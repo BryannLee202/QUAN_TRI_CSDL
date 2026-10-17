@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Báo Cáo Kế Hoạch Đồ Án - MushroomCloud</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 18mm 15mm 20mm 15mm;
+            @bottom-right {
+                content: counter(page);
+            }
+        }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+            color: #0F172A;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            font-size: 13px;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        /* COVER PAGE */
+        .cover {
+            height: 95vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: center;
+            border: 2px solid #0D5C3A;
+            padding: 40px 30px;
+            box-sizing: border-box;
+            background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+        }
+        .cover-header {
+            border-bottom: 2px solid #0D5C3A;
+            padding-bottom: 20px;
+        }
+        .cover-header h3 {
+            margin: 0;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #475569;
+        }
+        .cover-header h2 {
+            margin: 8px 0 0 0;
+            font-size: 17px;
+            color: #0D5C3A;
+            text-transform: uppercase;
+        }
+        .cover-title {
+            margin: 40px 0;
+        }
+        .cover-badge {
+            display: inline-block;
+            background: #E8F5E9;
+            color: #0D5C3A;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #A5D6A7;
+            text-transform: uppercase;
+        }
+        .cover-title h1 {
+            font-size: 26px;
+            color: #0D5C3A;
+            margin: 10px 0;
+            line-height: 1.3;
+            text-transform: uppercase;
+        }
+        .cover-title h4 {
+            font-size: 15px;
+            font-weight: 500;
+            color: #334155;
+            margin: 10px 0 25px 0;
+            font-style: italic;
+        }
+        .cover-desc {
+            font-size: 13px;
+            color: #64748B;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .cover-info {
+            text-align: left;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-left: 4px solid #0D5C3A;
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin: 0 auto;
+            width: 85%;
+            font-size: 13px;
+        }
+        .cover-info table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .cover-info td {
+            padding: 4px 8px;
+        }
+        .cover-info td.label {
+            font-weight: 600;
+            color: #1E293B;
+            width: 180px;
+        }
+        .cover-footer {
+            font-size: 12px;
+            color: #64748B;
+            border-top: 1px solid #E2E8F0;
+            padding-top: 15px;
+        }
+        
+        /* CONTENT STYLES */
+        h2.section-title {
+            font-size: 18px;
+            color: #0D5C3A;
+            border-bottom: 2px solid #0D5C3A;
+            padding-bottom: 6px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        h3.sub-title {
+            font-size: 15px;
+            color: #1E293B;
+            margin-top: 18px;
+            margin-bottom: 8px;
+            border-left: 3px solid #D4AF37;
+            padding-left: 10px;
+        }
+        p, li {
+            text-align: justify;
+        }
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 12px;
+        }
+        table.data-table th, table.data-table td {
+            border: 1px solid #CBD5E1;
+            padding: 8px 10px;
+            vertical-align: top;
+        }
+        table.data-table th {
+            background-color: #F1F5F9;
+            color: #0F172A;
+            font-weight: 600;
+            text-align: left;
+        }
+        table.data-table tr:nth-child(even) {
+            background-color: #F8FAFC;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        .badge-green { background: #DCFCE7; color: #166534; }
+        .badge-gold { background: #FEF3C7; color: #92400E; }
+        .badge-blue { background: #DBEAFE; color: #1E40AF; }
+        .badge-red { background: #FEE2E2; color: #991B1B; }
+
+        .callout {
+            background: #F8FAFC;
+            border-left: 4px solid #0D5C3A;
+            padding: 12px 16px;
+            margin: 15px 0;
+            border-radius: 0 6px 6px 0;
+            font-size: 12.5px;
+        }
+        .callout-gold {
+            border-left-color: #D4AF37;
+            background: #FFFBEB;
+        }
+        code {
+            font-family: Consolas, 'Courier New', monospace;
+            background: #F1F5F9;
+            padding: 2px 4px;
+            border-radius: 3px;
+            color: #0D5C3A;
+            font-size: 11.5px;
+        }
+        pre {
+            background: #0F172A;
+            color: #E2E8F0;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: Consolas, monospace;
+            font-size: 11px;
+            overflow-x: auto;
+            line-height: 1.4;
+            margin: 10px 0;
+        }
+        .diagram-box {
+            background: #F8FAFC;
+            border: 1px dashed #CBD5E1;
+            padding: 12px;
+            font-family: Consolas, monospace;
+            font-size: 11px;
+            white-space: pre;
+            line-height: 1.3;
+            margin: 10px 0;
+            color: #334155;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TRANG BÌA -->
+    <div class="cover">
+        <div class="cover-header">
+            <h3>BÁO CÁO ĐỒ ÁN HỆ QUẢN TRỊ CƠ SỞ DỮ LIỆU & PHÁT TRIỂN ỨNG DỤNG WEB</h3>
+            <h2>HỌC PHẦN: HỆ QUẢN TRỊ CSDL (SQL SERVER / T-SQL) & FULLSTACK WEB</h2>
+        </div>
+
+        <div class="cover-title">
+            <span class="cover-badge">ĐỀ ÁN WEBSITE THƯƠNG MẠI DỊCH VỤ TÍCH HỢP IOT (FaaS)</span>
+            <h1>XÂY DỰNG HỆ THỐNG QUẢN LÝ NUÔI TRỒNG NẤM THÔNG MINH TÍCH HỢP CHO THUÊ VÀ GIÁM SÁT TỪ XA</h1>
+            <h4>MushroomCloud - Smart Mushroom Cultivation & Remote Monitoring Platform</h4>
+            <p class="cover-desc">
+                Hệ thống ứng dụng Web hoàn chỉnh phục vụ kinh doanh "Farm as a Service": Quản lý buồng nấm, dịch vụ cho thuê khay nấm bằng mã QR, giám sát vi khí hậu thời gian thực qua IoT và tích hợp chuyên sâu các kỹ thuật CSDL nâng cao trên Microsoft SQL Server.
+            </p>
+        </div>
+
+        <div class="cover-info">
+            <table>
+                <tr>
+                    <td class="label">Hệ Quản Trị CSDL:</td>
+                    <td>Microsoft SQL Server 2022, T-SQL, SSMS</td>
+                </tr>
+                <tr>
+                    <td class="label">Nền tảng Công nghệ:</td>
+                    <td>Node.js / Express (TypeScript), React/Next.js, Three.js 3D, WebSocket</td>
+                </tr>
+                <tr>
+                    <td class="label">Kho lưu trữ GitHub:</td>
+                    <td><code>https://github.com/BryannLee202/QUAN_TRI_CSDL</code></td>
+                </tr>
+                <tr>
+                    <td class="label">Nhóm thực hiện:</td>
+                    <td><strong>Nhóm 5 Thành Viên</strong> (Trưởng nhóm, Hoàng Huy, Nguyễn Thanh Hi..., Đăng, Võ Duy Thịnh)</td>
+                </tr>
+                <tr>
+                    <td class="label">Thời gian thực hiện:</td>
+                    <td>3 - 4 Tuần (Kế hoạch hoàn thành thần tốc)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="cover-footer">
+            NĂM HỌC 2026 - 2027 | ĐỒ ÁN MẪU ĐẠT TIÊU CHUẨN THƯƠNG MẠI HÓA
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- MỤC 1 & 2: BỐI CẢNH & KIẾN TRÚC -->
+    <h2 class="section-title">1. TỔNG QUAN ĐỀ TÀI & MỤC TIÊU PHÁT TRIỂN</h2>
+    <h3 class="sub-title">1.1. Bối cảnh thực tiễn & Mô hình "Farm as a Service" (FaaS)</h3>
+    <p>
+        Nuôi trồng nấm ăn và nấm dược liệu (bào ngư xám, hoàng kim, hầu thủ, linh chi đỏ, đông trùng hạ thảo) đòi hỏi điều kiện vi khí hậu khắt khe: Nhiệt độ 22-28°C, Độ ẩm 80-95%, CO₂ &lt; 1000 ppm. Cư dân đô thị có nhu cầu sở hữu thực phẩm sạch tự nhiên nhưng thiếu mặt bằng và kỹ thuật.
+    </p>
+    <p>
+        <strong>MushroomCloud</strong> giải quyết triệt để vấn đề này qua mô hình nông nghiệp chia sẻ: Trang trại chịu trách nhiệm vận hành kỹ thuật và buồng nuôi phòng sạch; Khách hàng đăng ký thuê các khay nấm cụ thể (định danh bằng mã QR), giám sát nấm lớn từng ngày từ xa qua <strong>Camera Live Stream & Thước tua Timelapse</strong>, đồng thời nấm thu hoạch sẽ được đóng gói giao tận nhà.
+    </p>
+
+    <h3 class="sub-title">1.2. Mục tiêu Môn học Hệ quản trị CSDL & Tiêu chuẩn Thương mại</h3>
+    <div class="callout">
+        <strong>Trọng tâm đánh giá điểm 10/10:</strong> Ứng dụng toàn diện Microsoft SQL Server và T-SQL để thiết kế mô hình chuẩn hóa 3NF, cài đặt toàn vẹn tham chiếu, xây dựng các Stored Procedure giao dịch nguyên tử (ACID) có khóa dòng <code>UPDLOCK, ROWLOCK</code> chống race condition, viết DML Triggers tự động kiểm tra vi khí hậu, và thiết kế chỉ mục (Indexing) phục vụ truy vấn chuỗi thời gian lớn.
+    </div>
+
+    <h2 class="section-title">2. KIẾN TRÚC TỔNG THỂ HỆ THỐNG (3-TIER & BFF PATTERN)</h2>
+    <div class="diagram-box">
++---------------------------------------------------------------------------------------------------+
+| 1. TẦNG GIAO DIỆN (PRESENTATION LAYER - CLIENT)                                                  |
+| - Phong cách: Scandinavian Luxury & Apple Minimalism (Nền Warm Slate, Xanh Rừng Thông, Vàng Kim)  |
+| - Giao diện Khách hàng: Thuê khay, Camera Live Stream, thước tua Timelapse, đồ thị nhiệt ẩm 24h  |
+| - Giao diện Quản trị/Kỹ thuật: Sơ đồ ma trận 50 khay nấm, công tắc bật/tắt thiết bị buồng nuôi    |
+| - Công nghệ: React / Next.js (TypeScript), Three.js (Mô hình 3D xoay 360 độ), TailwindCSS, Chart.js|
++---------------------------------------------------------------------------------------------------+
+                                         │ (HTTPS REST API / WebSocket Realtime)
+                                         ▼
++---------------------------------------------------------------------------------------------------+
+| 2. TẦNG NGHIỆP VỤ & BFF (BACKEND FOR FRONTEND & APPLICATION LAYER)                                |
+| - Web Server: Node.js / Express (TypeScript) - Kiến trúc phân tầng Controller - Service - Repo    |
+| - Xác thực & Phân quyền: JSON Web Token (JWT) + BCrypt Password Hashing, RBAC 3 vai trò           |
+| - IoT Gateway & WebSocket Hub: Nhận bản tin cảm biến từ Simulator/ESP32, đẩy realtime xuống Web  |
+| - Kết nối CSDL: Driver mssql chính thức của Microsoft, cấu hình Connection Pool tối ưu hiệu năng   |
++---------------------------------------------------------------------------------------------------+
+                                         │ (TCP Native Port 1433)
+                                         ▼
++---------------------------------------------------------------------------------------------------+
+| 3. TẦNG CƠ SỞ DỮ LIỆU (DATABASE LAYER - MICROSOFT SQL SERVER 2022)                                |
+| - Tên CSDL: SmartMushroomDB (11 Bảng chuẩn 3NF, Collation Vietnamese_CI_AS)                       |
+| - T-SQL Nâng cao: Stored Procedures (sp_CreateRentalOrder, sp_AssignTrayToOrder, sp_CompleteHarvest)|
+| - DML Triggers: trg_CheckSensorThresholds (Tự sinh cảnh báo và tự kích hoạt quạt hút khí CO2)    |
+| - Views & Functions: vw_RoomOccupancyReport, vw_CustomerActiveRentals, fn_CalculateRentalPrice    |
+| - Indexing: Composite Non-Clustered Index có INCLUDE trên SensorData, Filtered Index trên Alerts  |
++---------------------------------------------------------------------------------------------------+</div>
+
+    <div class="page-break"></div>
+
+    <!-- MỤC 3: CƠ SỞ DỮ LIỆU CHUẨN 3NF -->
+    <h2 class="section-title">3. THIẾT KẾ CƠ SỞ DỮ LIỆU SMARTMUSHROOMDB (CHUẨN 3NF)</h2>
+    <p>Cơ sở dữ liệu được thiết kế đạt <strong>Dạng chuẩn 3 (3NF)</strong>, triệt tiêu hoàn toàn dư thừa dữ liệu và đảm bảo tính toàn vẹn thông qua hệ thống khóa ngoại và ràng buộc CHECK:</p>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 18%;">Tên Bảng</th>
+                <th style="width: 25%;">Khóa Chính & Ngoại</th>
+                <th style="width: 35%;">Các Cột Thuộc Tính Nổi Bật</th>
+                <th style="width: 22%;">Ràng Buộc Nghiệp Vụ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Roles</strong></td>
+                <td><code>PK: RoleID</code></td>
+                <td>RoleName, Description</td>
+                <td><span class="badge badge-green">UNIQUE(RoleName)</span></td>
+            </tr>
+            <tr>
+                <td><strong>Users</strong></td>
+                <td><code>PK: UserID</code><br><code>FK: RoleID</code></td>
+                <td>FullName, Email, PhoneNumber, PasswordHash, Address, AvatarUrl, IsActive</td>
+                <td><span class="badge badge-green">UNIQUE(Email)</span></td>
+            </tr>
+            <tr>
+                <td><strong>Rooms</strong></td>
+                <td><code>PK: RoomID</code></td>
+                <td>RoomCode, RoomName, MaxTrays, TempMin, TempMax, HumidityMin, HumidityMax, CO2Max</td>
+                <td><span class="badge badge-blue">CHECK: Temp, Ẩm, CO2 hợp lệ</span></td>
+            </tr>
+            <tr>
+                <td><strong>MushroomSpecies</strong></td>
+                <td><code>PK: SpeciesID</code></td>
+                <td>SpeciesName, OptimalTempMin/Max, GrowthDurationDays, EstimatedYieldKgPerTray</td>
+                <td><span class="badge badge-green">UNIQUE(SpeciesName)</span></td>
+            </tr>
+            <tr>
+                <td><strong>RentalPackages</strong></td>
+                <td><code>PK: PackageID</code><br><code>FK: SpeciesID</code></td>
+                <td>PackageName, DurationDays, Price, ExpectedYieldKg, ServiceLevel, IsActive</td>
+                <td><span class="badge badge-gold">CHECK(Price &gt;= 0)</span></td>
+            </tr>
+            <tr>
+                <td><strong>RentalOrders</strong></td>
+                <td><code>PK: OrderID</code><br><code>FK: UserID, PackageID</code></td>
+                <td>OrderCode, StartDate, EndDate, TotalAmount, PaymentStatus, DeliveryAddress</td>
+                <td><span class="badge badge-blue">CHECK(PaymentStatus)</span><br>UNIQUE(OrderCode)</td>
+            </tr>
+            <tr>
+                <td><strong>CultivationTrays</strong></td>
+                <td><code>PK: TrayID</code><br><code>FK: RoomID, OrderID</code></td>
+                <td>TrayCode (QR), RackNumber, ShelfLevel, Status, InoculationDate, ExpectedHarvestDate</td>
+                <td><span class="badge badge-red">CHECK(Status IN 'AVAILABLE', 'OCCUPIED'...)</span></td>
+            </tr>
+            <tr>
+                <td><strong>SensorData</strong></td>
+                <td><code>PK: DataID (BIGINT)</code><br><code>FK: RoomID, TrayID</code></td>
+                <td>Temperature, Humidity, CO2Level, LightLux, RecordedAt (DATETIME2)</td>
+                <td><span class="badge badge-green">Time-Series Telemetry</span></td>
+            </tr>
+            <tr>
+                <td><strong>SensorAlerts</strong></td>
+                <td><code>PK: AlertID</code><br><code>FK: RoomID</code></td>
+                <td>AlertType, Severity ('WARNING','CRITICAL'), Message, AlertTime, IsResolved</td>
+                <td><span class="badge badge-red">Tự động sinh bởi Trigger</span></td>
+            </tr>
+            <tr>
+                <td><strong>GrowthLogs</strong></td>
+                <td><code>PK: LogID</code><br><code>FK: TrayID, OrderID</code></td>
+                <td>StageName, PhotoUrl, HeightMm, Notes, RecordedBy, LogDate</td>
+                <td>Theo dõi tiến độ nấm lớn</td>
+            </tr>
+            <tr>
+                <td><strong>HarvestRequests</strong></td>
+                <td><code>PK: HarvestID</code><br><code>FK: OrderID, TrayID</code></td>
+                <td>RequestDate, Status, DeliveryType, ActualWeightKg, QualityGrade, TrackingNumber</td>
+                <td><span class="badge badge-gold">Đơn thu hoạch & giao hàng</span></td>
+            </tr>
+            <tr>
+                <td><strong>DeviceActionLogs</strong></td>
+                <td><code>PK: ActionID</code><br><code>FK: RoomID</code></td>
+                <td>DeviceType, ActionState ('ON','OFF'), TriggeredBy, ExecutedAt</td>
+                <td><span class="badge badge-blue">Nhật ký điều khiển IoT</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 class="section-title">4. BỘ NÃO LẬP TRÌNH T-SQL CHUYÊN SÂU (ĐIỂM NHẤN CHẤM THI)</h2>
+    
+    <h3 class="sub-title">4.1. Stored Procedure <code>sp_CreateRentalOrder</code> (Giao Dịch ACID & Khóa Dòng)</h3>
+    <p>Giải quyết triệt để bài toán <strong>Race Condition / Overbooking</strong> khi nhiều khách hàng cùng bấm thuê một khay nấm trong cùng một tích tắc:</p>
+    <pre>-- Trích đoạn kỹ thuật khóa dòng độc quyền (Row-level Locking)
+IF NOT EXISTS (
+    SELECT 1 
+    FROM CultivationTrays WITH (UPDLOCK, ROWLOCK) 
+    WHERE TrayID = @TrayID AND Status = 'AVAILABLE'
+)
+BEGIN
+    RAISERROR(N'Lỗi: Khay nấm đã có người đặt hoặc đang bảo dưỡng!', 16, 1);
+    ROLLBACK TRANSACTION;
+    RETURN;
+END</pre>
+
+    <h3 class="sub-title">4.2. DML Trigger <code>trg_CheckSensorThresholds</code> (Tự Động Giám Sát Vi Khí Hậu)</h3>
+    <p>Trigger dạng <code>AFTER INSERT</code> trên bảng <code>SensorData</code>. Mỗi khi bản tin cảm biến được nạp vào, Trigger tự động so sánh với ngưỡng của buồng nuôi trong bảng <code>Rooms</code>, tự động ghi cảnh báo vào <code>SensorAlerts</code> và <strong>tự động ghi lệnh bật quạt thông gió khi nồng độ CO₂ vượt ngưỡng</strong>.</p>
+
+    <h3 class="sub-title">4.3. Chiến Lược Chỉ Mục (Indexing Strategy) & Đo Lường Hiệu Năng</h3>
+    <p>Bảng <code>SensorData</code> đón nhận hàng triệu bản tin. Nhóm cài đặt <strong>Non-Clustered Composite Index có <code>INCLUDE</code></strong>: <code>IX_SensorData_Room_RecordedAt (RoomID ASC, RecordedAt DESC) INCLUDE (Temperature, Humidity, CO2Level)</code>. Trong buổi bảo vệ, nhóm sẽ mở <strong>Graphical Execution Plan (SSMS)</strong> chứng minh chi phí truy vấn chuyển từ <code>Table Scan (100%)</code> sang <code>Index Seek (&lt; 2%)</code>.</p>
+
+    <div class="page-break"></div>
+
+    <!-- MỤC 5 & 6: BẢNG PHÂN CÔNG & LỘ TRÌNH GIT -->
+    <h2 class="section-title">5. KẾ HOẠCH PHÂN CHIA NHIỆM VỤ CHO 5 THÀNH VIÊN (3 - 4 TUẦN)</h2>
+    <p>Dự án được phân chia độc lập theo từng module nhằm tránh xung đột code (Merge Conflict) và đảm bảo mỗi thành viên đều có đóng góp rõ ràng trên GitHub Insights:</p>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 15%;">Thành Viên</th>
+                <th style="width: 20%;">Vai Trò Kỹ Thuật</th>
+                <th style="width: 45%;">Nhiệm Vụ Cụ Thể (Tuần 1 - 4)</th>
+                <th style="width: 20%;">File Git Phụ Trách</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Bạn<br>(Trưởng nhóm)</strong></td>
+                <td><strong>Lead Architect & Database Lead</strong></td>
+                <td>
+                    - Thiết kế kiến trúc tổng thể (3-Tier + BFF), quy chuẩn ERD 3NF.<br>
+                    - Viết Stored Procedure giao dịch lõi (<code>sp_CreateRentalOrder</code> với khóa dòng <code>UPDLOCK, ROWLOCK</code>).<br>
+                    - Viết thủ tục gán khay QR và hoàn tất thu hoạch.<br>
+                    - Điều phối dự án, review code trên GitHub và hoàn thiện Báo cáo đồ án.
+                </td>
+                <td>
+                    <code>database/01_schema.sql</code><br>
+                    <code>database/02_tsql_logic.sql</code><br>
+                    <code>README.md</code>, Docs
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Hoàng Huy</strong></td>
+                <td><strong>T-SQL Specialist & Performance Lead</strong></td>
+                <td>
+                    - Viết DML Trigger giám sát vi khí hậu (<code>trg_CheckSensorThresholds</code>) & Trigger Audit Log.<br>
+                    - Viết các Views thống kê (<code>vw_RoomOccupancyReport</code>, <code>vw_MonthlyRevenueReport</code>).<br>
+                    - Nạp dữ liệu mẫu 70 khay nấm và lịch sử cảm biến.<br>
+                    - Thiết kế chỉ mục Composite Index, chạy đo lường <code>SET STATISTICS IO, TIME ON</code>.
+                </td>
+                <td>
+                    <code>database/02_tsql_logic.sql</code><br>
+                    <code>database/03_seed_data.sql</code><br>
+                    <code>database/04_indexing...</code>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Nguyễn Thanh Hi...</strong></td>
+                <td><strong>Backend API & Security Engineer</strong></td>
+                <td>
+                    - Xây dựng Web API (Node.js/Express TypeScript), kết nối Connection Pool SQL Server.<br>
+                    - Triển khai xác thực JWT, mã hóa BCrypt, phân quyền RBAC.<br>
+                    - Viết Controller & Service gọi Stored Procedures.<br>
+                    - Tích hợp thanh toán mô phỏng QR Code và bảo mật chống SQL Injection.
+                </td>
+                <td>
+                    <code>backend/src/controllers/</code><br>
+                    <code>backend/src/routes/</code><br>
+                    <code>backend/src/services/</code>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Đăng</strong></td>
+                <td><strong>Frontend & 3D Web Engineer</strong></td>
+                <td>
+                    - Xây dựng Giao diện Web theo chuẩn <strong>Apple / Scandinavian Luxury</strong>.<br>
+                    - Tích hợp mô hình buồng nấm 3D lồng kính tương tác (Three.js) xoay 360 độ.<br>
+                    - Xây dựng Cổng Khách Hàng: Live Camera stream, thước tua Timelapse nấm lớn từng ngày.<br>
+                    - Tích hợp biểu đồ cảm biến Chart.js và tối ưu Responsive di động.
+                </td>
+                <td>
+                    <code>frontend/src/components/</code><br>
+                    <code>frontend/src/3d/</code><br>
+                    <code>frontend/src/styles/</code>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Võ Duy Thịnh</strong></td>
+                <td><strong>IoT, Realtime Hub & DevOps Engineer</strong></td>
+                <td>
+                    - Phát triển module IoT Telemetry Simulator phát sinh dữ liệu cảm biến biến thiên tự nhiên.<br>
+                    - Xây dựng Socket.io Hub đẩy dữ liệu vi khí hậu realtime xuống Web.<br>
+                    - Xây dựng Trung tâm Điều hành Kỹ thuật viên (Ma trận 50 khay nấm, công tắc gạt iOS).<br>
+                    - Đóng gói Docker Compose 1-Click Run cho toàn bộ hệ thống.
+                </td>
+                <td>
+                    <code>iot_simulator/</code><br>
+                    <code>backend/src/sockets/</code><br>
+                    <code>docker-compose.yml</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 class="section-title">6. LỊCH TRÌNH COMMIT GIT CHI TIẾT THEO TUẦN (CONVENTIONAL COMMITS)</h2>
+    <div class="callout callout-gold">
+        <strong>Cam kết tiến độ:</strong> Toàn bộ 5 thành viên thực hiện commit đều đặn trên các nhánh chức năng <code>feature/*</code>, sau đó tạo Pull Request để Trưởng nhóm duyệt và merge vào <code>main</code>.
+    </div>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 12%;">Giai Đoạn</th>
+                <th style="width: 48%;">Mục Tiêu Công Việc Cốt Lõi</th>
+                <th style="width: 40%;">Mẫu Commit Message Chuẩn Quốc Tế</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Tuần 1</strong><br>(Móng CSDL & Setup)</td>
+                <td>
+                    - Dựng Database SmartMushroomDB, 11 bảng 3NF.<br>
+                    - Viết Stored Procedure giao dịch lõi <code>sp_CreateRentalOrder</code>.<br>
+                    - Cài đặt Trigger bắt lỗi vi khí hậu và nạp 70 khay nấm.<br>
+                    - Khởi tạo Backend Express & cấu hình theme Apple Luxury cho Frontend.
+                </td>
+                <td>
+                    <code>feat(database): init SmartMushroomDB 3NF tables</code><br>
+                    <code>feat(tsql): implement sp_CreateRentalOrder with UPDLOCK</code><br>
+                    <code>feat(tsql): create trg_CheckSensorThresholds trigger</code><br>
+                    <code>chore(backend): setup mssql connection pool</code><br>
+                    <code>feat(iot): create realistic sensor simulator</code>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Tuần 2</strong><br>(API, Realtime & 3D)</td>
+                <td>
+                    - Viết API gọi Stored Procedures (thuê khay, gán QR khay).<br>
+                    - Đánh chỉ mục Composite Index có INCLUDE trên SensorData.<br>
+                    - Dựng mô hình buồng nấm 3D xoay 360 độ (Three.js).<br>
+                    - Thiết lập Socket.io Hub đẩy vi khí hậu realtime.
+                </td>
+                <td>
+                    <code>feat(api): create rental order endpoint calling procedure</code><br>
+                    <code>perf(indexing): add composite index with INCLUDE</code><br>
+                    <code>feat(3d): integrate interactive Three.js chamber</code><br>
+                    <code>feat(websocket): setup Socket.io telemetry broadcast</code>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Tuần 3</strong><br>(Hoàn thiện Portals)</td>
+                <td>
+                    - Hoàn thiện Cổng Khách Hàng (Camera Live + Timelapse slider).<br>
+                    - Hoàn thiện Trung tâm Điều hành (Ma trận 50 khay + Toggle switch).<br>
+                    - Tích hợp thanh toán mô phỏng QR Code động.<br>
+                    - Chụp ảnh đo lường Execution Plan đưa vào báo cáo.
+                </td>
+                <td>
+                    <code>feat(customer): build dashboard with live camera & timelapse</code><br>
+                    <code>feat(operator): build 50-tray interactive matrix UI</code><br>
+                    <code>feat(payment): add dynamic QR code payment flow</code><br>
+                    <code>docs(report): compile execution plan comparison analysis</code>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Tuần 4</strong><br>(Kiểm thử & Đóng gói)</td>
+                <td>
+                    - Kiểm thử E2E chống race condition với 2 tab đồng thời.<br>
+                    - Hoàn thiện Docker Compose 1-Click Run cho toàn bộ hệ thống.<br>
+                    - Hoàn thiện Báo cáo đồ án (PDF/Word) & Slide thuyết trình.
+                </td>
+                <td>
+                    <code>test(concurrency): verify row-level lock concurrency</code><br>
+                    <code>ci(docker): finalize multi-container docker deployment</code><br>
+                    <code>docs(report): finalize complete academic documentation</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="page-break"></div>
+
+    <!-- MỤC 7: KỊCH BẢN VẤN ĐÁP BẢO VỆ 10/10 -->
+    <h2 class="section-title">7. KỊCH BẢN DEMO 7 PHÚT & PHÒNG THỦ TRƯỚC GIẢNG VIÊN KHÓ TÍNH</h2>
+
+    <h3 class="sub-title">7.1. Kịch Bản Trình Chiếu 7 Phút (The Winning Demo Flow)</h3>
+    <ol>
+        <li><strong>Phút 1 - 2 (Ấn tượng thị giác)</strong>: Mở Landing Page phong cách Apple Luxury. Dùng chuột xoay buồng nấm 3D lồng kính 360 độ, khoe các thẻ HUD vi khí hậu nổi. Giới thiệu mô hình FaaS giải quyết bài toán nông nghiệp minh bạch.</li>
+        <li><strong>Phút 3 - 4 (Trải nghiệm Khách hàng)</strong>: Đăng nhập tài khoản khách hàng, duyệt gói thuê nấm, chọn khay nấm trống. Mở Cổng Khách Hàng xem luồng Camera Live góc cận, kéo thanh trượt Timelapse (Day 1 -> Day 30) xem nấm lớn, và bấm nút [Gửi Yêu Cầu Thu Hoạch].</li>
+        <li><strong>Phút 5 - 6 (ĐỈNH CAO KỸ THUẬT CSDL - ĂN ĐIỂM TUYỆT ĐỐI)</strong>:
+            <ul>
+                <li>Mở tab Điều hành: Khoe ma trận 50 khay nấm phân màu và các công tắc IoT.</li>
+                <li><strong>Thao tác 1 (Bảo vệ Concurrency)</strong>: Mở 2 tab ẩn danh bấm thuê cùng 1 khay trong cùng 1 giây -> Chứng minh Stored Procedure <code>sp_CreateRentalOrder</code> khóa dòng <code>UPDLOCK, ROWLOCK</code> chặn đứng lỗi Overbooking!</li>
+                <li><strong>Thao tác 2 (Bảo vệ Tự động hóa)</strong>: Giả lập tăng CO₂ lên 1250 ppm -> Chứng minh Trigger T-SQL <code>trg_CheckSensorThresholds</code> tự bắt lỗi, chuông cảnh báo Web reo đỏ và tự động bật quạt thông gió.</li>
+                <li><strong>Thao tác 3 (Bảo vệ Hiệu năng)</strong>: Mở SSMS, chiếu Graphical Execution Plan chứng minh câu lệnh chạy bằng <code>Index Seek (&lt; 2%)</code>.</li>
+            </ul>
+        </li>
+        <li><strong>Phút 7 (Kết luận & Thương mại hóa)</strong>: Trình diễn khởi chạy toàn bộ hệ thống bằng lệnh <code>docker compose up</code>, khẳng định hệ thống sẵn sàng phát hành thực tế.</li>
+    </ol>
+
+    <h3 class="sub-title">7.2. Phân Công Trả Lời Vấn Đáp Từng Thành Viên</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 25%;">Dạng Câu Hỏi Của Giảng Viên</th>
+                <th style="width: 20%;">Người Đứng Lên Trả Lời</th>
+                <th style="width: 55%;">Nội Dung Trả Lời Chuẩn Mực</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><em>"Nếu 2 người cùng bấm thuê 1 khay nấm cùng lúc thì sao?"</em></td>
+                <td><strong>Bạn (Trưởng nhóm)</strong></td>
+                <td><em>"Thưa thầy, hệ thống xử lý bằng Transaction với gợi ý khóa dòng <code>SELECT ... WITH (UPDLOCK, ROWLOCK) WHERE Status = 'AVAILABLE'</code> trong Stored Procedure <code>sp_CreateRentalOrder</code>. Giao dịch đầu tiên sẽ giữ Exclusive Lock, giao dịch thứ hai bị chặn và nhận thông báo lỗi an toàn 100%."</em></td>
+            </tr>
+            <tr>
+                <td><em>"Trigger hoạt động thế nào? Có làm chậm hệ thống không?"</em></td>
+                <td><strong>Hoàng Huy</strong></td>
+                <td><em>"Thưa thầy, Trigger <code>trg_CheckSensorThresholds</code> là AFTER INSERT, kiểm tra vi khí hậu dựa trên bảng ảo <code>inserted</code> JOIN với <code>Rooms</code>. Về hiệu năng, bảng SensorData được đánh Non-Clustered Composite Index có INCLUDE, chỉ lọc vùng dữ liệu cần thiết nên thời gian thực thi chỉ dưới 5ms."</em></td>
+            </tr>
+            <tr>
+                <td><em>"Hệ thống bảo mật API và phiên đăng nhập ra sao?"</em></td>
+                <td><strong>Nguyễn Thanh Hi...</strong></td>
+                <td><em>"Thưa thầy, API sử dụng kiến trúc phân tầng kết hợp JSON Web Token (JWT). Mật khẩu được băm bằng thuật toán BCrypt với salt round = 10, phân quyền RBAC nghiêm ngặt theo 3 vai trò và áp dụng Parameterized Query chống triệt để SQL Injection."</em></td>
+            </tr>
+            <tr>
+                <td><em>"Phần 3D và Camera Timelapse hiển thị như thế nào?"</em></td>
+                <td><strong>Đăng</strong></td>
+                <td><em>"Thưa thầy, buồng nấm 3D được dựng bằng Three.js cho phép tương tác xoay 360 độ trên nền WebGL tối ưu FPS. Khung Timelapse sử dụng cơ chế đồng bộ mốc thời gian từ bảng <code>GrowthLogs</code>, cho phép người dùng kéo slider xem chu kỳ sinh trưởng từ ngày cấy meo đến khi thu hoạch."</em></td>
+            </tr>
+            <tr>
+                <td><em>"Cơ chế IoT đẩy dữ liệu và triển khai thực tế thế nào?"</em></td>
+                <td><strong>Võ Duy Thịnh</strong></td>
+                <td><em>"Thưa thầy, dữ liệu cảm biến được truyền phát liên tục qua WebSocket Hub (Socket.io) giúp đồ thị Web nhảy số mà không cần F5 trang. Toàn bộ giải pháp từ CSDL SQL Server đến Frontend được container hóa bằng Docker Compose, sẵn sàng deploy lên VPS trong vòng 5 phút."</em></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="callout" style="text-align: center; margin-top: 30px;">
+        <strong>KẾT LUẬN:</strong> Bản kế hoạch này kết hợp chặt chẽ giữa <strong>học thuật chuyên sâu môn CSDL (10/10)</strong> và <strong>năng lực phát hành phần mềm thương mại thực tế</strong>. Nhóm hoàn toàn tự tin chinh phục hội đồng đánh giá!
+    </div>
+
+</body>
+</html>
