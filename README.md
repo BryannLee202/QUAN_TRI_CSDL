@@ -84,3 +84,33 @@ Hệ thống sẽ tự động khởi động SQL Server trên cổng 1433 và n
 * **Nguyễn Thanh Hiển**: Phát triển Backend Web API, JWT Security & Tích hợp Stored Procedures.
 * **Đăng**: Phát triển Giao diện Web, Landing Page 3D Three.js & Cổng Giám sát Khách hàng.
 * **Võ Duy Thịnh**: Phát triển Trung tâm Điều hành Kỹ thuật viên, IoT Telemetry Simulator & DevOps.
+
+---
+
+## 🔒 6. Quy Định Đóng Góp Mã Nguồn & Quy Trình Pull Request (Bắt Buộc)
+
+> **QUY TẮC BẤT DI BẤT DỊCH CỦA NHÓM**: 
+> 1. Tuyệt đối **KHÔNG ĐƯỢC push trực tiếp lên nhánh `main`**.
+> 2. Mỗi thành viên khi làm tính năng phải **tự tạo một nhánh riêng (feature branch)** từ `main`.
+> 3. Sau khi hoàn thành và kiểm thử trên máy cá nhân, thành viên **đẩy nhánh lên GitHub và tạo Pull Request (PR)**.
+> 4. Chỉ có **Trưởng nhóm (Lê Minh Tài)** mới có quyền review code và bấm nút **Merge vào `main`**.
+
+### Hướng dẫn quy trình 4 bước cho các thành viên:
+```bash
+# Bước 1: Kéo code mới nhất từ main về và tạo nhánh riêng
+git checkout main
+git pull origin main
+git checkout -b feature/<ten-tinh-nang>-<ten-thanh-vien>
+# Ví dụ: git checkout -b feature/auth-api-hien
+
+# Bước 2: Viết code và commit trên nhánh cá nhân
+git add .
+git commit -m "feat(auth): implement user login and registration with JWT"
+
+# Bước 3: Đẩy nhánh cá nhân lên GitHub
+git push origin feature/<ten-tinh-nang>-<ten-thanh-vien>
+
+# Bước 4: Mở trình duyệt vào GitHub, bấm nút "Compare & pull request",
+# gán Reviewer là Lê Minh Tài để Trưởng nhóm kiểm tra và duyệt merge vào main.
+```
+
