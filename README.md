@@ -79,7 +79,7 @@ Hệ thống sẽ tự động khởi động SQL Server trên cổng 1433 và n
 ---
 
 ## 👥 5. Thành Viên Nhóm Phát Triển
-* **Trưởng nhóm**: Thiết kế Kiến trúc hệ thống, Mô hình CSDL ERD 3NF & Stored Procedure giao dịch lõi.
+* **Lê Minh Tài (Trưởng nhóm)**: Thiết kế Kiến trúc hệ thống, Mô hình CSDL ERD 3NF & Stored Procedure giao dịch lõi.
 * **Hoàng Huy**: Thiết kế CSDL T-SQL, DML Triggers vi khí hậu & Chiến lược Indexing.
 * **Nguyễn Thanh Hi...**: Phát triển Backend Web API, JWT Security & Tích hợp Stored Procedures.
 * **Đăng**: Phát triển Giao diện Web, Landing Page 3D Three.js & Cổng Giám sát Khách hàng.
