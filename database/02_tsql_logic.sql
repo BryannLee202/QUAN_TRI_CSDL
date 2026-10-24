@@ -637,16 +637,15 @@ GO
 -- View 4.3: Báo cáo Doanh thu & Thống kê kinh doanh theo tháng (Monthly Revenue Report)
 CREATE OR ALTER VIEW dbo.vw_MonthlyRevenueReport
 AS
-SELECT 
-    YEAR(o.CreatedAt) AS OrderYear,
-    MONTH(o.CreatedAt) AS OrderMonth,
-    COUNT(o.OrderID) AS TotalOrders,
-    SUM(o.TotalAmount) AS TotalRevenue,
-    AVG(o.TotalAmount) AS AverageOrderValue,
-    COUNT(DISTINCT o.UserID) AS UniqueCustomers
-FROM RentalOrders o
+SELECT
+    YEAR(o.StartDate)                                      AS RevenueYear,
+    MONTH(o.StartDate)                                     AS RevenueMonth,
+    DATEFROMPARTS(YEAR(o.StartDate), MONTH(o.StartDate), 1) AS MonthStart,
+    COUNT(o.OrderID)                                       AS PaidOrders,
+    SUM(o.TotalAmount)                                     AS TotalRevenue
+FROM RentalOrders AS o
 WHERE o.PaymentStatus = 'PAID'
-GROUP BY YEAR(o.CreatedAt), MONTH(o.CreatedAt);
+GROUP BY YEAR(o.StartDate), MONTH(o.StartDate);
 GO
 
 PRINT N'>>> ĐÃ TẠO THÀNH CÔNG TOÀN BỘ STORED PROCEDURES, TRIGGERS, FUNCTIONS & VIEWS CHO T-SQL! <<<';
