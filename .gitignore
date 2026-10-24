@@ -36,3 +36,7 @@ Thumbs.db
 .idea/
 *.suo
 *.user
+# Backend environment and build outputs
+backend/.env.*
+!backend/.env.example
+backend/dist/
