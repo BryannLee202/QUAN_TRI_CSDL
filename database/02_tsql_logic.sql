@@ -567,21 +567,25 @@ GO
 -- View 4.1: Báo cáo tỷ lệ lấp đầy khay nuôi trồng theo từng buồng (Occupancy Report)
 CREATE OR ALTER VIEW dbo.vw_RoomOccupancyReport
 AS
-SELECT 
+SELECT
     r.RoomID,
     r.RoomCode,
     r.RoomName,
+    r.IsActive,
     r.MaxTrays,
-    COUNT(t.TrayID) AS TotalConfiguredTrays,
-    SUM(CASE WHEN t.Status = 'AVAILABLE' THEN 1 ELSE 0 END) AS AvailableTrays,
-    SUM(CASE WHEN t.Status = 'OCCUPIED' THEN 1 ELSE 0 END) AS OccupiedTrays,
-    SUM(CASE WHEN t.Status = 'MAINTENANCE' THEN 1 ELSE 0 END) AS MaintenanceTrays,
-    CAST(ROUND(
-        CAST(SUM(CASE WHEN t.Status = 'OCCUPIED' THEN 1 ELSE 0 END) AS FLOAT) / 
-        NULLIF(COUNT(t.TrayID), 0) * 100.00, 2) AS DECIMAL(5,2)) AS OccupancyRatePercent
-FROM Rooms r
-LEFT JOIN CultivationTrays t ON r.RoomID = t.RoomID
-GROUP BY r.RoomID, r.RoomCode, r.RoomName, r.MaxTrays;
+    COUNT(t.TrayID)                                          AS TotalTrays,        -- đếm theo TrayID, không dùng COUNT(*)
+    COUNT(CASE WHEN t.Status = 'OCCUPIED'    THEN t.TrayID END) AS OccupiedTrays,
+    COUNT(CASE WHEN t.Status = 'AVAILABLE'   THEN t.TrayID END) AS AvailableTrays,
+    COUNT(CASE WHEN t.Status = 'RESERVED'    THEN t.TrayID END) AS ReservedTrays,
+    COUNT(CASE WHEN t.Status = 'MAINTENANCE' THEN t.TrayID END) AS MaintenanceTrays,
+    CAST(
+        100.0 * COUNT(CASE WHEN t.Status = 'OCCUPIED' THEN t.TrayID END)
+        / NULLIF(r.MaxTrays, 0)
+        AS DECIMAL(5,2))                                     AS OccupancyRatePercent
+FROM Rooms AS r
+LEFT JOIN CultivationTrays AS t
+       ON t.RoomID = r.RoomID
+GROUP BY r.RoomID, r.RoomCode, r.RoomName, r.IsActive, r.MaxTrays;
 GO
 
 -- View 4.2: Tổng hợp dữ liệu hiển thị tức thời cho Cổng Khách Hàng (Customer Dashboard Summary)
