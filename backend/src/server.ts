@@ -2,12 +2,17 @@ import "dotenv/config";
 import app from "./app.js";
 import { connectDB } from "./config/db.js";
 
-const PORT = Number(process.env.PORT) || 3000;
+const PORT = Number(process.env.PORT) || 5000;
 
 const startServer = async () => {
-  await connectDB();
+  try {
+    await connectDB();
+  } catch (error) {
+    console.warn("[Server] Chạy ứng dụng ở chế độ chờ CSDL (Offline fallback)...");
+  }
+
   app.listen(PORT, () => {
-    console.log(`Backend server is running at http://localhost:${PORT}`);
+    console.log(`[Server] MushroomCloud Backend API đang chạy tại http://localhost:${PORT}`);
   });
 };
 
