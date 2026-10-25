@@ -36,3 +36,8 @@ Thumbs.db
 .idea/
 *.suo
 *.user
+
+# Python (iot_simulator)
+.venv/
+.vs/
+__pycache__/
