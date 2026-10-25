@@ -3,37 +3,38 @@
 
 [![Database: Microsoft SQL Server](https://img.shields.io/badge/Database-MS%20SQL%20Server%202022-CC292B?logo=microsoftsqlserver)](https://www.microsoft.com/sql-server)
 [![T-SQL Stored Procedures](https://img.shields.io/badge/T--SQL-Procedures%20%26%20Triggers-0078D4)](https://docs.microsoft.com/sql/t-sql/)
-[![Node.js & TypeScript](https://img.shields.io/badge/Backend-Node.js%20%26%20TypeScript-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Node.js & Express](https://img.shields.io/badge/Backend-Node.js%20%26%20Express%20(TS)-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![React & Next.js](https://img.shields.io/badge/Frontend-Next.js%20%26%20React-black?logo=next.js)](https://nextjs.org/)
-[![IoT Realtime](https://img.shields.io/badge/IoT-Telemetry%20%26%20WebSocket-10B981)](https://socket.io/)
+[![Styling: Tailwind CSS](https://img.shields.io/badge/Theme-Scandinavian%20Luxury-0D5C3A?logo=tailwindcss)](https://tailwindcss.com/)
+[![IoT & Docker](https://img.shields.io/badge/DevOps-Docker%20Compose-2496ED?logo=docker)](https://www.docker.com/)
 
 ---
 
 ## 📖 1. Giới Thiệu Dự Án
 
 **MushroomCloud** là nền tảng thương mại dịch vụ và điều hành nuôi trồng nấm thông minh theo mô hình **"Farm as a Service" (FaaS)**:
-- **Khách hàng (Customer)**: Thuê khay nấm trực tuyến từ xa, giám sát vi khí hậu (Nhiệt độ, Độ ẩm, $\text{CO}_2$) thời gian thực 24/7, xem camera luồng trực tiếp và tua timelapse nấm lớn từng ngày, đặt lệnh thu hoạch đóng gói ship tận nhà.
-- **Trang trại & Vận hành (Farm Operator / Admin)**: Quản lý ma trận khay nuôi trồng bằng mã QR Code, tự động hóa điều khiển thiết bị vi khí hậu (máy phun sương, quạt thông gió), bắt lỗi cảnh báo tức thì thông qua **DML Triggers T-SQL** và theo dõi báo cáo doanh thu.
+- **Khách hàng (Customer)**: Thuê khay nấm trực tuyến từ xa, giám sát vi khí hậu (Nhiệt độ, Độ ẩm, $\text{CO}_2$, Ánh sáng) thời gian thực 24/7, xem buồng nuôi 3D tương tác và nhận nấm tươi sạch đóng gói giao tận nhà.
+- **Trang trại & Vận hành (Farm Operator / Technician)**: Quản lý ma trận khay nuôi trồng bằng mã QR Code, tự động hóa điều khiển thiết bị vi khí hậu (máy phun sương, quạt thông gió), bắt lỗi cảnh báo tức thì thông qua **DML Triggers T-SQL** và theo dõi báo cáo tỷ lệ lấp đầy khay.
 
 ---
 
-## 🏗️ 2. Kiến Trúc Hệ Thống (3-Tier & BFF Pattern)
+## 🏗️ 2. Kiến Trúc Hệ Thống (3-Tier & Fullstack Web Pattern)
 
 ```text
 [ Trình Duyệt Web Khách Hàng ]     [ Dashboard Quản Trị Viên ]     [ IoT Simulator / ESP32 ]
             │                                    │                                  │
             └─────────────────────┬──────────────┴──────────────────────────────────┘
                                   ▼
-                   [ Backend API (Node.js / Express) ]
+                   [ Backend API (Node.js / Express TypeScript) ]
                    - RESTful API & JWT Authentication
-                   - WebSocket / SignalR Realtime Hub
+                   - Middleware kiểm tra quyền RBAC (Admin, Technician, Customer)
                                   │
                                   ▼ (Port 1433 / mssql)
-            [ Microsoft SQL Server 2022 (SmartMushroomDB) ]
-            - Stored Procedures (Giao dịch ACID & Khóa dòng UPDLOCK)
-            - DML Triggers (Tự động bắt lỗi vi khí hậu & Ghi log thiết bị)
-            - Views (Thống kê tỷ lệ lấp đầy & Báo cáo doanh thu)
-            - Composite Indexes & Filtered Indexes
+             [ Microsoft SQL Server 2022 (SmartMushroomDB) ]
+             - Stored Procedures (Giao dịch ACID & Khóa dòng UPDLOCK, ROWLOCK)
+             - DML Triggers (Tự động bắt lỗi vi khí hậu & Ghi log thiết bị)
+             - Views (Thống kê tỷ lệ lấp đầy & Báo cáo doanh thu)
+             - Composite Indexes & Filtered Indexes
 ```
 
 ---
@@ -43,9 +44,9 @@
 Toàn bộ kịch bản CSDL được lưu trữ tại thư mục [`/database`](./database):
 
 1. [`01_schema.sql`](./database/01_schema.sql): Khởi tạo CSDL, 11 bảng chuẩn 3NF, khóa chính PK, khóa ngoại FK và ràng buộc CHECK:
-   - `Roles`, `Users`: Phân quyền RBAC (Admin, Operator, Customer).
-   - `Rooms`, `MushroomSpecies`: Buồng nuôi và danh mục nấm (Bào ngư, Hoàng kim, Hầu thủ, Linh chi, Đông trùng hạ thảo).
-   - `RentalPackages`, `RentalOrders`: Gói thuê và hợp đồng điện tử.
+   - `Roles`, `Users`: Phân quyền RBAC (Admin, Technician, Customer).
+   - `Rooms`, `MushroomSpecies`: Buồng nuôi và danh mục giống nấm quý (Linh chi đỏ, Đông trùng hạ thảo, Bào ngư xám).
+   - `RentalPackages`, `RentalOrders`: Gói thuê và hợp đồng nuôi trồng điện tử.
    - `CultivationTrays`: Khay nấm có mã QR định danh duy nhất (`TRAY-RM01-R01-01`).
    - `SensorData`, `SensorAlerts`: Dữ liệu chuỗi thời gian IoT và cảnh báo vi khí hậu.
    - `GrowthLogs`, `HarvestRequests`, `DeviceActionLogs`: Nhật ký sinh trưởng, yêu cầu thu hoạch và điều khiển phần cứng.
@@ -57,60 +58,63 @@ Toàn bộ kịch bản CSDL được lưu trữ tại thư mục [`/database`](
    - **`trg_CheckSensorThresholds`**: Trigger `AFTER INSERT` trên bảng `SensorData`, tự động phát hiện vi khí hậu bất thường và kích hoạt quạt thông gió.
    - **`vw_RoomOccupancyReport`** & **`vw_CustomerActiveRentals`**: Các Views phục vụ Dashboard tức thì.
 
-3. [`03_seed_data.sql`](./database/03_seed_data.sql): Dữ liệu mẫu phong phú gồm 5 tài khoản mẫu, 70 khay nấm, các loài nấm quý, đơn thuê thực tế có sẵn ảnh nhật ký sinh trưởng và 24h chuỗi thời gian cảm biến.
+3. [`03_seed_data.sql`](./database/03_seed_data.sql): Dữ liệu mẫu phong phú gồm 5 tài khoản mẫu (mã hóa mật khẩu BCrypt), 70 khay nấm, các loài nấm quý, đơn thuê thực tế có sẵn ảnh nhật ký sinh trưởng và 7 ngày dữ liệu cảm biến mô phỏng.
 
 4. [`04_indexing_and_performance.sql`](./database/04_indexing_and_performance.sql): Thiết kế chỉ mục Composite Non-Clustered Index có `INCLUDE` và Filtered Index kèm kịch bản đo lường hiệu năng `SET STATISTICS IO, TIME ON`.
 
 ---
 
-## 🚀 4. Hướng Dẫn Cài Đặt Cơ Sở Dữ Liệu
+## 🧪 4. Bộ Kiểm Thử Độc Lập Ở Tầng CSDL (Test Suites)
 
-### Cách 1: Chạy trực tiếp qua SQL Server Management Studio (SSMS)
-1. Mở SSMS và kết nối vào SQL Server (`localhost` hoặc tên máy chủ của bạn).
-2. Mở file `database/01_schema.sql` và bấm **Execute (F5)**.
-3. Tiếp tục mở và thực thi lần lượt: `02_tsql_logic.sql` $\rightarrow$ `03_seed_data.sql` $\rightarrow$ `04_indexing_and_performance.sql`.
+Toàn bộ các bộ kiểm thử do **Lê Minh Tài (Trưởng nhóm)** xây dựng tại thư mục [`/tests`](./tests):
 
-### Cách 2: Khởi chạy 1 lệnh bằng Docker Compose (Khuyên Dùng)
-```bash
-docker compose up -d
-```
-Hệ thống sẽ tự động khởi động SQL Server trên cổng 1433 và nạp toàn bộ cấu trúc bảng cùng dữ liệu mẫu.
+| Tệp Kiểm Thử | Mục Tiêu & Kịch Bản Kiểm Chứng | Kết Quả Mong Đợi |
+| :--- | :--- | :--- |
+| **`test_concurrency_race_condition.sql`** | Mô phỏng 2 tiến trình song song cùng tranh chấp 1 khay trống duy nhất trong buồng nuôi, kiểm tra cơ chế khóa dòng `UPDLOCK, ROWLOCK`. | Tiến trình 1 thành công; Tiến trình 2 bị chặn an toàn và rollback. Khay nấm không bao giờ bị gán trùng (**Zero Overbooking**). |
+| **`test_concurrency_runner.ts`** | Bắn đồng thời 10 yêu cầu đặt thuê khay nấm song song qua Promise.all tại cùng 1 mili-giây vào buồng chỉ còn 2 chỗ. | Đúng 2 yêu cầu thành công, 8 yêu cầu bị từ chối an toàn với mã lỗi phòng kín chỗ, 0 khay bị trùng lặp. |
+| **`test_sp_harvest_and_qr.sql`** | Kiểm chứng toàn vẹn chu trình sống của khay nấm từ quét mã QR gán khay (`sp_AssignTrayToOrder`), khách yêu cầu thu hoạch (`sp_RequestHarvest`) đến nghiệm thu sản lượng (`sp_CompleteHarvest`). | Toàn bộ 4 test case đều đạt `[PASS]`, trạng thái đơn và khay chuyển đổi chuẩn xác. |
+| **`test_sp_create_rental_order.sql`** | Kiểm thử giao dịch đặt thuê khay hợp lệ (Happy path) và từ chối gói thuê không tồn tại. | Giao dịch tự `ROLLBACK` an toàn khi có lỗi, khay chuyển trạng thái chuẩn xác (`[PASS]`). |
+| **`test_constraints_and_integrity.sql`** | Kiểm tra ràng buộc CHECK nhiệt độ, độ ẩm và ràng buộc UNIQUE chống trùng mã QR khay. | SQL Server tự động kích hoạt ràng buộc toàn vẹn chặn đứng các câu lệnh vi phạm (`[PASS]`). |
 
----
-
-## 👥 5. Thành Viên Nhóm Phát Triển
-* **Lê Minh Tài (Trưởng nhóm)**: Thiết kế Kiến trúc hệ thống, Mô hình CSDL ERD 3NF & Stored Procedure giao dịch lõi.
-* **Hoàng Huy**: Thiết kế CSDL T-SQL, DML Triggers vi khí hậu & Chiến lược Indexing.
-* **Nguyễn Thanh Hiển**: Phát triển Backend Web API, JWT Security & Tích hợp Stored Procedures.
-* **Đăng**: Phát triển Giao diện Web, Landing Page 3D Three.js & Cổng Giám sát Khách hàng.
-* **Võ Duy Thịnh**: Phát triển Trung tâm Điều hành Kỹ thuật viên, IoT Telemetry Simulator & DevOps.
+*Chi tiết phân tích lý thuyết khóa dòng xem tại: [`docs/Bao_Cao_Kiem_Thu_Dong_Thoi_T-SQL.md`](./docs/Bao_Cao_Kiem_Thu_Dong_Thoi_T-SQL.md).*
 
 ---
 
-## 🔒 6. Quy Định Đóng Góp Mã Nguồn & Quy Trình Pull Request (Bắt Buộc)
+## 🚀 5. Hướng Dẫn Cài Đặt & Chạy Dự Án
 
-> **QUY TẮC BẤT DI BẤT DỊCH CỦA NHÓM**: 
-> 1. Tuyệt đối **KHÔNG ĐƯỢC push trực tiếp lên nhánh `main`**.
-> 2. Mỗi thành viên khi làm tính năng phải **tự tạo một nhánh riêng (feature branch)** từ `main`.
-> 3. Sau khi hoàn thành và kiểm thử trên máy cá nhân, thành viên **đẩy nhánh lên GitHub và tạo Pull Request (PR)**.
-> 4. Chỉ có **Trưởng nhóm (Lê Minh Tài)** mới có quyền review code và bấm nút **Merge vào `main`**.
+### Khởi động Cơ sở dữ liệu:
+* **Cách 1 (Docker Compose)**:
+  ```bash
+  docker compose up -d
+  ```
+* **Cách 2 (SSMS)**:
+  Mở SSMS và thực thi file `database/run_all.sql`.
 
-### Hướng dẫn quy trình 4 bước cho các thành viên:
+### Chạy các bài kiểm thử CSDL:
 ```bash
-# Bước 1: Kéo code mới nhất từ main về và tạo nhánh riêng
-git checkout main
-git pull origin main
-git checkout -b feature/<ten-tinh-nang>-<ten-thanh-vien>
-# Ví dụ: git checkout -b feature/auth-api-hien
+# Chạy bộ test tranh chấp đồng thời
+sqlcmd -S localhost -d SmartMushroomDB -E -i tests/test_concurrency_race_condition.sql
 
-# Bước 2: Viết code và commit trên nhánh cá nhân
-git add .
-git commit -m "feat(auth): implement user login and registration with JWT"
-
-# Bước 3: Đẩy nhánh cá nhân lên GitHub
-git push origin feature/<ten-tinh-nang>-<ten-thanh-vien>
-
-# Bước 4: Mở trình duyệt vào GitHub, bấm nút "Compare & pull request",
-# gán Reviewer là Lê Minh Tài để Trưởng nhóm kiểm tra và duyệt merge vào main.
+# Chạy bộ test quét QR và nghiệm thu thu hoạch
+sqlcmd -S localhost -d SmartMushroomDB -E -i tests/test_sp_harvest_and_qr.sql
 ```
 
+---
+
+## 👥 6. Phân Công Thành Viên Nhóm
+
+* **Lê Minh Tài (Trưởng nhóm / Database Lead)**: Thiết kế Kiến trúc hệ thống, Mô hình CSDL ERD 3NF, Stored Procedures giao dịch lõi (`sp_CreateRentalOrder` với khóa dòng `UPDLOCK, ROWLOCK`), Kịch bản kiểm thử đồng thời (Concurrency Tests) & Quản lý Git Flow.
+* **Hoàng Huy (T-SQL & Performance Specialist)**: Thiết kế CSDL T-SQL, DML Triggers kiểm tra ngưỡng vi khí hậu tự động, Views báo cáo, Composite Indexing & Benchmark I/O.
+* **Nguyễn Thanh Hiển (Backend & Security Engineer)**: Phát triển Backend Web API (Node.js/Express TypeScript), JWT RBAC, kết nối MSSQL Pool & Nghiệp vụ đơn thuê nấm.
+* **Đăng (Frontend & 3D Web UI Engineer)**: Phát triển Giao diện Web (Next.js 14, Tailwind CSS Scandinavian Luxury), Mô hình 3D buồng nấm tương tác & Cổng khách hàng.
+* **Võ Duy Thịnh (IoT & DevOps Engineer)**: Xây dựng Docker Compose SQL Server 2022, Python Telemetry Simulator giả lập cảm biến nhiệt/ẩm/CO2 và Realtime WebSocket Hub.
+
+---
+
+## 🔒 7. Quy Định Đóng Góp Mã Nguồn & Quy Trình Pull Request (Bắt Buộc)
+
+> **QUY TẮC CỦA NHÓM**: 
+> 1. Nhánh `main` được bảo vệ bằng **Branch Protection Rule**.
+> 2. Các thành viên phải tạo nhánh chức năng riêng từ `main`: `feature/<tên-tính-năng>-<tên-thành-viên>`.
+> 3. Sau khi hoàn thành và tự kiểm thử, thành viên đẩy nhánh lên GitHub và tạo **Pull Request (PR)**.
+> 4. Trưởng nhóm (**Lê Minh Tài**) kiểm tra code, đánh giá đạt chuẩn và duyệt **Merge vào `main`**.
