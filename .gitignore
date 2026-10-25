@@ -36,7 +36,20 @@ Thumbs.db
 .idea/
 *.suo
 *.user
+
 # Backend environment and build outputs
+backend/.env
 backend/.env.*
 !backend/.env.example
 backend/dist/
+backend/node_modules/
+
+# Frontend environment and build outputs
+frontend/.next/
+frontend/out/
+frontend/node_modules/
+
+# Python (iot_simulator)
+.venv/
+.vs/
+__pycache__/
