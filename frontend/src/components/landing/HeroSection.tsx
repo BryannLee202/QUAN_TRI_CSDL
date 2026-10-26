@@ -14,7 +14,7 @@ export default function HeroSection() {
         </div>
         <span className="text-slate-600">|</span>
         <div className="flex items-center gap-2 text-amber-400 font-semibold text-sm">
-          <span>🍃 CO2: 620 ppm</span>
+          <span>💨 CO2: 620 ppm</span>
         </div>
       </div>
 
