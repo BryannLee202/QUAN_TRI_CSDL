@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export default function HeroSection() {
   return (
@@ -6,11 +6,11 @@ export default function HeroSection() {
       {/* Thẻ HUD Vi Khí Hậu Nổi */}
       <div className="z-10 mb-8 flex flex-wrap justify-center gap-6 bg-slate-800/90 backdrop-blur-md px-6 py-3 rounded-full border border-[#D4AF37]/40 shadow-xl">
         <div className="flex items-center gap-2 text-emerald-400 font-semibold text-sm">
-          <span>🌡️ Nhiệt độ: 23.8°C</span>
+          <span>🌡️ Nhiệt Độ: 23.8°C</span>
         </div>
         <span className="text-slate-600">|</span>
         <div className="flex items-center gap-2 text-cyan-400 font-semibold text-sm">
-          <span>💧 Độ ẩm: 90%</span>
+          <span>💧 Độ Ẩm: 90%</span>
         </div>
         <span className="text-slate-600">|</span>
         <div className="flex items-center gap-2 text-amber-400 font-semibold text-sm">
