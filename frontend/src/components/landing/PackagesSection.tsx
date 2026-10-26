@@ -79,7 +79,7 @@ export default function PackagesSection() {
                 <span className="text-slate-400 text-sm"> / {pkg.duration}</span>
               </div>
               <div className="bg-slate-50 p-3 rounded-lg text-sm font-semibold text-slate-700">
-                🌱 Sản lượng: <span className="text-[#0D5C3A]">{pkg.expectedYield}</span>
+                ⚖️ Sản lượng: <span className="text-[#0D5C3A]">{pkg.expectedYield}</span>
               </div>
               <ul className="space-y-3 pt-2 text-sm text-slate-600">
                 {pkg.features.map((ft, idx) => (
