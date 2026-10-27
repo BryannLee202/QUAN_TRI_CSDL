@@ -37,6 +37,26 @@ def ramp(cur, conn, room_id, temp, hum, start, end, steps, interval):
         time.sleep(interval)
 
 
+def show_effects(cur, room_id, since):
+    print("\n=== SensorAlerts do trigger sinh ra ===")
+    cur.execute("SELECT AlertID, AlertType, Severity, Message, AlertTime FROM SensorAlerts "
+                "WHERE RoomID = ? AND AlertTime >= ? ORDER BY AlertID", room_id, since)
+    rows = cur.fetchall()
+    for r in rows:
+        print(f"  #{r.AlertID} [{r.Severity}] {r.AlertType}: {r.Message}")
+    if not rows:
+        print("  (chưa có cảnh báo nào)")
+
+    print("\n=== DeviceActionLogs (lệnh thiết bị) ===")
+    cur.execute("SELECT ActionID, DeviceType, ActionState, TriggeredBy, Details FROM DeviceActionLogs "
+                "WHERE RoomID = ? AND ExecutedAt >= ? ORDER BY ActionID", room_id, since)
+    rows = cur.fetchall()
+    for r in rows:
+        print(f"  #{r.ActionID} {r.DeviceType} -> {r.ActionState} (bởi {r.TriggeredBy}) {r.Details or ''}")
+    if not rows:
+        print("  (chưa có lệnh thiết bị nào)")
+
+
 def main():
     ap = argparse.ArgumentParser(description="Giả lập sự cố CO2 cao")
     ap.add_argument("--room", type=int, default=1, help="RoomID (mặc định 1)")
