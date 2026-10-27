@@ -60,6 +60,16 @@ export function initSensorSocket(httpServer: HttpServer, pool: ConnectionPool) {
    lastAction = Number(r.recordset[0].x);
  }
 
+   async function latestPerRoom(rooms: Rooms) {
+   const r = await pool.request().query(`
+    SELECT s.* FROM SensorData s
+    JOIN (SELECT RoomID, MAX(DataID) AS MaxID FROM SensorData GROUP BY RoomID) m
+      ON m.MaxID = s.DataID`);
+    return r.recordset
+     .map(toReading)
+     .filter((x) => rooms === "all" || rooms.includes(x.roomId));
+ }
+
   async function pollOnce() {
     if (polling) return; 
     polling = true;
@@ -94,12 +104,17 @@ export function initSensorSocket(httpServer: HttpServer, pool: ConnectionPool) {
 
   io.on("connection", (socket: Socket) => {
     // Client gửi: { rooms: "all" } hoặc { rooms: [1, 2] }
-    socket.on("subscribe", (payload: { rooms?: Rooms } = {}, ack?: (r: unknown) => void) => {
+    socket.on("subscribe", async (payload: { rooms?: Rooms } = {}, ack?: (r: unknown) => void) => {
       const rooms = payload.rooms ?? "all";
       if (rooms === "all") socket.join("farm");
       else for (const id of rooms) if (Number.isInteger(id)) socket.join(`room:${id}`);
+      try {
+       socket.emit("sensor:snapshot", await latestPerRoom(rooms));
       ack?.({ ok: true });
-    });
+    } catch (err) {
+      ack?.({ ok: false, error: (err as Error).message });
+    }
+   });
 
     socket.on("unsubscribe", (payload: { rooms?: Rooms } = {}) => {
       const rooms = payload.rooms ?? "all";
