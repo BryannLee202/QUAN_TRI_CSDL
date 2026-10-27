@@ -64,6 +64,7 @@ def main():
     ap.add_argument("--steps", type=int, default=5, help="số bước tăng dần")
     ap.add_argument("--hold", type=int, default=3, help="số bản tin giữ ở mức đích")
     ap.add_argument("--interval", type=float, default=2, help="giây giữa 2 bản tin")
+    ap.add_argument("--recover", action="store_true", help="hạ CO2 về bình thường sau sự cố")
     args = ap.parse_args()
 
     conn = connect()
@@ -82,6 +83,11 @@ def main():
 
     time.sleep(1)
     show_effects(cur, args.room, since)
+    if args.recover:
+        print("\n[PHỤC HỒI] Hạ CO2 về mức bình thường...")
+        ramp(cur, conn, args.room, temp, hum, args.target, co2_now, args.steps, args.interval)
+        time.sleep(1)
+        show_effects(cur, args.room, since)
     conn.close()
 
 if __name__ == "__main__":
