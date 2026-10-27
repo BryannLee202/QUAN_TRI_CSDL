@@ -1,3 +1,9 @@
+import type { Server as HttpServer } from "http";
+import { Server, Socket } from "socket.io";
+import sql, { ConnectionPool } from "mssql";
+type Row = Record<string, any>;
+export type Rooms = number[] | "all";
+
 export const toReading = (r: Row) => ({
   dataId: Number(r.DataID),
   roomId: r.RoomID as number,
@@ -29,3 +35,26 @@ export const toAction = (r: Row) => ({
   executedAt: new Date(r.ExecutedAt).toISOString(),
 });
 
+export function initSensorSocket(httpServer: HttpServer, pool: ConnectionPool) {
+  const io = new Server(httpServer, {
+    cors: { origin: process.env.CORS_ORIGIN?.split(",") ?? "*" },
+  });
+
+  io.on("connection", (socket: Socket) => {
+    // Client gửi: { rooms: "all" } hoặc { rooms: [1, 2] }
+    socket.on("subscribe", (payload: { rooms?: Rooms } = {}, ack?: (r: unknown) => void) => {
+      const rooms = payload.rooms ?? "all";
+      if (rooms === "all") socket.join("farm");
+      else for (const id of rooms) if (Number.isInteger(id)) socket.join(`room:${id}`);
+      ack?.({ ok: true });
+    });
+
+    socket.on("unsubscribe", (payload: { rooms?: Rooms } = {}) => {
+      const rooms = payload.rooms ?? "all";
+      if (rooms === "all") socket.leave("farm");
+      else for (const id of rooms) socket.leave(`room:${id}`);
+    });
+  });
+
+  return { io };
+}
