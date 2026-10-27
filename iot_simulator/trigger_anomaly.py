@@ -41,15 +41,24 @@ def main():
     ap = argparse.ArgumentParser(description="Giả lập sự cố CO2 cao")
     ap.add_argument("--room", type=int, default=1, help="RoomID (mặc định 1)")
     ap.add_argument("--target", type=float, default=1250, help="CO2 đích (ppm)")
+    ap.add_argument("--steps", type=int, default=5, help="số bước tăng dần")
+    ap.add_argument("--hold", type=int, default=3, help="số bản tin giữ ở mức đích")
+    ap.add_argument("--interval", type=float, default=2, help="giây giữa 2 bản tin")
     args = ap.parse_args()
 
     conn = connect()
     cur = conn.cursor()
     code, co2_max = room_info(cur, args.room)
     temp, hum, co2_now = baseline(cur, args.room)
-    print(f"[SỰ CỐ] {code}: ngưỡng CO2 = {co2_max:.0f} ppm, hiện tại {co2_now:.0f} -> {args.target:.0f} ppm")
-    conn.close()
 
+    print(f"[SỰ CỐ] {code}: ngưỡng CO2 = {co2_max:.0f} ppm, hiện tại {co2_now:.0f} -> {args.target:.0f} ppm")
+    ramp(cur, conn, args.room, temp, hum, co2_now, args.target, args.steps, args.interval)
+    print(f"  Giữ {args.hold} bản tin ở mức đích...")
+    for _ in range(args.hold):
+        push(cur, conn, args.room, temp, hum, args.target)
+        time.sleep(args.interval)
+
+    conn.close()
 
 if __name__ == "__main__":
     main()
