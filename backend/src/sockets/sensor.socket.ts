@@ -43,16 +43,19 @@ export function initSensorSocket(httpServer: HttpServer, pool: ConnectionPool) {
   });
 
   let lastData = 0;
+  let lastAlert = 0;
   let polling = false;
   let timer: NodeJS.Timeout | undefined;
 
   const targets = (roomId: number) => ["farm", `room:${roomId}`];
 
-  async function initCursors() {
-    const r = await pool.request().query(
-      "SELECT ISNULL((SELECT MAX(DataID) FROM SensorData), 0) AS d");
-    lastData = Number(r.recordset[0].d);
-  }
+   async function initCursors() {
+   const r = await pool.request().query(`
+     SELECT ISNULL((SELECT MAX(DataID)  FROM SensorData), 0)   AS d,
+            ISNULL((SELECT MAX(AlertID) FROM SensorAlerts), 0) AS a`);
+   lastData = Number(r.recordset[0].d);
+   lastAlert = Number(r.recordset[0].a);
+ }
 
   async function pollOnce() {
     if (polling) return; 
@@ -64,6 +67,13 @@ export function initSensorSocket(httpServer: HttpServer, pool: ConnectionPool) {
         const msg = toReading(row);
         io.to(targets(msg.roomId)).emit("sensor:update", msg);
         lastData = Math.max(lastData, msg.dataId);
+      }      
+     const alerts = await pool.request().input("last", sql.Int, lastAlert).query(
+       `SELECT TOP (${BATCH}) * FROM SensorAlerts WHERE AlertID > @last ORDER BY AlertID`);
+     for (const row of alerts.recordset) {
+       const msg = toAlert(row);
+       io.to(targets(msg.roomId)).emit("alert:new", msg);
+       lastAlert = Math.max(lastAlert, msg.alertId);
       }
     } catch (err) {
       console.error("[sensor.socket] poll lỗi:", (err as Error).message);
