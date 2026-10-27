@@ -44,6 +44,7 @@ export function initSensorSocket(httpServer: HttpServer, pool: ConnectionPool) {
 
   let lastData = 0;
   let lastAlert = 0;
+  let lastAction = 0;
   let polling = false;
   let timer: NodeJS.Timeout | undefined;
 
@@ -51,10 +52,12 @@ export function initSensorSocket(httpServer: HttpServer, pool: ConnectionPool) {
 
    async function initCursors() {
    const r = await pool.request().query(`
-     SELECT ISNULL((SELECT MAX(DataID)  FROM SensorData), 0)   AS d,
-            ISNULL((SELECT MAX(AlertID) FROM SensorAlerts), 0) AS a`);
+   SELECT ISNULL((SELECT MAX(DataID)   FROM SensorData), 0)       AS d,
+          ISNULL((SELECT MAX(AlertID)  FROM SensorAlerts), 0)     AS a,
+          ISNULL((SELECT MAX(ActionID) FROM DeviceActionLogs), 0) AS x`);
    lastData = Number(r.recordset[0].d);
    lastAlert = Number(r.recordset[0].a);
+   lastAction = Number(r.recordset[0].x);
  }
 
   async function pollOnce() {
@@ -74,6 +77,13 @@ export function initSensorSocket(httpServer: HttpServer, pool: ConnectionPool) {
        const msg = toAlert(row);
        io.to(targets(msg.roomId)).emit("alert:new", msg);
        lastAlert = Math.max(lastAlert, msg.alertId);
+      }
+     const actions = await pool.request().input("last", sql.Int, lastAction).query(
+       `SELECT TOP (${BATCH}) * FROM DeviceActionLogs WHERE ActionID > @last ORDER BY ActionID`);
+     for (const row of actions.recordset) {
+       const msg = toAction(row);
+       io.to(targets(msg.roomId)).emit("device:action", msg);
+       lastAction = Math.max(lastAction, msg.actionId);
       }
     } catch (err) {
       console.error("[sensor.socket] poll lỗi:", (err as Error).message);
