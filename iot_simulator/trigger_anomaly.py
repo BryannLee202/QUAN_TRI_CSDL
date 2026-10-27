@@ -70,6 +70,8 @@ def main():
     cur = conn.cursor()
     code, co2_max = room_info(cur, args.room)
     temp, hum, co2_now = baseline(cur, args.room)
+    cur.execute("SELECT SYSDATETIME()")
+    since = cur.fetchone()[0]
 
     print(f"[SỰ CỐ] {code}: ngưỡng CO2 = {co2_max:.0f} ppm, hiện tại {co2_now:.0f} -> {args.target:.0f} ppm")
     ramp(cur, conn, args.room, temp, hum, co2_now, args.target, args.steps, args.interval)
@@ -78,6 +80,8 @@ def main():
         push(cur, conn, args.room, temp, hum, args.target)
         time.sleep(args.interval)
 
+    time.sleep(1)
+    show_effects(cur, args.room, since)
     conn.close()
 
 if __name__ == "__main__":
