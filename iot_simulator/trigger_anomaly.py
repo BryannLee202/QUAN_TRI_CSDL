@@ -22,6 +22,21 @@ def baseline(cur, room_id):
     return 24.0, 88.0, 600.0
 
 
+def push(cur, conn, room_id, temp, hum, co2):
+    cur.execute(
+        "INSERT INTO SensorData (RoomID, TrayID, Temperature, Humidity, CO2Level, LightLux) "
+        "VALUES (?, NULL, ?, ?, ?, ?)",
+        room_id, round(temp, 2), round(hum, 2), round(co2, 2), 220.0)
+    conn.commit()
+    print(f"  -> gửi CO2 = {co2:7.1f} ppm")
+
+
+def ramp(cur, conn, room_id, temp, hum, start, end, steps, interval):
+    for i in range(1, steps + 1):
+        push(cur, conn, room_id, temp, hum, start + (end - start) * i / steps)
+        time.sleep(interval)
+
+
 def main():
     ap = argparse.ArgumentParser(description="Giả lập sự cố CO2 cao")
     ap.add_argument("--room", type=int, default=1, help="RoomID (mặc định 1)")
