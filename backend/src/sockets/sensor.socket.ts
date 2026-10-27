@@ -1,6 +1,8 @@
 import type { Server as HttpServer } from "http";
 import { Server, Socket } from "socket.io";
 import sql, { ConnectionPool } from "mssql";
+const POLL_MS = Number(process.env.SOCKET_POLL_MS ?? 2000);
+const BATCH = 500;
 type Row = Record<string, any>;
 export type Rooms = number[] | "all";
 
@@ -40,6 +42,36 @@ export function initSensorSocket(httpServer: HttpServer, pool: ConnectionPool) {
     cors: { origin: process.env.CORS_ORIGIN?.split(",") ?? "*" },
   });
 
+  let lastData = 0;
+  let polling = false;
+  let timer: NodeJS.Timeout | undefined;
+
+  const targets = (roomId: number) => ["farm", `room:${roomId}`];
+
+  async function initCursors() {
+    const r = await pool.request().query(
+      "SELECT ISNULL((SELECT MAX(DataID) FROM SensorData), 0) AS d");
+    lastData = Number(r.recordset[0].d);
+  }
+
+  async function pollOnce() {
+    if (polling) return; 
+    polling = true;
+    try {
+      const sensors = await pool.request().input("last", sql.BigInt, lastData).query(
+        `SELECT TOP (${BATCH}) * FROM SensorData WHERE DataID > @last ORDER BY DataID`);
+      for (const row of sensors.recordset) {
+        const msg = toReading(row);
+        io.to(targets(msg.roomId)).emit("sensor:update", msg);
+        lastData = Math.max(lastData, msg.dataId);
+      }
+    } catch (err) {
+      console.error("[sensor.socket] poll lỗi:", (err as Error).message);
+    } finally {
+      polling = false;
+    }
+  }
+
   io.on("connection", (socket: Socket) => {
     // Client gửi: { rooms: "all" } hoặc { rooms: [1, 2] }
     socket.on("subscribe", (payload: { rooms?: Rooms } = {}, ack?: (r: unknown) => void) => {
@@ -56,5 +88,12 @@ export function initSensorSocket(httpServer: HttpServer, pool: ConnectionPool) {
     });
   });
 
-  return { io };
+  initCursors()
+    .then(() => {
+      timer = setInterval(pollOnce, POLL_MS);
+      console.log(`[sensor.socket] sẵn sàng, poll mỗi ${POLL_MS} ms`);
+    })
+    .catch((e) => console.error("[sensor.socket] không khởi tạo được:", e.message));
+
+  return { io, stop: () => timer && clearInterval(timer) };
 }
