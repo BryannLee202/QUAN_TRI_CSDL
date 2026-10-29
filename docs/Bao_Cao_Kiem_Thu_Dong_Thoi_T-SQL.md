@@ -23,7 +23,7 @@ Giả sử buồng chỉ còn duy nhất **1 khay trống cuối cùng**. Cùng 
 
 ## 2. GIẢI PHÁP KIẾN TRÚC T-SQL: KHÓA DÒNG NGUYÊN TỬ (UPDLOCK, ROWLOCK)
 
-Để triệt tiêu 100% hiện tượng tranh chấp mà không làm suy giảm hiệu năng của toàn bộ bảng, chúng tôi áp dụng cơ chế khóa mức hàng chuyên sâu trong `sp_CreateRentalOrder`:
+Để triệt tiêu 100% hiện tượng tranh chấp mà không làm suy giảm hiệu năng của toàn bộ bảng, kiến trúc CSDL áp dụng cơ chế khóa mức hàng chuyên sâu trong `sp_CreateRentalOrder`:
 
 ```sql
 -- Trích đoạn cốt lõi trong sp_CreateRentalOrder (database/02_tsql_logic.sql)
@@ -44,7 +44,7 @@ ORDER BY TrayID;
 
 ## 3. BẢNG SO SÁNH GIỮA CƠ CHẾ MẶC ĐỊNH VÀ UPDLOCK, ROWLOCK
 
-| Tiêu Chí So Sánh | Cơ chế thông thường (Default Read Committed) | Giải pháp của Nhóm (UPDLOCK, ROWLOCK trong Transaction) |
+| Tiêu Chí So Sánh | Cơ chế thông thường (Default Read Committed) | Giải pháp Kỹ thuật (UPDLOCK, ROWLOCK trong Transaction) |
 | :--- | :--- | :--- |
 | **Loại khóa khi SELECT** | Shared Lock (`S lock`), tự nhả ngay sau khi đọc xong dòng | Update Lock (`U lock`), giữ chặt cho tới khi kết thúc `COMMIT/ROLLBACK` |
 | **Nguy cơ Overbooking** | **Rất cao (Critical)** khi có từ 2 khách hàng bấm cùng lúc | **Tuyệt đối bằng 0 (Zero Overbooking)** |
@@ -82,6 +82,6 @@ Hệ thống cung cấp 2 bộ công cụ kiểm chứng độc lập:
 
 ---
 
-## 5. KẾT LUẬN & ĐÁNH GIÁ CỦA TRƯỞNG NHÓM
+## 5. TỔNG KẾT KỸ THUẬT & ĐÁNH GIÁ KIẾN TRÚC
 1. Tầng Cơ sở dữ liệu của dự án **MushroomCloud** không chỉ dừng lại ở các câu lệnh CRUD đơn giản mà đã giải quyết triệt để bài toán đồng thời phức tạp ở cấp độ doanh nghiệp thương mại.
 2. Thiết kế này đảm bảo an toàn tuyệt đối ngay cả khi mở rộng quy mô lên hàng chục ngàn lượt truy cập đồng thời.

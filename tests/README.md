@@ -1,33 +1,35 @@
-# 🧪 HƯỚNG DẪN QUY TRÌNH KIỂM THỬ CƠ SỞ DỮ LIỆU SMARTMUSHROOMDB
+# HƯỚNG DẪN QUY TRÌNH KIỂM THỬ CƠ SỞ DỮ LIỆU SMARTMUSHROOMDB
 ### Hệ Thống Quản Lý Nuôi Trồng Nấm Thông Minh & Cho Thuê (MushroomCloud)
-### Người phụ trách kỹ thuật: Lê Minh Tài (Trưởng nhóm - Lead Architect)
+### Phụ trách kỹ thuật: Lê Minh Tài (Trưởng nhóm / Database Lead)
 
 ---
 
-## 📋 1. Danh Mục Các Bộ Kiểm Thử (Test Suites)
+## 1. Danh Mục Các Bộ Kiểm Thử (Test Suites)
 
 Thư mục `/tests` chứa các kịch bản kiểm thử độc lập ở tầng Hệ quản trị Cơ sở dữ liệu (Microsoft SQL Server / T-SQL):
 
 | Tệp Kiểm Thử | Mục Tiêu & Kịch Bản Kiểm Chứng | Kết Quả Mong Đợi |
 | :--- | :--- | :--- |
-| **`test_sp_create_rental_order.sql`** | - **Test 1**: Thuê khay trống hợp lệ (Happy path).<br>- **Test 2**: Chống Overbooking khi cố tình đặt trùng khay đang nuôi (Race Condition).<br>- **Test 3**: Từ chối dữ liệu rác (Gói thuê không tồn tại). | Toàn bộ 3 bài test đều trả về `[PASS]`. Giao dịch tự `ROLLBACK` an toàn khi có lỗi, khay chuyển trạng thái chuẩn xác. |
-| **`test_constraints_and_integrity.sql`** | - **Test 1**: Ràng buộc CHECK độ ẩm buồng nuôi ($0 - 100\%$).<br>- **Test 2**: Ràng buộc UNIQUE chống trùng mã QR định danh khay nấm.<br>- **Test 3**: Ràng buộc CHECK miền giá trị trạng thái khay nấm. | SQL Server tự động kích hoạt ràng buộc toàn vẹn chặn đứng các câu lệnh vi phạm, trả về `[PASS]`. |
-| **`test_concurrency_race_condition.sql`** | - Mô phỏng 2 tiến trình song song cùng tranh chấp 1 khay trống duy nhất trong buồng nuôi.<br>- Kiểm tra cơ chế khóa dòng `UPDLOCK, ROWLOCK`. | Tiến trình 1 thành công; Tiến trình 2 bị chặn an toàn và rollback. Khay nấm không bao giờ bị gán trùng (Zero Overbooking). |
-| **`test_concurrency_runner.ts`** | - Bắn đồng thời 10 yêu cầu đặt thuê khay nấm song song qua Promise.all vào buồng chỉ còn 2 chỗ. | Đúng 2 yêu cầu thành công, 8 yêu cầu bị từ chối với mã lỗi phòng kín chỗ, 0 khay bị trùng lặp. |
+| **`test_end_to_end_lifecycle.sql`** | Kiểm thử toàn diện chu trình sống khép kín của đơn thuê: Đặt thuê (`sp_CreateRentalOrder`) -> Quét QR (`sp_AssignTrayToOrder`) -> Cảm biến kích hoạt Trigger -> Cổng khách hàng -> Thu hoạch (`sp_RequestHarvest`, `sp_CompleteHarvest`) -> Khử trùng khay -> Báo cáo doanh thu & công suất buồng. | 8/8 bước kiểm thử đạt `[PASS]`, dữ liệu chuyển đổi trạng thái nguyên tử, không phát sinh lỗi ngoại lệ. |
+| **`test_concurrency_race_condition.sql`** | Mô phỏng 2 tiến trình song song cùng tranh chấp 1 khay trống duy nhất trong buồng nuôi; kiểm tra cơ chế khóa dòng `UPDLOCK, ROWLOCK`. | Tiến trình 1 thành công; Tiến trình 2 bị chặn an toàn và rollback. Không bao giờ phát sinh gán trùng khay (Zero Overbooking). |
+| **`test_concurrency_runner.ts`** | Kiểm thử tải bất đồng bộ: Bắn đồng thời 10 yêu cầu đặt thuê khay nấm song song qua `Promise.all` tại cùng mili-giây vào buồng chỉ còn 2 chỗ. | Đúng 2 yêu cầu thành công, 8 yêu cầu bị từ chối với mã lỗi phòng kín chỗ, 0 khay bị trùng lặp. |
+| **`test_sp_create_rental_order.sql`** | Kiểm thử các trường hợp biên của thủ tục đặt thuê: Đặt khay hợp lệ (Happy path), kiểm tra ràng buộc khóa dòng và tự động rollback khi gặp dữ liệu không hợp lệ. | Toàn bộ các test case đều trả về `[PASS]`, giao dịch tự `ROLLBACK` an toàn khi có lỗi. |
+| **`test_sp_harvest_and_qr.sql`** | Kiểm chứng quy trình nghiệp vụ: Quét mã QR gán khay, gửi yêu cầu thu hoạch và hoàn tất nghiệm thu sản lượng. | Toàn bộ 4 kịch bản đạt `[PASS]`, khay chuyển từ `OCCUPIED` sang `MAINTENANCE`. |
+| **`test_constraints_and_integrity.sql`** | Kiểm tra ràng buộc toàn vẹn miền giá trị CHECK (Nhiệt độ, độ ẩm, nồng độ CO2) và ràng buộc UNIQUE chống trùng mã khay vật lý. | SQL Server tự động kích hoạt ràng buộc toàn vẹn chặn đứng các câu lệnh vi phạm dữ liệu. |
 
 ---
 
-## 🚀 2. Hướng Dẫn Thực Thi Kiểm Thử
+## 2. Hướng Dẫn Thực Thi Kiểm Thử
 
 ### Cách 1: Chạy trực tiếp trong SQL Server Management Studio (SSMS) - Khuyên dùng
-1. Mở **SSMS** và kết nối vào máy chủ SQL Server của bạn.
-2. Đảm bảo đã chạy khởi tạo CSDL và nạp dữ liệu mẫu bằng cách thực thi lần lượt:
-   - `database/01_schema.sql`
-   - `database/02_tsql_logic.sql`
-   - `database/03_seed_data.sql`
-3. Mở tệp `tests/test_sp_create_rental_order.sql` và bấm **Execute (phím F5)**.
-4. Mở tiếp tệp `tests/test_concurrency_race_condition.sql` và bấm **Execute (phím F5)**.
-5. Mở tiếp tệp `tests/test_constraints_and_integrity.sql` và bấm **Execute (phím F5)**.
+1. Mở **SSMS** và kết nối vào máy chủ SQL Server (`.\SQLEXPRESS01` hoặc `localhost`).
+2. Mở tệp kịch bản muốn kiểm tra trong thư mục `tests/`:
+   - `tests/test_end_to_end_lifecycle.sql` (Kịch bản toàn diện khuyên dùng cho demo)
+   - `tests/test_concurrency_race_condition.sql`
+   - `tests/test_sp_create_rental_order.sql`
+   - `tests/test_sp_harvest_and_qr.sql`
+   - `tests/test_constraints_and_integrity.sql`
+3. Nhấn **Execute (phím F5)** để chạy và quan sát kết quả chi tiết trên tab `Messages`.
 
 ### Cách 2: Chạy kiểm thử tải song song tự động bằng Node.js / TypeScript
 ```bash
@@ -37,18 +39,18 @@ npx tsx ../tests/test_concurrency_runner.ts
 
 ### Cách 3: Chạy tự động qua dòng lệnh bằng công cụ `sqlcmd`
 ```powershell
-# Chạy bộ test giao dịch Stored Procedure
-sqlcmd -S localhost -d SmartMushroomDB -E -i tests/test_sp_create_rental_order.sql
+# Chạy bộ test vòng đời toàn diện
+sqlcmd -S ".\SQLEXPRESS01" -d SmartMushroomDB -E -C -I -i tests/test_end_to_end_lifecycle.sql
 
 # Chạy bộ test tranh chấp đồng thời
-sqlcmd -S localhost -d SmartMushroomDB -E -i tests/test_concurrency_race_condition.sql
+sqlcmd -S ".\SQLEXPRESS01" -d SmartMushroomDB -E -C -I -i tests/test_concurrency_race_condition.sql
 
 # Chạy bộ test ràng buộc toàn vẹn CSDL
-sqlcmd -S localhost -d SmartMushroomDB -E -i tests/test_constraints_and_integrity.sql
+sqlcmd -S ".\SQLEXPRESS01" -d SmartMushroomDB -E -C -I -i tests/test_constraints_and_integrity.sql
 ```
 
 ---
 
-## 🎯 3. Ý Nghĩa Đối Với Hội Đồng Chấm Điểm
-- Minh chứng cho giảng viên thấy hệ thống áp dụng phương pháp **Test-Driven Database Development (TDDD)**.
-- Chứng minh khả năng tự bảo vệ dữ liệu ở tầng CSDL: Dù hacker hay nhiều người dùng có thao tác đồng thời thì tầng CSDL với khóa dòng `UPDLOCK, ROWLOCK` vẫn loại trừ hoàn toàn race conditions.
+## 3. Tiêu Chuẩn Kỹ Thuật Đạt Được
+- **Áp dụng phương pháp Test-Driven Database Development (TDDD)**: Toàn bộ Stored Procedures, Views, Triggers và Constraints đều có kịch bản kiểm thử độc lập đi kèm.
+- **Bảo toàn dữ liệu ACID**: Khóa mức hàng `WITH (UPDLOCK, ROWLOCK)` kết hợp `SET XACT_ABORT ON` đảm bảo tính nhất quán tuyệt đối trong môi trường đa người dùng.
