@@ -650,3 +650,46 @@ GO
 
 PRINT N'>>> ĐÃ TẠO THÀNH CÔNG TOÀN BỘ STORED PROCEDURES, TRIGGERS, FUNCTIONS & VIEWS CHO T-SQL! <<<';
 GO
+
+-- Trigger ghi nhật kí thay đổi trạng thái khay
+
+IF OBJECT_ID(N'dbo.TrayStatusLogs', N'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.TrayStatusLogs (
+        LogID      BIGINT IDENTITY(1,1) NOT NULL,
+        TrayID     INT           NOT NULL,
+        OldStatus  VARCHAR(20)   NOT NULL,
+        NewStatus  VARCHAR(20)   NOT NULL,
+        OldOrderID INT           NULL,   -- CurrentOrderID trước khi đổi
+        NewOrderID INT           NULL,   -- CurrentOrderID sau khi đổi
+        ChangedAt  DATETIME2(3)  NOT NULL CONSTRAINT DF_TrayStatusLogs_ChangedAt DEFAULT SYSDATETIME(),
+        ChangedBy  NVARCHAR(128) NOT NULL CONSTRAINT DF_TrayStatusLogs_ChangedBy DEFAULT SUSER_SNAME(),
+        CONSTRAINT PK_TrayStatusLogs PRIMARY KEY CLUSTERED (LogID)
+    );
+END
+GO
+
+-- Tra cứu lịch sử của 1 khay, mới nhất trước
+IF NOT EXISTS (SELECT 1 FROM sys.indexes
+               WHERE object_id = OBJECT_ID(N'dbo.TrayStatusLogs') AND name = N'IX_TrayStatusLogs_Tray_ChangedAt')
+    CREATE NONCLUSTERED INDEX IX_TrayStatusLogs_Tray_ChangedAt
+        ON dbo.TrayStatusLogs (TrayID ASC, ChangedAt DESC)
+        INCLUDE (OldStatus, NewStatus, NewOrderID);
+GO
+
+CREATE OR ALTER TRIGGER dbo.trg_LogTrayStatusChange
+ON dbo.CultivationTrays
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF NOT UPDATE(Status) RETURN;   -- UPDATE không đụng cột Status thì bỏ qua
+
+    INSERT INTO dbo.TrayStatusLogs (TrayID, OldStatus, NewStatus, OldOrderID, NewOrderID)
+    SELECT i.TrayID, d.Status, i.Status, d.CurrentOrderID, i.CurrentOrderID
+    FROM inserted i
+    JOIN deleted  d ON d.TrayID = i.TrayID
+    WHERE d.Status <> i.Status;     -- chỉ ghi khi trạng thái thật sự đổi
+END
+GO
