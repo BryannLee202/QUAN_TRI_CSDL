@@ -36,6 +36,7 @@ export interface DeviceAction {
 
 export interface DeviceState {
   on: boolean;
+  actionState?: string;
   triggeredBy?: string;
 }
 
