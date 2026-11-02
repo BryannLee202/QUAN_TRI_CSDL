@@ -33,5 +33,5 @@ export const MOCK_ALERTS: AlertItem[] = [
 
 export const MOCK_DEVICES: Record<string, DeviceState> = {
   "1:EXHAUST_FAN": { on: false },
-  "1:MISTER": { on: false },
+  "1:MISTING_SYSTEM": { on: false },
 };
