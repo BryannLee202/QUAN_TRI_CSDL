@@ -28,7 +28,9 @@ export default function HardwareControls({ roomId, devices, onToggle }: Props) {
                 <p className="font-medium text-slate-800">{d.label}</p>
                 <p className="text-xs text-slate-500">{d.hint}</p>
                 {state?.triggeredBy && (
-                  <p className="mt-1 text-xs text-slate-400">Lệnh gần nhất bởi: {state.triggeredBy}</p>
+                  <p className="mt-1 text-xs text-slate-400">
+                    {state.actionState ? `${state.actionState} · ` : ""}Lệnh gần nhất bởi: {state.triggeredBy}
+                  </p>
                 )}
               </div>
               <Switch checked={on} label={d.label} onChange={(next) => onToggle(d.type, next)} />
