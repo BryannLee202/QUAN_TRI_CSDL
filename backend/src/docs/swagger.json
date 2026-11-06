@@ -1,104 +1,210 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "SmartMushroomDB - API Documentation",
+    "title": "MushroomCloud - REST API & T-SQL Services",
     "version": "1.0.0",
-    "description": "Tài liệu API cho Hệ thống Quản lý và Thuê Buồng Nấm Thông Minh (Tuần 3)"
+    "description": "Tài liệu API chuẩn mực cho Hệ thống Quản trị CSDL Nông trại Nấm Thông Minh (Farm-as-a-Service - FaaS). Hỗ trợ kiểm thử trực tiếp (Try it out) cho hội đồng chấm đồ án."
   },
   "servers": [
     {
-      "url": "http://localhost:3000",
-      "description": "Local Development Server"
+      "url": "http://localhost:5000",
+      "description": "Máy chủ Backend cục bộ (Node.js/Express + MSSQL)"
     }
   ],
   "paths": {
-    "/api/rentals": {
+    "/api/health": {
+      "get": {
+        "tags": ["Giám sát hệ thống"],
+        "summary": "Kiểm tra sức khỏe hệ thống và độ trễ CSDL SQL Server",
+        "description": "Trả về thông số CPU, RAM, thời gian chạy và thực thi truy vấn ping CSDL SQL Server thời gian thực.",
+        "responses": {
+          "200": {
+            "description": "Hệ thống và CSDL hoạt động bình thường (Healthy)",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "healthy",
+                  "timestamp": "2026-11-06T18:00:00.000Z",
+                  "uptimeSeconds": 1420,
+                  "nodeVersion": "v20.x",
+                  "memory": { "rssMb": 65.2, "heapUsedMb": 38.5, "heapTotalMb": 52.1 },
+                  "system": { "platform": "win32", "cpuCores": 8, "freeMemoryMb": 8192, "totalMemoryMb": 16384 },
+                  "database": { "status": "healthy", "latencyMs": 4, "database": "SmartMushroomDB" }
+                }
+              }
+            }
+          },
+          "503": { "description": "Mất kết nối hoặc CSDL đang gặp sự cố" }
+        }
+      }
+    },
+    "/api/auth/login": {
       "post": {
-        "summary": "Thuê khay nấm",
+        "tags": ["Xác thực & Người dùng"],
+        "summary": "Đăng nhập người dùng / kỹ thuật viên",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": ["email", "password"],
                 "properties": {
-                  "userId": { "type": "integer", "example": 1 },
-                  "packageId": { "type": "integer", "example": 2 },
-                  "quantity": { "type": "integer", "example": 5 }
+                  "email": { "type": "string", "example": "customer1@mushroomcloud.test" },
+                  "password": { "type": "string", "example": "Password123!" }
                 }
               }
             }
           }
         },
-        "responses": { "201": { "description": "Đặt thuê thành công" } }
+        "responses": {
+          "200": {
+            "description": "Đăng nhập thành công, trả về JWT Token và thông tin phân quyền Role"
+          },
+          "401": { "description": "Sai email hoặc mật khẩu" }
+        }
+      }
+    },
+    "/api/rentals": {
+      "post": {
+        "tags": ["Thuê khay nấm (FaaS)"],
+        "summary": "Đặt thuê khay nấm (Gọi sp_CreateRentalOrder với khóa bi quan)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["userId", "packageId", "trayId", "deliveryAddress", "receiverPhone"],
+                "properties": {
+                  "userId": { "type": "integer", "example": 4 },
+                  "packageId": { "type": "integer", "example": 1 },
+                  "trayId": { "type": "integer", "example": 14 },
+                  "deliveryAddress": { "type": "string", "example": "Khu Công Nghệ Cao, TP. Thủ Đức, TP.HCM" },
+                  "receiverPhone": { "type": "string", "example": "0909123456" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Khóa khay và tạo đơn hàng thành công",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Đặt thuê khay nấm thành công!",
+                  "order": {
+                    "orderId": 25,
+                    "orderCode": "ORD-20261106-9999",
+                    "totalAmount": 299000
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Khay nấm đã bị người khác thuê (Tránh Overbooking)" }
+        }
       }
     },
     "/api/trays/assign-qr": {
       "post": {
-        "summary": "Quét QR để gán khay nấm vào đơn hàng",
+        "tags": ["Gán mã QR Khay"],
+        "summary": "Kỹ thuật viên quét mã QR gán khay vật lý (sp_AssignTrayToOrder)",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": ["orderId", "trayCode", "operatorId"],
                 "properties": {
-                  "orderId": { "type": "integer", "example": 1001 },
-                  "qrCode": { "type": "string", "example": "TRAY-QR-8892" }
+                  "orderId": { "type": "integer", "example": 25 },
+                  "trayCode": { "type": "string", "example": "TRAY-RM01-R02-015" },
+                  "operatorId": { "type": "integer", "example": 2 }
                 }
               }
             }
           }
         },
-        "responses": { "200": { "description": "Gán khay thành công" } }
+        "responses": {
+          "200": { "description": "Gán mã QR vào đơn hàng thành công" }
+        }
       }
     },
     "/api/harvest": {
       "post": {
-        "summary": "Yêu cầu thu hoạch và chốt sản lượng",
+        "tags": ["Thu hoạch & Nghiệm thu"],
+        "summary": "Kỹ thuật viên chốt sản lượng thu hoạch vụ nấm (sp_CompleteHarvest)",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": ["harvestId", "actualWeightKg", "qualityGrade", "operatorId"],
                 "properties": {
-                  "trayId": { "type": "integer", "example": 50 },
-                  "actualYield": { "type": "number", "example": 12.5 }
+                  "harvestId": { "type": "integer", "example": 4 },
+                  "actualWeightKg": { "type": "number", "example": 3.25 },
+                  "qualityGrade": { "type": "string", "example": "Loại 1 (Xuất khẩu)" },
+                  "trackingNumber": { "type": "string", "example": "VNPOST-MSCLOUD-9988" },
+                  "operatorId": { "type": "integer", "example": 2 }
                 }
               }
             }
           }
         },
-        "responses": { "200": { "description": "Thu hoạch thành công" } }
+        "responses": {
+          "200": { "description": "Chốt sản lượng và chuyển khay sang bảo dưỡng thành công" }
+        }
       }
     },
     "/api/payments/generate-qr": {
       "post": {
-        "summary": "Tạo mã QR chuyển khoản VietQR động",
+        "tags": ["Thanh toán VietQR"],
+        "summary": "Sinh mã QR thanh toán ngân hàng tự động",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": ["orderId", "amount"],
                 "properties": {
-                  "orderId": { "type": "integer", "example": 1001 },
-                  "amount": { "type": "number", "example": 500000 },
+                  "orderId": { "type": "integer", "example": 25 },
+                  "amount": { "type": "number", "example": 299000 },
                   "bankId": { "type": "string", "example": "MB" },
-                  "bankAccount": { "type": "string", "example": "0999999999" }
+                  "bankAccount": { "type": "string", "example": "0909999888" }
                 }
               }
             }
           }
         },
-        "responses": { "200": { "description": "Tạo QR thành công" } }
+        "responses": {
+          "200": { "description": "Tạo dữ liệu QR Code thành công" }
+        }
       }
     },
     "/api/analytics/revenue-monthly": {
       "get": {
-        "summary": "Báo cáo thống kê doanh thu theo tháng (View vw_MonthlyRevenueReport)",
-        "responses": { "200": { "description": "Lấy báo cáo thành công" } }
+        "tags": ["Báo cáo quản trị"],
+        "summary": "Báo cáo doanh thu theo tháng (Truy vấn vw_MonthlyRevenueReport)",
+        "responses": {
+          "200": {
+            "description": "Dữ liệu doanh thu thực tế được đối soát từ CSDL",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "data": [
+                    { "Year": 2026, "Month": 11, "TotalOrders": 5, "TotalRevenue": 2695000 }
+                  ]
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
