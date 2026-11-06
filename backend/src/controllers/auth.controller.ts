@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import sql from "mssql";
 import { getPool } from "../config/db.js";
@@ -7,25 +7,17 @@ import { generateToken, verifyToken } from "../config/jwt.js";
 // POST /api/auth/register
 export const register = async (req: Request, res: Response) => {
   try {
-    const { fullName, email, password, phoneNumber, address } = req.body;
+    const { fullName, email, phoneNumber, password, address } = req.body;
 
-    // 1. Kiểm tra dữ liệu đầu vào bắt buộc
+    // 1. Kiểm tra đầu vào bắt buộc
     if (!fullName || !email || !password) {
       return res.status(400).json({
         success: false,
-        message: "Vui lòng nhập đầy đủ họ tên, email và mật khẩu.",
+        message: "Vui lòng cung cấp đầy đủ: họ tên, email và mật khẩu.",
       });
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({
-        success: false,
-        message: "Định dạng email không hợp lệ.",
-      });
-    }
-
-    if (typeof password !== "string" || password.length < 8) {
+    if (password.length < 8) {
       return res.status(400).json({
         success: false,
         message: "Mật khẩu phải có ít nhất 8 ký tự.",
@@ -82,6 +74,14 @@ export const register = async (req: Request, res: Response) => {
       email: newUser.Email,
       roleId: newUser.RoleID,
       roleName: "CUSTOMER",
+    });
+
+    // Thiết lập cookie httpOnly bảo vệ phiên làm việc
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     return res.status(201).json({
@@ -168,6 +168,14 @@ export const login = async (req: Request, res: Response) => {
       roleName: user.RoleName,
     });
 
+    // 5. Lưu JWT vào Cookie httpOnly (Kế thừa từ Seal_Hackathon_Webapp BFF)
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 ngày
+    });
+
     return res.status(200).json({
       success: true,
       message: "Đăng nhập thành công!",
@@ -192,18 +200,36 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
+// POST /api/auth/logout
+export const logout = async (_req: Request, res: Response) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  });
+  return res.status(200).json({
+    success: true,
+    message: "Đăng xuất thành công!",
+  });
+};
+
 // GET /api/auth/me
 export const getMe = async (req: Request, res: Response) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    // Hỗ trợ trích xuất token từ Cookie httpOnly hoặc Authorization Bearer Header
+    const token =
+      req.cookies?.token ||
+      (req.headers.authorization?.startsWith("Bearer ")
+        ? req.headers.authorization.split(" ")[1]
+        : null);
+
+    if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Yêu cầu cung cấp Bearer token hợp lệ.",
+        message: "Phiên làm việc chưa xác thực. Vui lòng đăng nhập.",
       });
     }
 
-    const token = authHeader.split(" ")[1];
     const decoded = verifyToken(token);
 
     const pool = getPool();
