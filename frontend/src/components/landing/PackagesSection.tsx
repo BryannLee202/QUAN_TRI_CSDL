@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { triggerSuccessConfetti } from "../../utils/confetti";
+import { TiltCard } from "./TiltCard";
 
 const packages = [
   {
@@ -58,48 +59,48 @@ export default function PackagesSection() {
   };
 
   return (
-    <section id="packages" className="py-20 px-6 bg-[#F8FAFC] text-slate-800">
+    <section id="packages" className="py-20 px-6 bg-[#F8FAFC] dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors">
       <div className="max-w-6xl mx-auto text-center space-y-4 mb-14">
-        <h2 className="text-3xl md:text-4xl font-bold text-[#0F172A]">
+        <h2 className="text-3xl md:text-4xl font-bold text-[#0F172A] dark:text-emerald-400">
           Danh Mục Các Gói Thuê Nấm
         </h2>
-        <p className="text-slate-600 max-w-2xl mx-auto">
+        <p className="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
           Lựa chọn gói nuôi trồng phù hợp với nhu cầu sử dụng hoặc làm quà tặng cao cấp. Cam kết sản lượng minh bạch.
         </p>
       </div>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         {packages.map((pkg) => (
-          <div
+          <TiltCard
             key={pkg.id}
-            className={`relative bg-white rounded-2xl p-8 shadow-sm border transition hover:shadow-xl flex flex-col justify-between ${
+            className={`bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm border transition hover:shadow-2xl flex flex-col justify-between ${
               pkg.isPopular
                 ? "border-[#D4AF37] ring-2 ring-[#D4AF37]/20"
-                : "border-slate-200"
+                : "border-slate-200 dark:border-slate-700"
             }`}
           >
             {pkg.isPopular && (
-              <span className="absolute -top-3 right-6 bg-[#D4AF37] text-white text-xs font-bold px-3 py-1 rounded-full uppercase">
+              <span className="absolute -top-3 right-6 bg-[#D4AF37] text-white text-xs font-bold px-3 py-1 rounded-full uppercase shadow-md">
                 Ưa Chuộng
               </span>
             )}
             <div className="space-y-4">
-              <h3 className="text-xl font-bold text-[#0D5C3A]">{pkg.name}</h3>
-              <p className="text-xs text-slate-500 font-medium">{pkg.species}</p>
-              <div className="border-b border-slate-100 pb-4">
-                <span className="text-3xl font-extrabold text-[#0F172A]">
+              <h3 className="text-xl font-bold text-[#0D5C3A] dark:text-emerald-400">{pkg.name}</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">{pkg.species}</p>
+              <div className="border-b border-slate-100 dark:border-slate-700 pb-4">
+                <span className="text-3xl font-extrabold text-[#0F172A] dark:text-white">
                   {pkg.price}
                 </span>
                 <span className="text-slate-400 text-sm"> / {pkg.duration}</span>
               </div>
-              <div className="bg-slate-50 p-3 rounded-lg text-sm font-semibold text-slate-700">
+              <div className="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200">
                 ⚖️ Sản lượng:{" "}
-                <span className="text-[#0D5C3A]">{pkg.expectedYield}</span>
+                <span className="text-[#0D5C3A] dark:text-emerald-400">{pkg.expectedYield}</span>
               </div>
-              <ul className="space-y-3 pt-2 text-sm text-slate-600">
+              <ul className="space-y-3 pt-2 text-sm text-slate-600 dark:text-slate-300">
                 {pkg.features.map((ft, idx) => (
                   <li key={idx} className="flex items-start gap-2">
-                    <span className="text-[#0D5C3A] font-bold">✓</span>
+                    <span className="text-[#0D5C3A] dark:text-emerald-400 font-bold">✓</span>
                     <span>{ft}</span>
                   </li>
                 ))}
@@ -107,26 +108,26 @@ export default function PackagesSection() {
             </div>
             <button
               onClick={() => handleBooking(pkg.name)}
-              className="mt-8 w-full py-3 px-4 rounded-xl font-semibold bg-[#0F172A] hover:bg-[#0D5C3A] text-white transition transform active:scale-95 shrink-0 whitespace-nowrap shadow-md"
+              className="mt-8 w-full py-3 px-4 rounded-xl font-semibold bg-[#0F172A] dark:bg-emerald-700 hover:bg-[#0D5C3A] dark:hover:bg-emerald-600 text-white transition transform active:scale-95 shrink-0 whitespace-nowrap shadow-md"
             >
               Đăng Ký Thuê Ngay
             </button>
-          </div>
+          </TiltCard>
         ))}
       </div>
 
       {bookedPackage && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-emerald-200 text-center animate-fadeIn">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-emerald-200 dark:border-emerald-700 text-center animate-fadeIn">
             <span className="text-4xl">🎉</span>
-            <h4 className="font-bold text-2xl text-[#0F172A]">Đăng Ký Thuê Thành Công!</h4>
-            <p className="text-sm text-slate-600">
+            <h4 className="font-bold text-2xl text-[#0F172A] dark:text-white">Đăng Ký Thuê Thành Công!</h4>
+            <p className="text-sm text-slate-600 dark:text-slate-300">
               Bạn đã chọn <strong>{bookedPackage}</strong>. Hệ thống CSDL đang thực thi thủ tục <code>sp_CreateRentalOrder</code> với khóa bi quan để gán mã khay QR riêng biệt cho bạn.
             </p>
             <div className="pt-2">
               <button
                 onClick={() => setBookedPackage(null)}
-                className="w-full py-2.5 px-4 bg-[#0D5C3A] text-white font-bold rounded-xl shadow transition hover:bg-emerald-800"
+                className="w-full py-2.5 px-4 bg-[#0D5C3A] hover:bg-emerald-800 text-white font-bold rounded-xl shadow transition"
               >
                 Vào Cổng Khách Hàng Theo Dõi
               </button>
