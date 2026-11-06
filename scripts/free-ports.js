@@ -14,7 +14,7 @@ console.log('🔍 [Port Manager] Đang kiểm tra trạng thái các cổng: ' +
 ports.forEach((port) => {
   try {
     if (process.platform === 'win32') {
-      const stdout = execSync(`netstat -ano | findstr :${port} | findstr LISTENING`, {
+      const stdout = execSync(`netstat -ano | findstr :${port}`, {
         encoding: 'utf8',
         stdio: ['pipe', 'pipe', 'ignore'],
       });
@@ -34,7 +34,7 @@ ports.forEach((port) => {
         pids.forEach((pid) => {
           try {
             console.log(`⚠️  [Port Manager] Cổng ${port} đang bị chiếm bởi PID ${pid}. Đang giải phóng...`);
-            execSync(`taskkill /F /PID ${pid}`, { stdio: 'ignore' });
+            execSync(`taskkill /F /T /PID ${pid}`, { stdio: 'ignore' });
             console.log(`✅ [Port Manager] Đã giải phóng thành công cổng ${port} (PID ${pid}).`);
           } catch (e) {
             console.warn(`⚠️  [Port Manager] Không thể ngắt PID ${pid}: ${e.message}`);
