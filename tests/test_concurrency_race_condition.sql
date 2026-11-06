@@ -2,11 +2,16 @@
 -- ĐỒ ÁN HỆ QUẢN TRỊ CƠ SỞ DỮ LIỆU - MUSHROOMCLOUD
 -- BÀI KIỂM THỬ ĐỒNG THỜI & TRANH CHẤP DỮ LIỆU (CONCURRENCY & RACE CONDITION TEST)
 -- Mục tiêu: Chứng minh cơ chế khóa dòng (UPDLOCK, ROWLOCK) trong sp_CreateRentalOrder
--- ngăn chặn 100% hiện tượng Overbooking khi nhiều khách hàng cùng đặt khay đồng thời.
+-- ngăn chặn 100% hiện tượng Overbooking khi nhiều khách hàng cùng tranh chấp khay đồng thời.
 -- ============================================================================
 
 USE SmartMushroomDB;
+GO
+
+SET ANSI_NULLS ON;
+SET QUOTED_IDENTIFIER ON;
 SET NOCOUNT ON;
+GO
 
 PRINT N'============================================================================';
 PRINT N'BẮT ĐẦU KIỂM THỬ TRANH CHẤP ĐỒNG THỜI (CONCURRENCY RACE CONDITION TEST)';
@@ -16,7 +21,7 @@ PRINT N'========================================================================
 DECLARE @TestRoomID INT, @TestPackageID INT, @TestUserA INT, @TestUserB INT;
 DECLARE @TestTrayID INT;
 
--- 1.1 Tạo phòng thử nghiệm chỉ có DUY NHẤT 1 khay trống
+-- 1.1 Tạo phòng thử nghiệm và 1 khay trống duy nhất
 DELETE FROM CultivationTrays WHERE TrayCode = 'TRAY_CONCUR_01';
 DELETE FROM Rooms WHERE RoomCode = 'RM_TEST_CONCUR';
 
@@ -24,8 +29,8 @@ INSERT INTO Rooms (RoomCode, RoomName, MaxTrays, TempMin, TempMax, HumidityMin, 
 VALUES ('RM_TEST_CONCUR', N'Phòng Thử Nghiệm Concurrency', 1, 20.0, 28.0, 80.0, 95.0, 1000.0, 1);
 SET @TestRoomID = SCOPE_IDENTITY();
 
-INSERT INTO CultivationTrays (RoomID, TrayCode, Status, CurrentOrderID)
-VALUES (@TestRoomID, 'TRAY_CONCUR_01', 'AVAILABLE', NULL);
+INSERT INTO CultivationTrays (RoomID, TrayCode, RackNumber, ShelfLevel, PositionNumber, Status, CurrentOrderID)
+VALUES (@TestRoomID, 'TRAY_CONCUR_01', 1, 1, 1, 'AVAILABLE', NULL);
 SET @TestTrayID = SCOPE_IDENTITY();
 
 -- 1.2 Lấy gói thuê mẫu
@@ -52,14 +57,14 @@ BEGIN TRY
     EXEC dbo.sp_CreateRentalOrder
         @UserID = @TestUserA,
         @PackageID = @TestPackageID,
-        @TargetRoomID = @TestRoomID,
-        @PaymentMethod = 'VNPAY',
+        @TrayID = @TestTrayID,
         @DeliveryAddress = N'123 Đường Test Concurrency, Quận 1, TP.HCM',
         @ReceiverPhone = '0901111222',
+        @PaymentMethod = 'VNPAY',
         @DiscountPercent = 0,
         @Notes = N'Đơn hàng test concurrency - Khách A',
-        @GeneratedOrderCode = @OrderCodeA OUTPUT,
-        @NewOrderID = @OrderID_A OUTPUT;
+        @NewOrderID = @OrderID_A OUTPUT,
+        @GeneratedOrderCode = @OrderCodeA OUTPUT;
 
     PRINT N'   [THÀNH CÔNG] Khách A đã giữ chỗ khay thành công! Mã đơn: ' + @OrderCodeA;
 END TRY
@@ -68,9 +73,9 @@ BEGIN CATCH
 END CATCH;
 
 -- ============================================================================
--- BƯỚC 3: MÔ PHỎNG TIẾN TRÌNH 2 (SESSION 2 - KHÁCH HÀNG B TRANH CHẤP CÙNG PHÒNG)
+-- BƯỚC 3: MÔ PHỎNG TIẾN TRÌNH 2 (SESSION 2 - KHÁCH HÀNG B TRANH CHẤP CÙNG KHAY)
 -- ============================================================================
-PRINT N'>> [TIẾN TRÌNH 2]: Khách hàng B gọi sp_CreateRentalOrder vào cùng phòng vừa hết chỗ...';
+PRINT N'>> [TIẾN TRÌNH 2]: Khách hàng B gọi sp_CreateRentalOrder tranh chấp cùng khay vừa hết chỗ...';
 
 DECLARE @OrderCodeB VARCHAR(30), @OrderID_B INT;
 DECLARE @SessionB_Blocked BIT = 0;
@@ -79,14 +84,14 @@ BEGIN TRY
     EXEC dbo.sp_CreateRentalOrder
         @UserID = @TestUserB,
         @PackageID = @TestPackageID,
-        @TargetRoomID = @TestRoomID,
-        @PaymentMethod = 'MOMO',
+        @TrayID = @TestTrayID,
         @DeliveryAddress = N'456 Đường Test Tranh Chấp, Quận 3, TP.HCM',
         @ReceiverPhone = '0903333444',
+        @PaymentMethod = 'MOMO',
         @DiscountPercent = 0,
         @Notes = N'Đơn hàng test concurrency - Khách B (Kỳ vọng bị từ chối)',
-        @GeneratedOrderCode = @OrderCodeB OUTPUT,
-        @NewOrderID = @OrderID_B OUTPUT;
+        @NewOrderID = @OrderID_B OUTPUT,
+        @GeneratedOrderCode = @OrderCodeB OUTPUT;
 
     PRINT N'   [CẢNH BÁO NGUY HIỂM] Khách B đặt thành công -> ĐÃ XẢY RA LỖI OVERBOOKING!';
 END TRY
@@ -108,7 +113,7 @@ SELECT @FinalTrayStatus = Status, @AssignedOrderID = CurrentOrderID
 FROM CultivationTrays
 WHERE TrayID = @TestTrayID;
 
-PRINT N'   - Trạng thái khay TRAY_CONCUR_01 hiện tại: ' + @FinalTrayStatus;
+PRINT N'   - Trạng thái khay TRAY_CONCUR_01 hiện tại: ' + ISNULL(@FinalTrayStatus, 'NULL');
 PRINT N'   - Gán duy nhất cho Order ID: ' + CAST(ISNULL(@AssignedOrderID, 0) AS VARCHAR(10));
 
 -- 4.2 Kiểm tra số lượng đơn hàng trúng khay
