@@ -3,6 +3,7 @@
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import LanguageToggle from "./LanguageToggle";
+import NotificationBell from "./NotificationBell";
 import { useLanguage } from "../../context/LanguageContext";
 
 export default function Navbar() {
@@ -27,6 +28,7 @@ export default function Navbar() {
           </a>
         </div>
         <div className="flex items-center gap-2">
+          <NotificationBell />
           <LanguageToggle />
           <ThemeToggle />
         </div>
