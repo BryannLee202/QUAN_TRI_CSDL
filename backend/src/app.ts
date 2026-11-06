@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import swaggerUi from "swagger-ui-express";
 import fs from "fs";
@@ -22,7 +23,14 @@ app.use(
   })
 );
 
-app.use(cors());
+// Hỗ trợ gửi cookie an toàn giữa Frontend và Backend
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 app.use(express.json());
 
 // 2. Cấu hình Rate Limiting phòng thủ chống DDoS & Brute-force
