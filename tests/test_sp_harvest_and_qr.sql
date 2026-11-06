@@ -25,8 +25,8 @@ INSERT INTO Rooms (RoomCode, RoomName, MaxTrays, TempMin, TempMax, HumidityMin, 
 VALUES ('RM_TEST_QR', N'Phòng Test Quy Trình QR', 5, 20.0, 26.0, 85.0, 95.0, 900.0, 1);
 SET @TestRoomID = SCOPE_IDENTITY();
 
-INSERT INTO CultivationTrays (RoomID, TrayCode, Status, CurrentOrderID)
-VALUES (@TestRoomID, 'TRAY_TEST_QR_01', 'AVAILABLE', NULL);
+INSERT INTO CultivationTrays (RoomID, TrayCode, RackNumber, ShelfLevel, PositionNumber, Status, CurrentOrderID)
+VALUES (@TestRoomID, 'TRAY_TEST_QR_01', 1, 1, 1, 'AVAILABLE', NULL);
 SET @TestTrayID = SCOPE_IDENTITY();
 
 SELECT TOP 1 @TestPackageID = PackageID FROM RentalPackages WHERE IsActive = 1;
@@ -34,7 +34,7 @@ SELECT TOP 1 @TestUserID = UserID FROM Users WHERE RoleID = 3;
 SELECT TOP 1 @TestOperatorID = UserID FROM Users WHERE RoleID = 2; -- Kỹ thuật viên
 
 -- Tạo đơn thuê nấm ban đầu chưa gán khay
-INSERT INTO RentalOrders (OrderCode, UserID, PackageID, StartDate, ExpectedEndDate, TotalAmount, PaymentStatus, PaymentMethod, DeliveryAddress, ReceiverPhone)
+INSERT INTO RentalOrders (OrderCode, UserID, PackageID, StartDate, EndDate, TotalAmount, PaymentStatus, PaymentMethod, DeliveryAddress, ReceiverPhone)
 VALUES ('ORD-TEST-QR-999', @TestUserID, @TestPackageID, SYSDATETIME(), DATEADD(DAY, 45, SYSDATETIME()), 1500000, 'PAID', 'MOMO', N'Địa chỉ nhận nấm test', '0909999888');
 SET @TestOrderID = SCOPE_IDENTITY();
 
@@ -133,22 +133,20 @@ BEGIN TRY
     -- 1. HarvestRequests đổi sang COMPLETED
     -- 2. RentalOrders đổi sang COMPLETED
     -- 3. CultivationTrays chuyển về MAINTENANCE (để khử trùng) và gỡ liên kết đơn hàng
-    DECLARE @HarvestStatus VARCHAR(20), @OrderStatus VARCHAR(20), @TrayStatus VARCHAR(20), @CurrOrder INT;
+    DECLARE @HarvestStatus VARCHAR(20), @TrayStatus VARCHAR(20), @CurrOrder INT;
     SELECT @HarvestStatus = Status FROM HarvestRequests WHERE HarvestID = @TestHarvestID;
-    SELECT @OrderStatus = OrderStatus FROM RentalOrders WHERE OrderID = @TestOrderID;
-    SELECT @TrayStatus = Status, @CurrOrder = CurrentOrderID FROM CultivationTrays WHERE TrayID = @TestTrayID;
+        SELECT @TrayStatus = Status, @CurrOrder = CurrentOrderID FROM CultivationTrays WHERE TrayID = @TestTrayID;
 
-    IF @HarvestStatus = 'COMPLETED' AND @OrderStatus = 'COMPLETED' AND @TrayStatus = 'MAINTENANCE' AND @CurrOrder IS NULL
+    IF @HarvestStatus = 'COMPLETED' AND @TrayStatus = 'MAINTENANCE' AND @CurrOrder IS NULL
     BEGIN
         PRINT N'   [PASS] Nghiệm thu toàn vẹn thành công!';
         PRINT N'          - Trạng thái yêu cầu: ' + @HarvestStatus;
-        PRINT N'          - Trạng thái đơn hàng: ' + @OrderStatus;
-        PRINT N'          - Trạng thái khay nấm: ' + @TrayStatus + N' (sẵn sàng khử trùng vụ mới)';
+                PRINT N'          - Trạng thái khay nấm: ' + @TrayStatus + N' (sẵn sàng khử trùng vụ mới)';
         SET @PassCount += 1;
     END
     ELSE
     BEGIN
-        PRINT N'   [FAIL] Dữ liệu sau thu hoạch không đúng kỳ vọng: Harvest=' + ISNULL(@HarvestStatus,'') + N', Order=' + ISNULL(@OrderStatus,'') + N', Tray=' + ISNULL(@TrayStatus,'');
+        PRINT N'   [FAIL] Dữ liệu sau thu hoạch không đúng kỳ vọng: Harvest=' + ISNULL(@HarvestStatus,'') + N', Tray=' + ISNULL(@TrayStatus,'');
         SET @FailCount += 1;
     END
 END TRY

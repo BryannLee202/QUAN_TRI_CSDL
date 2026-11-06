@@ -10,7 +10,10 @@
 USE SmartMushroomDB;
 GO
 
+SET ANSI_NULLS ON;
+SET QUOTED_IDENTIFIER ON;
 SET NOCOUNT ON;
+GO
 
 PRINT N'======================================================================';
 PRINT N'BẮT ĐẦU CHẠY BỘ KIỂM THỬ RÀNG BUỘC TOÀN VẸN CSDL (DATA INTEGRITY)';
@@ -49,18 +52,18 @@ PRINT N'----------------------------------------------------------------------';
 
 -- ============================================================================
 -- TEST CASE 2: RÀNG BUỘC DUY NHẤT (UNIQUE) MÃ KHAY ĐỊNH DANH QR
--- Cố tình chèn 2 khay nấm có cùng mã QR Code đã tồn tại trên kệ
+-- Cố tình chèn khay nấm có cùng mã QR Code đã tồn tại trên kệ
 -- Kỳ vọng: SQL Server chặn vì vi phạm UQ_CultivationTrays_Code
 -- ============================================================================
 SET @TotalTests = @TotalTests + 1;
-PRINT N'[TEST CASE 2]: Thử chèn khay nấm trùng mã QR đã tồn tại (TRAY-RM01-R01-01)...';
+PRINT N'[TEST CASE 2]: Thử chèn khay nấm trùng mã QR đã tồn tại trên kệ...';
 
 BEGIN TRY
-    DECLARE @RoomID INT;
-    SELECT TOP 1 @RoomID = RoomID FROM Rooms;
+    DECLARE @RoomID INT, @ExistingTrayCode VARCHAR(50);
+    SELECT TOP 1 @ExistingTrayCode = TrayCode, @RoomID = RoomID FROM CultivationTrays;
 
     INSERT INTO CultivationTrays (TrayCode, RoomID, RackNumber, ShelfLevel, PositionNumber, Status)
-    VALUES ('TRAY-RM01-R01-01', @RoomID, 9, 9, 9, 'AVAILABLE');
+    VALUES (@ExistingTrayCode, @RoomID, 9, 9, 9, 'AVAILABLE');
 
     SET @FailedTests = @FailedTests + 1;
     PRINT N'   => KẾT QUẢ: [FAIL] LỖI! CSDL chấp nhận mã QR bị trùng lặp!';
