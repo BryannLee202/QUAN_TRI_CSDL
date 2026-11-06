@@ -13,6 +13,7 @@ import paymentRoutes from "./routes/payment.routes.js";
 import analyticsRoutes from "./routes/analytics.routes.js";
 import healthRoutes from "./routes/health.routes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { csrfProtection } from "./middleware/csrf.middleware.js";
 
 const app = express();
 
@@ -33,7 +34,10 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
-// 2. Cấu hình Rate Limiting phòng thủ chống DDoS & Brute-force
+// 2. Bảo vệ chống tấn công CSRF (Double Submit Cookie Pattern)
+app.use(csrfProtection);
+
+// 3. Cấu hình Rate Limiting phòng thủ chống DDoS & Brute-force
 const generalApiLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 phút
   max: 120, // Tối đa 120 requests/phút cho các API thông thường
@@ -71,7 +75,7 @@ const swaggerDocument = fs.existsSync(swaggerPath)
 // Swagger OpenAPI documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// 3. API Routes kèm các lớp bảo vệ
+// 4. API Routes kèm các lớp bảo vệ
 app.use("/api", healthRoutes); // Không áp rate limit khắt khe lên endpoint health check
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api", generalApiLimiter, rentalRoutes);
