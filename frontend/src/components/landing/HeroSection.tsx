@@ -16,34 +16,44 @@ interface ChamberView {
 
 const chamberViews: ChamberView[] = [
   {
-    id: "chamber",
-    name: "Buồng Kính Vi Khí Hậu 3D",
-    badge: "ISO Class 5",
+    id: "portal",
+    name: "Buồng Nuôi Phòng Sạch 3D",
+    badge: "ISO Class 5 • Giám Sát 24/7",
+    image: "/images/view-portal-macro.jpg",
+    temp: "24.0°C",
+    hum: "91%",
+    co2: "650 ppm",
+    desc: "Cận cảnh khay nấm Bào Ngư phát triển trong buồng kính với camera góc cận và cảm biến vi khí hậu",
+  },
+  {
+    id: "control",
+    name: "Trung Tâm Điều Hành Trang Trại",
+    badge: "IoT Telemetry Hub",
+    image: "/images/view-operator-hub.jpg",
+    temp: "22.5°C",
+    hum: "65%",
+    co2: "450 ppm",
+    desc: "Phòng điều hành trung tâm giám sát đồng loạt các buồng nuôi, van phun sương và quạt đối lưu",
+  },
+  {
+    id: "facility",
+    name: "Cơ Sở Nuôi Cấy Đa Tầng FaaS",
+    badge: "Smart Multi-Tier Racks",
+    image: "/images/view-farm-facility.jpg",
+    temp: "25.0°C",
+    hum: "88%",
+    co2: "590 ppm",
+    desc: "Hệ thống dàn kệ nuôi nấm quy mô lớn tích hợp tự động hóa điều hòa vi khí hậu chuẩn VietGAP",
+  },
+  {
+    id: "cube",
+    name: "Buồng Kính Lập Phương Cách Ly",
+    badge: "Terrarium Chamber",
     image: "/images/chamber-clean-crop.png",
     temp: "24.2°C",
     hum: "92%",
     co2: "680 ppm",
-    desc: "Buồng nuôi kính vô trùng cách nhiệt với hệ thống sương ẩm siêu âm vi khí hậu",
-  },
-  {
-    id: "control",
-    name: "Phòng Điều Hành IoT Trang Trại",
-    badge: "Live Telemetry",
-    image: "/images/farm-cleanroom-control.jpg",
-    temp: "22.5°C",
-    hum: "65%",
-    co2: "450 ppm",
-    desc: "Trung tâm vận hành theo dõi dữ liệu cảm biến và van điều tiết của toàn trang trại",
-  },
-  {
-    id: "facility",
-    name: "Dàn Buồng Nuôi Cấy FaaS",
-    badge: "Smart Racks",
-    image: "/images/farm-facility-dashboard.jpg",
-    temp: "25.0°C",
-    hum: "88%",
-    co2: "590 ppm",
-    desc: "Khu nuôi cấy đa tầng tích hợp camera soi góc cận và cảm biến độ ẩm cơ chất",
+    desc: "Mô hình buồng kính lập phương cách nhiệt độc lập với làn sương ẩm siêu âm tự động",
   },
 ];
 
@@ -52,16 +62,16 @@ export default function HeroSection() {
   const currentView = chamberViews[activeTab];
 
   return (
-    <section className="relative bg-gradient-to-b from-white via-slate-50/70 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-900 dark:text-slate-100 py-16 sm:py-24 px-6 overflow-hidden transition-colors">
+    <section className="relative bg-gradient-to-b from-white via-slate-50/70 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-900 dark:text-slate-100 py-12 sm:py-20 px-6 overflow-hidden transition-colors">
       {/* Background Subtle Gradient Blobs */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-emerald-500/10 dark:bg-emerald-500/5 blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-emerald-500/10 dark:bg-emerald-500/5 blur-3xl pointer-events-none rounded-full" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Top Split: 2-Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           
           {/* Cột Trái: Tiêu đề, Thông điệp & CTA */}
-          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+          <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
             {/* Pill Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-xs font-semibold text-emerald-800 dark:text-emerald-300 shadow-xs">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
@@ -77,7 +87,7 @@ export default function HeroSection() {
             </h1>
 
             {/* Mô tả giải pháp */}
-            <p className="text-slate-600 dark:text-slate-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed">
               Trải nghiệm mô hình nuôi trồng nấm dược liệu công nghệ cao khép kín chuẩn ISO: Thuê khay nấm trực tuyến, giám sát vi khí hậu 24/7 qua cảm biến IoT & Camera Live Stream, nhận nấm tươi thu hoạch tận nhà.
             </p>
 
@@ -101,7 +111,7 @@ export default function HeroSection() {
             </div>
 
             {/* Trust Badges */}
-            <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs font-semibold text-slate-500 dark:text-slate-400">
+            <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs font-semibold text-slate-500 dark:text-slate-400">
               <span className="flex items-center gap-1.5">
                 <span className="text-emerald-600 dark:text-emerald-400 font-bold">✓</span>
                 Giao dịch khóa dòng CSDL T-SQL
@@ -117,19 +127,19 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Cột Phải: Bộ Trình Diễn Hình Ảnh Buồng Nấm Đa Trạng Thái */}
-          <div className="lg:col-span-5 relative flex flex-col items-center">
+          {/* Cột Phải: Showcase Buồng Kính Hiện Đại (Trắng Tinh Tế, Không Hộp Đen) */}
+          <div className="lg:col-span-6 relative flex flex-col items-center">
             
-            {/* Bộ Nút Chuyển Đổi Góc Nhìn Thực Tế */}
-            <div className="w-full max-w-lg flex items-center justify-between gap-1.5 p-1 mb-3 rounded-2xl bg-slate-100/90 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/70 shadow-xs">
+            {/* Bộ Nút Chuyển Đổi Tab Siêu Nét - Kiểu Dáng Apple Segments */}
+            <div className="w-full flex items-center justify-between gap-1 p-1 mb-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm">
               {chamberViews.map((v, idx) => (
                 <button
                   key={v.id}
                   onClick={() => setActiveTab(idx)}
-                  className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition-all text-center truncate ${
+                  className={`flex-1 py-2 px-2.5 rounded-xl text-xs font-bold transition-all text-center truncate ${
                     activeTab === idx
-                      ? "bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700"
-                      : "text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
+                      ? "bg-emerald-700 text-white shadow-sm"
+                      : "text-slate-600 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                   }`}
                   title={v.name}
                 >
@@ -138,49 +148,55 @@ export default function HeroSection() {
               ))}
             </div>
 
-            {/* Khung Kính Hiển Thị Ảnh Chân Thực */}
-            <div className="relative w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 dark:border-slate-800 bg-slate-950 group transition-all duration-500">
-              {/* Ảnh Buồng Nấm Thực Tế Cách Ly */}
-              <div className="relative aspect-[4/3] w-full bg-slate-950">
+            {/* Khung Kính Showcase Sang Trọng Màu Sáng */}
+            <div className="relative w-full rounded-3xl overflow-hidden shadow-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 group transition-all duration-500">
+              {/* Hình Ảnh Nét Căng 1376x768 */}
+              <div className="relative aspect-[16/10] w-full bg-slate-100 dark:bg-slate-950 overflow-hidden">
                 <Image
                   key={currentView.image}
                   src={currentView.image}
                   alt={currentView.name}
                   fill
                   priority
-                  className="object-contain p-2 group-hover:scale-105 transition-transform duration-700 ease-out"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
-              </div>
 
-              {/* Lớp phủ chuyển màu viền kính */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent pointer-events-none" />
+                {/* Lớp bóng kính mờ nhẹ ở đáy */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
 
-              {/* Tag phân loại trên đầu */}
-              <div className="absolute top-4 left-4 backdrop-blur-md bg-slate-900/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold px-3 py-1 rounded-full shadow-lg flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                <span>{currentView.badge}</span>
-              </div>
+                {/* Badge Trạng Thái Nổi Góc Trên */}
+                <div className="absolute top-3 left-3 backdrop-blur-md bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-[11px] font-bold px-3 py-1 rounded-full shadow-md flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                  <span>{currentView.badge}</span>
+                </div>
 
-              {/* 3 Thẻ Hologram Vi Khí Hậu Cập Nhật Theo Ảnh */}
-              <div className="absolute top-4 right-4 backdrop-blur-md bg-slate-900/85 border border-cyan-500/40 text-cyan-300 text-xs font-mono font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
-                <span>Nhiệt độ: {currentView.temp}</span>
-              </div>
+                {/* 3 Chip Cảm Biến Realtime Nổi Góc Trên Phải */}
+                <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
+                  <div className="backdrop-blur-md bg-slate-900/85 border border-emerald-500/40 text-emerald-300 text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    <span>🌡️ {currentView.temp}</span>
+                  </div>
+                  <div className="backdrop-blur-md bg-slate-900/85 border border-cyan-500/40 text-cyan-300 text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                    <span>💧 {currentView.hum}</span>
+                  </div>
+                </div>
 
-              <div className="absolute bottom-12 right-4 backdrop-blur-md bg-slate-900/85 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                <span>Độ ẩm: {currentView.hum}</span>
-              </div>
-
-              {/* Mô tả chân ảnh */}
-              <div className="absolute bottom-3 left-4 right-4 text-xs text-slate-300 font-medium truncate pointer-events-none">
-                💡 <span className="text-emerald-400 font-bold">{currentView.name}:</span> {currentView.desc}
+                {/* Chú Thích Dưới Đáy Ảnh */}
+                <div className="absolute bottom-3 left-3 right-3 text-white">
+                  <h3 className="font-bold text-sm text-white drop-shadow-sm flex items-center gap-1.5">
+                    <span>{currentView.name}</span>
+                  </h3>
+                  <p className="text-xs text-slate-200/90 line-clamp-1 mt-0.5 font-normal">
+                    {currentView.desc}
+                  </p>
+                </div>
               </div>
             </div>
 
-            {/* Ghi chú tương tác */}
-            <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-2 text-center">
-              👆 Bấm chọn các tab phía trên để chuyển đổi giữa các góc nhìn thực tế của trang trại
+            {/* Ghi chú gợi ý bấm chọn */}
+            <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-2.5 text-center font-medium">
+              💡 Bấm chọn các tab phía trên để chuyển đổi giữa 4 góc nhìn nông trại công nghệ cao thực tế
             </p>
           </div>
 
