@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import NetworkStatusBanner from "../components/NetworkStatusBanner";
 import { LanguageProvider } from "../context/LanguageContext";
+import BotFloatingAction from "../components/ai/BotFloatingAction";
 
 export const metadata: Metadata = {
   title: "MushroomCloud - Nông Nghiệp Thông Minh FaaS",
@@ -19,6 +20,7 @@ export default function RootLayout({
         <LanguageProvider>
           <NetworkStatusBanner />
           {children}
+          <BotFloatingAction />
         </LanguageProvider>
       </body>
     </html>
