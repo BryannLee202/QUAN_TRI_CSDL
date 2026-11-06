@@ -61,4 +61,20 @@ ports.forEach((port) => {
   }
 });
 
+if (process.platform === 'win32') {
+  try {
+    const orphanCmd = 'Get-CimInstance Win32_Process -Filter "Name = \'node.exe\'" | Where-Object { $_.CommandLine -like "*Mushromm*" -and $_.ProcessId -ne ' + process.pid + ' } | Select-Object -ExpandProperty ProcessId';
+    const orphanOutput = execSync(`powershell -NoProfile -Command "${orphanCmd}"`, {
+      encoding: 'utf8',
+      stdio: ['pipe', 'pipe', 'ignore'],
+    });
+    const orphanPids = orphanOutput.trim().split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+    orphanPids.forEach(p => {
+      try {
+        execSync(`taskkill /F /T /PID ${p}`, { stdio: 'ignore' });
+      } catch {}
+    });
+  } catch {}
+}
+
 console.log('🎯 [Port Manager] Hoàn tất chuẩn bị tài nguyên mạng!\n');
