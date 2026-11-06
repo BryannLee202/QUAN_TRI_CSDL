@@ -5,7 +5,8 @@ const tests = [
   'tests/test_sp_create_rental_order.sql',
   'tests/test_concurrency_race_condition.sql',
   'tests/test_constraints_and_integrity.sql',
-  'tests/test_sp_harvest_and_qr.sql'
+  'tests/test_sp_harvest_and_qr.sql',
+  'tests/test_audit_and_security.sql'
 ];
 
 for (let round = 1; round <= 3; round++) {
@@ -32,4 +33,4 @@ for (let round = 1; round <= 3; round++) {
   }
 }
 
-console.log('\n🎉 TOÀN BỘ 3 VÒNG KIỂM THỬ TẤT CẢ 5 KỊCH BẢN ĐÃ VƯỢT QUA 100%!');
+console.log('\n🎉 TOÀN BỘ 3 VÒNG KIỂM THỬ TẤT CẢ 6 KỊCH BẢN ĐÃ VƯỢT QUA 100%!');
