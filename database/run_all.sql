@@ -20,6 +20,9 @@ PRINT N'======================================================================';
 -- 4. ĐÁNH CHỈ MỤC TỐI ƯU HIỆU NĂNG (04_indexing_and_performance.sql)
 :r 04_indexing_and_performance.sql
 
+-- 5. NHẬT KÝ KIỂM TOÁN VÀ TRUY VẾT HÀNH ĐỘNG (05_audit_logs.sql)
+:r 05_audit_logs.sql
+
 PRINT N'======================================================================';
 PRINT N'HOÀN TẤT 100% QUÁ TRÌNH KHỞI TẠO CƠ SỞ DỮ LIỆU CHO HỆ THỐNG!';
 PRINT N'======================================================================';
