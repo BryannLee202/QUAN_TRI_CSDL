@@ -1,0 +1,13 @@
+# ==============================================================================
+# HỆ THỐNG NÔNG TRẠI NẤM THÔNG MINH - MUSHROOMCLOUD (FARM-AS-A-SERVICE)
+# DANH SÁCH TÀI KHOẢN DÙNG CHO KIỂM THỬ VÀ BẢO VỆ ĐỒ ÁN (DEMO CREDENTIALS)
+# Kế thừa mô hình tài khoản mẫu từ SEAL_HACKATHON
+# Phụ trách: Hoàng Huy (hoanghuy216412@gmail.com)
+#
+# Định dạng: email | mật khẩu | vai trò | mô tả
+# ==============================================================================
+
+admin@mushroomcloud.test|Password123!|ADMIN|Quản trị viên toàn hệ thống, toàn quyền cấu hình buồng nấm và xem báo cáo doanh thu
+operator1@mushroomcloud.test|Password123!|OPERATOR|Kỹ thuật viên phòng nuôi trồng, quét mã QR gán khay, nghiệm thu thu hoạch nấm
+customer1@mushroomcloud.test|Password123!|CUSTOMER|Khách hàng thuê khay nấm, theo dõi vi khí hậu, xem camera và gửi yêu cầu thu hoạch
+customer2@mushroomcloud.test|Password123!|CUSTOMER|Khách hàng thứ 2, dùng để kiểm thử đặt thuê đồng thời (Race Condition)
