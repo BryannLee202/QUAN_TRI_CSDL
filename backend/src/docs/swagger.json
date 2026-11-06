@@ -1,0 +1,105 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SmartMushroomDB - API Documentation",
+    "version": "1.0.0",
+    "description": "Tài liệu API cho Hệ thống Quản lý và Thuê Buồng Nấm Thông Minh (Tuần 3)"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local Development Server"
+    }
+  ],
+  "paths": {
+    "/api/rentals": {
+      "post": {
+        "summary": "Thuê khay nấm",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": { "type": "integer", "example": 1 },
+                  "packageId": { "type": "integer", "example": 2 },
+                  "quantity": { "type": "integer", "example": 5 }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Đặt thuê thành công" } }
+      }
+    },
+    "/api/trays/assign-qr": {
+      "post": {
+        "summary": "Quét QR để gán khay nấm vào đơn hàng",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "orderId": { "type": "integer", "example": 1001 },
+                  "qrCode": { "type": "string", "example": "TRAY-QR-8892" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Gán khay thành công" } }
+      }
+    },
+    "/api/harvest": {
+      "post": {
+        "summary": "Yêu cầu thu hoạch và chốt sản lượng",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "trayId": { "type": "integer", "example": 50 },
+                  "actualYield": { "type": "number", "example": 12.5 }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Thu hoạch thành công" } }
+      }
+    },
+    "/api/payments/generate-qr": {
+      "post": {
+        "summary": "Tạo mã QR chuyển khoản VietQR động",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "orderId": { "type": "integer", "example": 1001 },
+                  "amount": { "type": "number", "example": 500000 },
+                  "bankId": { "type": "string", "example": "MB" },
+                  "bankAccount": { "type": "string", "example": "0999999999" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Tạo QR thành công" } }
+      }
+    },
+    "/api/analytics/revenue-monthly": {
+      "get": {
+        "summary": "Báo cáo thống kê doanh thu theo tháng (View vw_MonthlyRevenueReport)",
+        "responses": { "200": { "description": "Lấy báo cáo thành công" } }
+      }
+    }
+  }
+}
