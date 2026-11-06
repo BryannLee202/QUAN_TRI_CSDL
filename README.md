@@ -1,212 +1,225 @@
-# 🍄 MushroomCloud - Smart Mushroom Cultivation & Rental Platform
-### Hệ Thống Quản Lý Nuôi Trồng Nấm Thông Minh Tích Hợp Cho Thuê & Giám Sát Từ Xa (FaaS)
+# BÁO CÁO ĐỒ ÁN MÔN HỌC: QUẢN TRỊ CƠ SỞ DỮ LIỆU NÂNG CAO
+## ĐỀ TÀI: HỆ THỐNG QUẢN LÝ VÀ ĐIỀU HÀNH NUÔI TRỒNG NẤM THÔNG MINH THEO MÔ HÌNH FARM-AS-A-SERVICE (MUSHROOMCLOUD)
 
-[![Database: Microsoft SQL Server](https://img.shields.io/badge/Database-MS%20SQL%20Server%202022-CC292B?logo=microsoftsqlserver)](https://www.microsoft.com/sql-server)
-[![T-SQL Stored Procedures](https://img.shields.io/badge/T--SQL-Procedures%20%26%20Triggers-0078D4)](https://docs.microsoft.com/sql/t-sql/)
-[![Node.js & Express](https://img.shields.io/badge/Backend-Node.js%20%26%20Express%20(TS)-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![React & Next.js](https://img.shields.io/badge/Frontend-Next.js%2014%20(App%20Router)-black?logo=next.js)](https://nextjs.org/)
-[![Realtime: Socket.io](https://img.shields.io/badge/Realtime-Socket.io%20Hub-010101?logo=socket.io)](https://socket.io/)
-[![Styling: Tailwind CSS](https://img.shields.io/badge/Theme-Scandinavian%20Luxury-0D5C3A?logo=tailwindcss)](https://tailwindcss.com/)
-[![DevOps: Docker](https://img.shields.io/badge/DevOps-Docker%20Compose-2496ED?logo=docker)](https://www.docker.com/)
+**Đơn vị đào tạo**: Khoa Công nghệ Thông tin – Trường Đại học Sư phạm Kỹ thuật TP. Hồ Chí Minh  
+**Học phần**: Quản trị Cơ sở Dữ liệu Nâng cao (Advanced Database Management Systems)  
+**Hệ Quản trị CSDL mục tiêu**: Microsoft SQL Server (Transact-SQL)  
+**Kho lưu trữ mã nguồn**: [https://github.com/BryannLee202/QUAN_TRI_CSDL](https://github.com/BryannLee202/QUAN_TRI_CSDL)
 
 ---
 
-## 📖 1. Giới Thiệu Dự Án
+### BẢNG PHÂN CÔNG NHIỆM VỤ VÀ THÀNH VIÊN THỰC HIỆN
 
-**MushroomCloud** là nền tảng thương mại dịch vụ và điều hành nuôi trồng nấm công nghệ cao theo mô hình **Farm-as-a-Service (FaaS)**:
-- **Khách hàng (Customer)**: Thuê khay nấm trực tuyến từ xa, theo dõi các chỉ số vi khí hậu (Nhiệt độ, Độ ẩm, nồng độ $\text{CO}_2$, Cường độ sáng) theo thời gian thực 24/7, theo dõi nhật ký phát triển của nấm và nhận nông sản tươi sạch tận nhà khi đến kỳ thu hoạch.
-- **Kỹ thuật viên trang trại (Operator)**: Vận hành buồng nấm qua mã định danh QR Code, tự động hóa thiết bị vi khí hậu (máy phun ẩm, quạt thông gió), tiếp nhận cảnh báo tức thời khi môi trường có sự cố và nghiệm thu sản lượng thu hoạch.
-- **Quản trị viên (Admin)**: Theo dõi công suất phòng nuôi, tỷ lệ lấp đầy khay và báo cáo doanh thu tài chính tổng hợp.
-
----
-
-## 🏗️ 2. Kiến Trúc Hệ Thống (3-Tier & Fullstack Web Pattern)
-
-```text
-[ Trình Duyệt Web Khách Hàng ]     [ Dashboard Kỹ Thuật Viên ]     [ IoT Simulator / Hardware ]
-       (Next.js 14)                       (Next.js 14)                 (Python / MQTT / Socket)
-            │                                  │                                  │
-            └───────────────────┬──────────────┴──────────────────────────────────┘
-                                │ HTTP / WebSocket
-                                ▼
-                 [ Backend API & Realtime Hub ]
-                 - Node.js & Express (TypeScript)
-                 - Socket.io Gateway: Phát sóng telemetry & cảnh báo tức thì
-                 - JWT Authentication & Phân quyền RBAC (Admin, Operator, Customer)
-                 - MSSQL Connection Pool (Cổng 1433)
-                                │
-                                ▼
-                 [ Microsoft SQL Server 2022 ]
-                 - 11 bảng chuẩn hóa 3NF, ràng buộc CHECK và khóa ngoại FK
-                 - Stored Procedures với khóa mức hàng (UPDLOCK, ROWLOCK)
-                 - DML Triggers: Tự động kiểm tra vi khí hậu & bật/tắt thiết bị
-                 - Views: Báo cáo công suất buồng (Occupancy) & Doanh thu hàng tháng
-                 - Non-clustered Composite Indexes có INCLUDE & Filtered Indexes
-```
-
----
-
-## 🗄️ 3. Cơ Sở Dữ Liệu `SmartMushroomDB` (Chuẩn Hóa 3NF)
-
-Toàn bộ kịch bản CSDL được lưu trữ tại thư mục [`/database`](./database):
-
-1. **[`01_schema.sql`](./database/01_schema.sql)** - Khởi tạo cấu trúc 11 bảng chuẩn 3NF:
-   - `Roles`, `Users`: Quản lý tài khoản và phân quyền hệ thống.
-   - `Rooms`, `MushroomSpecies`: Buồng nuôi vi khí hậu và danh mục loài nấm.
-   - `RentalPackages`, `RentalOrders`: Gói dịch vụ và hợp đồng thuê khay nấm.
-   - `CultivationTrays`: Khay nấm có mã QR định danh duy nhất (`TRAY-RM01-R01-001`).
-   - `SensorData`, `SensorAlerts`: Chuỗi thời gian cảm biến và cảnh báo vượt ngưỡng.
-   - `GrowthLogs`, `HarvestRequests`, `DeviceActionLogs`: Nhật ký sinh trưởng, quy trình thu hoạch và nhật ký điều khiển thiết bị.
-
-2. **[`02_tsql_logic.sql`](./database/02_tsql_logic.sql)** - T-SQL nâng cao:
-   - `sp_CreateRentalOrder`: Giao dịch ACID với kỹ thuật khóa mức hàng `WITH (UPDLOCK, ROWLOCK)` ngăn chặn overbooking.
-   - `sp_AssignTrayToOrder`: Quét mã QR gán khay vật lý vào đơn thuê.
-   - `sp_InsertSensorData`: Tiếp nhận dữ liệu cảm biến đo đạc vi khí hậu.
-   - `sp_RequestHarvest` & `sp_CompleteHarvest`: Quy trình gửi yêu cầu và chốt sản lượng thu hoạch.
-   - `trg_CheckSensorThresholds`: Trigger `AFTER INSERT` trên `SensorData`, tự động phát hiện vượt ngưỡng và kích hoạt `EXHAUST_FAN`.
-   - `vw_RoomOccupancyReport`, `vw_CustomerActiveRentals`, `vw_MonthlyRevenueReport`: Các Views phục vụ báo cáo.
-
-3. **[`03_seed_data.sql`](./database/03_seed_data.sql)** - Dữ liệu mẫu phong phú:
-   - 8 tài khoản mẫu (BCrypt hash chuẩn `$2b$10$`), 70 khay nấm, 16 đơn hàng mẫu và dữ liệu cảm biến mô phỏng.
-
-4. **[`04_indexing_and_performance.sql`](./database/04_indexing_and_performance.sql)** - Tối ưu hóa chỉ mục:
-   - Composite Non-Clustered Index có `INCLUDE` trên `SensorData(RoomID, RecordedAt)`.
-   - Filtered Index trên `SensorAlerts(RoomID, AlertTime)` với điều kiện `WHERE IsResolved = 0`.
-   - Bảng thử nghiệm benchmark 1 triệu dòng dữ liệu để đo lường `STATISTICS IO, TIME`.
-
----
-
-## 🚀 4. Hướng Dẫn Cài Đặt & Khởi Chạy Nhanh
-
-### Bước 1: Khởi tạo Cơ sở dữ liệu SQL Server
-- Mở **SSMS (SQL Server Management Studio)**, kết nối vào máy chủ SQL Server cục bộ (`.\SQLEXPRESS01` hoặc `localhost`).
-- Chạy lần lượt các file trong thư mục `database/`:
-  1. `database/01_schema.sql`
-  2. `database/02_tsql_logic.sql`
-  3. `database/03_seed_data.sql`
-  4. `database/04_indexing_and_performance.sql`
-*(Hoặc chạy lệnh gộp qua file `database/run_all.sql` ở chế độ SQLCMD Mode)*.
-
-### Bước 2: Khởi chạy Backend API & Realtime Hub
-```bash
-cd backend
-npm install
-npm run dev
-```
-👉 Server sẽ khởi động tại: **`http://localhost:5000`** (Kết nối CSDL và Socket.io Hub sẵn sàng).
-
-### Bước 3: Khởi chạy Frontend Web
-```bash
-cd frontend
-npm install
-npm run dev
-```
-👉 Mở trình duyệt truy cập: **`http://localhost:3000`** để xem giao diện web.
-
-### Bước 4: Khởi chạy Giả lập Cảm biến IoT (Tùy chọn)
-```bash
-cd iot_simulator
-pip install -r requirements.txt
-python simulator.py
-```
-
----
-
-## 🎬 5. Kịch Bản Demo Toàn Diện (Demo Guide Từng Bước)
-
-Dành cho các buổi báo cáo, thuyết trình hoặc kiểm tra hệ thống:
-
-### 🟢 Kịch bản Demo 1: Kiểm thử Toàn diện Vòng đời Hệ thống (E2E Lifecycle)
-- **Mục tiêu**: Chứng minh chu trình dữ liệu khép kín từ lúc khách đặt thuê đến khi thu hoạch thành công trên CSDL.
-- **Thao tác**:
-  1. Mở file [`tests/test_end_to_end_lifecycle.sql`](./tests/test_end_to_end_lifecycle.sql) trong SSMS.
-  2. Nhấn **Execute (F5)** (hoặc chạy qua lệnh PowerShell: `sqlcmd -S ".\SQLEXPRESS01" -d SmartMushroomDB -E -C -I -i tests/test_end_to_end_lifecycle.sql`).
-  3. **Quan sát tab Messages**:
-     - Bước 1: Khách đặt thuê (`sp_CreateRentalOrder`) $\rightarrow$ Khay chuyển `OCCUPIED`.
-     - Bước 2: Kỹ thuật viên quét QR gán khay (`sp_AssignTrayToOrder`) $\rightarrow$ Xác nhận hợp lệ.
-     - Bước 3: IoT gửi bản tin CO2 = 1450 ppm $\rightarrow$ Trigger kích hoạt cảnh báo và tự động bật quạt hút `EXHAUST_FAN`.
-     - Bước 4: Cổng khách hàng cập nhật tiến độ nuôi qua `vw_CustomerActiveRentals`.
-     - Bước 5: Khách gửi yêu cầu thu hoạch (`sp_RequestHarvest`) $\rightarrow$ Trạng thái `REQUESTED`.
-     - Bước 6: Kỹ thuật viên chốt sản lượng 2.45 kg (`sp_CompleteHarvest`) $\rightarrow$ Khay sang `MAINTENANCE`.
-     - Bước 7: Khử trùng khay $\rightarrow$ Khay hoàn trả về `AVAILABLE`.
-     - Bước 8: Báo cáo công suất buồng và doanh thu nhảy số chính xác.
-     - **Kết quả: 8/8 bước PASS (100%)**.
-
----
-
-### 🟡 Kịch bản Demo 2: Kiểm thử Tranh chấp Đồng thời & Khóa Dòng (Concurrency & Race Condition)
-- **Mục tiêu**: Chứng minh khóa dòng `WITH (UPDLOCK, ROWLOCK)` ngăn chặn 100% tình trạng đặt trùng khay (Zero Overbooking).
-- **Thao tác**:
-  - **Cách 1 (T-SQL)**: Mở [`tests/test_concurrency_race_condition.sql`](./tests/test_concurrency_race_condition.sql) trong SSMS $\rightarrow$ Bấm **F5**.
-    - Tiến trình 1 chiếm khay thành công.
-    - Tiến trình 2 cùng lúc bị chặn an toàn và rollback: `Lỗi: Phòng nuôi trồng hiện đã kín khay trống!`.
-  - **Cách 2 (TypeScript Runner - 10 Request song song)**:
-    ```bash
-    cd backend
-    npx tsx ../tests/test_concurrency_runner.ts
-    ```
-    - 10 luồng Promise bắn cùng mili-giây vào phòng chỉ còn 2 chỗ. Kết quả: Đúng 2 đơn thành công, 8 đơn bị từ chối an toàn, 0 khay bị trùng lặp.
-- *Xem tài liệu kỹ thuật chi tiết tại: [`docs/Bao_Cao_Kiem_Thu_Dong_Thoi_T-SQL.md`](./docs/Bao_Cao_Kiem_Thu_Dong_Thoi_T-SQL.md).*
-
----
-
-### 🔵 Kịch bản Demo 3: Mô phỏng Sự cố Môi trường & Socket.io Realtime
-- **Mục tiêu**: Kiểm tra khả năng tự phục hồi của Trigger T-SQL kết hợp truyền dữ liệu không độ trễ qua Socket.io.
-- **Thao tác**:
-  1. Mở Terminal 1 (Kiểm tra lắng nghe Socket):
-     ```bash
-     node backend/scripts/socket-test.js
-     ```
-  2. Mở Terminal 2 (Bơm sự cố CO2 vượt ngưỡng):
-     ```bash
-     python iot_simulator/trigger_anomaly.py --room 1 --co2 1450
-     ```
-  3. **Kết quả**:
-     - CSDL kích hoạt Trigger `trg_CheckSensorThresholds`, ghi nhận cảnh báo `HIGH_CO2` vào `SensorAlerts` và ghi lệnh bật `EXHAUST_FAN` vào `DeviceActionLogs`.
-     - Socket.io phát sự kiện `alert:new` và `device:action` ngay lập tức xuống màn hình mà không cần tải lại trang.
-
----
-
-### 🟣 Kịch bản Demo 4: Tối ưu Hóa Chỉ Mục & Đo Lường 1 Triệu Dòng (Indexing Benchmark)
-- **Mục tiêu**: So sánh chi phí truy vấn trước và sau khi đánh chỉ mục trên bảng 1.000.000 dòng.
-- **Thao tác**:
-  1. Mở file [`database/04_indexing_and_performance.sql`](./database/04_indexing_and_performance.sql) trong SSMS.
-  2. Chạy khối lệnh tạo bảng benchmark `SensorData_Bench` và `SensorAlerts_Bench`.
-  3. Bật **Include Actual Execution Plan (Ctrl + M)** và chạy truy vấn so sánh.
-  4. **Kết quả**:
-     - Trước chỉ mục: Quét toàn bộ bảng (Table Scan), Logical Reads > 22.000 trang.
-     - Sau chỉ mục: Tìm kiếm chỉ mục (Index Seek), Logical Reads giảm xuống < 50 trang (Giảm tải hơn 99% chi phí I/O).
-
----
-
-## 🔑 6. Tài Khoản Đăng Nhập Mẫu (Demo Credentials)
-
-Tất cả tài khoản trong file `03_seed_data.sql` đều sử dụng chung mật khẩu demo: **`Password123@`**
-
-| Vai trò | Họ tên | Email đăng nhập | Quyền hạn chính |
-| :--- | :--- | :--- | :--- |
-| **Admin** | Nguyễn Quản Trị | `admin@mushroomcloud.test` | Xem toàn bộ báo cáo doanh thu, quản lý danh mục và người dùng |
-| **Operator** | Trần Kỹ Thuật | `operator1@mushroomcloud.test` | Quét mã QR gán khay, xử lý sự cố thiết bị và chốt sản lượng thu hoạch |
-| **Operator** | Lê Vận Hành | `operator2@mushroomcloud.test` | Giám sát trạng thái vi khí hậu và bảo trì khay nấm |
-| **Customer** | Phạm Minh An | `customer1@mushroomcloud.test` | Thuê khay nấm, xem telemetry thời gian thực và gửi yêu cầu thu hoạch |
-| **Customer** | Võ Thu Hà | `customer2@mushroomcloud.test` | Thuê khay nấm và theo dõi lịch sử sinh trưởng |
-
----
-
-## 👥 7. Phân Công Thành Viên Dự Án
-
-| STT | Thành viên | Vai trò kỹ thuật | Trách nhiệm chính |
+| STT | Họ và Tên | Vai trò | Trách nhiệm chuyên môn chính |
 | :---: | :--- | :--- | :--- |
-| 1 | **Lê Minh Tài** | **Trưởng nhóm / Database Lead & System Architect** | Thiết kế kiến trúc tổng thể, mô hình CSDL 3NF (`01_schema.sql`), Stored Procedures giao dịch lõi (`sp_CreateRentalOrder` với khóa dòng `UPDLOCK, ROWLOCK`), bộ kịch bản kiểm thử đồng thời (`tests/`), kịch bản kiểm thử vòng đời E2E (`test_end_to_end_lifecycle.sql`) và quản lý Git Flow. |
-| 2 | **Hoàng Huy** | **T-SQL & Performance Specialist** | Thiết kế DML Triggers cảnh báo vi khí hậu tự động (`trg_CheckSensorThresholds`), Views báo cáo (`vw_RoomOccupancyReport`, `vw_MonthlyRevenueReport`), nạp dữ liệu mẫu 70 khay và thiết kế chỉ mục Composite / Filtered Index với Benchmark 1 triệu dòng (`04_indexing_and_performance.sql`). |
-| 3 | **Nguyễn Thanh Hiển** | **Backend & Security Engineer** | Xây dựng khung Backend Node.js / Express (TypeScript), cấu hình kết nối MSSQL Connection Pool, xác thực JWT & bảo mật băm mật khẩu BCrypt, viết các RESTful API quản lý gói thuê, đơn đặt và gọi Stored Procedure. |
-| 4 | **Đăng** | **Frontend & UI/UX Engineer** | Thiết kế và xây dựng giao diện ứng dụng Web bằng Next.js 14 App Router và Tailwind CSS theo phong cách Scandinavian & Apple Luxury, hoàn thiện Navbar, Hero Section với HUD vi khí hậu nổi, bảng danh mục gói thuê nấm và cổng khách hàng. |
-| 5 | **Võ Duy Thịnh** | **IoT & Realtime Systems Engineer** | Xây dựng kịch bản giả lập cảm biến vi khí hậu Python (`simulator.py`), kịch bản kiểm thử sự cố CO2 (`trigger_anomaly.py`), cổng Socket.io Realtime Gateway phát sóng dữ liệu cảm biến và cấu hình triển khai Docker Compose. |
+| 1 | **Lê Minh Tài** | **Nhóm trưởng / Kiến trúc sư Hệ thống** | • Thiết kế kiến trúc tổng thể và mô hình quan hệ CSDL chuẩn hóa 3NF.<br>• Xây dựng các Stored Procedure xử lý giao dịch lõi (`sp_CreateRentalOrder`) tích hợp kiểm soát tương tranh với khóa dòng `UPDLOCK, ROWLOCK`.<br>• Thiết kế bộ kịch bản kiểm thử tranh chấp (Concurrency & Race Conditions) và kịch bản vòng đời E2E.<br>• Quản trị tiến trình Git, tích hợp nhánh và phát triển công cụ tự động hóa kiểm thử. |
+| 2 | **Hoàng Huy** | **Kỹ sư T-SQL & Tối ưu Hiệu năng** | • Xây dựng hệ thống DML Triggers tự động kiểm tra ngưỡng vi khí hậu (`trg_CheckSensorThresholds`).<br>• Thiết kế các Views báo cáo công suất buồng nuôi và doanh thu định kỳ.<br>• Thiết lập chiến lược chỉ mục nâng cao: Composite Non-Clustered Indexes có mệnh đề `INCLUDE` và Filtered Indexes.<br>• Thực hiện Benchmark đo lường chi phí I/O trên tập dữ liệu 1.000.000 bản ghi. |
+| 3 | **Nguyễn Thanh Hiển** | **Kỹ sư Backend & An toàn Thông tin** | • Hiện thực hóa tầng dịch vụ API bằng Node.js / Express với TypeScript.<br>• Cấu hình hồ chứa kết nối (Connection Pool) tối ưu hóa truy vấn đến SQL Server.<br>• Thiết lập xác thực phân quyền RBAC dựa trên JWT lưu trữ an toàn trong HttpOnly Cookie.<br>• Triển khai cơ chế phòng vệ CSRF Double-Submit Cookie và kiểm soát tần suất Rate Limiting. |
+| 4 | **Đăng** | **Kỹ sư Giao diện & Trải nghiệm Người dùng** | • Phát triển Cổng Khách hàng (Customer Portal) trên nền tảng Next.js 14 App Router.<br>• Xây dựng hệ thống quốc tế hóa đa ngôn ngữ (i18n Song ngữ Việt – Anh).<br>• Hiện thực hóa các thành phần tương tác: Giấy chứng nhận số VietGAP, bảng điều khiển gói thuê và biểu đồ vi khí hậu. |
+| 5 | **Võ Duy Thịnh** | **Kỹ sư IoT & Hệ thống Thời gian thực** | • Xây dựng module giả lập cảm biến vi khí hậu đa thông số (Nhiệt độ, Độ ẩm, CO2, Ánh sáng).<br>• Triển khai cổng truyền thông thời gian thực Socket.io kết nối trực tiếp với Database Event Stream.<br>• Phát triển Bàn điều phối Kỹ thuật viên (Operator Control Center) và Trợ lý giải đáp tự động MushroomBot. |
 
 ---
 
-## 🔒 8. Quy Chuẩn Đóng Góp Mã Nguồn (Git Branching Strategy)
+## I. TỔNG QUAN ĐỀ TÀI
 
-- **Nhánh `main`**: Nhánh chính thức, chứa mã nguồn ổn định đã kiểm thử đạt chuẩn 100%.
-- **Nhánh chức năng**: Mỗi thành viên làm việc trên nhánh riêng theo quy ước: `feature/<tên-chức-năng>-<tên-thành-viên>` (Ví dụ: `feature/socket-anomaly-thinh`, `feature/indexing-performance-huy`).
-- **Quy trình tích hợp**: Tạo Pull Request (PR) $\rightarrow$ Kiểm tra conflict và code review $\rightarrow$ Trưởng nhóm phê duyệt và merge vào `main`.
+Mô hình **Farm-as-a-Service (FaaS)** trong nông nghiệp công nghệ cao cho phép khách hàng từ xa thuê sở hữu các khay nuôi cấy nấm dược liệu (Đông Trùng Hạ Thảo, Linh Chi Đỏ, Nấm Mối Đen...) đặt tại nhà kính khép kín. Dự án **MushroomCloud** giải quyết bài toán quản trị vận hành toàn diện:
+
+1. **Phía Khách hàng (Customer Portal)**:
+   * Cho phép đăng ký thuê khay trực tuyến theo chu kỳ sinh trưởng chuẩn.
+   * Giám sát thông số vi khí hậu (Telemetry) và hình ảnh trực tiếp 24/7 từ cảm biến IoT.
+   * Tra cứu nguồn gốc xuất xứ và Giấy chứng nhận canh tác sạch chuẩn VietGAP có mã QR xác thực.
+   * Gửi yêu cầu thu hoạch và nghiệm thu sản lượng trực tuyến.
+
+2. **Phía Vận hành viên (Operator Center)**:
+   * Quản lý ma trận khay nuôi vật lý theo từng buồng khí hậu.
+   * Điều khiển cưỡng bức thiết bị phần cứng (Quạt thông gió, Máy phun sương, Rèm lạnh).
+   * Tra cứu quy trình vận hành chuẩn (SOP), mã lỗi giao dịch và xử lý cảnh báo sự cố vi khí hậu theo thời gian thực.
+
+3. **Phía Quản trị viên (Management & Analytics)**:
+   * Thống kê tỷ lệ lấp đầy khay nuôi trên toàn bộ nhà kính.
+   * Báo cáo doanh thu, sản lượng thu hoạch và lưu vết toàn vẹn dữ liệu kiểm toán (Audit Trail).
+
+---
+
+## II. KIẾN TRÚC HỆ THỐNG VÀ CÔNG NGHỆ
+
+Hệ thống được thiết kế theo mô hình 3 tầng chuẩn doanh nghiệp (3-Tier Enterprise Architecture):
+
+```
+                       [ TẦNG TRÌNH DIỄN - PRESENTATION TIER ]
+                 Next.js 14 (App Router) | Tailwind CSS | Socket.io Client
+           ┌─────────────────────────────┴─────────────────────────────┐
+           ▼                                                           ▼
+ [ Cổng Khách Hàng (Portal) ]                               [ Bàn Điều Hành Kỹ Thuật Viên ]
+ • Tra cứu khay & telemetry vi khí hậu                      • Ma trận trạng thái buồng nuôi
+ • Đăng ký thuê khay & thanh toán                           • Điều khiển cưỡng bức thiết bị
+ • Giấy chứng nhận số VietGAP                               • Sổ tay tra cứu quy trình SOP
+           │                                                           │
+           └─────────────────────────────┬─────────────────────────────┘
+                                         │ HTTPS / WSS (Port 443 / 80)
+                                         ▼
+                            [ NGINX REVERSE PROXY ]
+                            • Cân bằng tải & SSL Termination
+                            • Nén Gzip & Caching tài nguyên tĩnh
+                                         │
+                                         ▼
+                        [ TẦNG NGHIỆP VỤ - APPLICATION TIER ]
+                       Node.js & Express (TypeScript) | Socket.io
+           ┌───────────────────────────────────────────────────────────┐
+           │ • Quản lý tiến trình sản xuất bằng PM2 Cluster            │
+           │ • Xác thực bảo mật JWT qua HttpOnly Cookie                │
+           │ • Phòng thủ CSRF Double-Submit & Rate Limiting            │
+           │ • Điều phối luồng dữ liệu thời gian thực (Telemetry Hub)  │
+           └─────────────────────────────┬─────────────────────────────┘
+                                         │ TDS Protocol (Port 1433)
+                                         ▼
+                          [ TẦNG DỮ LIỆU - DATABASE TIER ]
+                         Microsoft SQL Server 2022 (T-SQL)
+           ┌───────────────────────────────────────────────────────────┐
+           │ • 11 bảng chuẩn hóa 3NF với ràng buộc toàn vẹn nghiêm ngặt│
+           │ • ACID Transactions với khóa dòng: UPDLOCK, ROWLOCK       │
+           │ • DML Triggers phản ứng sự cố vi khí hậu tự động          │
+           │ • Views tổng hợp báo cáo công suất & doanh thu định kỳ    │
+           │ • Non-clustered Composite Indexes & Filtered Indexes      │
+           └───────────────────────────────────────────────────────────┘
+```
+
+---
+
+## III. THIẾT KẾ CƠ SỞ DỮ LIỆU (SMARTMUSHROOMDB)
+
+Cơ sở dữ liệu được tổ chức tại thư mục `database/` gồm các kịch bản T-SQL có cấu trúc:
+
+1. **`01_schema.sql` (Cấu trúc bảng và ràng buộc toàn vẹn)**:
+   * `Roles`, `Users`: Phân quyền người dùng theo vai trò RBAC (Admin, Operator, Customer). Mật khẩu được mã hóa an toàn bằng thuật toán BCrypt.
+   * `Rooms`, `MushroomSpecies`: Quản lý danh mục nhà kính, buồng nuôi và thông số sinh học chuẩn của từng loài nấm.
+   * `RentalPackages`, `RentalOrders`: Quản lý các gói dịch vụ và hợp đồng thuê có ràng buộc thời hạn.
+   * `CultivationTrays`: Quản lý thực thể khay nuôi với mã QR định danh duy nhất (VD: `TRAY-RM01-R01-001`).
+   * `SensorData`, `SensorAlerts`: Lưu trữ chuỗi thời gian telemetry và nhật ký cảnh báo bất thường.
+   * `GrowthLogs`, `HarvestRequests`, `DeviceActionLogs`: Theo dõi chu kỳ phát triển, quy trình thu hoạch và lưu vết điều khiển phần cứng.
+
+2. **`02_tsql_logic.sql` (Thủ tục lưu trữ, Trigger và Khung nhìn)**:
+   * `sp_CreateRentalOrder`: Thực thi nghiệp vụ tạo đơn thuê trong giao dịch ACID cô lập. Ứng dụng kỹ thuật khóa dòng `WITH (UPDLOCK, ROWLOCK)` ngăn chặn hoàn toàn hiện tượng tranh chấp đặt trùng khay (Zero Overbooking).
+   * `sp_AssignTrayToOrder`: Kỹ thuật viên quét mã QR xác thực để gán khay vật lý vào hợp đồng thuê.
+   * `sp_RequestHarvest` & `sp_CompleteHarvest`: Quy trình đóng gói, nghiệm thu sản lượng và chuyển trạng thái khay về bảo trì khử trùng.
+   * `trg_CheckSensorThresholds`: DML Trigger gắn trên bảng `SensorData`, tự động đối soát chỉ số môi trường với ngưỡng sinh học. Khi nồng độ CO2 vượt 1200 ppm, trigger tự sinh cảnh báo và kích hoạt quạt hút `EXHAUST_FAN`.
+   * Khung nhìn báo cáo: `vw_RoomOccupancyReport`, `vw_CustomerActiveRentals`, `vw_MonthlyRevenueReport`.
+
+3. **`03_seed_data.sql` (Dữ liệu thử nghiệm chuẩn)**:
+   * Cung cấp 8 tài khoản mẫu chuẩn hóa, 70 khay nuôi vật lý, 16 hợp đồng thuê mẫu và lịch sử telemetry phong phú phục vụ kiểm định trực quan.
+
+4. **`04_indexing_and_performance.sql` (Tối ưu hóa chỉ mục & Benchmark)**:
+   * Composite Non-Clustered Index trên `SensorData(RoomID, RecordedAt)` kết hợp mệnh đề `INCLUDE (Temperature, Humidity, CO2Level)`.
+   * Filtered Index trên `SensorAlerts(RoomID, AlertTime)` với điều kiện lọc `WHERE IsResolved = 0`.
+   * Bảng thử nghiệm 1.000.000 bản ghi đo lường kế hoạch thực thi (Execution Plan), chứng minh việc giảm thiểu hơn 99% chi phí Logical Reads (từ >22.000 trang quét toàn bảng xuống <50 trang tìm kiếm chỉ mục).
+
+---
+
+## IV. GIẢI QUYẾT BỐN BÀI TOÁN TƯƠNG TRANH (CONCURRENCY CONTROL)
+
+Hệ thống được thiết kế để xử lý triệt để 4 vấn đề tương tranh kinh điển trong CSDL phân tán:
+
+1. **Lost Update (Mất dữ liệu cập nhật)**:
+   * *Hiện tượng*: Hai giao dịch đồng thời đọc một khay trống và cùng tiến hành đặt, dẫn đến một đơn hàng bị ghi đè mất dấu.
+   * *Giải pháp T-SQL*: Sử dụng gợi ý khóa `WITH (UPDLOCK, ROWLOCK)` trong lệnh `SELECT` kiểm tra chỗ trống của thủ tục `sp_CreateRentalOrder`. Giao dịch thứ hai buộc phải chờ và nhận thông báo lỗi an toàn khi giao dịch thứ nhất hoàn tất.
+
+2. **Dirty Read (Đọc dữ liệu rác)**:
+   * *Hiện tượng*: Giao dịch B đọc dữ liệu đơn hàng đang được tạo bởi Giao dịch A; sau đó Giao dịch A gặp lỗi và bị ROLLBACK.
+   * *Giải pháp T-SQL*: Áp dụng mức cô lập mặc định `READ COMMITTED` kết hợp giao dịch tường minh `BEGIN TRANSACTION ... COMMIT TRANSACTION`.
+
+3. **Non-Repeatable Read (Đọc không lặp lại được)**:
+   * *Hiện tượng*: Một giao dịch đọc lại cùng một bản ghi trong phiên làm việc nhưng nhận hai giá trị khác nhau do giao dịch khác đã sửa đổi và COMMIT ở giữa chừng.
+   * *Giải pháp T-SQL*: Nâng cấp mức cô lập lên `REPEATABLE READ` hoặc `SERIALIZABLE` đối với các tác vụ tổng hợp doanh thu và đối soát số dư.
+
+4. **Phantom Read (Bản ghi bóng ma)**:
+   * *Hiện tượng*: Một giao dịch truy vấn danh sách khay khả dụng trong khoảng giá trị; một giao dịch khác chèn thêm bản ghi mới thỏa mãn điều kiện đó khiến lần đọc thứ hai xuất hiện bản ghi mới.
+   * *Giải pháp T-SQL*: Sử dụng mức cô lập `SERIALIZABLE` với khóa phạm vi (Range Locks) trong các tác vụ kiểm toán và chốt sổ kỳ kế toán.
+
+---
+
+## V. HƯỚNG DẪN CÀI ĐẶT VÀ KHỞI CHẠY HỆ THỐNG
+
+### 1. Yêu cầu môi trường tiền đề
+* Hệ điều hành: Windows 10/11 hoặc Linux (Ubuntu 22.04 LTS).
+* Cơ sở dữ liệu: Microsoft SQL Server 2019/2022 (hoặc SQL Server Express).
+* Môi trường thực thi: Node.js (Phiên bản khuyến nghị LTS v20.x hoặc v22.x).
+* Công cụ dòng lệnh: `sqlcmd` (Microsoft Command Line Utilities for SQL Server).
+
+### 2. Khởi tạo Cơ sở dữ liệu
+Khởi chạy SQL Server Management Studio (SSMS) hoặc cửa sổ dòng lệnh:
+```bash
+# Thực thi nạp toàn bộ cấu trúc và dữ liệu mẫu
+sqlcmd -S .\SQLEXPRESS01 -d master -E -C -I -i database/01_schema.sql
+sqlcmd -S .\SQLEXPRESS01 -d SmartMushroomDB -E -C -I -i database/02_tsql_logic.sql
+sqlcmd -S .\SQLEXPRESS01 -d SmartMushroomDB -E -C -I -i database/03_seed_data.sql
+sqlcmd -S .\SQLEXPRESS01 -d SmartMushroomDB -E -C -I -i database/04_indexing_and_performance.sql
+```
+
+### 3. Khởi chạy nhanh bằng công cụ tự động hóa (1-Click Launchers)
+Dự án đã tích hợp sẵn các tập lệnh batch tiện ích tại thư mục gốc:
+
+* **Khởi chạy hệ thống toàn diện**:
+  ```cmd
+  Chay_He_Thong.bat
+  ```
+  Cung cấp menu điều khiển tương tác đa chế độ:
+  * `[1]` Khởi chạy môi trường phát triển cục bộ (Backend Port 5000 + Frontend Port 3000).
+  * `[2]` Khởi chạy cụm dịch vụ qua Docker Compose với chuỗi Healthcheck phụ thuộc.
+  * `[3]` Thực thi bộ kiểm thử tự động toàn diện.
+  * `[4]` Giải phóng các cổng mạng 3000 và 5000 bị chiếm dụng.
+
+* **Khởi chạy chế độ siêu nhẹ (Minimized Background)**:
+  ```cmd
+  Chay_Noi_Bo_Sieu_Nhe.bat
+  ```
+  Tự động giải phóng cổng, khởi động backend và frontend ở chế độ cửa sổ thu nhỏ, trực tiếp điều hướng đến trình duyệt mà không gây rối màn hình làm việc.
+
+---
+
+## VI. BỘ KIỂM THỬ TỰ ĐỘNG VÀ XÁC MINH TOÀN VẸN (TESTING SUITE)
+
+Hệ thống tích hợp quy trình kiểm thử lặp lại nghiêm ngặt nhằm đảm bảo tính ổn định tuyệt đối trước Hội đồng chấm:
+
+### 1. Lệnh thực thi kiểm thử 1-Click
+```cmd
+run-automated-tests.bat
+```
+Hoặc chạy trực tiếp qua Node.js:
+```bash
+node scripts/test-runner.js
+```
+
+### 2. Ma trận 6 kịch bản kiểm thử tự động
+Bộ kiểm thử tự động thực hiện **3 vòng lặp liên tiếp** (tổng cộng 18 lượt kiểm tra độc lập):
+1. `tests/test_end_to_end_lifecycle.sql`: Xác minh chu trình 8 bước khép kín từ đặt khay, gán QR, kích hoạt vi khí hậu đến thu hoạch và thanh lý.
+2. `tests/test_sp_create_rental_order.sql`: Kiểm tra tính toàn vẹn của nghiệp vụ tạo đơn thuê và cập nhật trạng thái khay.
+3. `tests/test_concurrency_race_condition.sql`: Kiểm tra khả năng chống chịu tranh chấp khi nhiều luồng cùng chiếm một vị trí khay.
+4. `tests/test_constraints_and_integrity.sql`: Kiểm thử việc kích hoạt lỗi khi vi phạm các ràng buộc CHECK và khóa ngoại FK.
+5. `tests/test_sp_harvest_and_qr.sql`: Kiểm tra quy trình quét mã QR và chốt sản lượng thu hoạch thực tế.
+6. `tests/test_audit_and_security.sql`: Kiểm tra tính bảo mật, ghi nhật ký vết kiểm toán và bảo vệ dữ liệu.
+
+**Kết quả tiêu chuẩn**: **18/18 lượt kiểm thử đạt 100% (ALL PASS)**. Nhật ký chi tiết được kết xuất tự động tại file `test-report.log`.
+
+---
+
+## VII. DANH MỤC TÀI KHOẢN MẪU PHỤC VỤ ĐÁNH GIÁ (DEMO CREDENTIALS)
+
+Tất cả tài khoản thử nghiệm được khởi tạo sẵn với mật khẩu mặc định: **`Password123@`**
+
+| Nhóm quyền (RBAC) | Họ và Tên | Tên đăng nhập / Email | Phạm vi thao tác chính |
+| :--- | :--- | :--- | :--- |
+| **Quản trị viên (Admin)** | Nguyễn Quản Trị | `admin@mushroomcloud.test` | Toàn quyền cấu hình buồng nuôi, xem báo cáo doanh thu tài chính và quản trị tài khoản |
+| **Kỹ thuật viên (Operator)** | Trần Kỹ Thuật | `operator1@mushroomcloud.test` | Điều khiển thiết bị nhà kính, quét mã QR khay nuôi, xử lý sự cố cảnh báo vi khí hậu |
+| **Kỹ thuật viên (Operator)** | Lê Vận Hành | `operator2@mushroomcloud.test` | Giám sát trạng thái bảo trì và lập nhật ký sinh trưởng |
+| **Khách hàng (Customer)** | Phạm Minh An | `customer1@mushroomcloud.test` | Đặt thuê khay nấm, giám sát telemetry, xem Giấy chứng nhận VietGAP và yêu cầu thu hoạch |
+| **Khách hàng (Customer)** | Võ Thu Hà | `customer2@mushroomcloud.test` | Theo dõi lịch sử hợp đồng và dữ liệu cảm biến thời gian thực |
+
+---
+
+## VIII. CÁC TÀI LIỆU KỸ THUẬT KÈM THEO
+
+* [DEMO_GUIDE.md](./DEMO_GUIDE.md): Cẩm nang chi tiết các bước vận hành và chuẩn bị hệ thống trước Hội đồng.
+* [DEMO_SCRIPT.md](./DEMO_SCRIPT.md): Kịch bản thuyết trình bảo vệ đồ án từng phút.
+* [HUONG_DAN_VAN_HANH_PRODUCTION.md](./HUONG_DAN_VAN_HANH_PRODUCTION.md): Sổ tay hướng dẫn triển khai thực tế trên máy chủ VPS, cấu hình PM2, Nginx và lịch trình sao lưu CSDL.
+* [scripts/tai-khoan-demo.txt](./scripts/tai-khoan-demo.txt): Bảng tóm tắt tài khoản demo định dạng plain text tiện sao chép.
+* [scripts/ma-tran-quyen.txt](./scripts/ma-tran-quyen.txt): Ma trận phân quyền truy xuất dữ liệu chi tiết theo từng vai trò.
