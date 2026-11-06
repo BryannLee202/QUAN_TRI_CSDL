@@ -1,7 +1,56 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 
+interface ChamberView {
+  id: string;
+  name: string;
+  badge: string;
+  image: string;
+  temp: string;
+  hum: string;
+  co2: string;
+  desc: string;
+}
+
+const chamberViews: ChamberView[] = [
+  {
+    id: "chamber",
+    name: "Buồng Kính Vi Khí Hậu 3D",
+    badge: "ISO Class 5",
+    image: "/images/chamber-clean-crop.png",
+    temp: "24.2°C",
+    hum: "92%",
+    co2: "680 ppm",
+    desc: "Buồng nuôi kính vô trùng cách nhiệt với hệ thống sương ẩm siêu âm vi khí hậu",
+  },
+  {
+    id: "control",
+    name: "Phòng Điều Hành IoT Trang Trại",
+    badge: "Live Telemetry",
+    image: "/images/farm-cleanroom-control.jpg",
+    temp: "22.5°C",
+    hum: "65%",
+    co2: "450 ppm",
+    desc: "Trung tâm vận hành theo dõi dữ liệu cảm biến và van điều tiết của toàn trang trại",
+  },
+  {
+    id: "facility",
+    name: "Dàn Buồng Nuôi Cấy FaaS",
+    badge: "Smart Racks",
+    image: "/images/farm-facility-dashboard.jpg",
+    temp: "25.0°C",
+    hum: "88%",
+    co2: "590 ppm",
+    desc: "Khu nuôi cấy đa tầng tích hợp camera soi góc cận và cảm biến độ ẩm cơ chất",
+  },
+];
+
 export default function HeroSection() {
+  const [activeTab, setActiveTab] = useState(0);
+  const currentView = chamberViews[activeTab];
+
   return (
     <section className="relative bg-gradient-to-b from-white via-slate-50/70 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-900 dark:text-slate-100 py-16 sm:py-24 px-6 overflow-hidden transition-colors">
       {/* Background Subtle Gradient Blobs */}
@@ -19,10 +68,10 @@ export default function HeroSection() {
               <span>Nền Tảng Nông Trại Nấm Thông Minh FaaS</span>
             </div>
 
-            {/* Headline lớn sang trọng */}
+            {/* Headline chính */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15] text-slate-900 dark:text-white">
-              Nông Trại Nấm Thông Minh <br className="hidden sm:inline" />
-              <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-[#0D5C3A] dark:from-emerald-400 dark:via-teal-300 dark:to-emerald-200 bg-clip-text text-transparent">
+              Nông Trại Nấm Thông Minh{" "}
+              <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 bg-clip-text text-transparent">
                 Trong Tầm Tay Của Bạn
               </span>
             </h1>
@@ -68,39 +117,71 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Cột Phải: Buồng Nấm 3D Terrarium & Holographic Chips */}
-          <div className="lg:col-span-5 relative flex justify-center">
-            <div className="relative w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 dark:border-slate-800 bg-slate-950 group">
-              {/* Ảnh 3D Terrarium Chamber */}
-              <div className="relative aspect-[4/3] w-full">
+          {/* Cột Phải: Bộ Trình Diễn Hình Ảnh Buồng Nấm Đa Trạng Thái */}
+          <div className="lg:col-span-5 relative flex flex-col items-center">
+            
+            {/* Bộ Nút Chuyển Đổi Góc Nhìn Thực Tế */}
+            <div className="w-full max-w-lg flex items-center justify-between gap-1.5 p-1 mb-3 rounded-2xl bg-slate-100/90 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/70 shadow-xs">
+              {chamberViews.map((v, idx) => (
+                <button
+                  key={v.id}
+                  onClick={() => setActiveTab(idx)}
+                  className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition-all text-center truncate ${
+                    activeTab === idx
+                      ? "bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-400 shadow-xs border border-slate-200/50 dark:border-slate-700"
+                      : "text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
+                  }`}
+                  title={v.name}
+                >
+                  {v.name.split(" ")[0]} {v.name.split(" ")[1]}
+                </button>
+              ))}
+            </div>
+
+            {/* Khung Kính Hiển Thị Ảnh Chân Thực */}
+            <div className="relative w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 dark:border-slate-800 bg-slate-950 group transition-all duration-500">
+              {/* Ảnh Buồng Nấm Thực Tế Cách Ly */}
+              <div className="relative aspect-[4/3] w-full bg-slate-950">
                 <Image
-                  src="/images/hero-chamber.png"
-                  alt="3D Smart Mushroom Cleanroom Chamber"
+                  key={currentView.image}
+                  src={currentView.image}
+                  alt={currentView.name}
                   fill
                   priority
-                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  className="object-contain p-2 group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
               </div>
 
               {/* Lớp phủ chuyển màu viền kính */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent pointer-events-none" />
 
-              {/* 3 Thẻ Hologram Vi Khí Hậu Nổi */}
-              <div className="absolute top-4 left-4 backdrop-blur-md bg-slate-900/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 animate-pulse">
-                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span>Nhiệt độ: 24.2°C</span>
+              {/* Tag phân loại trên đầu */}
+              <div className="absolute top-4 left-4 backdrop-blur-md bg-slate-900/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold px-3 py-1 rounded-full shadow-lg flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>{currentView.badge}</span>
               </div>
 
-              <div className="absolute top-4 right-4 backdrop-blur-md bg-slate-900/80 border border-cyan-500/40 text-cyan-300 text-xs font-mono font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
-                <span>Độ ẩm: 92%</span>
+              {/* 3 Thẻ Hologram Vi Khí Hậu Cập Nhật Theo Ảnh */}
+              <div className="absolute top-4 right-4 backdrop-blur-md bg-slate-900/85 border border-cyan-500/40 text-cyan-300 text-xs font-mono font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                <span>Nhiệt độ: {currentView.temp}</span>
               </div>
 
-              <div className="absolute bottom-4 right-4 backdrop-blur-md bg-slate-900/80 border border-amber-500/40 text-amber-300 text-xs font-mono font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-400"></span>
-                <span>CO2: 680 ppm</span>
+              <div className="absolute bottom-12 right-4 backdrop-blur-md bg-slate-900/85 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                <span>Độ ẩm: {currentView.hum}</span>
+              </div>
+
+              {/* Mô tả chân ảnh */}
+              <div className="absolute bottom-3 left-4 right-4 text-xs text-slate-300 font-medium truncate pointer-events-none">
+                💡 <span className="text-emerald-400 font-bold">{currentView.name}:</span> {currentView.desc}
               </div>
             </div>
+
+            {/* Ghi chú tương tác */}
+            <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-2 text-center">
+              👆 Bấm chọn các tab phía trên để chuyển đổi giữa các góc nhìn thực tế của trang trại
+            </p>
           </div>
 
         </div>
