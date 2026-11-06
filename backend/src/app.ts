@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.routes.js";
 import rentalRoutes from "./routes/rental.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 import analyticsRoutes from "./routes/analytics.routes.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
@@ -45,5 +46,8 @@ app.get("/", (_req, res) => {
     },
   });
 });
+
+// Middleware xử lý lỗi tập trung toàn hệ thống (Global Error Handler)
+app.use(errorHandler);
 
 export default app;
