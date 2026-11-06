@@ -21,6 +21,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+logs/
+*.log
 
 # Database files & backups
 *.bak
@@ -56,3 +58,6 @@ __pycache__/
 
 # TypeScript incremental build cache
 *.tsbuildinfo
+
+# Coursework lab exercises and reports
+tai_lieu_bao_cao_mon_hoc/

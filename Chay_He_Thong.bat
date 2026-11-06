@@ -1,122 +1,112 @@
 @echo off
-chcp 65001 > nul
-title MushroomCloud - Bàn Điều Khiển & Khởi Chạy Hệ Thống Nông Trại Nấm
+title MushroomCloud - Ban Dieu Khien He Thong
 cls
 
 echo ========================================================================
-echo    HỆ THỐNG NÔNG TRẠI NẤM THÔNG MINH - MUSHROOMCLOUD (FARM-AS-A-SERVICE)
-echo    Đồ Án Môn Học: Quản Trị Cơ Sở Dữ Liệu Nâng Cao (MS SQL Server)
-echo    Trưởng nhóm / Kiến trúc sư CSDL: Lê Minh Tài (BryannLee202)
+echo    HE THONG NONG TRAI NAM THONG MINH - MUSHROOMCLOUD (FARM-AS-A-SERVICE)
+echo    Do An Mon Hoc: Quan Tri Co So Du Lieu Nang Cao (MS SQL Server)
+echo    Kien truc su CSDL / Truong nhom: Le Minh Tai (BryannLee202)
 echo ========================================================================
 echo.
-echo Vui lòng chọn chế độ khởi chạy:
-echo   [1] Khởi chạy Local Dev (Backend Port 5000 + Frontend Port 3000) - Mặc định
-echo   [2] Khởi chạy Docker Compose (Chuỗi Healthcheck SQL Server, API, Web)
-echo   [3] Chạy bộ kiểm thử tự động toàn diện (Test CSDL & Backend)
-echo   [4] Dọn dẹp tiến trình và giải phóng cổng mạng (Port 3000, 5000)
-echo   [5] Thoát
+echo Vui long chon che do khoi chay:
+echo   [1] Khoi chay Local Dev (Backend Port 5000 + Frontend Port 3000)
+echo   [2] Khoi chay bang Docker Compose (SQL Server, Backend, Frontend)
+echo   [3] Chay bo kiem thu tu dong toan dien (18/18 Tests SQL + Builds)
+echo   [4] Giai phong va don dep cong mang (Port 3000, 5000)
+echo   [5] Thoat
 echo.
-set /p choice="Nhập lựa chọn của bạn [1-5] (Nhấn Enter chọn [1]): "
-if "%choice%"=="" set choice=1
+set "choice=1"
+set /p "choice=Nhap lua chon [1-5] (Mac dinh nhan Enter chon [1]): "
 
-if "%choice%"=="1" goto LOCAL_DEV
-if "%choice%"=="2" goto DOCKER_MODE
-if "%choice%"=="3" goto RUN_TESTS
-if "%choice%"=="4" goto CLEAN_PORTS
-if "%choice%"=="5" exit /b 0
+if "%choice:~0,1%"=="5" exit /b 0
+if "%choice:~0,1%"=="2" goto DOCKER_MODE
+if "%choice:~0,1%"=="3" goto RUN_TESTS
+if "%choice:~0,1%"=="4" goto CLEAN_PORTS
 goto LOCAL_DEV
 
 :LOCAL_DEV
 cls
 echo ========================================================================
-echo    KHỞI CHẠY MÔI TRƯỜNG LOCAL DEV (BACKEND + FRONTEND)
+echo    KHOI CHAY MOI TRUONG LOCAL DEV (BACKEND + FRONTEND)
 echo ========================================================================
 echo.
-echo [1/4] Kiểm tra môi trường Node.js...
+echo [1/4] Kiem tra Node.js...
 where node >nul 2>nul
 if %errorlevel% neq 0 (
-    echo [LỖI] Chưa phát hiện Node.js trên máy tính!
-    echo Vui lòng cài đặt Node.js LTS từ https://nodejs.org trước khi khởi chạy.
+    echo [LOI] Chua cai dat Node.js tren may tinh!
     pause
     exit /b 1
 )
-echo       -> Node.js đã sẵn sàng.
+echo       [OK] Node.js da san sang.
 
 echo.
-echo [2/4] Dọn dẹp và giải phóng cổng mạng (Port 3000, 5000)...
-node scripts/free-ports.js
+echo [2/4] Giai phong cong mang 3000 va 5000...
+node "%~dp0scripts/free-ports.js"
 
 echo.
-echo [3/4] Đang khởi động Backend API và Frontend Web...
+echo [3/4] Khoi dong Backend API va Frontend Web...
 start "MushroomCloud Backend API (Port 5000)" cmd /c "cd /d "%~dp0backend" && npm run dev"
 start "MushroomCloud Frontend Web (Port 3000)" cmd /c "cd /d "%~dp0frontend" && npm run dev"
 
 echo.
-echo [4/4] Đang chờ hệ thống sẵn sàng và mở trình duyệt...
-timeout /t 5 /nobreak > nul
+echo [4/4] Cho he thong san sang va mo trinh duyet...
+ping 127.0.0.1 -n 6 > nul
 start http://localhost:3000
 
 echo.
 echo ========================================================================
-echo    KHỞI CHẠY HỆ THỐNG MUSHROOMCLOUD THÀNH CÔNG!
+echo    KHOI CHAY HE THONG THANH CONG!
+echo    - Cong Khach Hang:        http://localhost:3000
+echo    - Ban Dieu Hanh Ky Thuat: http://localhost:3000/operator
+echo    - Swagger API Docs:       http://localhost:5000/api-docs
+echo    - Health Check API:       http://localhost:5000/api/health
 echo ========================================================================
-echo    1. Cổng Khách Hàng:       http://localhost:3000
-echo    2. Trung Tâm Điều Hành:   http://localhost:3000/operator
-echo    3. Swagger API Docs:      http://localhost:5000/api-docs
-echo    4. Health Check API:      http://localhost:5000/api/health
-echo ========================================================================
-echo Nhấn phím bất kỳ để quay lại menu...
-pause > nul
-goto MENU_RELOAD
+echo.
+pause
+exit /b 0
 
 :DOCKER_MODE
 cls
 echo ========================================================================
-echo    KHỞI CHẠY BẰNG DOCKER COMPOSE
+echo    KHOI CHAY DOCKER COMPOSE
 echo ========================================================================
 echo.
 where docker >nul 2>nul
 if %errorlevel% neq 0 (
-    echo [CẢNH BÁO] Không tìm thấy Docker CLI trên máy!
-    echo Tự động chuyển hướng về chế độ Local Dev...
-    timeout /t 3 /nobreak > nul
+    echo [CANH BAO] May tinh chua cai dat Docker!
+    echo Chuyen huong ve che do Local Dev...
+    ping 127.0.0.1 -n 4 > nul
     goto LOCAL_DEV
 )
 docker info >nul 2>nul
 if %errorlevel% neq 0 (
-    echo [CẢNH BÁO] Docker daemon chưa được bật (Docker Desktop đang tắt).
-    echo Tự động chuyển hướng về chế độ Local Dev...
-    timeout /t 3 /nobreak > nul
+    echo [CANH BAO] Docker daemon dang tat (Chua bat Docker Desktop).
+    echo Chuyen huong ve che do Local Dev...
+    ping 127.0.0.1 -n 4 > nul
     goto LOCAL_DEV
 )
-echo Đang kích hoạt docker-compose up --build...
 docker-compose up --build
 pause
-goto MENU_RELOAD
+exit /b 0
 
 :RUN_TESTS
 cls
 echo ========================================================================
-echo    CHẠY BỘ KIỂM THỬ TỰ ĐỘNG TOÀN DIỆN (SQL SERVER + BACKEND)
+echo    CHAY BO KIEM THU TU DONG TOAN DIEN
 echo ========================================================================
 echo.
-node scripts/test-runner.js
-echo.
-echo Nhấn phím bất kỳ để quay lại menu...
-pause > nul
-goto MENU_RELOAD
+call "%~dp0run-automated-tests.bat"
+pause
+exit /b 0
 
 :CLEAN_PORTS
 cls
 echo ========================================================================
-echo    GIẢI PHÓNG CỔNG MẠNG BỊ CHIẾM DỤNG
+echo    GIAI PHONG CONG MANG 3000 VA 5000
 echo ========================================================================
 echo.
-node scripts/free-ports.js
+node "%~dp0scripts/free-ports.js"
 echo.
-echo Đã giải phóng hoàn tất. Nhấn phím bất kỳ để quay lại menu...
-pause > nul
-goto MENU_RELOAD
-
-:MENU_RELOAD
-cmd /c "%~f0"
+echo Da giai phong cong mang hoan tat.
+pause
+exit /b 0
