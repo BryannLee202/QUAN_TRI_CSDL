@@ -8,6 +8,7 @@ import RoomTabs from "@/components/operator/RoomTabs";
 import StatusLegend from "@/components/operator/StatusLegend";
 import TrayMatrix from "@/components/operator/TrayMatrix";
 import ThemeToggle from "@/components/layout/ThemeToggle";
+import CheatsheetDrawer from "@/components/operator/CheatsheetDrawer";
 import { isDeviceOn } from "@/components/operator/deviceState";
 import { MOCK_ALERTS, MOCK_DEVICES, MOCK_ROOMS, MOCK_TRAYS } from "@/components/operator/mockData";
 import type { AlertItem, DeviceState } from "@/components/operator/types";
@@ -17,6 +18,7 @@ export default function OperatorPage() {
   const [roomId, setRoomId] = useState(MOCK_ROOMS[0].roomId);
   const [alerts, setAlerts] = useState<AlertItem[]>(MOCK_ALERTS);
   const [devices, setDevices] = useState<Record<string, DeviceState>>(MOCK_DEVICES);
+  const [isCheatsheetOpen, setIsCheatsheetOpen] = useState(false);
 
   const { connected } = useOperatorSocket({
     onAlert: (a) =>
@@ -74,6 +76,14 @@ export default function OperatorPage() {
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
+          <button
+            onClick={() => setIsCheatsheetOpen(true)}
+            className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-sm"
+            title="Mở sổ tay tra cứu kỹ thuật"
+          >
+            <span>📋</span>
+            <span>Sổ Tay Kỹ Thuật</span>
+          </button>
           <span
             className={`rounded-full px-3 py-1 text-xs font-semibold shrink-0 whitespace-nowrap shadow-sm ${
               connected
@@ -99,6 +109,11 @@ export default function OperatorPage() {
           <AlertFeed alerts={alerts} roomLabel={roomLabel} onResolve={resolveAlert} />
         </div>
       </div>
+
+      <CheatsheetDrawer
+        isOpen={isCheatsheetOpen}
+        onClose={() => setIsCheatsheetOpen(false)}
+      />
     </main>
   );
 }
