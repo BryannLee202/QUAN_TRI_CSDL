@@ -1,44 +1,69 @@
-﻿services:
-  sqlserver:
+version: '3.8'
+
+# Hệ thống Nông trại Nấm Thông minh MushroomCloud - Multi-container Compose
+# Chuỗi ràng buộc khởi động phụ thuộc healthcheck kế thừa từ Seal_Hackathon_Webapp
+# Phụ trách: Hoàng Huy (hoanghuy216412@gmail.com)
+
+services:
+  database:
     image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: smartmushroom-sql
+    container_name: mushroomcloud_mssql
     environment:
-      ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD:-Password123!}
+      - MSSQL_PID=Express
     ports:
       - "1433:1433"
     volumes:
-      - sqldata:/var/opt/mssql
+      - mssql_data:/var/opt/mssql
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' || exit 1"]
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P '${MSSQL_SA_PASSWORD:-Password123!}' -C -Q 'SELECT 1' || /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P '${MSSQL_SA_PASSWORD:-Password123!}' -Q 'SELECT 1'"]
       interval: 10s
       timeout: 5s
-      retries: 12
+      retries: 10
+      start_period: 25s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mushroomcloud_backend
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - DB_SERVER=database
+      - DB_PORT=1433
+      - DB_NAME=SmartMushroomDB
+      - DB_USER=sa
+      - DB_PASSWORD=${MSSQL_SA_PASSWORD:-Password123!}
+      - DB_ENCRYPT=false
+      - DB_TRUSTED_CONNECTION=false
+      - JWT_SECRET=${JWT_SECRET:-MushroomCloud_Secret_Key_2026_JWT!}
+    ports:
+      - "5000:5000"
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
       start_period: 20s
 
-  db-init:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: smartmushroom-db-init
-    depends_on:
-      sqlserver:
-        condition: service_healthy
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: mushroomcloud_frontend
     environment:
-      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
-    volumes:
-      - ./database:/scripts:ro
-    restart: "no"
-    entrypoint: /bin/bash
-    command:
-      - -c
-      - |
-        run() { /opt/mssql-tools18/bin/sqlcmd -S sqlserver -U sa -P "$$MSSQL_SA_PASSWORD" -C -b -I -f 65001 "$$@"; }
-        EXISTS=$$(run -h -1 -W -Q "SET NOCOUNT ON; SELECT COUNT(*) FROM sys.databases WHERE name='SmartMushroomDB'" | tr -d '[:space:]')
-        if [ "$$EXISTS" = "1" ]; then echo "SmartMushroomDB da ton tai, bo qua nap."; exit 0; fi
-        for f in 01_schema 02_tsql_logic 03_seed_data 04_indexing_and_performance; do
-          echo ">>> Chay $$f.sql"
-          run -i /scripts/$${f}.sql || exit 1
-        done
-        echo ">>> Nap CSDL xong."
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
 
 volumes:
-  sqldata:
+  mssql_data:
