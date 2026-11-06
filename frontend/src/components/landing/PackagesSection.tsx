@@ -59,56 +59,75 @@ export default function PackagesSection() {
   };
 
   return (
-    <section id="packages" className="py-20 px-6 bg-[#F8FAFC] dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors">
-      <div className="max-w-6xl mx-auto text-center space-y-4 mb-14">
-        <h2 className="text-3xl md:text-4xl font-bold text-[#0F172A] dark:text-emerald-400">
+    <section id="packages" className="py-20 px-6 bg-slate-50/70 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors">
+      <div className="max-w-6xl mx-auto text-center space-y-3 mb-14">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-xs font-bold text-emerald-800 dark:text-emerald-300">
+          <span>📦 BẢNG GIÁ DỊCH VỤ FaaS</span>
+        </div>
+        <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
           Danh Mục Các Gói Thuê Nấm
         </h2>
-        <p className="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-          Lựa chọn gói nuôi trồng phù hợp với nhu cầu sử dụng hoặc làm quà tặng cao cấp. Cam kết sản lượng minh bạch.
+        <p className="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">
+          Lựa chọn gói nuôi trồng phù hợp với nhu cầu chăm sóc sức khỏe hoặc làm quà tặng cao cấp. Cam kết sản lượng minh bạch có bảo hiểm.
         </p>
       </div>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
         {packages.map((pkg) => (
           <TiltCard
             key={pkg.id}
-            className={`bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm border transition hover:shadow-2xl flex flex-col justify-between ${
+            className={`bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-md border transition-all duration-300 flex flex-col justify-between relative ${
               pkg.isPopular
-                ? "border-[#D4AF37] ring-2 ring-[#D4AF37]/20"
-                : "border-slate-200 dark:border-slate-700"
+                ? "border-2 border-emerald-500 ring-4 ring-emerald-500/10 md:-translate-y-2 shadow-xl"
+                : "border-slate-200/80 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
             }`}
           >
             {pkg.isPopular && (
-              <span className="absolute -top-3 right-6 bg-[#D4AF37] text-white text-xs font-bold px-3 py-1 rounded-full uppercase shadow-md">
-                Ưa Chuộng
+              <span className="absolute -top-3.5 right-6 bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-[11px] font-black px-3.5 py-1 rounded-full uppercase shadow-md tracking-wider">
+                Ưa Chuộng Nhất
               </span>
             )}
             <div className="space-y-4">
-              <h3 className="text-xl font-bold text-[#0D5C3A] dark:text-emerald-400">{pkg.name}</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">{pkg.species}</p>
-              <div className="border-b border-slate-100 dark:border-slate-700 pb-4">
-                <span className="text-3xl font-extrabold text-[#0F172A] dark:text-white">
+              <div>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                  {pkg.name}
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                  {pkg.species}
+                </p>
+              </div>
+
+              <div className="border-b border-slate-100 dark:border-slate-800 pb-4">
+                <span className="text-3xl font-black text-emerald-700 dark:text-emerald-400">
                   {pkg.price}
                 </span>
-                <span className="text-slate-400 text-sm"> / {pkg.duration}</span>
+                <span className="text-slate-400 text-xs font-semibold"> / {pkg.duration}</span>
               </div>
-              <div className="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200">
-                ⚖️ Sản lượng:{" "}
-                <span className="text-[#0D5C3A] dark:text-emerald-400">{pkg.expectedYield}</span>
+
+              <div className="bg-emerald-50/70 dark:bg-slate-800/80 p-3 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 flex items-center justify-between">
+                <span>⚖️ Cam kết sản lượng:</span>
+                <span className="text-emerald-700 dark:text-emerald-300 font-bold">{pkg.expectedYield}</span>
               </div>
-              <ul className="space-y-3 pt-2 text-sm text-slate-600 dark:text-slate-300">
+
+              <ul className="space-y-3 pt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
                 {pkg.features.map((ft, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <span className="text-[#0D5C3A] dark:text-emerald-400 font-bold">✓</span>
+                  <li key={idx} className="flex items-start gap-2.5">
+                    <span className="w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 font-bold flex items-center justify-center text-[10px] shrink-0 mt-0.5">
+                      ✓
+                    </span>
                     <span>{ft}</span>
                   </li>
                 ))}
               </ul>
             </div>
+
             <button
               onClick={() => handleBooking(pkg.name)}
-              className="mt-8 w-full py-3 px-4 rounded-xl font-semibold bg-[#0F172A] dark:bg-emerald-700 hover:bg-[#0D5C3A] dark:hover:bg-emerald-600 text-white transition transform active:scale-95 shrink-0 whitespace-nowrap shadow-md"
+              className={`mt-8 w-full py-3.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition transform active:scale-95 shadow-sm ${
+                pkg.isPopular
+                  ? "bg-gradient-to-r from-emerald-600 to-[#0D5C3A] hover:from-emerald-500 hover:to-emerald-700 text-white shadow-emerald-700/20"
+                  : "bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white"
+              }`}
             >
               Đăng Ký Thuê Ngay
             </button>
@@ -118,16 +137,18 @@ export default function PackagesSection() {
 
       {bookedPackage && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-emerald-200 dark:border-emerald-700 text-center animate-fadeIn">
-            <span className="text-4xl">🎉</span>
-            <h4 className="font-bold text-2xl text-[#0F172A] dark:text-white">Đăng Ký Thuê Thành Công!</h4>
-            <p className="text-sm text-slate-600 dark:text-slate-300">
-              Bạn đã chọn <strong>{bookedPackage}</strong>. Hệ thống CSDL đang thực thi thủ tục <code>sp_CreateRentalOrder</code> với khóa bi quan để gán mã khay QR riêng biệt cho bạn.
+          <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-4 shadow-2xl border border-emerald-200 dark:border-emerald-700 text-center animate-fade-in">
+            <span className="text-4xl block">🎉</span>
+            <h4 className="font-extrabold text-2xl text-slate-900 dark:text-white">
+              Đăng Ký Thuê Thành Công!
+            </h4>
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Bạn đã chọn <strong>{bookedPackage}</strong>. Hệ thống CSDL đang thực thi thủ tục <code>sp_CreateRentalOrder</code> với khóa dòng bi quan để gán mã khay QR riêng biệt cho bạn.
             </p>
             <div className="pt-2">
               <button
                 onClick={() => setBookedPackage(null)}
-                className="w-full py-2.5 px-4 bg-[#0D5C3A] hover:bg-emerald-800 text-white font-bold rounded-xl shadow transition"
+                className="w-full py-3 px-4 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl shadow-md transition"
               >
                 Vào Cổng Khách Hàng Theo Dõi
               </button>

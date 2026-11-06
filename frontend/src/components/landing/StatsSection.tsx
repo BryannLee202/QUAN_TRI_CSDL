@@ -4,7 +4,7 @@ import React from 'react';
 import { CountUp } from './CountUp';
 
 /**
- * Phần Thống Kê Chỉ Số Động (Stats Section) sử dụng CountUp
+ * Phần Thống Kê Chỉ Số Động (Stats Section) phong cách Scandinavian Clean White
  * Phụ trách: Võ Duy Thịnh
  */
 export default function StatsSection() {
@@ -16,15 +16,20 @@ export default function StatsSection() {
   ];
 
   return (
-    <section className="py-12 bg-[#093823] dark:bg-slate-950 text-white border-y border-emerald-800 dark:border-slate-800 shadow-inner transition-colors">
-      <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+    <section className="py-12 bg-white dark:bg-slate-900 border-y border-slate-200/80 dark:border-slate-800 transition-colors">
+      <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
         {stats.map((s, idx) => (
-          <div key={idx} className="space-y-1.5 p-3 rounded-2xl hover:bg-white/5 transition">
-            <span className="text-2xl md:text-3xl block">{s.icon}</span>
-            <div className="text-3xl md:text-4xl font-extrabold text-[#D4AF37] tracking-tight">
+          <div
+            key={idx}
+            className="p-5 rounded-2xl bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60 hover:border-emerald-500/40 hover:shadow-md transition-all duration-300"
+          >
+            <span className="text-2xl md:text-3xl block mb-2">{s.icon}</span>
+            <div className="text-3xl md:text-4xl font-black text-[#0D5C3A] dark:text-emerald-400 tracking-tight">
               <CountUp target={s.value} suffix={s.suffix} />
             </div>
-            <p className="text-xs md:text-sm text-emerald-200 dark:text-slate-400 font-medium">{s.label}</p>
+            <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 font-medium mt-1">
+              {s.label}
+            </p>
           </div>
         ))}
       </div>
