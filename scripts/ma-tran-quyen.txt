@@ -1,0 +1,33 @@
+# ==============================================================================
+# HỆ THỐNG NÔNG TRẠI NẤM THÔNG MINH - MUSHROOMCLOUD (FARM-AS-A-SERVICE)
+# MA TRẬN PHÂN QUYỀN TRUY XUẤT CƠ SỞ DỮ LIỆU (ROLE-BASED ACCESS CONTROL - RBAC)
+# Phụ trách: Hoàng Huy (hoanghuy216412@gmail.com)
+# ==============================================================================
+
+1. BẢNG MA TRẬN QUYỀN TRÊN CÁC THỰC THỂ CSDL:
+
+| Tên Bảng CSDL / Đối Tượng       | ADMIN (Quản trị) | OPERATOR (Kỹ thuật viên) | CUSTOMER (Khách hàng) |
+| :------------------------------ | :--------------: | :----------------------: | :-------------------: |
+| Users                           | SELECT, INSERT, UPDATE, DELETE | SELECT (cá nhân) | SELECT, UPDATE (cá nhân) |
+| Roles                           | SELECT | SELECT | KHÔNG TRUY CẬP |
+| Rooms                           | FULL CONTROL | SELECT, UPDATE (ngưỡng vi khí hậu) | SELECT (công khai) |
+| MushroomSpecies                 | FULL CONTROL | SELECT | SELECT (công khai) |
+| RentalPackages                  | FULL CONTROL | SELECT | SELECT (công khai) |
+| CultivationTrays                | FULL CONTROL | SELECT, UPDATE (quét QR, chuyển bảo dưỡng) | SELECT (khay đang thuê) |
+| RentalOrders                    | FULL CONTROL | SELECT | SELECT, INSERT (đặt thuê cá nhân) |
+| SensorData                      | FULL CONTROL | SELECT, INSERT (node IoT) | SELECT (khay đang thuê) |
+| SensorAlerts                    | FULL CONTROL | SELECT, UPDATE (xử lý cảnh báo) | SELECT (cảnh báo khay mình) |
+| GrowthLogs                      | FULL CONTROL | SELECT, INSERT (chụp ảnh, ghi nhật ký) | SELECT (nhật ký khay mình) |
+| HarvestRequests                 | FULL CONTROL | SELECT, UPDATE (nghiệm thu nấm) | SELECT, INSERT (gửi yêu cầu) |
+| DeviceActionLogs                | FULL CONTROL | SELECT, INSERT (điều khiển thiết bị) | SELECT (lịch sử khay mình) |
+| AuditLogs                       | SELECT (kiểm toán) | KHÔNG TRUY CẬP | KHÔNG TRUY CẬP |
+
+2. MA TRẬN THỰC THI THỦ TỤC T-SQL (EXECUTE STORED PROCEDURES):
+
+| Stored Procedure                | ADMIN | OPERATOR | CUSTOMER | Mục đích nghiệp vụ |
+| :------------------------------ | :---: | :------: | :------: | :----------------- |
+| dbo.sp_CreateRentalOrder        | Có | Không | Có | Đặt thuê khay nấm, khóa bi quan UPDLOCK chống đặt trùng |
+| dbo.sp_AssignTrayToOrder        | Có | Có | Không | Kỹ thuật viên quét mã QR gán khay vật lý vào đơn hàng |
+| dbo.sp_RequestHarvest           | Có | Không | Có | Khách hàng gửi yêu cầu thu hoạch khi nấm đến kỳ vụ |
+| dbo.sp_CompleteHarvest          | Có | Có | Không | Kỹ thuật viên nghiệm thu cân ký và chuyển khay bảo dưỡng |
+| dbo.sp_LogAuditEvent            | Có | Có (qua hệ thống) | Không | Ghi nhật ký kiểm toán bất biến phục vụ truy vết |
