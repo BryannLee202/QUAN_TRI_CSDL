@@ -1,4 +1,7 @@
-import React from "react";
+'use client';
+
+import React, { useState } from "react";
+import { triggerSuccessConfetti } from "../../utils/confetti";
 
 const packages = [
   {
@@ -47,6 +50,13 @@ const packages = [
 ];
 
 export default function PackagesSection() {
+  const [bookedPackage, setBookedPackage] = useState<string | null>(null);
+
+  const handleBooking = (pkgName: string) => {
+    triggerSuccessConfetti();
+    setBookedPackage(pkgName);
+  };
+
   return (
     <section id="packages" className="py-20 px-6 bg-[#F8FAFC] text-slate-800">
       <div className="max-w-6xl mx-auto text-center space-y-4 mb-14">
@@ -95,12 +105,35 @@ export default function PackagesSection() {
                 ))}
               </ul>
             </div>
-            <button className="mt-8 w-full py-3 px-4 rounded-xl font-semibold bg-[#0F172A] hover:bg-[#0D5C3A] text-white transition">
+            <button
+              onClick={() => handleBooking(pkg.name)}
+              className="mt-8 w-full py-3 px-4 rounded-xl font-semibold bg-[#0F172A] hover:bg-[#0D5C3A] text-white transition transform active:scale-95 shrink-0 whitespace-nowrap shadow-md"
+            >
               Đăng Ký Thuê Ngay
             </button>
           </div>
         ))}
       </div>
+
+      {bookedPackage && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-emerald-200 text-center animate-fadeIn">
+            <span className="text-4xl">🎉</span>
+            <h4 className="font-bold text-2xl text-[#0F172A]">Đăng Ký Thuê Thành Công!</h4>
+            <p className="text-sm text-slate-600">
+              Bạn đã chọn <strong>{bookedPackage}</strong>. Hệ thống CSDL đang thực thi thủ tục <code>sp_CreateRentalOrder</code> với khóa bi quan để gán mã khay QR riêng biệt cho bạn.
+            </p>
+            <div className="pt-2">
+              <button
+                onClick={() => setBookedPackage(null)}
+                className="w-full py-2.5 px-4 bg-[#0D5C3A] text-white font-bold rounded-xl shadow transition hover:bg-emerald-800"
+              >
+                Vào Cổng Khách Hàng Theo Dõi
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
