@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import NetworkStatusBanner from "../components/NetworkStatusBanner";
+import { LanguageProvider } from "../context/LanguageContext";
 
 export const metadata: Metadata = {
   title: "MushroomCloud - Nông Nghiệp Thông Minh FaaS",
@@ -15,8 +16,10 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body className="min-h-screen bg-[#F8FAFC] text-slate-800 antialiased">
-        <NetworkStatusBanner />
-        {children}
+        <LanguageProvider>
+          <NetworkStatusBanner />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );
