@@ -4,12 +4,29 @@ import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import type { AlertItem, DeviceAction, SensorReading } from "@/components/operator/types";
 
-const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL ?? "http://localhost:3000";
+const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL ?? "http://localhost:5000";
+
+export interface TrayOccupiedEvent {
+  trayId: number;
+  orderId: number;
+  orderCode: string;
+  packageId: number;
+  timestamp: string;
+}
+
+export interface HarvestRequestedEvent {
+  harvestId: number;
+  orderId: number;
+  deliveryType: string;
+  timestamp: string;
+}
 
 interface Handlers {
   onAlert?: (a: AlertItem) => void;
   onDevice?: (d: DeviceAction) => void;
   onSensor?: (r: SensorReading) => void;
+  onTrayOccupied?: (t: TrayOccupiedEvent) => void;
+  onHarvestRequested?: (h: HarvestRequestedEvent) => void;
 }
 
 export function useOperatorSocket(handlers: Handlers) {
@@ -18,7 +35,7 @@ export function useOperatorSocket(handlers: Handlers) {
   latest.current = handlers;
 
   useEffect(() => {
-    const socket = io(SOCKET_URL, { transports: ["websocket"] });
+    const socket = io(SOCKET_URL, { transports: ["websocket", "polling"] });
     
     socket.on("connect", () => {
       setConnected(true);
@@ -28,6 +45,8 @@ export function useOperatorSocket(handlers: Handlers) {
     socket.on("alert:new", (a: AlertItem) => latest.current.onAlert?.(a));
     socket.on("device:action", (d: DeviceAction) => latest.current.onDevice?.(d));
     socket.on("sensor:update", (r: SensorReading) => latest.current.onSensor?.(r));
+    socket.on("tray:occupied", (t: TrayOccupiedEvent) => latest.current.onTrayOccupied?.(t));
+    socket.on("harvest:requested", (h: HarvestRequestedEvent) => latest.current.onHarvestRequested?.(h));
 
     return () => {
       socket.disconnect();
