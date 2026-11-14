@@ -11,13 +11,14 @@ import ThemeToggle from "@/components/layout/ThemeToggle";
 import CheatsheetDrawer from "@/components/operator/CheatsheetDrawer";
 import { isDeviceOn } from "@/components/operator/deviceState";
 import { MOCK_ALERTS, MOCK_DEVICES, MOCK_ROOMS, MOCK_TRAYS } from "@/components/operator/mockData";
-import type { AlertItem, DeviceState } from "@/components/operator/types";
+import type { AlertItem, DeviceState, TrayCell } from "@/components/operator/types";
 import { useOperatorSocket } from "@/hooks/useOperatorSocket";
 
 export default function OperatorPage() {
   const [roomId, setRoomId] = useState(MOCK_ROOMS[0].roomId);
   const [alerts, setAlerts] = useState<AlertItem[]>(MOCK_ALERTS);
   const [devices, setDevices] = useState<Record<string, DeviceState>>(MOCK_DEVICES);
+  const [trays, setTrays] = useState<TrayCell[]>(MOCK_TRAYS);
   const [isCheatsheetOpen, setIsCheatsheetOpen] = useState(false);
 
   const { connected } = useOperatorSocket({
@@ -32,6 +33,38 @@ export default function OperatorPage() {
           triggeredBy: d.triggeredBy,
         },
       })),
+    onTrayOccupied: (t) => {
+      // Cập nhật ma trận khay thời gian thực khi khách hàng đặt thuê từ Landing Page
+      setTrays((prev) =>
+        prev.map((tray) =>
+          tray.trayId === t.trayId ? { ...tray, status: "OCCUPIED" } : tray
+        )
+      );
+
+      const newAlert: AlertItem = {
+        alertId: Date.now(),
+        roomId: 1,
+        alertType: "TRAY_BOOKING",
+        severity: "WARNING",
+        message: `Khay #${t.trayId} vừa được gán đơn thuê mới (${t.orderCode}) qua CSDL!`,
+        alertTime: new Date().toISOString(),
+        isResolved: false,
+      };
+      setAlerts((prev) => [newAlert, ...prev].slice(0, 50));
+    },
+    onHarvestRequested: (h) => {
+      // Nhận tín hiệu yêu cầu thu hoạch tức thì từ Cổng Khách Hàng
+      const newAlert: AlertItem = {
+        alertId: Date.now(),
+        roomId: 1,
+        alertType: "HARVEST_REQUEST",
+        severity: "CRITICAL",
+        message: `Yêu cầu thu hoạch mới: Đơn hàng #${h.orderId} (Mã TH: #${h.harvestId}) - Phương thức: ${h.deliveryType}`,
+        alertTime: new Date().toISOString(),
+        isResolved: false,
+      };
+      setAlerts((prev) => [newAlert, ...prev].slice(0, 50));
+    },
   });
 
   const alertRoomIds = useMemo(
@@ -39,7 +72,7 @@ export default function OperatorPage() {
     [alerts]
   );
   const roomHasAlert = alertRoomIds.has(roomId);
-  const traysInRoom = useMemo(() => MOCK_TRAYS.filter((t) => t.roomId === roomId), [roomId]);
+  const traysInRoom = useMemo(() => trays.filter((t) => t.roomId === roomId), [trays, roomId]);
   const roomLabel = useCallback(
     (id: number) => MOCK_ROOMS.find((r) => r.roomId === id)?.roomCode ?? `Buồng ${id}`,
     []
@@ -91,7 +124,7 @@ export default function OperatorPage() {
                 : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700"
             }`}
           >
-            {connected ? "● Socket.io: Đã kết nối" : "○ Socket.io: Mất kết nối"}
+            {connected ? "● Socket.io: Đã kết nối (5000)" : "○ Socket.io: Đang kết nối..."}
           </span>
           <ThemeToggle />
         </div>
@@ -101,7 +134,7 @@ export default function OperatorPage() {
         <section className="space-y-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm lg:col-span-2 transition-colors">
           <RoomTabs rooms={MOCK_ROOMS} selectedRoomId={roomId} alertRoomIds={alertRoomIds} onSelect={setRoomId} />
           <StatusLegend trays={traysInRoom} roomHasAlert={roomHasAlert} />
-          <TrayMatrix trays={MOCK_TRAYS} roomId={roomId} roomHasAlert={roomHasAlert} />
+          <TrayMatrix trays={trays} roomId={roomId} roomHasAlert={roomHasAlert} />
         </section>
 
         <div className="space-y-6">
