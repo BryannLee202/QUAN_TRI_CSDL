@@ -77,7 +77,7 @@ GO
 CREATE OR ALTER PROCEDURE dbo.sp_CreateRentalOrder
     @UserID INT,
     @PackageID INT,
-    @TrayID INT,
+    @TrayID INT = NULL OUTPUT,
     @DeliveryAddress NVARCHAR(255),
     @ReceiverPhone VARCHAR(20),
     @PaymentMethod VARCHAR(50) = 'VNPAY',
@@ -115,17 +115,35 @@ BEGIN
             RETURN;
         END
 
-        -- BƯỚC 3: Khóa dòng khay nấm (ROWLOCK, UPDLOCK) để kiểm tra tính sẵn sàng (Chống Overbooking)
-        -- Kỹ thuật đỉnh cao giúp ngăn chặn 2 khách hàng bấm thuê 1 khay trong cùng 1 millisecond
-        IF NOT EXISTS (
-            SELECT 1 
-            FROM CultivationTrays WITH (UPDLOCK, ROWLOCK) 
-            WHERE TrayID = @TrayID AND Status = 'AVAILABLE'
-        )
+        -- BƯỚC 3: Kiểm tra và khóa dòng khay nấm (Chống Overbooking & Race Condition)
+        -- Nếu không chỉ định TrayID cụ thể (@TrayID IS NULL hoặc <= 0), tự động cấp khay AVAILABLE bằng READPAST
+        IF @TrayID IS NULL OR @TrayID <= 0
         BEGIN
-            RAISERROR(N'Lỗi: Khay nấm này vừa có người đặt hoặc đang trong quá trình bảo dưỡng!', 16, 1);
-            ROLLBACK TRANSACTION;
-            RETURN;
+            SELECT TOP 1 @TrayID = TrayID
+            FROM CultivationTrays WITH (UPDLOCK, ROWLOCK, READPAST)
+            WHERE Status = 'AVAILABLE'
+            ORDER BY TrayID;
+
+            IF @TrayID IS NULL
+            BEGIN
+                RAISERROR(N'Lỗi: Hiện không còn khay nấm nào ở trạng thái AVAILABLE để đặt thuê!', 16, 1);
+                ROLLBACK TRANSACTION;
+                RETURN;
+            END
+        END
+        ELSE
+        BEGIN
+            -- Nếu có chỉ định TrayID, khóa dòng khay nấm (ROWLOCK, UPDLOCK) để kiểm tra tính sẵn sàng
+            IF NOT EXISTS (
+                SELECT 1 
+                FROM CultivationTrays WITH (UPDLOCK, ROWLOCK) 
+                WHERE TrayID = @TrayID AND Status = 'AVAILABLE'
+            )
+            BEGIN
+                RAISERROR(N'Lỗi: Khay nấm này vừa có người đặt hoặc đang trong quá trình bảo dưỡng!', 16, 1);
+                ROLLBACK TRANSACTION;
+                RETURN;
+            END
         END
 
         -- BƯỚC 4: Tính toán tổng tiền qua Function
