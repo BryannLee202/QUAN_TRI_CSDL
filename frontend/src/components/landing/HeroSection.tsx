@@ -6,6 +6,7 @@ import Image from "next/image";
 interface ChamberView {
   id: string;
   name: string;
+  shortName: string;
   badge: string;
   image: string;
   temp: string;
@@ -16,44 +17,37 @@ interface ChamberView {
 
 const chamberViews: ChamberView[] = [
   {
-    id: "portal",
-    name: "Buồng Nuôi Phòng Sạch 3D",
-    badge: "ISO Class 5 • Giám Sát 24/7",
-    image: "/images/view-portal-macro.jpg",
-    temp: "24.0°C",
-    hum: "91%",
-    co2: "650 ppm",
-    desc: "Cận cảnh khay nấm Bào Ngư phát triển trong buồng kính với camera góc cận và cảm biến vi khí hậu",
-  },
-  {
-    id: "control",
-    name: "Trung Tâm Điều Hành Trang Trại",
-    badge: "IoT Telemetry Hub",
-    image: "/images/view-operator-hub.jpg",
-    temp: "22.5°C",
-    hum: "65%",
-    co2: "450 ppm",
-    desc: "Phòng điều hành trung tâm giám sát đồng loạt các buồng nuôi, van phun sương và quạt đối lưu",
+    id: "cube",
+    name: "Buồng Nuôi Thông Minh 3D",
+    shortName: "Buồng Kính 3D",
+    badge: "Buồng Nuôi ISO Class 5 • Cảm Biến IoT 24/7",
+    image: "/images/smart-chamber-original.png",
+    temp: "24.2°C",
+    hum: "92%",
+    co2: "680 ppm",
+    desc: "Buồng kính lập phương vô trùng kiểm soát vi khí hậu độc lập, tích hợp phun sương siêu âm và camera góc rộng",
   },
   {
     id: "facility",
-    name: "Cơ Sở Nuôi Cấy Đa Tầng FaaS",
-    badge: "Smart Multi-Tier Racks",
+    name: "Dàn Nuôi Đa Tầng Quy Mô Lớn",
+    shortName: "Dàn Nuôi Đa Tầng",
+    badge: "Smart Multi-Tier FaaS Farm",
     image: "/images/view-farm-facility.jpg",
     temp: "25.0°C",
     hum: "88%",
     co2: "590 ppm",
-    desc: "Hệ thống dàn kệ nuôi nấm quy mô lớn tích hợp tự động hóa điều hòa vi khí hậu chuẩn VietGAP",
+    desc: "Hệ thống giá kệ nuôi cấy tự động khép kín chuẩn VietGAP với điều hòa đối lưu không khí hai chiều",
   },
   {
-    id: "cube",
-    name: "Buồng Kính Lập Phương Cách Ly",
-    badge: "Terrarium Chamber",
-    image: "/images/chamber-clean-crop.png",
-    temp: "24.2°C",
-    hum: "92%",
-    co2: "680 ppm",
-    desc: "Mô hình buồng kính lập phương cách nhiệt độc lập với làn sương ẩm siêu âm tự động",
+    id: "control",
+    name: "Trung Tâm Điều Hành Giám Sát",
+    shortName: "Phòng Điều Hành",
+    badge: "Central Telemetry Hub",
+    image: "/images/view-operator-hub.jpg",
+    temp: "22.5°C",
+    hum: "65%",
+    co2: "450 ppm",
+    desc: "Màn hình giám sát tập trung toàn bộ buồng nuôi, tiếp nhận lệnh thu hoạch và cảnh báo bất thường",
   },
 ];
 
@@ -127,67 +121,79 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Cột Phải: Showcase Buồng Kính Hiện Đại (Trắng Tinh Tế, Không Hộp Đen) */}
+          {/* Cột Phải: Showcase Buồng Kính Hiện Đại (Thiết kế Tinh Tế, Liền Mạch) */}
           <div className="lg:col-span-6 relative flex flex-col items-center">
             
-            {/* Bộ Nút Chuyển Đổi Tab Siêu Nét - Kiểu Dáng Apple Segments */}
+            {/* Bộ Nút Chuyển Đổi Góc Nhìn - Phong Cách Apple Segments */}
             <div className="w-full flex items-center justify-between gap-1 p-1 mb-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm">
               {chamberViews.map((v, idx) => (
                 <button
                   key={v.id}
                   onClick={() => setActiveTab(idx)}
-                  className={`flex-1 py-2 px-2.5 rounded-xl text-xs font-bold transition-all text-center truncate ${
+                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all text-center flex items-center justify-center gap-1.5 ${
                     activeTab === idx
-                      ? "bg-emerald-700 text-white shadow-sm"
-                      : "text-slate-600 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                      ? "bg-emerald-600 dark:bg-emerald-700 text-white shadow-sm shadow-emerald-700/20"
+                      : "text-slate-600 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800/60"
                   }`}
                   title={v.name}
                 >
-                  {v.name.split(" ")[0]} {v.name.split(" ")[1]}
+                  <span className="hidden sm:inline">
+                    {v.id === "cube" ? "🌿" : v.id === "facility" ? "🏭" : "🖥️"}
+                  </span>
+                  <span>{v.shortName}</span>
                 </button>
               ))}
             </div>
 
-            {/* Khung Kính Showcase Sang Trọng Màu Sáng */}
-            <div className="relative w-full rounded-3xl overflow-hidden shadow-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 group transition-all duration-500">
-              {/* Hình Ảnh Nét Căng 1376x768 */}
-              <div className="relative aspect-[16/10] w-full bg-slate-100 dark:bg-slate-950 overflow-hidden">
+            {/* Khung Kính Showcase Sang Trọng */}
+            <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 dark:border-slate-800 bg-[#0f171d] group transition-all duration-500 hover:border-emerald-500/40">
+              {/* Vùng Hiển Thị Hình Ảnh */}
+              <div className="relative aspect-[16/11] w-full bg-[#0a1116] overflow-hidden flex items-center justify-center">
                 <Image
                   key={currentView.image}
                   src={currentView.image}
                   alt={currentView.name}
                   fill
                   priority
-                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  className={`${
+                    currentView.id === "cube" ? "object-contain" : "object-cover"
+                  } group-hover:scale-[1.03] transition-transform duration-700 ease-out`}
                 />
 
-                {/* Lớp bóng kính mờ nhẹ ở đáy */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
-
-                {/* Badge Trạng Thái Nổi Góc Trên */}
-                <div className="absolute top-3 left-3 backdrop-blur-md bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-[11px] font-bold px-3 py-1 rounded-full shadow-md flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                {/* Badge Trạng Thái Nổi Góc Trên Trái */}
+                <div className="absolute top-3 left-3 backdrop-blur-md bg-slate-900/80 border border-slate-700/80 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-lg flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                   <span>{currentView.badge}</span>
                 </div>
 
                 {/* 3 Chip Cảm Biến Realtime Nổi Góc Trên Phải */}
                 <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
-                  <div className="backdrop-blur-md bg-slate-900/85 border border-emerald-500/40 text-emerald-300 text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1.5">
+                  <div className="backdrop-blur-md bg-slate-950/85 border border-emerald-500/50 text-emerald-300 text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-lg flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                     <span>🌡️ {currentView.temp}</span>
                   </div>
-                  <div className="backdrop-blur-md bg-slate-900/85 border border-cyan-500/40 text-cyan-300 text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1.5">
+                  <div className="backdrop-blur-md bg-slate-950/85 border border-cyan-500/50 text-cyan-300 text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-lg flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
                     <span>💧 {currentView.hum}</span>
+                  </div>
+                  <div className="backdrop-blur-md bg-slate-950/85 border border-amber-500/50 text-amber-300 text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-lg flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    <span>🫧 {currentView.co2}</span>
                   </div>
                 </div>
 
                 {/* Chú Thích Dưới Đáy Ảnh */}
-                <div className="absolute bottom-3 left-3 right-3 text-white">
-                  <h3 className="font-bold text-sm text-white drop-shadow-sm flex items-center gap-1.5">
-                    <span>{currentView.name}</span>
-                  </h3>
-                  <p className="text-xs text-slate-200/90 line-clamp-1 mt-0.5 font-normal">
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent p-4 text-white">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-bold text-sm text-white drop-shadow-sm flex items-center gap-2">
+                      <span className="text-emerald-400">●</span>
+                      <span>{currentView.name}</span>
+                    </h3>
+                    <span className="text-[10px] uppercase tracking-wider text-slate-300 bg-emerald-950/80 border border-emerald-800/80 px-2 py-0.5 rounded-md">
+                      IoT Telemetry 24/7
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-300 line-clamp-1 mt-1 font-normal">
                     {currentView.desc}
                   </p>
                 </div>
@@ -195,8 +201,8 @@ export default function HeroSection() {
             </div>
 
             {/* Ghi chú gợi ý bấm chọn */}
-            <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-2.5 text-center font-medium">
-              💡 Bấm chọn các tab phía trên để chuyển đổi giữa 4 góc nhìn nông trại công nghệ cao thực tế
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2.5 text-center font-medium">
+              💡 Bấm chọn các tab phía trên để chuyển đổi góc nhìn buồng nuôi và cơ sở công nghệ cao thực tế
             </p>
           </div>
 

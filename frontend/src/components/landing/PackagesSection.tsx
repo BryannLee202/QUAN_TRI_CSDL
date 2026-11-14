@@ -1,15 +1,32 @@
 'use client';
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { triggerSuccessConfetti } from "../../utils/confetti";
 import { TiltCard } from "./TiltCard";
+import { createRentalOrder, RentalResponse } from "../../services/api";
 
-const packages = [
+interface PackageItem {
+  id: string;
+  packageId: number;
+  name: string;
+  species: string;
+  price: string;
+  rawPrice: number;
+  expectedYield: string;
+  duration: string;
+  isPopular?: boolean;
+  features: string[];
+}
+
+const packages: PackageItem[] = [
   {
     id: "pkg-1",
+    packageId: 1,
     name: "Gói Nấm Bào Ngư Xám",
     species: "Bào Ngư Xám Phòng Cleanroom",
     price: "299.000 VNĐ",
+    rawPrice: 299000,
     expectedYield: "2.5 - 3.0 kg",
     duration: "30 Ngày",
     features: [
@@ -21,9 +38,11 @@ const packages = [
   },
   {
     id: "pkg-2",
+    packageId: 2,
     name: "Gói Nấm Linh Chi Đỏ Luxury",
     species: "Linh Chi Đỏ Dược Liệu High-Tech",
     price: "899.000 VNĐ",
+    rawPrice: 899000,
     expectedYield: "1.2 - 1.5 kg",
     duration: "90 Ngày",
     isPopular: true,
@@ -36,9 +55,11 @@ const packages = [
   },
   {
     id: "pkg-3",
+    packageId: 3,
     name: "Gói Đông Trùng Hạ Thảo",
     species: "Đông Trùng Hạ Thảo Chủng Cordyceps",
     price: "1.499.000 VNĐ",
+    rawPrice: 1499000,
     expectedYield: "0.8 - 1.0 kg",
     duration: "60 Ngày",
     features: [
@@ -51,11 +72,49 @@ const packages = [
 ];
 
 export default function PackagesSection() {
-  const [bookedPackage, setBookedPackage] = useState<string | null>(null);
+  const [selectedPkg, setSelectedPkg] = useState<PackageItem | null>(null);
+  const [phone, setPhone] = useState("0900000011");
+  const [address, setAddress] = useState("123 Đường Nấm Sạch, TP. Hồ Chí Minh");
+  const [paymentMethod, setPaymentMethod] = useState("VNPAY");
+  const [loading, setLoading] = useState(false);
+  const [orderResult, setOrderResult] = useState<RentalResponse["data"] | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleBooking = (pkgName: string) => {
-    triggerSuccessConfetti();
-    setBookedPackage(pkgName);
+  const openBookingModal = (pkg: PackageItem) => {
+    setSelectedPkg(pkg);
+    setOrderResult(null);
+    setErrorMessage(null);
+  };
+
+  const closeModal = () => {
+    setSelectedPkg(null);
+    setOrderResult(null);
+    setErrorMessage(null);
+  };
+
+  const handleConfirmBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedPkg) return;
+
+    setLoading(true);
+    setErrorMessage(null);
+
+    try {
+      const res = await createRentalOrder({
+        userId: 4, // customer1
+        packageId: selectedPkg.packageId,
+        deliveryAddress: address,
+        receiverPhone: phone,
+        paymentMethod: paymentMethod,
+      });
+
+      triggerSuccessConfetti();
+      setOrderResult(res.data);
+    } catch (err: any) {
+      setErrorMessage(err.message || "Không thể tạo đơn thuê khay. Vui lòng thử lại!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -122,7 +181,7 @@ export default function PackagesSection() {
             </div>
 
             <button
-              onClick={() => handleBooking(pkg.name)}
+              onClick={() => openBookingModal(pkg)}
               className={`mt-8 w-full py-3.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition transform active:scale-95 shadow-sm ${
                 pkg.isPopular
                   ? "bg-gradient-to-r from-emerald-600 to-[#0D5C3A] hover:from-emerald-500 hover:to-emerald-700 text-white shadow-emerald-700/20"
@@ -135,24 +194,147 @@ export default function PackagesSection() {
         ))}
       </div>
 
-      {bookedPackage && (
+      {/* Booking Modal với kết nối API Backend Thực Tế */}
+      {selectedPkg && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-4 shadow-2xl border border-emerald-200 dark:border-emerald-700 text-center animate-fade-in">
-            <span className="text-4xl block">🎉</span>
-            <h4 className="font-extrabold text-2xl text-slate-900 dark:text-white">
-              Đăng Ký Thuê Thành Công!
-            </h4>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-              Bạn đã chọn <strong>{bookedPackage}</strong>. Hệ thống CSDL đang thực thi thủ tục <code>sp_CreateRentalOrder</code> với khóa dòng bi quan để gán mã khay QR riêng biệt cho bạn.
-            </p>
-            <div className="pt-2">
-              <button
-                onClick={() => setBookedPackage(null)}
-                className="w-full py-3 px-4 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl shadow-md transition"
-              >
-                Vào Cổng Khách Hàng Theo Dõi
-              </button>
-            </div>
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-5 shadow-2xl border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 animate-fade-in relative">
+            <button
+              onClick={closeModal}
+              className="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xl font-bold"
+            >
+              ✕
+            </button>
+
+            {!orderResult ? (
+              <form onSubmit={handleConfirmBooking} className="space-y-4">
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-[11px] font-bold text-emerald-700 dark:text-emerald-300">
+                    <span>Xác Nhận Hợp Đồng Thuê</span>
+                  </div>
+                  <h4 className="font-extrabold text-2xl text-slate-900 dark:text-white">
+                    {selectedPkg.name}
+                  </h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Giá trọn gói: <strong className="text-emerald-600 dark:text-emerald-400">{selectedPkg.price}</strong> • Thời hạn: {selectedPkg.duration}
+                  </p>
+                </div>
+
+                {errorMessage && (
+                  <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs font-semibold">
+                    ⚠️ {errorMessage}
+                  </div>
+                )}
+
+                <div className="space-y-3 text-left text-xs font-medium">
+                  <div>
+                    <label className="block text-slate-700 dark:text-slate-300 mb-1 font-bold">
+                      Số điện thoại nhận nấm:
+                    </label>
+                    <input
+                      type="text"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 dark:text-slate-300 mb-1 font-bold">
+                      Địa chỉ giao nấm thu hoạch:
+                    </label>
+                    <input
+                      type="text"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      required
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 dark:text-slate-300 mb-1 font-bold">
+                      Phương thức thanh toán:
+                    </label>
+                    <select
+                      value={paymentMethod}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs"
+                    >
+                      <option value="VNPAY">VNPAY Cổng thanh toán quốc gia</option>
+                      <option value="VIETQR">Chuyển khoản VietQR tức thì</option>
+                      <option value="COD">Thanh toán tiền mặt khi giao đợt 1</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl text-[11px] text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-800 space-y-1">
+                  <p className="flex items-center gap-1.5 font-semibold text-slate-700 dark:text-slate-300">
+                    <span className="text-emerald-500">🔒</span> CSDL T-SQL Locking & Concurrency:
+                  </p>
+                  <p>
+                    Lệnh đặt sẽ thực thi <code>sp_CreateRentalOrder</code> với khóa <code>ROWLOCK, UPDLOCK, READPAST</code> để tự động gán khay vô trùng và chống xung đột giao dịch.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    className="px-4 py-2.5 text-xs font-semibold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition"
+                  >
+                    Hủy Bỏ
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-[#0D5C3A] hover:from-emerald-500 hover:to-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition disabled:opacity-50"
+                  >
+                    {loading ? "Đang xử lý khóa CSDL..." : "Xác Nhận Đặt Thuê"}
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="space-y-4 text-center py-2">
+                <span className="text-4xl block">🎉</span>
+                <h4 className="font-extrabold text-2xl text-slate-900 dark:text-white">
+                  Đặt Thuê Khay Nấm Thành Công!
+                </h4>
+                <div className="p-4 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 rounded-2xl text-left space-y-2 text-xs">
+                  <div className="flex justify-between items-center border-b border-emerald-200 dark:border-emerald-800 pb-2">
+                    <span className="text-slate-600 dark:text-slate-300">Mã đơn hàng CSDL:</span>
+                    <strong className="text-emerald-800 dark:text-emerald-300 font-mono text-sm">{orderResult.orderCode}</strong>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-emerald-200 dark:border-emerald-800 pb-2">
+                    <span className="text-slate-600 dark:text-slate-300">Mã khay nuôi được gán:</span>
+                    <strong className="text-emerald-800 dark:text-emerald-300 font-mono text-sm">Khay #{orderResult.trayId}</strong>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-600 dark:text-slate-300">Trạng thái phát sóng:</span>
+                    <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Realtime socket `tray:occupied` đã gửi</span>
+                  </div>
+                </div>
+
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Khay nấm đã được kích hoạt vi khí hậu trên ma trận buồng nuôi. Bạn có thể sang trang Kỹ thuật viên để xem vị trí khay được cập nhật tức thì.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
+                  <Link
+                    href="/operator"
+                    className="flex-1 py-3 px-4 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-md transition text-center"
+                  >
+                    Xem Ma Trận Điều Hành →
+                  </Link>
+                  <button
+                    onClick={closeModal}
+                    className="flex-1 py-3 px-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl transition text-center"
+                  >
+                    Đóng
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
