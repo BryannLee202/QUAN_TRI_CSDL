@@ -37,10 +37,21 @@ export const toAction = (r: Row) => ({
   executedAt: new Date(r.ExecutedAt).toISOString(),
 });
 
+let activeIO: Server | null = null;
+
+export const getIO = (): Server | null => activeIO;
+
+export const broadcastEvent = (event: string, data: any) => {
+  if (activeIO) {
+    activeIO.emit(event, data);
+  }
+};
+
 export function initSensorSocket(httpServer: HttpServer, pool: ConnectionPool) {
   const io = new Server(httpServer, {
     cors: { origin: process.env.CORS_ORIGIN?.split(",") ?? "*" },
   });
+  activeIO = io;
 
   let lastData = 0;
   let lastAlert = 0;

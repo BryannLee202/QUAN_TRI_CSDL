@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import sql from "mssql";
 import { getPool } from "../config/db.js";
+import { broadcastEvent } from "../sockets/sensor.socket.js";
 
 // 1. POST /api/rentals (Tạo đơn thuê khay nấm an toàn - gọi sp_CreateRentalOrder)
 export const createRental = async (req: Request, res: Response): Promise<void> => {
@@ -8,23 +9,11 @@ export const createRental = async (req: Request, res: Response): Promise<void> =
     const { userId, packageId, trayId, deliveryAddress, receiverPhone, paymentMethod, discountPercent, notes } = req.body;
 
     const pool = getPool();
-    
-    // Nếu không truyền trayId cụ thể, tự động tìm khay AVAILABLE đầu tiên trong hệ thống
-    let targetTrayId = trayId;
-    if (!targetTrayId) {
-      const trayResult = await pool.request().query("SELECT TOP 1 TrayID FROM CultivationTrays WHERE Status = 'AVAILABLE' ORDER BY TrayID");
-      if (trayResult.recordset.length > 0) {
-        targetTrayId = trayResult.recordset[0].TrayID;
-      } else {
-        res.status(400).json({ message: "Hiện không còn khay nấm nào ở trạng thái AVAILABLE để đặt thuê!" });
-        return;
-      }
-    }
-
     const request = pool.request();
     request.input("UserID", sql.Int, userId || 4); // Mặc định customer1 nếu không truyền
     request.input("PackageID", sql.Int, packageId || 1);
-    request.input("TrayID", sql.Int, targetTrayId);
+    request.input("TrayID", sql.Int, trayId || null);
+    request.output("TrayID", sql.Int);
     request.input("DeliveryAddress", sql.NVarChar(255), deliveryAddress || "123 Đường Nấm Sạch, TP. Hồ Chí Minh");
     request.input("ReceiverPhone", sql.VarChar(20), receiverPhone || "0900000011");
     request.input("PaymentMethod", sql.VarChar(50), paymentMethod || "VNPAY");
@@ -35,16 +24,30 @@ export const createRental = async (req: Request, res: Response): Promise<void> =
 
     const result = await request.execute("sp_CreateRentalOrder");
 
+    const allocatedTrayId = result.output.TrayID || trayId;
+    const newOrderId = result.output.NewOrderID;
+    const orderCode = result.output.GeneratedOrderCode;
+
+    // Phát sóng sự kiện realtime tới trang Operator
+    broadcastEvent("tray:occupied", {
+      trayId: allocatedTrayId,
+      orderId: newOrderId,
+      orderCode: orderCode,
+      packageId: packageId || 1,
+      timestamp: new Date().toISOString(),
+    });
+
     res.status(201).json({
+      success: true,
       message: "Đặt thuê khay nấm thành công!",
       data: {
-        orderId: result.output.NewOrderID,
-        orderCode: result.output.GeneratedOrderCode,
-        trayId: targetTrayId,
+        orderId: newOrderId,
+        orderCode: orderCode,
+        trayId: allocatedTrayId,
       },
     });
   } catch (error: any) {
-    res.status(500).json({ message: "Lỗi xử lý thuê khay", error: error.message });
+    res.status(500).json({ success: false, message: "Lỗi xử lý thuê khay", error: error.message });
   }
 };
 
@@ -84,11 +87,21 @@ export const requestHarvest = async (req: Request, res: Response): Promise<void>
     request.output("NewHarvestID", sql.Int);
 
     const result = await request.execute("sp_RequestHarvest");
+    const harvestId = result.output.NewHarvestID;
+
+    // Phát sóng sự kiện realtime yêu cầu thu hoạch tới trang Operator
+    broadcastEvent("harvest:requested", {
+      harvestId,
+      orderId,
+      deliveryType: deliveryType || "HOME_DELIVERY",
+      timestamp: new Date().toISOString(),
+    });
 
     res.status(200).json({
+      success: true,
       message: "Gửi yêu cầu thu hoạch thành công!",
       data: {
-        harvestId: result.output.NewHarvestID,
+        harvestId,
         orderId,
       },
     });
