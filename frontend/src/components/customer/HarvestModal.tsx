@@ -2,11 +2,38 @@
 import React, { useState } from 'react';
 import { triggerSuccessConfetti } from '../../utils/confetti';
 import CertificateModal from '../modals/CertificateModal';
+import { requestHarvestApi, HarvestResponse } from '../../services/api';
 
 export default function HarvestModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [isHarvested, setIsHarvested] = useState(false);
   const [isCertOpen, setIsCertOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [harvestData, setHarvestData] = useState<HarvestResponse['data'] | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const handleConfirmHarvest = async () => {
+    setLoading(true);
+    setErrorMsg(null);
+    try {
+      // Gọi API thực thi Stored Procedure sp_RequestHarvest
+      const res = await requestHarvestApi({
+        orderId: 1, // Đơn hàng mẫu của customer1
+        deliveryType: 'HOME_DELIVERY',
+        deliveryAddress: '123 Đường Nấm Sạch, TP. Hồ Chí Minh',
+        notes: 'Thu hoạch đợt 1, đóng gói hút chân không VietGAP',
+      });
+
+      triggerSuccessConfetti();
+      setHarvestData(res.data);
+      setIsHarvested(true);
+      setIsOpen(false);
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Lỗi gửi yêu cầu thu hoạch');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -30,7 +57,10 @@ export default function HarvestModal() {
           </button>
 
           <button
-            onClick={() => setIsOpen(true)}
+            onClick={() => {
+              setIsOpen(true);
+              setErrorMsg(null);
+            }}
             className="w-full sm:w-auto px-5 py-2.5 bg-[#0F172A] hover:bg-[#0D5C3A] text-white font-bold text-xs rounded-xl border-2 border-[#D4AF37] shadow-lg transition transform active:scale-95 shrink-0 whitespace-nowrap"
           >
             ✨ Gửi Lệnh Thu Hoạch
@@ -45,36 +75,43 @@ export default function HarvestModal() {
                 Xác Nhận Thu Hoạch Nấm
               </h4>
               <p className="text-sm text-slate-600 dark:text-slate-300">
-                Kỹ thuật viên sẽ tiến hành nghiệm thu cân ký, sấy thăng hoa hoặc đóng gói tươi và giao đến địa chỉ đăng ký của bạn.
+                Hệ thống sẽ thực thi thủ tục <code>sp_RequestHarvest</code> trong CSDL, thông báo ngay lập tức qua WebSocket đến màn hình Kỹ thuật viên trang trại để nghiệm thu cân ký và giao tận nơi.
               </p>
+
+              {errorMsg && (
+                <div className="p-3 bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-300 text-xs">
+                  ⚠️ {errorMsg}
+                </div>
+              )}
+
               <div className="flex justify-end gap-3 pt-2">
                 <button
+                  type="button"
                   onClick={() => setIsOpen(false)}
-                  className="px-4 py-2 text-sm font-semibold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition"
+                  disabled={loading}
+                  className="px-4 py-2 text-sm font-semibold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition disabled:opacity-50"
                 >
                   Hủy Bỏ
                 </button>
                 <button
-                  onClick={() => {
-                    triggerSuccessConfetti();
-                    setIsHarvested(true);
-                    setIsOpen(false);
-                  }}
-                  className="px-5 py-2 text-sm font-bold bg-[#0D5C3A] text-white rounded-lg shadow transition transform active:scale-95"
+                  type="button"
+                  onClick={handleConfirmHarvest}
+                  disabled={loading}
+                  className="px-5 py-2 text-sm font-bold bg-[#0D5C3A] text-white rounded-lg shadow transition transform active:scale-95 disabled:opacity-50"
                 >
-                  Xác Nhận Gửi
+                  {loading ? 'Đang gửi lệnh CSDL...' : 'Xác Nhận Gửi'}
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {isHarvested && (
+        {isHarvested && harvestData && (
           <div className="fixed bottom-6 right-6 bg-emerald-700 text-white p-4 rounded-xl shadow-2xl z-50 flex items-center gap-3 animate-bounce">
             <span className="text-2xl">🎉</span>
             <div>
-              <p className="font-bold text-sm">Gửi yêu cầu thu hoạch thành công!</p>
-              <p className="text-xs opacity-90">Kỹ thuật viên trang trại đang tiến hành cắt nấm và nghiệm thu.</p>
+              <p className="font-bold text-sm">Gửi yêu cầu thu hoạch thành công (Mã TH: #{harvestData.harvestId})!</p>
+              <p className="text-xs opacity-90">Kỹ thuật viên trang trại đã nhận được thông báo thời gian thực trên ma trận.</p>
             </div>
           </div>
         )}
