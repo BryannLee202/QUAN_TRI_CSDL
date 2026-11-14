@@ -66,10 +66,18 @@ const authLimiter = rateLimit({
   },
 });
 
-// Load Swagger document an toàn cho cả dev và production
-const swaggerPath = path.resolve(process.cwd(), "src/docs/swagger.json");
-const swaggerDocument = fs.existsSync(swaggerPath)
-  ? JSON.parse(fs.readFileSync(swaggerPath, "utf-8"))
+// Load Swagger document an toàn cho cả dev, dist và root directory
+const swaggerCandidates = [
+  path.resolve(process.cwd(), "src/docs/swagger.json"),
+  path.resolve(process.cwd(), "backend/src/docs/swagger.json"),
+  path.resolve(process.cwd(), "dist/docs/swagger.json"),
+  path.resolve(process.cwd(), "backend/dist/docs/swagger.json"),
+  path.resolve(__dirname, "./docs/swagger.json"),
+  path.resolve(__dirname, "../src/docs/swagger.json"),
+];
+const foundSwaggerPath = swaggerCandidates.find((p) => fs.existsSync(p));
+const swaggerDocument = foundSwaggerPath
+  ? JSON.parse(fs.readFileSync(foundSwaggerPath, "utf-8"))
   : {};
 
 // Swagger OpenAPI documentation
