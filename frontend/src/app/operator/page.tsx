@@ -94,16 +94,16 @@ export default function OperatorPage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 p-6 transition-colors">
-      <header className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
+    <main className="min-h-screen bg-[#FDFBF8] dark:bg-[#140D07] p-6 text-[#24170E] dark:text-[#F7EFE6] transition-colors">
+      <header className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-[#E0D3C1] dark:border-[#38261A] pb-4">
         <div className="flex items-center gap-3">
           <Link
             href="/"
-            className="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition shrink-0 whitespace-nowrap"
+            className="px-3 py-1.5 rounded-lg border border-[#D9C8B5] dark:border-[#543825] text-xs font-semibold hover:bg-[#FAF5EE] dark:hover:bg-[#281A12] text-[#523522] dark:text-[#E2BA78] transition shrink-0 whitespace-nowrap"
           >
             ← Cổng Khách Hàng
           </Link>
-          <h1 className="text-2xl font-bold text-[#0D5C3A] dark:text-emerald-400 shrink-0 whitespace-nowrap">
+          <h1 className="text-2xl font-bold text-[#4D3220] dark:text-[#E2BA78] shrink-0 whitespace-nowrap">
             Trung tâm điều hành kỹ thuật viên
           </h1>
         </div>
@@ -111,7 +111,7 @@ export default function OperatorPage() {
         <div className="flex items-center gap-3 shrink-0">
           <button
             onClick={() => setIsCheatsheetOpen(true)}
-            className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-sm"
+            className="px-3 py-1.5 rounded-lg bg-[#C28E58] hover:bg-[#B37F49] text-white font-bold text-xs flex items-center gap-1.5 transition shadow-sm"
             title="Mở sổ tay tra cứu kỹ thuật"
           >
             <span>📋</span>
@@ -120,7 +120,7 @@ export default function OperatorPage() {
           <span
             className={`rounded-full px-3 py-1 text-xs font-semibold shrink-0 whitespace-nowrap shadow-sm ${
               connected
-                ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700"
+                ? "bg-[#FAF5EE] text-[#523522] dark:bg-[#2B1C13] dark:text-[#E2BA78] border border-[#C28E58]"
                 : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700"
             }`}
           >
@@ -131,7 +131,7 @@ export default function OperatorPage() {
       </header>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <section className="space-y-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm lg:col-span-2 transition-colors">
+        <section className="space-y-4 rounded-2xl border border-[#E0D3C1] dark:border-[#543825] bg-white dark:bg-[#20140D] p-4 shadow-sm lg:col-span-2 transition-colors">
           <RoomTabs rooms={MOCK_ROOMS} selectedRoomId={roomId} alertRoomIds={alertRoomIds} onSelect={setRoomId} />
           <StatusLegend trays={traysInRoom} roomHasAlert={roomHasAlert} />
           <TrayMatrix trays={trays} roomId={roomId} roomHasAlert={roomHasAlert} />
