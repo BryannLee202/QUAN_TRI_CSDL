@@ -146,9 +146,12 @@ export default function PackagesSection() {
             }`}
           >
             {pkg.isPopular && (
-              <span className="absolute -top-3.5 right-6 bg-gradient-to-r from-[#523522] to-[#8C5A37] text-[#FFF7EC] text-[11px] font-black px-3.5 py-1 rounded-full uppercase shadow-md tracking-wider">
-                Ưa Chuộng Nhất
-              </span>
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-20">
+                <span className="bg-gradient-to-r from-[#523522] via-[#6B442C] to-[#8C5A37] text-[#FFF7EC] text-[11px] font-black px-4 py-1 rounded-full uppercase shadow-md tracking-wider border border-[#C28E58]/50 flex items-center gap-1.5 whitespace-nowrap">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#E2BA78]"></span>
+                  Ưa Chuộng Nhất
+                </span>
+              </div>
             )}
             <div className="space-y-4">
               <div>
