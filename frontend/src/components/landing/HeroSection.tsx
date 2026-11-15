@@ -21,7 +21,7 @@ const chamberViews: ChamberView[] = [
     name: "Buồng Nuôi Thông Minh 3D",
     shortName: "Buồng Kính 3D",
     badge: "Buồng Nuôi ISO Class 5 • Cảm Biến IoT 24/7",
-    image: "/images/hero-chamber-emerald.jpg",
+    image: "/images/hero-chamber-light-sage.jpg",
     temp: "24.2°C",
     hum: "92%",
     co2: "620 ppm",
@@ -192,7 +192,7 @@ export default function HeroSection() {
             {/* Khung Kính Showcase Sang Trọng - Tone Cafe Sữa & Gỗ Ấm Đồng Bộ */}
             <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-[#E0D3C1] dark:border-[#543825] bg-[#FAF5EE] dark:bg-[#20140D] group transition-all duration-500 hover:border-[#C28E58]">
               {/* Vùng Hiển Thị Hình Ảnh */}
-              <div className="relative aspect-[16/11] w-full bg-[#0D1F17] overflow-hidden flex items-center justify-center">
+              <div className="relative aspect-[16/11] w-full bg-[#EDF2EE] dark:bg-[#1A110A] overflow-hidden flex items-center justify-center">
                 <Image
                   key={currentView.image}
                   src={currentView.image}
