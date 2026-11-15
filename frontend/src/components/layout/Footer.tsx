@@ -40,21 +40,7 @@ export default function Footer() {
               Nền tảng Nông Trại Thông Minh Farm-as-a-Service (FaaS) tiên phong tại Việt Nam: Thuê khay nấm từ xa, kiểm soát vi khí hậu bằng cảm biến IoT, quan sát trực tuyến camera 4K và nghiệm thu nấm tươi chuẩn VietGAP tận nhà.
             </p>
 
-            {/* Huy Hiệu Tiêu Chuẩn Nông Nghiệp */}
-            <div className="flex flex-wrap items-center gap-2 pt-1">
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#FAF5EE] dark:bg-[#20140D] border border-[#DECFC0] dark:border-[#422C1D] text-[10px] font-bold text-[#6B442C] dark:text-[#E2BA78]">
-                <svg className="w-3 h-3 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                <span>VietGAP Loại A</span>
-              </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#FAF5EE] dark:bg-[#20140D] border border-[#DECFC0] dark:border-[#422C1D] text-[10px] font-bold text-[#6B442C] dark:text-[#E2BA78]">
-                <svg className="w-3 h-3 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-                <span>ISO Class 5 Cleanroom</span>
-              </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#FAF5EE] dark:bg-[#20140D] border border-[#DECFC0] dark:border-[#422C1D] text-[10px] font-bold text-[#6B442C] dark:text-[#E2BA78]">
-                <svg className="w-3 h-3 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                <span>T-SQL Concurrency Locked</span>
-              </span>
-            </div>
+
           </div>
 
           {/* Cột 2: Nền Tảng Dịch Vụ */}
@@ -148,27 +134,16 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Dải Pháp Lý & Bản Quyền Dưới Cùng (Bottom Legal Bar) */}
-      <div className="border-t border-[#EAE1D3] dark:border-[#2B1C13] bg-[#F2EDE4]/60 dark:bg-[#0D0805] py-6 px-6 text-xs text-[#8C6D53] dark:text-[#BFA895]">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="space-y-1 text-center md:text-left">
-            <p className="font-semibold text-[#523522] dark:text-[#DAC7B5]">
-              © 2026 MushroomCloud Smart Farm FaaS Platform. Toàn bộ bản quyền được bảo lưu.
-            </p>
-            <p className="text-[11px] text-[#A6866C] dark:text-[#8C6D53]">
-              Đồ Án Môn Học Quản Trị Cơ Sở Dữ Liệu Nâng Cao • ĐH Sư Phạm Kỹ Thuật TP.HCM (HCMUTE)
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-4 text-[11px] font-medium text-[#735843] dark:text-[#DAC7B5]">
-            <a href="#" className="hover:text-[#C28E58] transition-colors">Điều Khoản Dịch Vụ</a>
-            <span>•</span>
-            <a href="#" className="hover:text-[#C28E58] transition-colors">Chính Sách Bảo Mật</a>
-            <span>•</span>
-            <a href="#" className="hover:text-[#C28E58] transition-colors">Cam Kết VietGAP</a>
-            <span>•</span>
-            <a href="#" className="hover:text-[#C28E58] transition-colors">SLA Vận Hành 99.9%</a>
-          </div>
+      {/* Dải Pháp Lý Dưới Cùng (Bottom Legal Bar) */}
+      <div className="border-t border-[#EAE1D3] dark:border-[#2B1C13] bg-[#F2EDE4]/60 dark:bg-[#0D0805] py-4 px-6 text-xs text-[#8C6D53] dark:text-[#BFA895]">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-4 text-[11px] font-medium text-[#735843] dark:text-[#DAC7B5]">
+          <a href="#" className="hover:text-[#C28E58] transition-colors">Điều Khoản Dịch Vụ</a>
+          <span>•</span>
+          <a href="#" className="hover:text-[#C28E58] transition-colors">Chính Sách Bảo Mật</a>
+          <span>•</span>
+          <a href="#" className="hover:text-[#C28E58] transition-colors">Cam Kết VietGAP</a>
+          <span>•</span>
+          <a href="#" className="hover:text-[#C28E58] transition-colors">SLA Vận Hành 99.9%</a>
         </div>
       </div>
     </footer>
