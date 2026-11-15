@@ -139,26 +139,36 @@ export default function PackagesSection() {
         {packages.map((pkg) => (
           <TiltCard
             key={pkg.id}
-            className={`bg-white dark:bg-[#20140D] rounded-3xl p-8 shadow-md border transition-all duration-300 flex flex-col justify-between relative ${
+            className={`bg-white dark:bg-[#20140D] rounded-3xl p-7 sm:p-8 shadow-md border transition-all duration-300 flex flex-col justify-between relative ${
               pkg.isPopular
                 ? "border-2 border-[#C28E58] ring-4 ring-[#C28E58]/15 md:-translate-y-2 shadow-xl"
                 : "border-[#E0D3C1]/80 dark:border-[#543825] hover:border-[#C28E58]/60"
             }`}
           >
-            {pkg.isPopular && (
-              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-20">
-                <span className="bg-gradient-to-r from-[#523522] via-[#6B442C] to-[#8C5A37] text-[#FFF7EC] text-[11px] font-black px-4 py-1 rounded-full uppercase shadow-md tracking-wider border border-[#C28E58]/50 flex items-center gap-1.5 whitespace-nowrap">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#E2BA78]"></span>
-                  Ưa Chuộng Nhất
+            <div className="space-y-4">
+              {/* Hàng Tiêu Đề Phụ & Huy Hiệu Độc Lập Chống Đè Chữ */}
+              <div className="flex items-center justify-between gap-2 min-h-[28px]">
+                {pkg.isPopular ? (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-[#523522] via-[#6B442C] to-[#8C5A37] text-[#FFF7EC] text-[11px] font-black uppercase tracking-wider shadow-sm border border-[#C28E58]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#E2BA78]"></span>
+                    Ưa Chuộng Nhất
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FAF5EE] dark:bg-[#2B1C13] text-[#735843] dark:text-[#DAC7B5] text-[11px] font-semibold border border-[#DECFC0] dark:border-[#422C1D]">
+                    Gói Tiêu Chuẩn
+                  </span>
+                )}
+                <span className="text-[11px] font-bold text-[#8C6D53] dark:text-[#BFA895] font-mono">
+                  {pkg.duration}
                 </span>
               </div>
-            )}
-            <div className="space-y-4">
-              <div>
-                <h3 className="text-xl font-bold text-[#24170E] dark:text-white">
+
+              {/* Tên Gói Nấm & Phân Loại Sinh Học */}
+              <div className="pt-1">
+                <h3 className="text-xl font-bold text-[#24170E] dark:text-white leading-tight">
                   {pkg.name}
                 </h3>
-                <p className="text-xs text-[#735843] dark:text-[#DAC7B5] font-medium mt-0.5">
+                <p className="text-xs text-[#735843] dark:text-[#DAC7B5] font-medium mt-1">
                   {pkg.species}
                 </p>
               </div>
