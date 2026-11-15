@@ -79,8 +79,8 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#mobile-app" className="hover:text-[#C28E58] transition-colors">
-                  Ứng Dụng Mobile (iOS & Android)
+                <a href="#portal" className="hover:text-[#C28E58] transition-colors">
+                  Camera PTZ & Cảm Biến Realtime
                 </a>
               </li>
               <li>
