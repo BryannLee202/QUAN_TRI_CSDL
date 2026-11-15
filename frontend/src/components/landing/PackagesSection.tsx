@@ -283,7 +283,11 @@ export default function PackagesSection() {
 
                 <div className="p-3 bg-[#FAF5EE] dark:bg-[#281A12] rounded-xl text-[11px] text-[#735843] dark:text-[#B59D89] border border-[#E0D3C1] dark:border-[#543825] space-y-1">
                   <p className="flex items-center gap-1.5 font-semibold text-[#4A3222] dark:text-[#F7EFE6]">
-                    <span className="text-[#C28E58]">🔒</span> CSDL T-SQL Locking & Concurrency:
+                    <svg className="w-3.5 h-3.5 text-[#C28E58] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                    CSDL T-SQL Locking & Concurrency:
                   </p>
                   <p>
                     Lệnh đặt sẽ thực thi <code>sp_CreateRentalOrder</code> với khóa <code>ROWLOCK, UPDLOCK, READPAST</code> để tự động gán khay vô trùng và chống xung đột giao dịch.
@@ -309,7 +313,12 @@ export default function PackagesSection() {
               </form>
             ) : (
               <div className="space-y-4 text-center py-2">
-                <span className="text-4xl block">🎉</span>
+                <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-[#FAF5EE] to-[#EBE0D3] dark:from-[#362215] dark:to-[#22150D] border-2 border-[#C28E58] flex items-center justify-center text-[#C28E58] shadow-md">
+                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
+                </div>
                 <h4 className="font-extrabold text-2xl text-[#24170E] dark:text-white">
                   Đặt Thuê Khay Nấm Thành Công!
                 </h4>
