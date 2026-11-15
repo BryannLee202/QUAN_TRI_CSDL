@@ -1,7 +1,7 @@
 # BÁO CÁO ĐỒ ÁN MÔN HỌC: QUẢN TRỊ CƠ SỞ DỮ LIỆU NÂNG CAO
 ## ĐỀ TÀI: HỆ THỐNG QUẢN LÝ VÀ ĐIỀU HÀNH NUÔI TRỒNG NẤM THÔNG MINH THEO MÔ HÌNH FARM-AS-A-SERVICE (MUSHROOMCLOUD)
 
-**Đơn vị đào tạo**: Khoa Công nghệ Thông tin – Trường Đại học Sư phạm Kỹ thuật TP. Hồ Chí Minh  
+  
 **Học phần**: Quản trị Cơ sở Dữ liệu Nâng cao (Advanced Database Management Systems)  
 **Hệ Quản trị CSDL mục tiêu**: Microsoft SQL Server (Transact-SQL)  
 **Kho lưu trữ mã nguồn**: [https://github.com/BryannLee202/QUAN_TRI_CSDL](https://github.com/BryannLee202/QUAN_TRI_CSDL)
