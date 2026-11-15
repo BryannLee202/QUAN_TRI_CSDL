@@ -41,14 +41,16 @@ export default function BotFloatingAction() {
 
           <span className="absolute -top-1 -right-1 flex h-4 w-4">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C28E58] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-[#523522] text-[9px] font-black text-[#FAF5EE] items-center justify-center shadow-xs">
-              AI
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-[#4A2E1D] text-[#E2BA78] items-center justify-center shadow-xs border border-[#C28E58]/40">
+              <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"/>
+              </svg>
             </span>
           </span>
 
           {/* Tooltip on hover */}
           <span className="absolute right-16 px-3 py-1.5 bg-[#331E12] text-[#FDF8F2] text-xs font-semibold rounded-xl shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none border border-[#734A2E]">
-            Hỏi Cố Vấn Nông Nghiệp AI
+            Cố Vấn Kỹ Thuật Trực Tuyến
           </span>
         </button>
       </div>
