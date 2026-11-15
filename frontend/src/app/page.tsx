@@ -34,14 +34,16 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          {/* Cụm 2 Cột Đối Xứng: Camera Giám Sát Trực Tiếp & Thước Tua Sinh Trưởng */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             <CameraFeed />
-            <div className="space-y-6">
-              <TimelapseSlider />
-              <HarvestModal />
-            </div>
+            <TimelapseSlider />
           </div>
 
+          {/* Băng Nghiệm Thu Thu Hoạch & Chứng Nhận VietGAP Trải Dài Toàn Chiều Ngang */}
+          <HarvestModal />
+
+          {/* Biểu Đồ Vi Khí Hậu 24h Realtime */}
           <SensorCharts />
         </div>
       </section>
