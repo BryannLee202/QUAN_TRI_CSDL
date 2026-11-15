@@ -263,68 +263,72 @@ export default function HeroSection() {
 
         {/* Chân Hero: Cụm 4 Thẻ Bento Tính Năng Ngang */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
-          <div className="bg-white dark:bg-[#20140D]/80 rounded-2xl p-5 border border-[#E0D3C1]/80 dark:border-[#543825] shadow-xs hover:shadow-md hover:border-[#C28E58]/50 transition-all duration-300 flex items-start gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-[#FAF5EE] dark:bg-[#2B1C13] text-[#523522] dark:text-[#E2BA78] border border-[#E0D3C1] dark:border-[#543825] flex items-center justify-center shrink-0">
-              <svg className="w-5 h-5 text-[#6B442C] dark:text-[#E2BA78]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M7 20h10"/>
-                <path d="M10 20c5.5-2.5.8-6.4 3-10"/>
-                <path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4.1 5.5.8z"/>
-                <path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/>
+          <div className="bg-white/90 dark:bg-[#20140D]/90 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-lg hover:border-[#C28E58] transition-all duration-300 flex items-start gap-4 group">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FAF5EE] to-[#F2E8DC] dark:from-[#2B1C13] dark:to-[#1C120B] text-[#6B442C] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform duration-300">
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect width="20" height="7" x="2" y="14" rx="2" />
+                <path d="M6 14V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8" />
+                <path d="M12 4v4" />
+                <path d="M9 10c0-1.1.9-2 2-2s2 .9 2 2" />
+                <circle cx="8" cy="17.5" r="1" fill="currentColor" />
+                <circle cx="16" cy="17.5" r="1" fill="currentColor" />
               </svg>
             </div>
             <div>
-              <h4 className="font-bold text-sm text-[#24170E] dark:text-white">Mô hình FaaS</h4>
-              <p className="text-xs text-[#735843] dark:text-[#DAC7B5] mt-0.5 leading-relaxed">
-                Thuê khay nấm sạch theo chu kỳ chuẩn quốc tế
+              <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA]">Mô hình Farm-as-a-Service</h4>
+              <p className="text-xs text-[#735843] dark:text-[#DAC7B5] mt-1 leading-relaxed">
+                Thuê khay nấm từ xa, theo dõi chu kỳ cấy giống và nhận nấm tươi tận tay
               </p>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-[#20140D]/80 rounded-2xl p-5 border border-[#E0D3C1]/80 dark:border-[#543825] shadow-xs hover:shadow-md hover:border-[#C28E58]/50 transition-all duration-300 flex items-start gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-[#FAF5EE] dark:bg-[#2B1C13] text-[#C28E58] border border-[#E0D3C1] dark:border-[#543825] flex items-center justify-center shrink-0">
-              <svg className="w-5 h-5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/>
-                <path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/>
-                <circle cx="12" cy="12" r="2"/>
-                <path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/>
-                <path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/>
+          <div className="bg-white/90 dark:bg-[#20140D]/90 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-lg hover:border-[#C28E58] transition-all duration-300 flex items-start gap-4 group">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FAF5EE] to-[#F2E8DC] dark:from-[#2B1C13] dark:to-[#1C120B] text-[#C28E58] border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform duration-300">
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect width="14" height="14" x="5" y="5" rx="3" />
+                <path d="M9 9h6v6H9z" />
+                <path d="M2 9h3M2 15h3M19 9h3M19 15h3M9 2v3M15 2v3M9 19v3M15 19v3" />
+                <circle cx="12" cy="12" r="1" fill="currentColor" />
               </svg>
             </div>
             <div>
-              <h4 className="font-bold text-sm text-[#24170E] dark:text-white">Cảm biến IoT Realtime</h4>
-              <p className="text-xs text-[#735843] dark:text-[#DAC7B5] mt-0.5 leading-relaxed">
-                Đo đạc vi khí hậu và cảnh báo tự động qua Socket
+              <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA]">Cảm Biến IoT Realtime</h4>
+              <p className="text-xs text-[#735843] dark:text-[#DAC7B5] mt-1 leading-relaxed">
+                Đo vi khí hậu đa điểm 24/7 và kích hoạt rèm lạnh đối lưu tự động qua Socket
               </p>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-[#20140D]/80 rounded-2xl p-5 border border-[#E0D3C1]/80 dark:border-[#543825] shadow-xs hover:shadow-md hover:border-[#C28E58]/50 transition-all duration-300 flex items-start gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-[#FAF5EE] dark:bg-[#2B1C13] text-[#8C5A37] dark:text-[#DDB988] border border-[#E0D3C1] dark:border-[#543825] flex items-center justify-center shrink-0">
-              <svg className="w-5 h-5 text-[#8C5A37] dark:text-[#DDB988]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m22 8-6 4 6 4V8Z"/>
-                <rect width="14" height="12" x="2" y="6" rx="2" ry="2"/>
+          <div className="bg-white/90 dark:bg-[#20140D]/90 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-lg hover:border-[#C28E58] transition-all duration-300 flex items-start gap-4 group">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FAF5EE] to-[#F2E8DC] dark:from-[#2B1C13] dark:to-[#1C120B] text-[#8C5A37] dark:text-[#DDB988] border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform duration-300">
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m22 7-6 4 6 4V7Z" />
+                <rect width="14" height="12" x="2" y="6" rx="3" />
+                <circle cx="9" cy="12" r="2.5" />
+                <path d="M6 3h2" strokeLinecap="round" />
               </svg>
             </div>
             <div>
-              <h4 className="font-bold text-sm text-[#24170E] dark:text-white">Camera Live Stream</h4>
-              <p className="text-xs text-[#735843] dark:text-[#DAC7B5] mt-0.5 leading-relaxed">
-                Quan sát buồng sạch vô trùng 1080p góc cận
+              <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA]">Camera Trực Tuyến 24/7</h4>
+              <p className="text-xs text-[#735843] dark:text-[#DAC7B5] mt-1 leading-relaxed">
+                Quan sát buồng sạch vô trùng Full HD, lưu trữ timelapse phát triển hàng ngày
               </p>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-[#20140D]/80 rounded-2xl p-5 border border-[#E0D3C1]/80 dark:border-[#543825] shadow-xs hover:shadow-md hover:border-[#C28E58]/50 transition-all duration-300 flex items-start gap-3.5">
-            <div className="w-10 h-10 rounded-xl bg-[#FAF5EE] dark:bg-[#2B1C13] text-[#523522] dark:text-[#E2BA78] border border-[#E0D3C1] dark:border-[#543825] flex items-center justify-center shrink-0">
-              <svg className="w-5 h-5 text-[#523522] dark:text-[#E2BA78]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
-                <path d="m3.3 7 8.7 5 8.7-5"/>
-                <path d="M12 22V12"/>
+          <div className="bg-white/90 dark:bg-[#20140D]/90 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-lg hover:border-[#C28E58] transition-all duration-300 flex items-start gap-4 group">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FAF5EE] to-[#F2E8DC] dark:from-[#2B1C13] dark:to-[#1C120B] text-[#523522] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform duration-300">
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M16.5 9.4 7.55 4.24a1.8 1.8 0 0 0-1.8 0L2.7 6.02a1.8 1.8 0 0 0-.9 1.56v8.84a1.8 1.8 0 0 0 .9 1.56l3.05 1.78a1.8 1.8 0 0 0 1.8 0l8.95-5.16a1.8 1.8 0 0 0 .9-1.56V10.96a1.8 1.8 0 0 0-.9-1.56Z" />
+                <path d="m2.1 7.2 9.4 5.4 9.4-5.4" />
+                <path d="M11.5 12.6v9.4" />
+                <path d="m18 13 2 2 3.5-3.5" stroke="#C28E58" strokeWidth="2" />
               </svg>
             </div>
             <div>
-              <h4 className="font-bold text-sm text-[#24170E] dark:text-white">Giao Nấm Tận Nhà</h4>
-              <p className="text-xs text-[#735843] dark:text-[#DAC7B5] mt-0.5 leading-relaxed">
-                Nghiệm thu cân ký kèm chứng nhận VietGAP
+              <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA]">Thu Hoạch & Giao Tận Nhà</h4>
+              <p className="text-xs text-[#735843] dark:text-[#DAC7B5] mt-1 leading-relaxed">
+                Nghiệm thu cân ký minh bạch, đóng gói chuẩn VietGAP giao tươi trong ngày
               </p>
             </div>
           </div>
