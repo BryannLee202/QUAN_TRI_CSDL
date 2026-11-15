@@ -121,7 +121,11 @@ export default function PackagesSection() {
     <section id="packages" className="py-20 px-6 bg-[#FAF7F2]/80 dark:bg-[#140D07] text-[#24170E] dark:text-[#F7EFE6] transition-colors">
       <div className="max-w-6xl mx-auto text-center space-y-3 mb-14">
         <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FAF5EE] dark:bg-[#2B1C13] border border-[#E0D3C1] dark:border-[#543825] text-xs font-bold text-[#6E4B33] dark:text-[#E2BA78]">
-          <span>📦 BẢNG GIÁ DỊCH VỤ FaaS</span>
+          <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/>
+            <path d="M7 7h.01"/>
+          </svg>
+          <span>BẢNG GIÁ DỊCH VỤ FaaS</span>
         </div>
         <h2 className="text-3xl sm:text-4xl font-black text-[#24170E] dark:text-white">
           Danh Mục Các Gói Thuê Nấm
@@ -164,7 +168,16 @@ export default function PackagesSection() {
               </div>
 
               <div className="bg-[#FAF5EE] dark:bg-[#2B1C13] p-3 rounded-xl text-xs font-semibold text-[#4A3222] dark:text-[#E2BA78] flex items-center justify-between border border-[#E0D3C1] dark:border-[#543825]">
-                <span>⚖️ Cam kết sản lượng:</span>
+                <span className="flex items-center gap-1.5">
+                  <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                    <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                    <path d="M7 21h10"/>
+                    <path d="M12 3v18"/>
+                    <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>
+                  </svg>
+                  <span>Cam kết sản lượng:</span>
+                </span>
                 <span className="text-[#8C5A37] dark:text-[#FFF5EA] font-bold">{pkg.expectedYield}</span>
               </div>
 
