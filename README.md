@@ -1,10 +1,10 @@
 # BÁO CÁO ĐỒ ÁN MÔN HỌC: QUẢN TRỊ CƠ SỞ DỮ LIỆU NÂNG CAO
 ## ĐỀ TÀI: HỆ THỐNG QUẢN LÝ VÀ ĐIỀU HÀNH NUÔI TRỒNG NẤM THÔNG MINH THEO MÔ HÌNH FARM-AS-A-SERVICE (MUSHROOMCLOUD)
 
-**Đơn vị đào tạo**: Khoa Công nghệ Thông tin – Trường Đại học Sư phạm Kỹ thuật TP. Hồ Chí Minh  
+**Đơn vị đào tạo**: Khoa Công nghệ Thông tin – Trường Đại học Sư phạm Kỹ thuật TP. Hồ Chí Minh (HCMUTE)  
 **Học phần**: Quản trị Cơ sở Dữ liệu Nâng cao (Advanced Database Management Systems)  
-**Hệ Quản trị CSDL mục tiêu**: Microsoft SQL Server (Transact-SQL)  
-**Kho lưu trữ mã nguồn**: [https://github.com/BryannLee202/QUAN_TRI_CSDL](https://github.com/BryannLee202/QUAN_TRI_CSDL)
+**Hệ Quản trị CSDL mục tiêu**: Microsoft SQL Server 2022 (Transact-SQL)  
+**Kho lưu trữ mã nguồn**: [https://github.com/BryannLee202/QUAN_TRI_CSDL](https://github.com/BryannLee202/QUAN_TRI_CSDL)  
 
 ---
 
@@ -12,7 +12,7 @@
 
 | STT | Họ và Tên | Vai trò | Trách nhiệm chuyên môn chính |
 | :---: | :--- | :--- | :--- |
-| 1 | **Lê Minh Tài** | **Nhóm trưởng / Kiến trúc sư Hệ thống** | • Thiết kế kiến trúc tổng thể và mô hình quan hệ CSDL chuẩn hóa 3NF.<br>• Xây dựng các Stored Procedure xử lý giao dịch lõi (`sp_CreateRentalOrder`) tích hợp kiểm soát tương tranh với khóa dòng `UPDLOCK, ROWLOCK`.<br>• Thiết kế bộ kịch bản kiểm thử tranh chấp (Concurrency & Race Conditions) và kịch bản vòng đời E2E.<br>• Quản trị tiến trình Git, tích hợp nhánh và phát triển công cụ tự động hóa kiểm thử. |
+| 1 | **Lê Minh Tài** | **Nhóm trưởng / Kiến trúc sư Hệ thống** | • Thiết kế kiến trúc tổng thể và mô hình quan hệ CSDL chuẩn hóa 3NF.<br>• Xây dựng các Stored Procedure xử lý giao dịch lõi (`sp_CreateRentalOrder`) tích hợp kiểm soát tương tranh với khóa dòng `UPDLOCK, ROWLOCK`.<br>• Thiết kế bộ kịch bản kiểm thử tranh chấp (Concurrency & Race Conditions) và kịch bản vòng đời E2E.<br>• Quản trị tiến trình Git, tích hợp nhánh và định hướng hệ thống nhận diện Cafe Latte Bắc Âu. |
 | 2 | **Hoàng Huy** | **Kỹ sư T-SQL & Tối ưu Hiệu năng** | • Xây dựng hệ thống DML Triggers tự động kiểm tra ngưỡng vi khí hậu (`trg_CheckSensorThresholds`).<br>• Thiết kế các Views báo cáo công suất buồng nuôi và doanh thu định kỳ.<br>• Thiết lập chiến lược chỉ mục nâng cao: Composite Non-Clustered Indexes có mệnh đề `INCLUDE` và Filtered Indexes.<br>• Thực hiện Benchmark đo lường chi phí I/O trên tập dữ liệu 1.000.000 bản ghi. |
 | 3 | **Nguyễn Thanh Hiển** | **Kỹ sư Backend & An toàn Thông tin** | • Hiện thực hóa tầng dịch vụ API bằng Node.js / Express với TypeScript.<br>• Cấu hình hồ chứa kết nối (Connection Pool) tối ưu hóa truy vấn đến SQL Server.<br>• Thiết lập xác thực phân quyền RBAC dựa trên JWT lưu trữ an toàn trong HttpOnly Cookie.<br>• Triển khai cơ chế phòng vệ CSRF Double-Submit Cookie và kiểm soát tần suất Rate Limiting. |
 | 4 | **Đăng** | **Kỹ sư Giao diện & Trải nghiệm Người dùng** | • Phát triển Cổng Khách hàng (Customer Portal) trên nền tảng Next.js 14 App Router.<br>• Xây dựng hệ thống quốc tế hóa đa ngôn ngữ (i18n Song ngữ Việt – Anh).<br>• Hiện thực hóa các thành phần tương tác: Giấy chứng nhận số VietGAP, bảng điều khiển gói thuê và biểu đồ vi khí hậu. |
@@ -20,28 +20,45 @@
 
 ---
 
-## I. TỔNG QUAN ĐỀ TÀI
+## I. TỔNG QUAN ĐỀ TÀI VÀ MÔ HÌNH FARM-AS-A-SERVICE (FaaS)
 
-Mô hình **Farm-as-a-Service (FaaS)** trong nông nghiệp công nghệ cao cho phép khách hàng từ xa thuê sở hữu các khay nuôi cấy nấm dược liệu (Đông Trùng Hạ Thảo, Linh Chi Đỏ, Nấm Mối Đen...) đặt tại nhà kính khép kín. Dự án **MushroomCloud** giải quyết bài toán quản trị vận hành toàn diện:
+Mô hình **Farm-as-a-Service (FaaS)** trong nông nghiệp công nghệ cao cho phép người dùng từ xa thuê sở hữu các khay nuôi cấy nấm dược liệu (Đông Trùng Hạ Thảo, Linh Chi Đỏ, Nấm Bào Ngư Xám, Nấm Hầu Thủ...) đặt tại nhà kính khép kín vô trùng. Dự án **MushroomCloud** giải quyết bài toán quản trị vận hành toàn diện:
 
 1. **Phía Khách hàng (Customer Portal)**:
-   * Cho phép đăng ký thuê khay trực tuyến theo chu kỳ sinh trưởng chuẩn.
-   * Giám sát thông số vi khí hậu (Telemetry) và hình ảnh trực tiếp 24/7 từ cảm biến IoT.
-   * Tra cứu nguồn gốc xuất xứ và Giấy chứng nhận canh tác sạch chuẩn VietGAP có mã QR xác thực.
-   * Gửi yêu cầu thu hoạch và nghiệm thu sản lượng trực tuyến.
+   * **Đặt thuê khay trực tuyến**: Đăng ký các gói nuôi trồng theo chu kỳ chuẩn, tự động cấp mã định danh khay nuôi QR code riêng biệt.
+   * **Camera Live Stream 24/7**: Ống kính quang học giám sát buồng kính với 3 góc quay (Toàn cảnh buồng 120°, Cận cảnh macro 4K, Giàn kệ vô trùng) tích hợp HUD và thu phóng `1x - 2x - 4x`.
+   * **Thước tua Timelapse sinh học**: Xem lại hình ảnh quá trình sinh trưởng tự động từ Ngày 01 (Gieo mầm) đến Ngày 30 (Thu hoạch).
+   * **Biểu đồ vi khí hậu 24h Realtime**: Đồ thị miền cong mượt mà theo dõi Nhiệt độ, Độ ẩm và CO₂ cập nhật mỗi 5 giây qua WebSocket.
+   * **Nghiệm thu & Chứng nhận VietGAP**: Gửi lệnh thu hoạch tức thời đến kỹ thuật viên trang trại và xuất Giấy chứng nhận xuất xứ số có mã xác thực CSDL.
 
-2. **Phía Vận hành viên (Operator Center)**:
-   * Quản lý ma trận khay nuôi vật lý theo từng buồng khí hậu.
-   * Điều khiển cưỡng bức thiết bị phần cứng (Quạt thông gió, Máy phun sương, Rèm lạnh).
-   * Tra cứu quy trình vận hành chuẩn (SOP), mã lỗi giao dịch và xử lý cảnh báo sự cố vi khí hậu theo thời gian thực.
+2. **Phía Kỹ thuật viên (Operator Control Center)**:
+   * Quản lý ma trận khay nuôi vật lý đa tầng theo từng buồng khí hậu sạch ISO Class 5.
+   * Điều khiển cưỡng bức thiết bị phần cứng (Quạt đối lưu, Máy phun sương siêu âm, Đèn LED quang phổ sinh học).
+   * Tra cứu quy trình vận hành chuẩn (SOP), mã lỗi giao dịch và xử lý cảnh báo ngưỡng vi khí hậu tức thời.
 
 3. **Phía Quản trị viên (Management & Analytics)**:
-   * Thống kê tỷ lệ lấp đầy khay nuôi trên toàn bộ nhà kính.
+   * Thống kê tỷ lệ lấp đầy khay nuôi trên toàn bộ nhà kính theo thời gian thực.
    * Báo cáo doanh thu, sản lượng thu hoạch và lưu vết toàn vẹn dữ liệu kiểm toán (Audit Trail).
 
 ---
 
-## II. KIẾN TRÚC HỆ THỐNG VÀ CÔNG NGHỆ
+## II. HỆ THỐNG THIẾT KẾ CAFE LATTE BẮC ÂU (SCANDINAVIAN DESIGN SYSTEM)
+
+Giao diện nền tảng được chuẩn hóa toàn diện theo phong cách **Scandinavian Cafe Latte Luxury**, mang lại trải nghiệm êm dịu, công nghệ cao và thanh lịch:
+
+* **Bảng màu nhận diện**:
+  * **Nâu gỗ óc chó (Deep Walnut)**: `#362113`, `#4A2E1D` – Tạo chiều sâu cho các nút hành động, thẻ tiêu điểm và thanh điều hướng.
+  * **Nâu cà phê ấm (Warm Coffee)**: `#6B442C`, `#523522` – Dùng cho các tiêu đề chính và khung Squircle biểu tượng.
+  * **Vàng đồng Champagne (Bronze Amber)**: `#C28E58`, `#E2BA78` – Điểm nhấn đường viền, chỉ số quan trọng, ánh kim loại và viền thẻ hoạt động.
+  * **Kem sữa & Linen (Latte Cream & Linen)**: `#FDFBF8`, `#FAF5EE`, `#F2E8DC` – Nền sáng êm dịu, tương phản dễ chịu với mắt người dùng.
+  * **Nền tối Espresso (Dark Espresso)**: `#140D08`, `#1C120C`, `#20140D` – Chế độ ban đêm sang trọng với viền màu nâu sẫm `#422C1D`.
+* **Quy chuẩn biểu tượng vector (Zero Emojis Policy)**:
+  * Loại bỏ hoàn toàn các emoji hoạt hình và biểu tượng template AI phổ thông.
+  * Thay thế bằng 100% biểu tượng vector SVG tinh xảo, đồng bộ kích thước và bo góc Squircle mềm mại.
+
+---
+
+## III. KIẾN TRÚC HỆ THỐNG VÀ CÔNG NGHỆ
 
 Hệ thống được thiết kế theo mô hình 3 tầng chuẩn doanh nghiệp (3-Tier Enterprise Architecture):
 
@@ -51,9 +68,10 @@ Hệ thống được thiết kế theo mô hình 3 tầng chuẩn doanh nghiệ
            ┌─────────────────────────────┴─────────────────────────────┐
            ▼                                                           ▼
  [ Cổng Khách Hàng (Portal) ]                               [ Bàn Điều Hành Kỹ Thuật Viên ]
- • Tra cứu khay & telemetry vi khí hậu                      • Ma trận trạng thái buồng nuôi
- • Đăng ký thuê khay & thanh toán                           • Điều khiển cưỡng bức thiết bị
- • Giấy chứng nhận số VietGAP                               • Sổ tay tra cứu quy trình SOP
+ • Camera Live Stream PTZ & HUD 4K                          • Ma trận trạng thái buồng nuôi đa tầng
+ • Thước tua Timelapse 30 ngày động                         • Điều khiển cưỡng bức thiết bị IoT
+ • Biểu đồ vi khí hậu SVG Spline 24h                        • Tra cứu SOP & xử lý cảnh báo tự động
+ • Nghiệm thu thu hoạch & VietGAP                           • Trợ lý AI nông nghiệp MushroomBot
            │                                                           │
            └─────────────────────────────┬─────────────────────────────┘
                                          │ HTTPS / WSS (Port 443 / 80)
@@ -86,7 +104,7 @@ Hệ thống được thiết kế theo mô hình 3 tầng chuẩn doanh nghiệ
 
 ---
 
-## III. THIẾT KẾ CƠ SỞ DỮ LIỆU (SMARTMUSHROOMDB)
+## IV. THIẾT KẾ CƠ SỞ DỮ LIỆU (SMARTMUSHROOMDB)
 
 Cơ sở dữ liệu được tổ chức tại thư mục `database/` gồm các kịch bản T-SQL có cấu trúc:
 
@@ -115,7 +133,7 @@ Cơ sở dữ liệu được tổ chức tại thư mục `database/` gồm cá
 
 ---
 
-## IV. GIẢI QUYẾT BỐN BÀI TOÁN TƯƠNG TRANH (CONCURRENCY CONTROL)
+## V. GIẢI QUYẾT BỐN BÀI TOÁN TƯƠNG TRANH (CONCURRENCY CONTROL)
 
 Hệ thống được thiết kế để xử lý triệt để 4 vấn đề tương tranh kinh điển trong CSDL phân tán:
 
@@ -137,7 +155,7 @@ Hệ thống được thiết kế để xử lý triệt để 4 vấn đề t�
 
 ---
 
-## V. HƯỚNG DẪN CÀI ĐẶT VÀ KHỞI CHẠY HỆ THỐNG
+## VI. HƯỚNG DẪN CÀI ĐẶT VÀ KHỞI CHẠY HỆ THỐNG
 
 ### 1. Yêu cầu môi trường tiền đề
 * Hệ điều hành: Windows 10/11 hoặc Linux (Ubuntu 22.04 LTS).
@@ -176,7 +194,7 @@ Dự án đã tích hợp sẵn các tập lệnh batch tiện ích tại thư m
 
 ---
 
-## VI. BỘ KIỂM THỬ TỰ ĐỘNG VÀ XÁC MINH TOÀN VẸN (TESTING SUITE)
+## VII. BỘ KIỂM THỬ TỰ ĐỘNG VÀ XÁC MINH TOÀN VẸN (TESTING SUITE)
 
 Hệ thống tích hợp quy trình kiểm thử lặp lại nghiêm ngặt nhằm đảm bảo tính ổn định tuyệt đối trước Hội đồng chấm:
 
@@ -202,7 +220,7 @@ Bộ kiểm thử tự động thực hiện **3 vòng lặp liên tiếp** (t�
 
 ---
 
-## VII. DANH MỤC TÀI KHOẢN MẪU PHỤC VỤ ĐÁNH GIÁ (DEMO CREDENTIALS)
+## VIII. DANH MỤC TÀI KHOẢN MẪU PHỤC VỤ ĐÁNH GIÁ (DEMO CREDENTIALS)
 
 Tất cả tài khoản thử nghiệm được khởi tạo sẵn với mật khẩu mặc định: **`Password123@`**
 
@@ -216,7 +234,7 @@ Tất cả tài khoản thử nghiệm được khởi tạo sẵn với mật k
 
 ---
 
-## VIII. CÁC TÀI LIỆU KỸ THUẬT KÈM THEO
+## IX. CÁC TÀI LIỆU KỸ THUẬT KÈM THEO
 
 * [DEMO_GUIDE.md](./DEMO_GUIDE.md): Cẩm nang chi tiết các bước vận hành và chuẩn bị hệ thống trước Hội đồng.
 * [DEMO_SCRIPT.md](./DEMO_SCRIPT.md): Kịch bản thuyết trình bảo vệ đồ án từng phút.
