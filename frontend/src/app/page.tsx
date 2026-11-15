@@ -3,6 +3,7 @@ import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/landing/HeroSection';
 import StatsSection from '@/components/landing/StatsSection';
 import PackagesSection from '@/components/landing/PackagesSection';
+import AppDownloadSection from '@/components/landing/AppDownloadSection';
 import CameraFeed from '@/components/customer/CameraFeed';
 import TimelapseSlider from '@/components/customer/TimelapseSlider';
 import SensorCharts from '@/components/customer/SensorCharts';
@@ -10,7 +11,7 @@ import HarvestModal from '@/components/customer/HarvestModal';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 transition-colors">
+    <main className="min-h-screen bg-[#FDFBF8] dark:bg-[#140D08] transition-colors">
       <Navbar />
       <HeroSection />
       
@@ -46,6 +47,10 @@ export default function Home() {
       </section>
 
       <PackagesSection />
+
+      {/* Ứng Dụng Di Động Mobile App & Hệ Sinh Thái FaaS */}
+      <AppDownloadSection />
+
       <Footer />
     </main>
   );
