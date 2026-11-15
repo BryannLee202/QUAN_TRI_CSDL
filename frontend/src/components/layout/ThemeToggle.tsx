@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 /**
  * Công tắc chuyển đổi giao diện Sáng / Tối (Dark / Light Theme Toggle)
- * Phụ trách: Võ Duy Thịnh
+ * Thiết kế chuẩn Luxury Cafe Latte & Vector SVG sắc nét, loại bỏ hoàn toàn Emoji
  */
 export default function ThemeToggle() {
   const [isDark, setIsDark] = useState<boolean>(false);
@@ -38,7 +38,7 @@ export default function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="w-24 h-8 bg-slate-200 dark:bg-slate-700 rounded-xl animate-pulse shrink-0"></div>
+      <div className="h-9 w-20 bg-[#F2E8DC] dark:bg-[#20140D] rounded-xl animate-pulse shrink-0 border border-[#DECFC0] dark:border-[#422C1D]"></div>
     );
   }
 
@@ -46,10 +46,37 @@ export default function ThemeToggle() {
     <button
       onClick={toggleTheme}
       aria-label="Chuyển đổi giao diện Sáng / Tối"
-      className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition transform active:scale-95 shrink-0 whitespace-nowrap shadow-sm border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 text-xs font-semibold"
+      className="h-9 px-3 rounded-xl bg-[#FAF5EE] hover:bg-[#F2E8DC] dark:bg-[#20140D] dark:hover:bg-[#2B1C13] text-[#5C3A24] dark:text-[#E8DCCE] transition-all duration-200 active:scale-95 shrink-0 whitespace-nowrap shadow-xs border border-[#DECFC0] dark:border-[#422C1D] flex items-center gap-1.5 text-[11px] font-bold group"
     >
-      <span>{isDark ? '☀️' : '🌙'}</span>
-      <span>{isDark ? 'Sáng' : 'Tối'}</span>
+      {isDark ? (
+        // Icon Mặt Trời Vector
+        <svg
+          className="w-4 h-4 text-[#C28E58] transition-transform duration-300 group-hover:rotate-45"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+        </svg>
+      ) : (
+        // Icon Mặt Trăng Vector
+        <svg
+          className="w-4 h-4 text-[#8C6E56] transition-transform duration-300 group-hover:-rotate-12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+        </svg>
+      )}
+      <span className="tracking-wide">{isDark ? 'Sáng' : 'Tối'}</span>
     </button>
   );
 }
