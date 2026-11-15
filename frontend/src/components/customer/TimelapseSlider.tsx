@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 /**
  * TimelapseSlider Component - Thước Tua Lịch Sử Sinh Trưởng Khay Nấm
- * Đồng bộ phong cách Cafe Latte Bắc Âu sang trọng, mô phỏng sinh học từ Ngày 01 đến Ngày 30
+ * Thiết kế cân đối cột phải bên cạnh CameraFeed, phong cách Cafe Latte Bắc Âu sang trọng
  */
 export default function TimelapseSlider() {
   const [day, setDay] = useState(15);
@@ -14,7 +14,6 @@ export default function TimelapseSlider() {
       return {
         stageName: 'Giai Đoạn 1: Cấy Giống & Ăn Tơ Vô Trùng',
         statusText: 'Tơ nấm Bào Ngư phân nhánh trắng muốt, phủ kín 95% bề mặt giá thể mùn cưa hữu cơ.',
-        progressPercent: Math.round((currentDay / 30) * 100),
         image: '/images/hero-chamber-synced-facility.jpg',
         badge: 'Tơ Nấm Lan Tỏa',
         metrics: 'Độ ẩm: 88% • T: 24.5°C • Tối 90%',
@@ -23,16 +22,14 @@ export default function TimelapseSlider() {
       return {
         stageName: 'Giai Đoạn 2: Kích Ẩm & Hình Thành Quả Thể',
         statusText: 'Các mầm nấm (ghim nấm) nhú đều, bung tán đồng loạt dưới luồng sương siêu âm đối lưu.',
-        progressPercent: Math.round((currentDay / 30) * 100),
         image: '/images/hero-chamber-champagne.jpg',
         badge: 'Phát Triển Mũ Nấm',
         metrics: 'Độ ẩm: 92% • T: 23.8°C • CO₂: 620 ppm',
       };
     } else {
       return {
-        stageName: 'Giai Đoạn 3: Nấm Trưởng Thành & Chuẩn Bị Thu Hoạch',
+        stageName: 'Giai Đoạn 3: Nấm Trưởng Thành & Đạt Tiêu Chuẩn',
         statusText: 'Mũ nấm đạt đường kính 5-7cm, dày dặn, dồi dào dược tính sinh học chuẩn kiểm định VietGAP.',
-        progressPercent: Math.round((currentDay / 30) * 100),
         image: '/images/hero-view-mushroom-macro.jpg',
         badge: 'Đạt Chuẩn Thu Hoạch',
         metrics: 'Độ ẩm: 90% • T: 24.0°C • Sẵn Sàng Hái',
@@ -43,11 +40,11 @@ export default function TimelapseSlider() {
   const stage = getStageInfo(day);
 
   return (
-    <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-3xl p-6 shadow-sm border border-[#E0D3C1] dark:border-[#543825] space-y-5 transition-all">
+    <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-3xl p-6 sm:p-7 shadow-sm border border-[#E0D3C1] dark:border-[#543825] flex flex-col justify-between space-y-5 transition-all h-full">
       {/* Tiêu Đề Thước Tua */}
-      <div className="flex flex-wrap justify-between items-center gap-2">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-[#FAF5EE] dark:bg-[#2B1C13] border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-center text-[#6B442C] dark:text-[#E2BA78]">
+      <div className="flex flex-wrap justify-between items-center gap-3 border-b border-[#EAE1D3] dark:border-[#362114] pb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-[#FAF5EE] dark:bg-[#2B1C13] border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-center text-[#6B442C] dark:text-[#E2BA78] shadow-xs">
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect width="20" height="20" x="2" y="2" rx="2.18" ry="2.18" />
               <line x1="7" x2="7" y1="2" y2="22" />
@@ -60,7 +57,7 @@ export default function TimelapseSlider() {
             </svg>
           </div>
           <div>
-            <h3 className="font-bold text-base text-[#24170E] dark:text-[#FFF5EA]">
+            <h3 className="font-bold text-base sm:text-lg text-[#24170E] dark:text-[#FFF5EA]">
               Thước Tua Timelapse Sinh Trưởng
             </h3>
             <p className="text-xs text-[#735843] dark:text-[#DAC7B5]">
@@ -70,13 +67,42 @@ export default function TimelapseSlider() {
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-[#523522] dark:text-[#E2BA78] bg-[#FAF5EE] dark:bg-[#2B1C13] px-3 py-1.5 rounded-xl border border-[#DECFC0] dark:border-[#422C1D]">
+          <span className="text-xs font-bold text-[#523522] dark:text-[#E2BA78] bg-[#FAF5EE] dark:bg-[#2B1C13] px-3.5 py-1.5 rounded-xl border border-[#DECFC0] dark:border-[#422C1D]">
             Ngày Thứ {day} / 30
           </span>
         </div>
       </div>
 
-      {/* Thanh Trượt Slider Điều Khiển Thời Gian */}
+      {/* Ảnh Xem Trước Trạng Thái Sinh Học Thực Tế */}
+      <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden border border-[#DECFC0] dark:border-[#422C1D] shadow-sm group">
+        <img
+          src={stage.image}
+          alt={stage.stageName}
+          className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none"></div>
+
+        {/* Badge Nổi Trên Ảnh */}
+        <div className="absolute top-3 left-3 flex items-center gap-2">
+          <span className="bg-black/60 backdrop-blur-md text-[11px] font-mono text-[#FFF5EA] px-2.5 py-1 rounded-lg border border-white/10">
+            MỐC NGÀY: D{day < 10 ? `0${day}` : day}
+          </span>
+          <span className="bg-[#C28E58] text-[#1C120C] text-[10px] font-bold px-2 py-1 rounded-lg shadow-sm">
+            {stage.badge}
+          </span>
+        </div>
+
+        <div className="absolute bottom-3 left-3 right-3 text-white">
+          <p className="font-bold text-sm text-[#FFF5EA] drop-shadow-sm">
+            {stage.stageName}
+          </p>
+          <p className="text-xs text-[#DAC7B5] line-clamp-1 mt-0.5 drop-shadow-sm">
+            {stage.statusText}
+          </p>
+        </div>
+      </div>
+
+      {/* Thanh Trượt Slider Điều Khiển Ngày */}
       <div className="space-y-2 pt-1">
         <input
           type="range"
@@ -102,40 +128,17 @@ export default function TimelapseSlider() {
         </div>
       </div>
 
-      {/* Khung Khái Quát Trạng Thái Kèm Ảnh Xem Trước Thực Tế */}
-      <div className="bg-[#FAF5EE]/80 dark:bg-[#2B1C13]/60 p-4 rounded-2xl border border-[#DECFC0] dark:border-[#422C1D] flex flex-col sm:flex-row items-center gap-4">
-        {/* Ảnh Thumbnail Stage Thực Tế */}
-        <div className="relative w-full sm:w-28 h-24 rounded-xl overflow-hidden shrink-0 border border-[#DECFC0] dark:border-[#543825] shadow-xs">
-          <img
-            src={stage.image}
-            alt={stage.stageName}
-            className="w-full h-full object-cover transition-all duration-300"
-          />
-          <span className="absolute bottom-1 right-1 bg-black/70 backdrop-blur-xs text-[9px] font-mono text-[#FFF5EA] px-1.5 py-0.5 rounded">
-            D{day}
-          </span>
+      {/* Thông Số Môi Trường Tương Ứng Với Ngày Chọn */}
+      <div className="bg-[#FAF5EE]/90 dark:bg-[#2B1C13]/60 p-3.5 rounded-2xl border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-between text-xs text-[#523522] dark:text-[#DAC7B5]">
+        <div className="flex items-center gap-2 font-medium">
+          <svg className="w-4 h-4 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          </svg>
+          <span>Vi khí hậu mốc D{day}: <strong>{stage.metrics}</strong></span>
         </div>
-
-        {/* Thông Tin Sinh Trưởng & Chỉ Số Khí Hậu Tương Ứng */}
-        <div className="text-xs space-y-1.5 w-full">
-          <div className="flex justify-between items-center flex-wrap gap-1">
-            <p className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA]">
-              {stage.stageName}
-            </p>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#C28E58]/20 text-[#6B442C] dark:text-[#E2BA78] border border-[#C28E58]/30">
-              {stage.badge}
-            </span>
-          </div>
-          <p className="text-[#634936] dark:text-[#DAC7B5] leading-relaxed">
-            {stage.statusText}
-          </p>
-          <div className="pt-1 flex items-center gap-2 text-[10px] font-mono text-[#8C6D53] dark:text-[#DAC7B5]">
-            <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-            </svg>
-            <span>{stage.metrics}</span>
-          </div>
-        </div>
+        <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800">
+          Sync CSDL OK
+        </span>
       </div>
     </div>
   );

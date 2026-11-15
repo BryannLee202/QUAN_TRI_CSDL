@@ -37,10 +37,10 @@ export default function HarvestModal() {
 
   return (
     <>
-      <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-3xl p-6 shadow-sm border border-[#E0D3C1] dark:border-[#543825] flex flex-col md:flex-row justify-between items-center gap-5 transition-all">
-        <div className="flex items-start gap-3.5">
-          <div className="w-10 h-10 rounded-2xl bg-[#FAF5EE] dark:bg-[#2B1C13] border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-center text-[#C28E58] shrink-0 mt-0.5">
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-3xl p-6 sm:p-7 shadow-sm border border-[#E0D3C1] dark:border-[#543825] flex flex-col lg:flex-row justify-between items-center gap-6 transition-all w-full">
+        <div className="flex items-center gap-4 w-full lg:w-auto">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FAF5EE] to-[#F2E8DC] dark:from-[#2B1C13] dark:to-[#1C120B] border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-center text-[#C28E58] shrink-0 shadow-xs">
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               <path d="m9 12 2 2 4-4" />
             </svg>
@@ -49,16 +49,16 @@ export default function HarvestModal() {
             <h3 className="font-bold text-base sm:text-lg text-[#24170E] dark:text-[#FFF5EA] flex items-center gap-2">
               <span>Nghiệm Thu Thu Hoạch & Chứng Nhận VietGAP</span>
             </h3>
-            <p className="text-xs text-[#735843] dark:text-[#DAC7B5] leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#735843] dark:text-[#DAC7B5] leading-relaxed max-w-2xl">
               Khay nấm đã đạt chu kỳ thu hoạch tiêu chuẩn. Xem chứng nhận nguồn gốc xuất xứ hoặc gửi lệnh thu hoạch đến kỹ thuật viên trang trại.
             </p>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto shrink-0">
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 w-full lg:w-auto shrink-0 justify-end">
           <button
             onClick={() => setIsCertOpen(true)}
-            className="w-full sm:w-auto px-4 py-2.5 bg-[#FAF5EE] hover:bg-[#F2E8DC] dark:bg-[#2B1C13] dark:hover:bg-[#3D261A] text-[#523522] dark:text-[#E2BA78] font-bold text-xs rounded-xl border border-[#C28E58] shadow-xs transition flex items-center justify-center gap-2 shrink-0 whitespace-nowrap"
+            className="w-full sm:w-auto px-5 py-3 bg-[#FAF5EE] hover:bg-[#F2E8DC] dark:bg-[#2B1C13] dark:hover:bg-[#3D261A] text-[#523522] dark:text-[#E2BA78] font-bold text-xs rounded-xl border border-[#C28E58] shadow-xs transition flex items-center justify-center gap-2 shrink-0 whitespace-nowrap"
           >
             <svg className="w-4 h-4 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="8" r="6"/>
@@ -72,7 +72,7 @@ export default function HarvestModal() {
               setIsOpen(true);
               setErrorMsg(null);
             }}
-            className="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-[#523522] to-[#361F12] hover:from-[#3D2517] hover:to-[#24140B] text-white font-bold text-xs rounded-xl border border-[#C28E58] shadow-md transition transform active:scale-95 shrink-0 whitespace-nowrap flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-[#523522] to-[#361F12] hover:from-[#3D2517] hover:to-[#24140B] text-white font-bold text-xs rounded-xl border border-[#C28E58] shadow-md transition transform active:scale-95 shrink-0 whitespace-nowrap flex items-center justify-center gap-2"
           >
             <svg className="w-4 h-4 text-[#E2BA78]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -80,6 +80,7 @@ export default function HarvestModal() {
             <span>Gửi Lệnh Thu Hoạch</span>
           </button>
         </div>
+      </div>
 
         {/* Modal Popup Confirm */}
         {isOpen && (
@@ -132,7 +133,6 @@ export default function HarvestModal() {
             </div>
           </div>
         )}
-      </div>
 
       <CertificateModal
         isOpen={isCertOpen}
