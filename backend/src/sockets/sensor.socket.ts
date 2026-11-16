@@ -86,21 +86,21 @@ export function initSensorSocket(httpServer: HttpServer, pool: ConnectionPool) {
     polling = true;
     try {
       const sensors = await pool.request().input("last", sql.BigInt, lastData).query(
-        `SELECT TOP (${BATCH}) * FROM SensorData WHERE DataID > @last ORDER BY DataID`);
+        "SELECT TOP 500 * FROM SensorData WHERE DataID > @last ORDER BY DataID");
       for (const row of sensors.recordset) {
         const msg = toReading(row);
         io.to(targets(msg.roomId)).emit("sensor:update", msg);
         lastData = Math.max(lastData, msg.dataId);
       }      
      const alerts = await pool.request().input("last", sql.Int, lastAlert).query(
-       `SELECT TOP (${BATCH}) * FROM SensorAlerts WHERE AlertID > @last ORDER BY AlertID`);
+       "SELECT TOP 500 * FROM SensorAlerts WHERE AlertID > @last ORDER BY AlertID");
      for (const row of alerts.recordset) {
        const msg = toAlert(row);
        io.to(targets(msg.roomId)).emit("alert:new", msg);
        lastAlert = Math.max(lastAlert, msg.alertId);
       }
      const actions = await pool.request().input("last", sql.Int, lastAction).query(
-       `SELECT TOP (${BATCH}) * FROM DeviceActionLogs WHERE ActionID > @last ORDER BY ActionID`);
+       "SELECT TOP 500 * FROM DeviceActionLogs WHERE ActionID > @last ORDER BY ActionID");
      for (const row of actions.recordset) {
        const msg = toAction(row);
        io.to(targets(msg.roomId)).emit("device:action", msg);
