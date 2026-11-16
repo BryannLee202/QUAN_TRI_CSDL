@@ -6,6 +6,19 @@
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
+export function getAuthHeaders(): Record<string, string> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("mc_token");
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+  }
+  return headers;
+}
+
 export interface CreateRentalParams {
   userId?: number;
   packageId: number;
@@ -140,11 +153,12 @@ export async function getOperatorAlertsApi(roomId?: number) {
 export async function resolveOperatorAlertApi(alertId: number, notes?: string) {
   const res = await fetch(`${API_BASE}/operator/alerts/${alertId}/resolve`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
+    credentials: "include",
     body: JSON.stringify({ notes }),
   });
   const json = await res.json();
-  if (!res.ok) throw new Error(json.error?.message || "Lỗi giải quyết cảnh báo");
+  if (!res.ok) throw new Error(json.error?.message || json.message || "Lỗi giải quyết cảnh báo");
   return json;
 }
 
@@ -157,22 +171,78 @@ export async function toggleOperatorDeviceApi(params: {
 }) {
   const res = await fetch(`${API_BASE}/operator/devices/toggle`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
+    credentials: "include",
     body: JSON.stringify(params),
   });
   const json = await res.json();
-  if (!res.ok) throw new Error(json.error?.message || "Lỗi điều khiển thiết bị");
+  if (!res.ok) throw new Error(json.error?.message || json.message || "Lỗi điều khiển thiết bị");
   return json;
 }
 
 export async function updateOperatorTrayStatusApi(trayId: number, status: "AVAILABLE" | "MAINTENANCE") {
   const res = await fetch(`${API_BASE}/operator/trays/${trayId}/status`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
+    credentials: "include",
     body: JSON.stringify({ status }),
   });
   const json = await res.json();
-  if (!res.ok) throw new Error(json.error?.message || "Lỗi cập nhật khay");
+  if (!res.ok) throw new Error(json.error?.message || json.message || "Lỗi cập nhật khay");
+  return json;
+}
+
+// -------------------------------------------------------------
+// Authentication & RBAC APIs
+// -------------------------------------------------------------
+export async function loginApi(params: { email: string; password: string }) {
+  const res = await fetch(`${API_BASE}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(params),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || "Đăng nhập thất bại");
+  return json;
+}
+
+export async function registerApi(params: {
+  fullName: string;
+  email: string;
+  password: string;
+  phoneNumber?: string;
+  address?: string;
+}) {
+  const res = await fetch(`${API_BASE}/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(params),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || "Đăng ký thất bại");
+  return json;
+}
+
+export async function logoutApi() {
+  const res = await fetch(`${API_BASE}/auth/logout`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    credentials: "include",
+  });
+  const json = await res.json();
+  return json;
+}
+
+export async function getMeApi() {
+  const res = await fetch(`${API_BASE}/auth/me`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+    credentials: "include",
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || "Chưa đăng nhập");
   return json;
 }
 
