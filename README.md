@@ -1,66 +1,29 @@
-# BÁO CÁO ĐỒ ÁN MÔN HỌC: QUẢN TRỊ CƠ SỞ DỮ LIỆU NÂNG CAO
-## ĐỀ TÀI: HỆ THỐNG QUẢN LÝ VÀ ĐIỀU HÀNH NUÔI TRỒNG NẤM THÔNG MINH THEO MÔ HÌNH FARM-AS-A-SERVICE (MUSHROOMCLOUD)
+# 🍄 MushroomCloud - Nền Tảng Nông Trại Thông Minh (Farm-as-a-Service)
 
-**Đơn vị đào tạo**: Khoa Công nghệ Thông tin – Trường Đại học Sư phạm Kỹ thuật TP. Hồ Chí Minh (HCMUTE)  
-**Học phần**: Quản trị Cơ sở Dữ liệu Nâng cao (Advanced Database Management Systems)  
-**Hệ Quản trị CSDL mục tiêu**: Microsoft SQL Server 2022 (Transact-SQL)  
-**Kho lưu trữ mã nguồn**: [https://github.com/BryannLee202/QUAN_TRI_CSDL](https://github.com/BryannLee202/QUAN_TRI_CSDL)  
+> **MushroomCloud (FaaS)** là nền tảng quản trị và vận hành nuôi trồng nấm dược liệu công nghệ cao khép kín chuẩn **VietGAP** và **ISO Class 5**. Cho phép khách hàng từ xa thuê sở hữu khay nấm, giám sát vi khí hậu thời gian thực 24/7 qua cảm biến IoT, theo dõi buồng kính qua Camera PTZ 4K, lưu trữ thước tua Timelapse sinh trưởng và nhận nấm tươi thu hoạch tận nhà.
 
----
-
-### BẢNG PHÂN CÔNG NHIỆM VỤ VÀ THÀNH VIÊN THỰC HIỆN
-
-| STT | Họ và Tên | Vai trò | Trách nhiệm chuyên môn chính |
-| :---: | :--- | :--- | :--- |
-| 1 | **Lê Minh Tài** | **Nhóm trưởng / Kiến trúc sư Hệ thống** | • Thiết kế kiến trúc tổng thể và mô hình quan hệ CSDL chuẩn hóa 3NF.<br>• Xây dựng các Stored Procedure xử lý giao dịch lõi (`sp_CreateRentalOrder`) tích hợp kiểm soát tương tranh với khóa dòng `UPDLOCK, ROWLOCK`.<br>• Thiết kế bộ kịch bản kiểm thử tranh chấp (Concurrency & Race Conditions) và kịch bản vòng đời E2E.<br>• Quản trị tiến trình Git, tích hợp nhánh và định hướng hệ thống nhận diện Cafe Latte Bắc Âu. |
-| 2 | **Hoàng Huy** | **Kỹ sư T-SQL & Tối ưu Hiệu năng** | • Xây dựng hệ thống DML Triggers tự động kiểm tra ngưỡng vi khí hậu (`trg_CheckSensorThresholds`).<br>• Thiết kế các Views báo cáo công suất buồng nuôi và doanh thu định kỳ.<br>• Thiết lập chiến lược chỉ mục nâng cao: Composite Non-Clustered Indexes có mệnh đề `INCLUDE` và Filtered Indexes.<br>• Thực hiện Benchmark đo lường chi phí I/O trên tập dữ liệu 1.000.000 bản ghi. |
-| 3 | **Nguyễn Thanh Hiển** | **Kỹ sư Backend & An toàn Thông tin** | • Hiện thực hóa tầng dịch vụ API bằng Node.js / Express với TypeScript.<br>• Cấu hình hồ chứa kết nối (Connection Pool) tối ưu hóa truy vấn đến SQL Server.<br>• Thiết lập xác thực phân quyền RBAC dựa trên JWT lưu trữ an toàn trong HttpOnly Cookie.<br>• Triển khai cơ chế phòng vệ CSRF Double-Submit Cookie và kiểm soát tần suất Rate Limiting. |
-| 4 | **Đăng** | **Kỹ sư Giao diện & Trải nghiệm Người dùng** | • Phát triển Cổng Khách hàng (Customer Portal) trên nền tảng Next.js 14 App Router.<br>• Xây dựng hệ thống quốc tế hóa đa ngôn ngữ (i18n Song ngữ Việt – Anh).<br>• Hiện thực hóa các thành phần tương tác: Giấy chứng nhận số VietGAP, bảng điều khiển gói thuê và biểu đồ vi khí hậu. |
-| 5 | **Võ Duy Thịnh** | **Kỹ sư IoT & Hệ thống Thời gian thực** | • Xây dựng module giả lập cảm biến vi khí hậu đa thông số (Nhiệt độ, Độ ẩm, CO2, Ánh sáng).<br>• Triển khai cổng truyền thông thời gian thực Socket.io kết nối trực tiếp với Database Event Stream.<br>• Phát triển Bàn điều phối Kỹ thuật viên (Operator Control Center) và Trợ lý giải đáp tự động MushroomBot. |
+[![Next.js](https://img.shields.io/badge/Next.js-14.2.3-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![SQL Server](https://img.shields.io/badge/MS_SQL_Server-2022-red?style=flat-square&logo=microsoftsqlserver)](https://www.microsoft.com/sql-server)
+[![Socket.io](https://img.shields.io/badge/Socket.io-4.8.4-black?style=flat-square&logo=socket.io)](https://socket.io/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
+[![Standard](https://img.shields.io/badge/Quality-VietGAP_Loại_A-emerald?style=flat-square)](https://vietgap.gov.vn/)
+[![Tests](https://img.shields.io/badge/Tests-18%2F18_PASS_100%25-brightgreen?style=flat-square)]()
 
 ---
 
-## I. TỔNG QUAN ĐỀ TÀI VÀ MÔ HÌNH FARM-AS-A-SERVICE (FaaS)
+## 🌟 Tính Năng Nổi Bật
 
-Mô hình **Farm-as-a-Service (FaaS)** trong nông nghiệp công nghệ cao cho phép người dùng từ xa thuê sở hữu các khay nuôi cấy nấm dược liệu (Đông Trùng Hạ Thảo, Linh Chi Đỏ, Nấm Bào Ngư Xám, Nấm Hầu Thủ...) đặt tại nhà kính khép kín vô trùng. Dự án **MushroomCloud** giải quyết bài toán quản trị vận hành toàn diện:
-
-1. **Phía Khách hàng (Customer Portal)**:
-   * **Đặt thuê khay trực tuyến**: Đăng ký các gói nuôi trồng theo chu kỳ chuẩn, tự động cấp mã định danh khay nuôi QR code riêng biệt.
-   * **Camera Live Stream 24/7**: Ống kính quang học giám sát buồng kính với 3 góc quay (Toàn cảnh buồng 120°, Cận cảnh macro 4K, Giàn kệ vô trùng) tích hợp HUD và thu phóng `1x - 2x - 4x`.
-   * **Thước tua Timelapse sinh học**: Xem lại hình ảnh quá trình sinh trưởng tự động từ Ngày 01 (Gieo mầm) đến Ngày 30 (Thu hoạch).
-   * **Biểu đồ vi khí hậu 24h Realtime**: Đồ thị miền cong mượt mà theo dõi Nhiệt độ, Độ ẩm và CO₂ cập nhật mỗi 5 giây qua WebSocket.
-   * **Nghiệm thu & Chứng nhận VietGAP**: Gửi lệnh thu hoạch tức thời đến kỹ thuật viên trang trại và xuất Giấy chứng nhận xuất xứ số có mã xác thực CSDL.
-
-2. **Phía Kỹ thuật viên (Operator Control Center)**:
-   * Quản lý ma trận khay nuôi vật lý đa tầng theo từng buồng khí hậu sạch ISO Class 5.
-   * Điều khiển cưỡng bức thiết bị phần cứng (Quạt đối lưu, Máy phun sương siêu âm, Đèn LED quang phổ sinh học).
-   * Tra cứu quy trình vận hành chuẩn (SOP), mã lỗi giao dịch và xử lý cảnh báo ngưỡng vi khí hậu tức thời.
-
-3. **Phía Quản trị viên (Management & Analytics)**:
-   * Thống kê tỷ lệ lấp đầy khay nuôi trên toàn bộ nhà kính theo thời gian thực.
-   * Báo cáo doanh thu, sản lượng thu hoạch và lưu vết toàn vẹn dữ liệu kiểm toán (Audit Trail).
+* **Giao Diện Cleanroom Mint & Bio-Emerald**: Thiết kế vô trùng chuẩn phòng lab sinh học hiện đại, tươi mát, sang trọng với các thẻ dữ liệu ngọc trai bóng mờ và biểu đồ vi khí hậu SVG Spline động.
+* **Camera Giám Sát PTZ 4K & Timelapse 30 Ngày**: 3 góc quay ống kính quang học (Toàn cảnh 120°, Cận cảnh macro 4K, Giàn kệ vô trùng) tích hợp HUD camera chuyên nghiệp và thanh trượt tua dòng thời gian sinh học từ Ngày 01 đến Ngày 30.
+* **Đồng Bộ Vi Khí Hậu Realtime (WebSocket 5s/lần)**: Cập nhật biến thiên Nhiệt độ (22-25°C), Độ ẩm (85-95%) và CO₂ (<800 ppm) trực tiếp đến trình duyệt.
+* **Động Cơ Giao Dịch Chống Tranh Chấp Cực Đoan (Zero Overbooking)**: Xử lý hợp đồng thuê khay bằng Stored Procedure ACID với kỹ thuật khóa dòng `WITH (UPDLOCK, ROWLOCK)` trên Microsoft SQL Server 2022.
+* **Trợ Lý Trí Tuệ Nhân Tạo (MushroomBot AI)**: Tích hợp mô hình ngôn ngữ Llama-3.1 cùng bộ máy tìm kiếm ngữ nghĩa RAG tra cứu tiêu chuẩn kỹ thuật VietGAP độ trễ 0ms.
+* **Bàn Điều Phối Kỹ Thuật Viên (Operator Hub)**: Ma trận giám sát khay nuôi vật lý đa tầng, điều khiển cưỡng bức thiết bị (quạt hút, rèm lạnh, phun sương siêu âm) và xử lý cảnh báo tự động sinh ra từ DML Trigger CSDL.
 
 ---
 
-## II. HỆ THỐNG THIẾT KẾ CAFE LATTE BẮC ÂU (SCANDINAVIAN DESIGN SYSTEM)
-
-Giao diện nền tảng được chuẩn hóa toàn diện theo phong cách **Scandinavian Cafe Latte Luxury**, mang lại trải nghiệm êm dịu, công nghệ cao và thanh lịch:
-
-* **Bảng màu nhận diện**:
-  * **Nâu gỗ óc chó (Deep Walnut)**: `#362113`, `#4A2E1D` – Tạo chiều sâu cho các nút hành động, thẻ tiêu điểm và thanh điều hướng.
-  * **Nâu cà phê ấm (Warm Coffee)**: `#6B442C`, `#523522` – Dùng cho các tiêu đề chính và khung Squircle biểu tượng.
-  * **Vàng đồng Champagne (Bronze Amber)**: `#C28E58`, `#E2BA78` – Điểm nhấn đường viền, chỉ số quan trọng, ánh kim loại và viền thẻ hoạt động.
-  * **Kem sữa & Linen (Latte Cream & Linen)**: `#FDFBF8`, `#FAF5EE`, `#F2E8DC` – Nền sáng êm dịu, tương phản dễ chịu với mắt người dùng.
-  * **Nền tối Espresso (Dark Espresso)**: `#140D08`, `#1C120C`, `#20140D` – Chế độ ban đêm sang trọng với viền màu nâu sẫm `#422C1D`.
-* **Quy chuẩn biểu tượng vector (Zero Emojis Policy)**:
-  * Loại bỏ hoàn toàn các emoji hoạt hình và biểu tượng template AI phổ thông.
-  * Thay thế bằng 100% biểu tượng vector SVG tinh xảo, đồng bộ kích thước và bo góc Squircle mềm mại.
-
----
-
-## III. KIẾN TRÚC HỆ THỐNG VÀ CÔNG NGHỆ
-
-Hệ thống được thiết kế theo mô hình 3 tầng chuẩn doanh nghiệp (3-Tier Enterprise Architecture):
+## 🏛️ Kiến Trúc Hệ Thống (3-Tier Enterprise Architecture)
 
 ```
                        [ TẦNG TRÌNH DIỄN - PRESENTATION TIER ]
@@ -104,110 +67,147 @@ Hệ thống được thiết kế theo mô hình 3 tầng chuẩn doanh nghiệ
 
 ---
 
-## IV. THIẾT KẾ CƠ SỞ DỮ LIỆU (SMARTMUSHROOMDB)
+## 🚀 Hướng Dẫn Trải Nghiệm Demo Toàn Diện Theo Từng Vai Trò
 
-Cơ sở dữ liệu được tổ chức tại thư mục `database/` gồm các kịch bản T-SQL có cấu trúc:
+Dưới đây là kịch bản chuẩn hóa giúp bạn và các thành viên dễ dàng trình diễn trực quan đầy đủ tính năng của hệ thống:
 
-1. **`01_schema.sql` (Cấu trúc bảng và ràng buộc toàn vẹn)**:
-   * `Roles`, `Users`: Phân quyền người dùng theo vai trò RBAC (Admin, Operator, Customer). Mật khẩu được mã hóa an toàn bằng thuật toán BCrypt.
-   * `Rooms`, `MushroomSpecies`: Quản lý danh mục nhà kính, buồng nuôi và thông số sinh học chuẩn của từng loài nấm.
-   * `RentalPackages`, `RentalOrders`: Quản lý các gói dịch vụ và hợp đồng thuê có ràng buộc thời hạn.
-   * `CultivationTrays`: Quản lý thực thể khay nuôi với mã QR định danh duy nhất (VD: `TRAY-RM01-R01-001`).
-   * `SensorData`, `SensorAlerts`: Lưu trữ chuỗi thời gian telemetry và nhật ký cảnh báo bất thường.
-   * `GrowthLogs`, `HarvestRequests`, `DeviceActionLogs`: Theo dõi chu kỳ phát triển, quy trình thu hoạch và lưu vết điều khiển phần cứng.
+```
+                                  KỊCH BẢN DEMO HỆ THỐNG
+   ┌──────────────────────────────────────────────────────────────────────────────────┐
+   │ 1. Trang Chủ ──> 2. Đặt Thuê Khay ──> 3. Cổng Giám Sát ──> 4. Bàn Điều Hành      │
+   │    (Landing)        (T-SQL ACID)         (Live Stream)        (Operator Hub)     │
+   └──────────────────────────────────────────────────────────────────────────────────┘
+```
 
-2. **`02_tsql_logic.sql` (Thủ tục lưu trữ, Trigger và Khung nhìn)**:
-   * `sp_CreateRentalOrder`: Thực thi nghiệp vụ tạo đơn thuê trong giao dịch ACID cô lập. Ứng dụng kỹ thuật khóa dòng `WITH (UPDLOCK, ROWLOCK)` ngăn chặn hoàn toàn hiện tượng tranh chấp đặt trùng khay (Zero Overbooking).
-   * `sp_AssignTrayToOrder`: Kỹ thuật viên quét mã QR xác thực để gán khay vật lý vào hợp đồng thuê.
-   * `sp_RequestHarvest` & `sp_CompleteHarvest`: Quy trình đóng gói, nghiệm thu sản lượng và chuyển trạng thái khay về bảo trì khử trùng.
-   * `trg_CheckSensorThresholds`: DML Trigger gắn trên bảng `SensorData`, tự động đối soát chỉ số môi trường với ngưỡng sinh học. Khi nồng độ CO2 vượt 1200 ppm, trigger tự sinh cảnh báo và kích hoạt quạt hút `EXHAUST_FAN`.
-   * Khung nhìn báo cáo: `vw_RoomOccupancyReport`, `vw_CustomerActiveRentals`, `vw_MonthlyRevenueReport`.
-
-3. **`03_seed_data.sql` (Dữ liệu thử nghiệm chuẩn)**:
-   * Cung cấp 8 tài khoản mẫu chuẩn hóa, 70 khay nuôi vật lý, 16 hợp đồng thuê mẫu và lịch sử telemetry phong phú phục vụ kiểm định trực quan.
-
-4. **`04_indexing_and_performance.sql` (Tối ưu hóa chỉ mục & Benchmark)**:
-   * Composite Non-Clustered Index trên `SensorData(RoomID, RecordedAt)` kết hợp mệnh đề `INCLUDE (Temperature, Humidity, CO2Level)`.
-   * Filtered Index trên `SensorAlerts(RoomID, AlertTime)` với điều kiện lọc `WHERE IsResolved = 0`.
-   * Bảng thử nghiệm 1.000.000 bản ghi đo lường kế hoạch thực thi (Execution Plan), chứng minh việc giảm thiểu hơn 99% chi phí Logical Reads (từ >22.000 trang quét toàn bảng xuống <50 trang tìm kiếm chỉ mục).
-
----
-
-## V. GIẢI QUYẾT BỐN BÀI TOÁN TƯƠNG TRANH (CONCURRENCY CONTROL)
-
-Hệ thống được thiết kế để xử lý triệt để 4 vấn đề tương tranh kinh điển trong CSDL phân tán:
-
-1. **Lost Update (Mất dữ liệu cập nhật)**:
-   * *Hiện tượng*: Hai giao dịch đồng thời đọc một khay trống và cùng tiến hành đặt, dẫn đến một đơn hàng bị ghi đè mất dấu.
-   * *Giải pháp T-SQL*: Sử dụng gợi ý khóa `WITH (UPDLOCK, ROWLOCK)` trong lệnh `SELECT` kiểm tra chỗ trống của thủ tục `sp_CreateRentalOrder`. Giao dịch thứ hai buộc phải chờ và nhận thông báo lỗi an toàn khi giao dịch thứ nhất hoàn tất.
-
-2. **Dirty Read (Đọc dữ liệu rác)**:
-   * *Hiện tượng*: Giao dịch B đọc dữ liệu đơn hàng đang được tạo bởi Giao dịch A; sau đó Giao dịch A gặp lỗi và bị ROLLBACK.
-   * *Giải pháp T-SQL*: Áp dụng mức cô lập mặc định `READ COMMITTED` kết hợp giao dịch tường minh `BEGIN TRANSACTION ... COMMIT TRANSACTION`.
-
-3. **Non-Repeatable Read (Đọc không lặp lại được)**:
-   * *Hiện tượng*: Một giao dịch đọc lại cùng một bản ghi trong phiên làm việc nhưng nhận hai giá trị khác nhau do giao dịch khác đã sửa đổi và COMMIT ở giữa chừng.
-   * *Giải pháp T-SQL*: Nâng cấp mức cô lập lên `REPEATABLE READ` hoặc `SERIALIZABLE` đối với các tác vụ tổng hợp doanh thu và đối soát số dư.
-
-4. **Phantom Read (Bản ghi bóng ma)**:
-   * *Hiện tượng*: Một giao dịch truy vấn danh sách khay khả dụng trong khoảng giá trị; một giao dịch khác chèn thêm bản ghi mới thỏa mãn điều kiện đó khiến lần đọc thứ hai xuất hiện bản ghi mới.
-   * *Giải pháp T-SQL*: Sử dụng mức cô lập `SERIALIZABLE` với khóa phạm vi (Range Locks) trong các tác vụ kiểm toán và chốt sổ kỳ kế toán.
+### 1. Kịch Bản 1: Trải Nghiệm Khách Hàng (Customer Journey)
+* **Bước 1 (Khám phá Landing Page)**:
+  * Truy cập [http://localhost:3000](http://localhost:3000).
+  * Chiêm ngưỡng Hero Section buồng kính lập phương 3D và các nút chuyển góc nhìn vi khí hậu.
+  * Cuộn xuống dải số liệu thống kê **Cleanroom Mint & Bio-Emerald** (`120+ Khay Nấm`, `99% VietGAP`, `85.000+ Vi Khí Hậu`, `4 ms T-SQL`).
+* **Bước 2 (Đăng ký thuê khay nấm)**:
+  * Tại mục **Bảng Giá Dịch Vụ FaaS**, chọn 1 trong 3 gói nuôi trồng:
+    * *Gói 1: Bào Ngư Xám (299.000 VNĐ - 30 Ngày)*.
+    * *Gói 2: Linh Chi Đỏ Luxury (899.000 VNĐ - 90 Ngày - Tiêu điểm)*.
+    * *Gói 3: Đông Trùng Hạ Thảo (1.899.000 VNĐ - 60 Ngày)*.
+  * Bấm **Thuê Khay Ngay** -> Điền thông tin giao nhận -> Xác nhận đặt khay.
+  * Hệ thống thực thi thủ tục `sp_CreateRentalOrder` với khóa dòng `UPDLOCK, ROWLOCK`, tự động cấp phát khay trống và bắn hiệu ứng pháo hoa Confetti chúc mừng.
+* **Bước 3 (Giám sát buồng nuôi & Timelapse)**:
+  * Vào **Cổng Khách Hàng Giám Sát Buồng Nấm**:
+    * Thử chuyển 3 góc quay camera PTZ (`Toàn Cảnh Buồng`, `Cận Cảnh Macro 4K`, `Giàn Kệ Vô Trùng`).
+    * Nhấn các nút zoom thu phóng quang học `1x - 2x - 4x`.
+    * Kéo thước tua **Timelapse Sinh Trưởng** từ Ngày 01 -> Ngày 15 -> Ngày 30 để quan sát mầm nấm bung tán thực tế.
+    * Quan sát biểu đồ **Vi Khí Hậu 24h Realtime** biến thiên theo chu kỳ cảm biến.
+* **Bước 4 (Nghiệm thu & Chứng nhận VietGAP)**:
+  * Bấm **Xem Chứng Thực VietGAP**: Mở Giấy chứng nhận xuất xứ số có dấu kiểm định điện tử và mã QR truy xuất CSDL.
+  * Bấm **Yêu Cầu Thu Hoạch Tận Nhà**: Gửi lệnh thu hoạch tức thời qua WebSocket đến màn hình Kỹ thuật viên.
 
 ---
 
-## VI. HƯỚNG DẪN CÀI ĐẶT VÀ KHỞI CHẠY HỆ THỐNG
+### 2. Kịch Bản 2: Trải Nghiệm Kỹ Thuật Viên Vận Hành (Operator Hub)
+* **Bước 1 (Đăng nhập Operator)**:
+  * Truy cập [http://localhost:3000/dang-nhap](http://localhost:3000/dang-nhap).
+  * Đăng nhập tài khoản: `operator1@mushroomcloud.test` / `Password123@`.
+* **Bước 2 (Trung Tâm Điều Hành Trang Trại)**:
+  * Điều hướng đến [http://localhost:3000/operator](http://localhost:3000/operator).
+  * **Ma trận Buồng Nuôi**: Quan sát công suất các buồng vô trùng (RM-01, RM-02, RM-03) với tỷ lệ lấp đầy khay.
+  * **Ma trận Khay Vật Lý**: Quản lý từng ô khay theo mã định danh (TRAY-01, TRAY-02...), theo dõi trạng thái `OCCUPIED`, `AVAILABLE` hoặc `MAINTENANCE`.
+* **Bước 3 (Can thiệp phần cứng & Cảnh báo môi trường)**:
+  * Điều khiển bật/tắt thiết bị buồng sạch: *Quạt hút khí tươi đối lưu*, *Rèm lạnh chống đọng sương*, *Máy siêu âm phun ẩm*.
+  * Tiếp nhận cảnh báo vi khí hậu tự động sinh ra từ **DML Trigger `trg_CheckSensorThresholds`** khi thông số lệch chuẩn.
+  * Bấm **Xử Lý Cảnh Báo** và lưu vết xử lý vào nhật ký kiểm toán hệ thống.
 
-### 1. Yêu cầu môi trường tiền đề
-* Hệ điều hành: Windows 10/11 hoặc Linux (Ubuntu 22.04 LTS).
-* Cơ sở dữ liệu: Microsoft SQL Server 2019/2022 (hoặc SQL Server Express).
-* Môi trường thực thi: Node.js (Phiên bản khuyến nghị LTS v20.x hoặc v22.x).
-* Công cụ dòng lệnh: `sqlcmd` (Microsoft Command Line Utilities for SQL Server).
+---
 
-### 2. Khởi tạo Cơ sở dữ liệu
-Khởi chạy SQL Server Management Studio (SSMS) hoặc cửa sổ dòng lệnh:
+### 3. Kịch Bản 3: Trợ Lý Trí Tuệ Nhân Tạo (MushroomBot AI)
+* **Kích hoạt**: Bấm vào biểu tượng robot **MushroomBot AI** ở góc dưới cùng bên phải màn hình.
+* **Đặt câu hỏi chuyên môn**:
+  * *"Nhiệt độ và độ ẩm thích hợp cho nấm Bào Ngư Xám là bao nhiêu?"*
+  * *"Quy trình kiểm định và chứng nhận nấm VietGAP Loại A hoạt động thế nào?"*
+  * *"Chính sách bảo hiểm 100% sản lượng khi thuê khay nấm ra sao?"*
+* **Quan sát kết quả**:
+  * MushroomBot phản hồi tức thời (độ trễ 0ms) nhờ động cơ ngữ nghĩa nội bộ kết hợp RAG Knowledge Base.
+  * Hiển thị đầy đủ nguồn tài liệu kiểm chứng (Viện Di Truyền Nông Nghiệp, Dược Điển Việt Nam V) cùng danh sách câu hỏi gợi ý thông minh.
+
+---
+
+### 4. Kịch Bản 4: Máy Tính Lợi Nhuận Đầu Tư (ROI Calculator)
+* Truy cập [http://localhost:3000/tinh-loi-nhuan](http://localhost:3000/tinh-loi-nhuan).
+* Kéo thanh trượt số lượng khay thuê và chọn chủng loại nấm.
+* Hệ thống tính toán tức thời:
+  * Tổng chi phí đầu tư ban đầu.
+  * Sản lượng nấm tươi kỳ vọng theo chuẩn VietGAP.
+  * Doanh thu dự kiến khi phân phối lại qua **Sàn Nông Sản FaaS** ([/san-nong-san](http://localhost:3000/san-nong-san)).
+  * Tỷ suất sinh lời ròng (ROI %) và thời gian hoàn vốn minh bạch.
+
+---
+
+## 🔑 Danh Mục Tài Khoản Thử Nghiệm (Demo Credentials)
+
+Mật khẩu chuẩn hóa cho tất cả tài khoản: **`Password123@`**
+
+| Vai trò (Role) | Họ và Tên | Tên đăng nhập / Email | Quyền hạn và phạm vi demo |
+| :--- | :--- | :--- | :--- |
+| **Quản trị viên (Admin)** | Nguyễn Quản Trị | `admin@mushroomcloud.test` | Toàn quyền cấu hình buồng nuôi, xem báo cáo doanh thu tài chính, quản lý người dùng |
+| **Kỹ thuật viên (Operator)** | Trần Kỹ Thuật | `operator1@mushroomcloud.test` | Điều khiển thiết bị nhà kính, quản lý khay nuôi, xử lý cảnh báo vi khí hậu tại `/operator` |
+| **Kỹ thuật viên (Operator)** | Lê Vận Hành | `operator2@mushroomcloud.test` | Giám sát trạng thái bảo trì, lập nhật ký sinh trưởng và quét mã QR |
+| **Khách hàng (Customer)** | Phạm Minh An | `customer1@mushroomcloud.test` | Đặt thuê khay nấm, giám sát telemetry, xem Giấy chứng nhận VietGAP, yêu cầu thu hoạch |
+| **Khách hàng (Customer)** | Võ Thu Hà | `customer2@mushroomcloud.test` | Theo dõi lịch sử hợp đồng và dữ liệu cảm biến thời gian thực |
+
+---
+
+## 🛠️ Hướng Dẫn Cài Đặt Và Khởi Chạy Nhanh (1-Click Launchers)
+
+### 1. Yêu cầu môi trường
+* **Hệ điều hành**: Windows 10/11 hoặc Linux (Ubuntu 22.04 LTS).
+* **Cơ sở dữ liệu**: Microsoft SQL Server 2019/2022 (hoặc SQL Server Express `.\SQLEXPRESS01`).
+* **Môi trường thực thi**: Node.js (Khuyến nghị LTS v20.x hoặc v22.x).
+* **Công cụ dòng lệnh**: `sqlcmd` (Microsoft Command Line Utilities for SQL Server).
+
+### 2. Khởi tạo Cơ sở Dữ liệu
 ```bash
-# Thực thi nạp toàn bộ cấu trúc và dữ liệu mẫu
+# Thực thi nạp toàn bộ cấu trúc bảng, logic T-SQL và dữ liệu mẫu
 sqlcmd -S .\SQLEXPRESS01 -d master -E -C -I -i database/01_schema.sql
 sqlcmd -S .\SQLEXPRESS01 -d SmartMushroomDB -E -C -I -i database/02_tsql_logic.sql
 sqlcmd -S .\SQLEXPRESS01 -d SmartMushroomDB -E -C -I -i database/03_seed_data.sql
 sqlcmd -S .\SQLEXPRESS01 -d SmartMushroomDB -E -C -I -i database/04_indexing_and_performance.sql
 ```
 
-### 3. Khởi chạy nhanh bằng công cụ tự động hóa (1-Click Launchers)
-Dự án đã tích hợp sẵn các tập lệnh batch tiện ích tại thư mục gốc:
+### 3. Khởi chạy 1-Click bằng Batch Script (Windows)
+```cmd
+# Khởi chạy toàn diện với menu tương tác
+Chay_He_Thong.bat
 
-* **Khởi chạy hệ thống toàn diện**:
-  ```cmd
-  Chay_He_Thong.bat
-  ```
-  Cung cấp menu điều khiển tương tác đa chế độ:
-  * `[1]` Khởi chạy môi trường phát triển cục bộ (Backend Port 5000 + Frontend Port 3000).
-  * `[2]` Khởi chạy cụm dịch vụ qua Docker Compose với chuỗi Healthcheck phụ thuộc.
-  * `[3]` Thực thi bộ kiểm thử tự động toàn diện.
-  * `[4]` Giải phóng các cổng mạng 3000 và 5000 bị chiếm dụng.
+# Hoặc khởi chạy chế độ siêu nhẹ cửa sổ ẩn (trực tiếp mở trình duyệt)
+Chay_Noi_Bo_Sieu_Nhe.bat
+```
 
-* **Khởi chạy chế độ siêu nhẹ (Minimized Background)**:
-  ```cmd
-  Chay_Noi_Bo_Sieu_Nhe.bat
+### 4. Khởi chạy thủ công bằng lệnh
+* **Khởi động Backend (Port 5000)**:
+  ```bash
+  cd backend
+  npm install
+  npm run dev
   ```
-  Tự động giải phóng cổng, khởi động backend và frontend ở chế độ cửa sổ thu nhỏ, trực tiếp điều hướng đến trình duyệt mà không gây rối màn hình làm việc.
+* **Khởi động Frontend (Port 3000)**:
+  ```bash
+  cd frontend
+  npm install
+  npm run dev
+  ```
 
 ---
 
-## VII. BỘ KIỂM THỬ TỰ ĐỘNG VÀ XÁC MINH TOÀN VẸN (TESTING SUITE)
+## 🧪 Bộ Kiểm Thử Tự Động Toàn Diện (Testing Suite)
 
-Hệ thống tích hợp quy trình kiểm thử lặp lại nghiêm ngặt nhằm đảm bảo tính ổn định tuyệt đối trước Hội đồng chấm:
+Hệ thống tích hợp quy trình kiểm thử tự động nghiêm ngặt nhằm đảm bảo tính toàn vẹn và khả năng xử lý tương tranh 100%:
 
 ### 1. Lệnh thực thi kiểm thử 1-Click
-```cmd
-run-automated-tests.bat
-```
-Hoặc chạy trực tiếp qua Node.js:
 ```bash
 node scripts/test-runner.js
 ```
+*(Hoặc click đúp chuột vào tệp `run-automated-tests.bat`)*
 
-### 2. Ma trận 6 kịch bản kiểm thử tự động
+### 2. Ma trận 6 kịch bản kiểm thử T-SQL
 Bộ kiểm thử tự động thực hiện **3 vòng lặp liên tiếp** (tổng cộng 18 lượt kiểm tra độc lập):
 1. `tests/test_end_to_end_lifecycle.sql`: Xác minh chu trình 8 bước khép kín từ đặt khay, gán QR, kích hoạt vi khí hậu đến thu hoạch và thanh lý.
 2. `tests/test_sp_create_rental_order.sql`: Kiểm tra tính toàn vẹn của nghiệp vụ tạo đơn thuê và cập nhật trạng thái khay.
@@ -216,28 +216,18 @@ Bộ kiểm thử tự động thực hiện **3 vòng lặp liên tiếp** (t�
 5. `tests/test_sp_harvest_and_qr.sql`: Kiểm tra quy trình quét mã QR và chốt sản lượng thu hoạch thực tế.
 6. `tests/test_audit_and_security.sql`: Kiểm tra tính bảo mật, ghi nhật ký vết kiểm toán và bảo vệ dữ liệu.
 
-**Kết quả tiêu chuẩn**: **18/18 lượt kiểm thử đạt 100% (ALL PASS)**. Nhật ký chi tiết được kết xuất tự động tại file `test-report.log`.
+> **Kết quả đạt chuẩn**: **18/18 lượt kiểm thử PASS 100%**. Báo cáo chi tiết được ghi tự động tại [test-report.log](./test-report.log).
 
 ---
 
-## VIII. DANH MỤC TÀI KHOẢN MẪU PHỤC VỤ ĐÁNH GIÁ (DEMO CREDENTIALS)
+## 📚 Tài Liệu Kỹ Thuật Chuyên Sâu
 
-Tất cả tài khoản thử nghiệm được khởi tạo sẵn với mật khẩu mặc định: **`Password123@`**
-
-| Nhóm quyền (RBAC) | Họ và Tên | Tên đăng nhập / Email | Phạm vi thao tác chính |
-| :--- | :--- | :--- | :--- |
-| **Quản trị viên (Admin)** | Nguyễn Quản Trị | `admin@mushroomcloud.test` | Toàn quyền cấu hình buồng nuôi, xem báo cáo doanh thu tài chính và quản trị tài khoản |
-| **Kỹ thuật viên (Operator)** | Trần Kỹ Thuật | `operator1@mushroomcloud.test` | Điều khiển thiết bị nhà kính, quét mã QR khay nuôi, xử lý sự cố cảnh báo vi khí hậu |
-| **Kỹ thuật viên (Operator)** | Lê Vận Hành | `operator2@mushroomcloud.test` | Giám sát trạng thái bảo trì và lập nhật ký sinh trưởng |
-| **Khách hàng (Customer)** | Phạm Minh An | `customer1@mushroomcloud.test` | Đặt thuê khay nấm, giám sát telemetry, xem Giấy chứng nhận VietGAP và yêu cầu thu hoạch |
-| **Khách hàng (Customer)** | Võ Thu Hà | `customer2@mushroomcloud.test` | Theo dõi lịch sử hợp đồng và dữ liệu cảm biến thời gian thực |
+* 📖 [docs/operator_api.md](docs/operator_api.md): Đặc tả chi tiết 6 REST API trung tâm điều hành cho Kỹ thuật viên & Admin.
+* 🛡️ [docs/AUTH_RBAC_SPECIFICATION.md](docs/AUTH_RBAC_SPECIFICATION.md): Đặc tả kiến trúc phân quyền RBAC và bảo vệ HttpOnly Cookie.
+* 📡 [docs/IOT_BINARY_PROTOCOL_SPEC.md](docs/IOT_BINARY_PROTOCOL_SPEC.md): Đặc tả giao thức truyền thông nhị phân cảm biến IoT buồng sạch.
+* 🌐 [HUONG_DAN_VAN_HANH_PRODUCTION.md](HUONG_DAN_VAN_HANH_PRODUCTION.md): Sổ tay hướng dẫn triển khai sản xuất trên VPS với PM2, Nginx và Docker.
+* 📑 [DEMO_GUIDE.md](DEMO_GUIDE.md) & [DEMO_SCRIPT.md](DEMO_SCRIPT.md): Cẩm nang chuẩn bị và kịch bản thuyết trình chi tiết từng phút.
 
 ---
 
-## IX. CÁC TÀI LIỆU KỸ THUẬT KÈM THEO
-
-* [DEMO_GUIDE.md](./DEMO_GUIDE.md): Cẩm nang chi tiết các bước vận hành và chuẩn bị hệ thống trước Hội đồng.
-* [DEMO_SCRIPT.md](./DEMO_SCRIPT.md): Kịch bản thuyết trình bảo vệ đồ án từng phút.
-* [HUONG_DAN_VAN_HANH_PRODUCTION.md](./HUONG_DAN_VAN_HANH_PRODUCTION.md): Sổ tay hướng dẫn triển khai thực tế trên máy chủ VPS, cấu hình PM2, Nginx và lịch trình sao lưu CSDL.
-* [scripts/tai-khoan-demo.txt](./scripts/tai-khoan-demo.txt): Bảng tóm tắt tài khoản demo định dạng plain text tiện sao chép.
-* [scripts/ma-tran-quyen.txt](./scripts/ma-tran-quyen.txt): Ma trận phân quyền truy xuất dữ liệu chi tiết theo từng vai trò.
+© 2026 **MushroomCloud Platform**. Bản quyền thuộc về Đội ngũ Phát triển Nông Trại Nấm Thông Minh FaaS.
