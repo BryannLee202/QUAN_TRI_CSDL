@@ -14,6 +14,7 @@ import { isDeviceOn } from "@/components/operator/deviceState";
 import { MOCK_ALERTS, MOCK_DEVICES, MOCK_ROOMS, MOCK_TRAYS } from "@/components/operator/mockData";
 import type { AlertItem, DeviceState, RoomOption, TrayCell } from "@/components/operator/types";
 import { useOperatorSocket } from "@/hooks/useOperatorSocket";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   getOperatorAlertsApi,
   getOperatorRoomsApi,
@@ -24,6 +25,7 @@ import {
 } from "@/services/api";
 
 export default function OperatorPage() {
+  const { user, isAdmin, isOperator, isAuthenticated, openAuthModal } = useAuth();
   const [rooms, setRooms] = useState<RoomOption[]>(MOCK_ROOMS);
   const [roomId, setRoomId] = useState<number>(MOCK_ROOMS[0].roomId);
   const [alerts, setAlerts] = useState<AlertItem[]>(MOCK_ALERTS);
@@ -130,10 +132,18 @@ export default function OperatorPage() {
   // 3. Xử lý điều khiển thiết bị (Lưu vào CSDL DeviceActionLogs)
   const toggleDevice = useCallback(
     async (deviceType: string, next: boolean) => {
+      // Kiểm tra quyền hạn RBAC
+      if (!isAdmin && !isOperator) {
+        setActionNotice("Từ chối: Thao tác bật/tắt thiết bị buồng nuôi yêu cầu tài khoản Quản trị viên hoặc Kỹ thuật viên!");
+        setTimeout(() => setActionNotice(null), 4000);
+        openAuthModal("login");
+        return;
+      }
+
       // Cập nhật lạc quan trên giao diện
       setDevices((prev) => ({
         ...prev,
-        [`${roomId}:${deviceType}`]: { on: next, actionState: next ? "ON" : "OFF", triggeredBy: "OPERATOR" },
+        [`${roomId}:${deviceType}`]: { on: next, actionState: next ? "ON" : "OFF", triggeredBy: user?.fullName || "OPERATOR" },
       }));
 
       try {
@@ -141,7 +151,7 @@ export default function OperatorPage() {
           roomId,
           deviceType,
           actionState: next ? "ON" : "OFF",
-          triggeredBy: "OPERATOR",
+          triggeredBy: user?.fullName || "OPERATOR",
           notes: `Kỹ thuật viên can thiệp phần cứng buồng ${roomId}`,
         });
         setActionNotice(`Đã chuyển trạng thái ${deviceType} buồng ${roomId} sang ${next ? "BẬT" : "TẮT"}`);
@@ -150,7 +160,7 @@ export default function OperatorPage() {
         console.error("Lỗi cập nhật thiết bị về CSDL:", err);
       }
     },
-    [roomId]
+    [roomId, isAdmin, isOperator, user, openAuthModal]
   );
 
   // 4. Đánh dấu xử lý cảnh báo (Lưu vào CSDL SensorAlerts)
@@ -173,6 +183,13 @@ export default function OperatorPage() {
   // 5. Cập nhật trạng thái khay (Bảo dưỡng / Sẵn sàng)
   const handleToggleTrayStatus = async () => {
     if (!selectedTray || isUpdatingTray) return;
+
+    if (!isAdmin && !isOperator) {
+      alert("Từ chối: Thao tác chuyển đổi trạng thái bảo dưỡng khay yêu cầu tài khoản Quản trị viên (Admin) hoặc Kỹ thuật viên (Operator)!");
+      openAuthModal("login");
+      return;
+    }
+
     const nextStatus = selectedTray.status === "MAINTENANCE" ? "AVAILABLE" : "MAINTENANCE";
 
     setIsUpdatingTray(true);
@@ -255,6 +272,32 @@ export default function OperatorPage() {
           <ThemeToggle />
         </div>
       </header>
+
+      {/* Cảnh báo phân quyền RBAC nếu không phải Admin/Operator */}
+      {!isAdmin && !isOperator && (
+        <div className="mb-6 p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-200 flex flex-wrap items-center justify-between gap-3 text-xs shadow-xs animate-fade-in">
+          <div className="flex items-center gap-3">
+            <span className="w-8 h-8 rounded-xl bg-amber-200 dark:bg-amber-900 text-amber-900 dark:text-amber-100 flex items-center justify-center font-bold shrink-0">
+              🔒
+            </span>
+            <div>
+              <strong className="block font-bold text-[13px]">
+                {isAuthenticated ? `Chế Độ Khách Hàng (Tài khoản: ${user?.fullName})` : "Chế Độ Khách Tham Quan (Chưa Đăng Nhập)"}
+              </strong>
+              <p className="text-[11px] text-amber-800 dark:text-amber-300 mt-0.5">
+                Bạn đang ở chế độ Chỉ Xem (View-Only). Quyền can thiệp rơ-le phần cứng IoT buồng nuôi và điều phối bảo dưỡng khay được khóa an toàn theo tiêu chuẩn RBAC.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => openAuthModal("login")}
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#C28E58] to-[#8A5C38] hover:from-[#B37F49] hover:to-[#704627] text-white font-bold transition shadow-xs shrink-0 flex items-center gap-1.5"
+          >
+            <span>Đăng Nhập Admin / Operator</span>
+            <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3.333 8h9.334M8.667 4l4 4-4 4"/></svg>
+          </button>
+        </div>
+      )}
 
       {/* Lưới Quản Lý Chính */}
       <div className="grid gap-6 lg:grid-cols-3">
