@@ -80,20 +80,27 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative bg-gradient-to-b from-[#FDFBF8] via-[#F8F3EC] to-[#FDFBF8] dark:from-[#170E08] dark:via-[#140D07] dark:to-[#170E08] text-[#24170E] dark:text-[#F7EFE6] py-12 sm:py-20 px-6 overflow-hidden transition-colors">
+    <section className="relative bg-gradient-to-b from-[#FDFBF8] via-[#F8F3EC] to-[#FDFBF8] dark:from-[#170E08] dark:via-[#140D07] dark:to-[#170E08] text-[#24170E] dark:text-[#F7EFE6] pt-6 sm:pt-10 pb-12 sm:pb-20 px-6 overflow-hidden transition-colors">
       {/* Background Subtle Warm Caramel Glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#E5D7C3]/40 dark:bg-[#3B2516]/15 blur-3xl pointer-events-none rounded-full" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Top Split: 2-Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           
           {/* Cột Trái: Tiêu đề, Thông điệp & CTA */}
-          <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
-            {/* Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FAF5EE] dark:bg-[#2B1C13] border border-[#E0D3C1] dark:border-[#543825] text-xs font-semibold text-[#6E4B33] dark:text-[#E2BA78] shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-[#C28E58] animate-ping"></span>
-              <span>Nền Tảng Nông Trại Nấm Thông Minh FaaS</span>
+          <div className="lg:col-span-6 space-y-5 text-center lg:text-left pt-1">
+            {/* High-End Telemetry Pill Badge */}
+            <div className="inline-flex flex-wrap items-center gap-2 px-4 py-2 rounded-full bg-white/90 dark:bg-[#20140D]/90 border border-[#E0D3C1] dark:border-[#543825] text-xs font-semibold text-[#523522] dark:text-[#E2BA78] shadow-xs backdrop-blur-xs">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C28E58] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C28E58]"></span>
+              </span>
+              <span className="text-[#3A2315] dark:text-[#F5E6D0] font-bold">Vận Hành 24/7</span>
+              <span className="text-[#C28E58]">•</span>
+              <span>120 Buồng Nuôi ISO Class 5</span>
+              <span className="text-[#C28E58] hidden sm:inline">•</span>
+              <span className="text-[#7A573C] dark:text-[#D1B89D] hidden sm:inline">AI Llama-3.1-8B Giám Sát</span>
             </div>
 
             {/* Headline chính */}
@@ -109,21 +116,21 @@ export default function HeroSection() {
               Trải nghiệm mô hình nuôi trồng nấm dược liệu công nghệ cao khép kín chuẩn ISO: Thuê khay nấm trực tuyến, giám sát vi khí hậu 24/7 qua cảm biến IoT & Camera Live Stream, nhận nấm tươi thu hoạch tận nhà.
             </p>
 
-            {/* Cụm Nút CTA Kép - Phối màu Emerald Bio & Bronze Champagne */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-2">
+            {/* Cụm Nút CTA Kép - Phương án 1: Deep Espresso & Champagne Gold */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-1">
               <a
                 href="#packages"
-                className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#1B3F2A] via-[#2A5C3D] to-[#B57C3E] hover:from-[#132E1F] hover:to-[#9E6A33] text-white font-bold text-sm shadow-md shadow-[#1B3F2A]/25 hover:shadow-xl transition transform hover:-translate-y-0.5 flex items-center gap-2"
+                className="px-6 py-3.5 rounded-xl bg-[#24170E] hover:bg-[#382417] text-white font-bold text-sm border border-[#C28E58]/35 shadow-lg shadow-[#24170E]/20 hover:shadow-xl hover:border-[#C28E58] transition duration-200 transform hover:-translate-y-0.5 flex items-center gap-2.5 group"
               >
                 <span>Thuê Khay Ngay (Khám Phá)</span>
-                <span>→</span>
+                <span className="text-[#E2BA78] group-hover:translate-x-0.5 transition-transform font-bold">→</span>
               </a>
 
               <a
                 href="#portal"
-                className="px-6 py-3.5 rounded-xl bg-white dark:bg-[#20140D] hover:bg-[#FAF5EE] dark:hover:bg-[#2B1C13] text-[#4A3222] dark:text-[#F7EFE6] font-bold text-sm border border-[#E0D3C1] dark:border-[#543825] shadow-xs transition flex items-center gap-2 group"
+                className="px-6 py-3.5 rounded-xl bg-white/90 dark:bg-[#20140D]/90 hover:bg-[#FAF5EE] dark:hover:bg-[#2B1C13] text-[#4A3222] dark:text-[#F7EFE6] font-bold text-sm border border-[#E0D3C1] dark:border-[#543825] hover:border-[#C28E58]/60 shadow-xs transition duration-200 flex items-center gap-2 group"
               >
-                <span className="relative flex items-center justify-center text-[#1B3F2A] dark:text-emerald-400">
+                <span className="relative flex items-center justify-center text-[#8C5A37] dark:text-[#E2BA78]">
                   <svg className="w-4 h-4 transition-transform group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="m22 8-6 4 6 4V8Z" />
                     <rect width="14" height="12" x="2" y="6" rx="2" ry="2" />
@@ -132,7 +139,6 @@ export default function HeroSection() {
                 <span>Xem Demo Camera Trực Tiếp</span>
               </a>
             </div>
-
 
           </div>
 
