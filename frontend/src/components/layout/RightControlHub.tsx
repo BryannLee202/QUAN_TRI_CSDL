@@ -224,9 +224,9 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                     <Link
                       href="/operator"
                       onClick={onClose}
-                      className="col-span-2 py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs text-center transition flex items-center justify-center gap-1.5 shadow-xs"
+                      className="col-span-2 py-2 px-3 rounded-xl bg-[#24170E] hover:bg-[#382417] text-white font-bold text-xs text-center border border-[#C28E58]/35 transition flex items-center justify-center gap-1.5 shadow-sm shadow-[#24170E]/20"
                     >
-                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg className="w-3.5 h-3.5 text-[#E2BA78]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <rect width="20" height="14" x="2" y="3" rx="2" />
                         <line x1="8" x2="16" y1="21" y2="21" />
                         <line x1="12" x2="12" y1="17" y2="21" />
@@ -270,10 +270,10 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                       onClose();
                       openAuthModal('register');
                     }}
-                    className="py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#1B3F2A] to-[#2A5C3D] hover:from-[#132E1F] hover:to-[#1B3F2A] text-white font-bold text-xs text-center transition shadow-xs flex items-center justify-center gap-1"
+                    className="py-2.5 px-3 rounded-xl bg-[#24170E] hover:bg-[#382417] text-white font-bold text-xs text-center border border-[#C28E58]/35 transition shadow-sm shadow-[#24170E]/20 flex items-center justify-center gap-1"
                   >
                     <span>Tạo Tài Khoản</span>
-                    <span>→</span>
+                    <span className="text-[#E2BA78] font-bold">→</span>
                   </button>
                 </div>
               </div>
