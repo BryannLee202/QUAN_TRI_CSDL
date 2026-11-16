@@ -19,3 +19,8 @@ Mỗi khi có thay đổi mã nguồn, tính năng hoặc giao diện mới cầ
 4. **Quy Chuẩn Danh Tính (Zero Co-Author)**:
    - Cả `GIT_AUTHOR` và `GIT_COMMITTER` phải trùng khớp 100% tên và email của thành viên tương ứng.
    - Tuyệt đối không thêm dòng `Co-authored-by`.
+
+## 3. Quy Tắc Áp Dụng Kỹ Năng (Skills Enforcement)
+- **Tự động kích hoạt kỹ năng**: Luôn kiểm tra danh mục kỹ năng (Skills) đã cài đặt tại `~/.gemini/config/skills/` và `.agents/skills/` (ví dụ: `mobile-app-testing`, `webapp-testing`, `reverse-engineer-anything`, `frontend-design`, `docx`, `xlsx`, `pptx`, `pdf`, `claude-api`,...).
+- **Tuân thủ quy trình chuẩn**: Bất kỳ khi nào tác vụ liên quan đến kiểm thử (web, mobile apk), thiết kế giao diện, xuất tài liệu hoặc dịch ngược mã nguồn, AI bắt buộc phải đọc và tuân thủ các bước chỉ dẫn trong tệp `SKILL.md` của skill tương ứng trước khi phản hồi hoặc thực thi.
+- **Không tự ý bỏ qua**: Tuyệt đối không phỏng đoán hay tự ý làm tắt khi đã có quy trình chuẩn trong Skill.
