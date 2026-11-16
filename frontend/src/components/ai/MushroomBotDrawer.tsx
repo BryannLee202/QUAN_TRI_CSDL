@@ -188,9 +188,9 @@ export default function MushroomBotDrawer({ isOpen, onClose }: MushroomBotDrawer
 
           {isTyping && (
             <div className="flex items-center gap-2 text-[#735843] dark:text-[#DAC7B5] text-xs p-2.5 bg-white dark:bg-[#1E130B] rounded-2xl border border-[#EAE1D3] dark:border-[#38261A] w-fit shadow-2xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce"></span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce [animation-delay:0.2s]"></span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce [animation-delay:0.4s]"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] animate-bounce"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] animate-bounce [animation-delay:0.2s]"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] animate-bounce [animation-delay:0.4s]"></span>
               <span className="text-[11px] font-medium">Llama-3.1-8B đang suy luận dữ liệu...</span>
             </div>
           )}
