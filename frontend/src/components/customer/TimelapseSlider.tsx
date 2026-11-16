@@ -22,7 +22,7 @@ export default function TimelapseSlider() {
       return {
         stageName: 'Giai Đoạn 2: Kích Ẩm & Hình Thành Quả Thể',
         statusText: 'Các mầm nấm (ghim nấm) nhú đều, bung tán đồng loạt dưới luồng sương siêu âm đối lưu.',
-        image: '/images/hero-chamber-fullbleed-white.jpg',
+        image: '/images/hero-chamber-champagne.jpg',
         badge: 'Phát Triển Mũ Nấm',
         metrics: 'Độ ẩm: 92% • T: 23.8°C • CO₂: 620 ppm',
       };

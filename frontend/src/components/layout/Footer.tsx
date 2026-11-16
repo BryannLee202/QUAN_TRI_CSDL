@@ -115,6 +115,18 @@ export default function Footer() {
                 <svg className="w-4 h-4 text-[#C28E58] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                 <span>contact@mushroomcloud.vn</span>
               </div>
+              <div className="flex items-start gap-2 pt-1">
+                <svg className="w-4 h-4 text-[#C28E58] shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span>Khoa CNTT, ĐH Sư Phạm Kỹ Thuật TP.HCM (HCMUTE)</span>
+              </div>
+
+              {/* Server Telemetry Badge */}
+              <div className="pt-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#FAF5EE] dark:bg-[#1C120C] border border-[#DECFC0] dark:border-[#422C1D] text-[11px] font-mono text-[#523522] dark:text-[#E2BA78]">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span>Hệ Thống CSDL: 99.98% Uptime</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
