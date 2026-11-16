@@ -78,6 +78,26 @@ export default function StatsSection() {
               <div className="text-3xl md:text-4xl font-extrabold text-[#362113] dark:text-[#FFF5EA] tracking-tight">
                 <CountUp target={s.value} suffix={s.suffix} />
               </div>
+              {idx === 0 && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 mt-2">
+                  IoT Khép Kín
+                </span>
+              )}
+              {idx === 1 && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 mt-2">
+                  Chuẩn VietGAP Loại A
+                </span>
+              )}
+              {idx === 2 && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950/80 text-sky-800 dark:text-sky-300 mt-2">
+                  WebSocket 5s/lần
+                </span>
+              )}
+              {idx === 3 && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 mt-2">
+                  T-SQL ROWLOCK
+                </span>
+              )}
               <h4 className="text-sm font-bold text-[#24170E] dark:text-[#F3E5D4] mt-2">
                 {s.label}
               </h4>

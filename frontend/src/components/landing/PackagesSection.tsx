@@ -149,9 +149,9 @@ export default function PackagesSection() {
               {/* Hàng Tiêu Đề Phụ & Huy Hiệu Độc Lập Chống Đè Chữ */}
               <div className="flex items-center justify-between gap-2 min-h-[28px]">
                 {pkg.isPopular ? (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-[#523522] via-[#6B442C] to-[#8C5A37] text-[#FFF7EC] text-[11px] font-black uppercase tracking-wider shadow-sm border border-[#C28E58]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#E2BA78]"></span>
-                    Ưa Chuộng Nhất
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-800 via-emerald-700 to-[#C28E58] text-white text-[11px] font-black uppercase tracking-wider shadow-sm border border-emerald-400/50">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-ping"></span>
+                    Ưa Chuộng Nhất • FaaS
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FAF5EE] dark:bg-[#2B1C13] text-[#735843] dark:text-[#DAC7B5] text-[11px] font-semibold border border-[#DECFC0] dark:border-[#422C1D]">
@@ -182,7 +182,7 @@ export default function PackagesSection() {
 
               <div className="bg-[#FAF5EE] dark:bg-[#2B1C13] p-3 rounded-xl text-xs font-semibold text-[#4A3222] dark:text-[#E2BA78] flex items-center justify-between border border-[#E0D3C1] dark:border-[#543825]">
                 <span className="flex items-center gap-1.5">
-                  <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
                     <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
                     <path d="M7 21h10"/>
@@ -191,13 +191,13 @@ export default function PackagesSection() {
                   </svg>
                   <span>Cam kết sản lượng:</span>
                 </span>
-                <span className="text-[#8C5A37] dark:text-[#FFF5EA] font-bold">{pkg.expectedYield}</span>
+                <span className="text-emerald-700 dark:text-emerald-300 font-bold">{pkg.expectedYield}</span>
               </div>
 
               <ul className="space-y-3 pt-2 text-xs sm:text-sm text-[#5C4231] dark:text-[#DAC7B5]">
                 {pkg.features.map((ft, idx) => (
                   <li key={idx} className="flex items-start gap-2.5">
-                    <span className="w-4 h-4 rounded-full bg-[#FAF5EE] dark:bg-[#2B1C13] text-[#C28E58] border border-[#E0D3C1] dark:border-[#543825] font-bold flex items-center justify-center text-[10px] shrink-0 mt-0.5">
+                    <span className="w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-700 font-bold flex items-center justify-center text-[10px] shrink-0 mt-0.5">
                       ✓
                     </span>
                     <span>{ft}</span>
@@ -210,11 +210,11 @@ export default function PackagesSection() {
               onClick={() => openBookingModal(pkg)}
               className={`mt-8 w-full py-3.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition transform active:scale-95 shadow-sm ${
                 pkg.isPopular
-                  ? "bg-gradient-to-r from-[#523522] to-[#361F12] hover:from-[#3D2517] hover:to-[#24140B] text-white shadow-[#523522]/20"
+                  ? "bg-gradient-to-r from-[#047857] via-[#059669] to-[#C28E58] hover:from-[#065F46] hover:to-[#A67543] text-white shadow-lg shadow-emerald-900/20"
                   : "bg-[#2B1B11] dark:bg-[#38261A] hover:bg-[#1C120C] dark:hover:bg-[#4D3322] text-[#FFF7EC]"
               }`}
             >
-              Đăng Ký Thuê Ngay
+              Đăng Ký Thuê Ngay →
             </button>
           </TiltCard>
         ))}
