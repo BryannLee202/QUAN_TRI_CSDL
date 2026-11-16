@@ -152,7 +152,7 @@ export default function OperatorPage() {
           deviceType,
           actionState: next ? "ON" : "OFF",
           triggeredBy: user?.fullName || "OPERATOR",
-          details: `Kỹ thuật viên can thiệp phần cứng buồng ${roomId}`,
+          notes: `Kỹ thuật viên can thiệp phần cứng buồng ${roomId}`,
         });
         setActionNotice(`Đã chuyển trạng thái ${deviceType} buồng ${roomId} sang ${next ? "BẬT" : "TẮT"}`);
         setTimeout(() => setActionNotice(null), 3500);
