@@ -4,6 +4,7 @@ import NetworkStatusBanner from "../components/NetworkStatusBanner";
 import { LanguageProvider } from "../context/LanguageContext";
 import { AuthProvider } from "../contexts/AuthContext";
 import AuthModalWrapper from "../components/auth/AuthModalWrapper";
+import BotFloatingAction from "../components/ai/BotFloatingAction";
 
 export const metadata: Metadata = {
   title: "MushroomCloud - Nông Nghiệp Thông Minh FaaS",
@@ -23,6 +24,8 @@ export default function RootLayout({
           svg { max-width: 100%; }
           .logo-box { width: 40px !important; height: 40px !important; min-width: 40px !important; min-height: 40px !important; max-width: 40px !important; max-height: 40px !important; flex-shrink: 0 !important; }
           .logo-svg { width: 28px !important; height: 28px !important; max-width: 28px !important; max-height: 28px !important; display: block !important; }
+          .bento-icon-box { width: 48px !important; height: 48px !important; min-width: 48px !important; min-height: 48px !important; max-width: 48px !important; max-height: 48px !important; flex-shrink: 0 !important; }
+          .bento-svg { width: 28px !important; height: 28px !important; max-width: 28px !important; max-height: 28px !important; display: block !important; }
           img { max-width: 100%; height: auto; }
         `}} />
       </head>
@@ -32,6 +35,7 @@ export default function RootLayout({
             <NetworkStatusBanner />
             {children}
             <AuthModalWrapper />
+            <BotFloatingAction />
           </AuthProvider>
         </LanguageProvider>
       </body>

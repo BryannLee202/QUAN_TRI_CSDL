@@ -356,8 +356,8 @@ export default function HeroSection() {
           {/* Card 1: Mô hình Farm-as-a-Service */}
           <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-[#C28E58] transition-all duration-300 flex items-start gap-4 group">
             {/* Icon Tile: Buồng Kính Vô Trùng Smart FaaS Thực Tế */}
-            <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#FAF3EA] via-[#F4E8D8] to-[#E8D4BB] dark:from-[#3D2517] dark:via-[#2B190E] dark:to-[#1A0F08] border border-[#D9C4AB] dark:border-[#5C3822] flex items-center justify-center shrink-0 shadow-md shadow-[#C28E58]/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2.5">
-              <svg className="w-full h-full" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="bento-icon-box w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-2xl bg-gradient-to-br from-[#FAF3EA] via-[#F4E8D8] to-[#E8D4BB] dark:from-[#3D2517] dark:via-[#2B190E] dark:to-[#1A0F08] border border-[#D9C4AB] dark:border-[#5C3822] flex items-center justify-center shrink-0 shadow-md shadow-[#C28E58]/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2">
+              <svg className="bento-svg w-7 h-7" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="faas-glass-grad" x1="4" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse">
                     <stop stopColor="#C28E58" />
@@ -386,7 +386,7 @@ export default function HeroSection() {
                 <circle cx="18" cy="17" r="0.6" fill="#FFF5EA" />
               </svg>
             </div>
-            <div>
+            <div className="flex-1 min-w-0">
               <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA] group-hover:text-[#6B442C] dark:group-hover:text-[#E2BA78] transition-colors">
                 Mô hình Farm-as-a-Service
               </h4>
@@ -399,8 +399,8 @@ export default function HeroSection() {
           {/* Card 2: Cảm Biến IoT Realtime */}
           <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-emerald-600 transition-all duration-300 flex items-start gap-4 group">
             {/* Icon Tile: Chip Cảm Biến Vi Điện Tử Bio-Tech Đa Kênh */}
-            <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#ECFDF5] via-[#D1FAE5] to-[#A7F3D0] dark:from-[#064E3B]/80 dark:via-[#065F46]/60 dark:to-[#022C22] border border-emerald-300/80 dark:border-emerald-700/60 flex items-center justify-center shrink-0 shadow-md shadow-emerald-900/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2.5">
-              <svg className="w-full h-full" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="bento-icon-box w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-2xl bg-gradient-to-br from-[#ECFDF5] via-[#D1FAE5] to-[#A7F3D0] dark:from-[#064E3B]/80 dark:via-[#065F46]/60 dark:to-[#022C22] border border-emerald-300/80 dark:border-emerald-700/60 flex items-center justify-center shrink-0 shadow-md shadow-emerald-900/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2">
+              <svg className="bento-svg w-7 h-7" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="iot-chip-grad" x1="8" y1="8" x2="24" y2="24" gradientUnits="userSpaceOnUse">
                     <stop stopColor="#059669" />
@@ -420,7 +420,7 @@ export default function HeroSection() {
                 <circle cx="16" cy="16" r="3.5" stroke="#A7F3D0" strokeWidth="0.8" strokeDasharray="1.5 1.5" />
               </svg>
             </div>
-            <div>
+            <div className="flex-1 min-w-0">
               <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA] group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
                 Cảm Biến IoT Realtime
               </h4>
@@ -433,8 +433,8 @@ export default function HeroSection() {
           {/* Card 3: Camera Trực Tuyến 24/7 */}
           <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-sky-600 transition-all duration-300 flex items-start gap-4 group">
             {/* Icon Tile: Ống Kính Camera PTZ 4K Siêu Nét */}
-            <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#F0F9FF] via-[#E0F2FE] to-[#BAE6FD] dark:from-[#0C4A6E]/80 dark:via-[#075985]/60 dark:to-[#082F49] border border-sky-300/80 dark:border-sky-700/60 flex items-center justify-center shrink-0 shadow-md shadow-sky-900/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2.5">
-              <svg className="w-full h-full" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="bento-icon-box w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-2xl bg-gradient-to-br from-[#F0F9FF] via-[#E0F2FE] to-[#BAE6FD] dark:from-[#0C4A6E]/80 dark:via-[#075985]/60 dark:to-[#082F49] border border-sky-300/80 dark:border-sky-700/60 flex items-center justify-center shrink-0 shadow-md shadow-sky-900/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2">
+              <svg className="bento-svg w-7 h-7" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="cam-lens-grad" x1="16" y1="8" x2="16" y2="24" gradientUnits="userSpaceOnUse">
                     <stop stopColor="#0369A1" />
@@ -455,7 +455,7 @@ export default function HeroSection() {
                 <circle cx="7.5" cy="12.5" r="1.2" fill="#EF4444" />
               </svg>
             </div>
-            <div>
+            <div className="flex-1 min-w-0">
               <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA] group-hover:text-sky-700 dark:group-hover:text-sky-400 transition-colors">
                 Camera Trực Tuyến 24/7
               </h4>
@@ -468,8 +468,8 @@ export default function HeroSection() {
           {/* Card 4: Thu Hoạch & Giao Tận Nhà */}
           <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-amber-600 transition-all duration-300 flex items-start gap-4 group">
             {/* Icon Tile: Hộp Nông Sản Hút Chân Không VietGAP Thực Tế */}
-            <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#FFFBEB] via-[#FEF3C7] to-[#FDE68A] dark:from-[#78350F]/80 dark:via-[#92400E]/60 dark:to-[#451A03] border border-amber-300/80 dark:border-amber-700/60 flex items-center justify-center shrink-0 shadow-md shadow-amber-900/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2.5">
-              <svg className="w-full h-full" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="bento-icon-box w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-2xl bg-gradient-to-br from-[#FFFBEB] via-[#FEF3C7] to-[#FDE68A] dark:from-[#78350F]/80 dark:via-[#92400E]/60 dark:to-[#451A03] border border-amber-300/80 dark:border-amber-700/60 flex items-center justify-center shrink-0 shadow-md shadow-amber-900/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2">
+              <svg className="bento-svg w-7 h-7" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="box-grad-top" x1="16" y1="5" x2="16" y2="13" gradientUnits="userSpaceOnUse">
                     <stop stopColor="#F59E0B" />
@@ -498,7 +498,7 @@ export default function HeroSection() {
                 <path d="M19 20L20.5 21.5L23.5 18.5" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-            <div>
+            <div className="flex-1 min-w-0">
               <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA] group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors">
                 Thu Hoạch &amp; Giao Tận Nhà
               </h4>
