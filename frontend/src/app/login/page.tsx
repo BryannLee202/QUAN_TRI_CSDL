@@ -191,11 +191,6 @@ export default function LoginPage() {
                 </div>
               </div>
             </div>
-
-            <div className="mt-6 pt-4 border-t border-[#DECFC0] dark:border-[#38261A] text-[11px] text-[#8C6D53] dark:text-[#9E8675] flex items-center justify-between">
-              <span>Đồ án môn Quản Trị CSDL Nâng Cao</span>
-              <span className="font-semibold">HCMUTE • 2026</span>
-            </div>
           </div>
 
           {/* Right Column: Form Container */}
