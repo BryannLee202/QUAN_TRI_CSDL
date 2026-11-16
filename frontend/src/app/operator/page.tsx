@@ -7,6 +7,7 @@ import HardwareControls from "@/components/operator/HardwareControls";
 import RoomTabs from "@/components/operator/RoomTabs";
 import StatusLegend from "@/components/operator/StatusLegend";
 import TrayMatrix from "@/components/operator/TrayMatrix";
+import IotHexInspector from "@/components/operator/IotHexInspector";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 import CheatsheetDrawer from "@/components/operator/CheatsheetDrawer";
 import { isDeviceOn } from "@/components/operator/deviceState";
@@ -283,6 +284,13 @@ export default function OperatorPage() {
         {/* Khối Phải: Điều Khiển Phần Cứng & Cảnh Báo IoT */}
         <div className="space-y-6">
           <HardwareControls roomId={roomId} devices={devices} onToggle={toggleDevice} />
+          <IotHexInspector
+            currentRoomId={roomId}
+            onIngestSuccess={(data) => {
+              setActionNotice(`Bản tin cảm biến #${data.dataId} đã nạp thành công vào CSDL!`);
+              setTimeout(() => setActionNotice(null), 3500);
+            }}
+          />
           <AlertFeed alerts={alerts} roomLabel={roomLabel} onResolve={resolveAlert} />
         </div>
       </div>
