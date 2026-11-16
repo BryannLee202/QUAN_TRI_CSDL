@@ -146,10 +146,10 @@ export default function PackagesSection() {
               key={pkg.id}
               className={`rounded-3xl p-7 sm:p-8 transition-all duration-300 flex flex-col justify-between relative ${
                 isPkg2
-                  ? "bg-gradient-to-b from-[#FFFDF9] via-white to-[#FBF6ED] dark:from-[#2E1D13] dark:via-[#24160E] dark:to-[#1C1109] border-2 border-[#C28E58] ring-4 ring-[#C28E58]/20 shadow-2xl shadow-[#C28E58]/25 md:-translate-y-3"
+                  ? "bg-gradient-to-b from-[#FFFDF9] via-white to-[#FDF5E8] dark:from-[#2E1D13] dark:via-[#24160E] dark:to-[#1C1109] border-2 border-[#C28E58] ring-4 ring-[#C28E58]/25 shadow-2xl shadow-[#C28E58]/30 md:-translate-y-4"
                   : isPkg1
-                  ? "bg-gradient-to-b from-[#FDFBF7] to-white dark:from-[#21160E] dark:to-[#19100A] border-2 border-[#DECFC0] dark:border-[#4A3222] shadow-md hover:shadow-xl hover:border-[#C28E58]"
-                  : "bg-gradient-to-b from-[#FFFDF6] to-white dark:from-[#261C10] dark:to-[#19100A] border-2 border-[#DECFC0] dark:border-[#4A3222] shadow-md hover:shadow-xl hover:border-[#C28E58]"
+                  ? "bg-gradient-to-b from-[#F2FBF6] via-white to-[#F2FBF6] dark:from-[#0E1D15] dark:via-[#14231B] dark:to-[#0E1D15] border-2 border-emerald-500/40 hover:border-emerald-500 shadow-md hover:shadow-xl hover:shadow-emerald-950/10"
+                  : "bg-gradient-to-b from-[#F6F9FF] via-white to-[#F2F7FF] dark:from-[#0F172A] dark:via-[#131D31] dark:to-[#0F172A] border-2 border-sky-500/40 hover:border-sky-500 shadow-md hover:shadow-xl hover:shadow-sky-950/10"
               }`}
             >
               <div className="space-y-4">
@@ -161,12 +161,12 @@ export default function PackagesSection() {
                       Ưa Chuộng Nhất • FaaS VIP
                     </span>
                   ) : isPkg1 ? (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FAF5EE] dark:bg-[#2B1C13] text-[#523522] dark:text-[#E2BA78] text-[11px] font-bold border border-[#DECFC0] dark:border-[#543825]">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 text-[11px] font-bold border border-emerald-500/30">
                       Nấm Ăn Tươi VietGAP
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FAF5EE] dark:bg-[#2B1C13] text-[#523522] dark:text-[#E2BA78] text-[11px] font-bold border border-[#DECFC0] dark:border-[#543825]">
-                      Dược Liệu Thượng Hạng
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sky-500/15 text-sky-800 dark:text-sky-300 text-[11px] font-bold border border-sky-500/30">
+                      Dược Liệu ISO Class 5
                     </span>
                   )}
                   <span className="text-[11px] font-bold text-[#8C6D53] dark:text-[#BFA895] font-mono">
@@ -188,7 +188,9 @@ export default function PackagesSection() {
                   <span className={`text-3xl font-black ${
                     isPkg2 
                       ? "text-[#523522] dark:text-[#F5CE76]" 
-                      : "text-[#24170E] dark:text-[#F5CE76]"
+                      : isPkg1
+                      ? "text-emerald-800 dark:text-emerald-300"
+                      : "text-sky-900 dark:text-sky-300"
                   }`}>
                     {pkg.price}
                   </span>
@@ -198,10 +200,12 @@ export default function PackagesSection() {
                 <div className={`p-3 rounded-xl text-xs font-semibold flex items-center justify-between border ${
                   isPkg2
                     ? "bg-[#FAF5EE] dark:bg-[#331E12] text-[#4A3222] dark:text-[#E2BA78] border-[#DECFC0] dark:border-[#543825]"
-                    : "bg-[#FAF5EE] dark:bg-[#26180F] text-[#4A3222] dark:text-[#DAC7B5] border-[#DECFC0] dark:border-[#4A3222]"
+                    : isPkg1
+                    ? "bg-emerald-50/80 dark:bg-[#162A20] text-emerald-900 dark:text-emerald-200 border-emerald-200 dark:border-emerald-800"
+                    : "bg-sky-50/80 dark:bg-[#132238] text-sky-900 dark:text-sky-200 border-sky-200 dark:border-sky-800"
                 }`}>
                   <span className="flex items-center gap-1.5">
-                    <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className={`w-3.5 h-3.5 ${isPkg1 ? 'text-emerald-600' : isPkg2 ? 'text-[#C28E58]' : 'text-sky-600'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
                       <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
                       <path d="M7 21h10"/>
@@ -219,7 +223,9 @@ export default function PackagesSection() {
                       <span className={`w-4 h-4 rounded-full font-bold flex items-center justify-center text-[10px] shrink-0 mt-0.5 ${
                         isPkg2
                           ? "bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700"
-                          : "bg-[#F4ECE1] dark:bg-[#332014] text-[#6E4B33] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#543825]"
+                          : isPkg1
+                          ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700"
+                          : "bg-sky-100 dark:bg-sky-950/80 text-sky-800 dark:text-sky-300 border border-sky-300 dark:border-sky-700"
                       }`}>
                         ✓
                       </span>
@@ -234,11 +240,13 @@ export default function PackagesSection() {
                 className={`mt-8 w-full py-3.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition transform active:scale-95 shadow-sm flex items-center justify-center gap-1.5 ${
                   isPkg2
                     ? "bg-gradient-to-r from-[#8C5A37] via-[#A86E45] to-[#C28E58] hover:from-[#754728] hover:to-[#A86E45] text-white shadow-xl shadow-[#C28E58]/30 border border-amber-300/40"
-                    : "bg-[#24170E] hover:bg-[#382417] text-white border border-[#C28E58]/35 shadow-md shadow-[#24170E]/20 hover:border-[#C28E58]"
+                    : isPkg1
+                    ? "bg-[#24170E] hover:bg-[#382417] text-white border border-emerald-500/40 hover:border-emerald-400 shadow-md shadow-[#24170E]/20"
+                    : "bg-[#24170E] hover:bg-[#382417] text-white border border-sky-500/40 hover:border-sky-400 shadow-md shadow-[#24170E]/20"
                 }`}
               >
                 <span>Đăng Ký Thuê Ngay</span>
-                <span className="text-[#E2BA78] font-bold">→</span>
+                <span className={isPkg2 ? "text-[#FFF5EA] font-bold" : isPkg1 ? "text-emerald-400 font-bold" : "text-sky-400 font-bold"}>→</span>
               </button>
             </TiltCard>
           );
