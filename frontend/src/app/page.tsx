@@ -29,6 +29,18 @@ export default function Home() {
         <div className="absolute top-0 right-1/4 w-[600px] h-[350px] bg-emerald-400/10 blur-[140px] pointer-events-none rounded-full" />
         <div className="absolute bottom-0 left-1/4 w-[600px] h-[350px] bg-teal-400/10 blur-[140px] pointer-events-none rounded-full" />
 
+        {/* Watermark Nấm Công Nghệ Cao Ẩn Sâu Dưới Nền Portal */}
+        <div className="absolute -top-16 -left-16 w-96 h-96 text-emerald-600 opacity-[0.03] pointer-events-none select-none -rotate-45">
+          <svg viewBox="0 0 200 200" fill="currentColor">
+            <path d="M100 25 C50 25 20 60 20 90 C20 100 30 105 50 105 C60 105 65 110 68 120 C72 145 78 175 80 185 C83 190 117 190 120 185 C122 175 128 145 132 120 C135 110 140 105 150 105 C170 105 180 100 180 90 C180 60 150 25 100 25 Z" />
+          </svg>
+        </div>
+        <div className="absolute -bottom-16 -right-16 w-96 h-96 text-teal-600 opacity-[0.03] pointer-events-none select-none rotate-45">
+          <svg viewBox="0 0 200 200" fill="currentColor">
+            <path d="M110 185 C105 150 100 120 95 90 C80 92 60 85 50 75 C30 55 45 30 75 25 C115 18 150 30 160 55 C165 68 155 82 135 88 C130 115 125 150 120 185 Z" />
+          </svg>
+        </div>
+
         <div className="max-w-7xl mx-auto space-y-8 relative z-10">
           <div className="bg-white/95 rounded-3xl p-6 sm:p-10 border border-emerald-100 shadow-xl shadow-emerald-950/5 space-y-8">
             <div className="text-center space-y-3 max-w-2xl mx-auto">
