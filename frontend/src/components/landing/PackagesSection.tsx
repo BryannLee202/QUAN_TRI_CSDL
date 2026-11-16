@@ -136,88 +136,120 @@ export default function PackagesSection() {
       </div>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-        {packages.map((pkg) => (
-          <TiltCard
-            key={pkg.id}
-            className={`bg-white dark:bg-[#20140D] rounded-3xl p-7 sm:p-8 shadow-md border transition-all duration-300 flex flex-col justify-between relative ${
-              pkg.isPopular
-                ? "border-2 border-[#C28E58] ring-4 ring-[#C28E58]/15 md:-translate-y-2 shadow-xl"
-                : "border-[#E0D3C1]/80 dark:border-[#543825] hover:border-[#C28E58]/60"
-            }`}
-          >
-            <div className="space-y-4">
-              {/* Hàng Tiêu Đề Phụ & Huy Hiệu Độc Lập Chống Đè Chữ */}
-              <div className="flex items-center justify-between gap-2 min-h-[28px]">
-                {pkg.isPopular ? (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-800 via-emerald-700 to-[#C28E58] text-white text-[11px] font-black uppercase tracking-wider shadow-sm border border-emerald-400/50">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-ping"></span>
-                    Ưa Chuộng Nhất • FaaS
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FAF5EE] dark:bg-[#2B1C13] text-[#735843] dark:text-[#DAC7B5] text-[11px] font-semibold border border-[#DECFC0] dark:border-[#422C1D]">
-                    Gói Tiêu Chuẩn
-                  </span>
-                )}
-                <span className="text-[11px] font-bold text-[#8C6D53] dark:text-[#BFA895] font-mono">
-                  {pkg.duration}
-                </span>
-              </div>
+        {packages.map((pkg) => {
+          const isPkg1 = pkg.id === 'pkg-1';
+          const isPkg2 = pkg.id === 'pkg-2';
+          const isPkg3 = pkg.id === 'pkg-3';
 
-              {/* Tên Gói Nấm & Phân Loại Sinh Học */}
-              <div className="pt-1">
-                <h3 className="text-xl font-bold text-[#24170E] dark:text-white leading-tight">
-                  {pkg.name}
-                </h3>
-                <p className="text-xs text-[#735843] dark:text-[#DAC7B5] font-medium mt-1">
-                  {pkg.species}
-                </p>
-              </div>
-
-              <div className="border-b border-[#EAE1D3] dark:border-[#38261A] pb-4">
-                <span className="text-3xl font-black text-[#523522] dark:text-[#E2BA78]">
-                  {pkg.price}
-                </span>
-                <span className="text-[#8C6D53] dark:text-[#B59D89] text-xs font-semibold"> / {pkg.duration}</span>
-              </div>
-
-              <div className="bg-[#FAF5EE] dark:bg-[#2B1C13] p-3 rounded-xl text-xs font-semibold text-[#4A3222] dark:text-[#E2BA78] flex items-center justify-between border border-[#E0D3C1] dark:border-[#543825]">
-                <span className="flex items-center gap-1.5">
-                  <svg className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
-                    <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
-                    <path d="M7 21h10"/>
-                    <path d="M12 3v18"/>
-                    <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>
-                  </svg>
-                  <span>Cam kết sản lượng:</span>
-                </span>
-                <span className="text-emerald-700 dark:text-emerald-300 font-bold">{pkg.expectedYield}</span>
-              </div>
-
-              <ul className="space-y-3 pt-2 text-xs sm:text-sm text-[#5C4231] dark:text-[#DAC7B5]">
-                {pkg.features.map((ft, idx) => (
-                  <li key={idx} className="flex items-start gap-2.5">
-                    <span className="w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-700 font-bold flex items-center justify-center text-[10px] shrink-0 mt-0.5">
-                      ✓
-                    </span>
-                    <span>{ft}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <button
-              onClick={() => openBookingModal(pkg)}
-              className={`mt-8 w-full py-3.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition transform active:scale-95 shadow-sm ${
-                pkg.isPopular
-                  ? "bg-gradient-to-r from-[#047857] via-[#059669] to-[#C28E58] hover:from-[#065F46] hover:to-[#A67543] text-white shadow-lg shadow-emerald-900/20"
-                  : "bg-[#2B1B11] dark:bg-[#38261A] hover:bg-[#1C120C] dark:hover:bg-[#4D3322] text-[#FFF7EC]"
+          return (
+            <TiltCard
+              key={pkg.id}
+              className={`rounded-3xl p-7 sm:p-8 transition-all duration-300 flex flex-col justify-between relative ${
+                isPkg2
+                  ? "bg-gradient-to-b from-[#FFFDF9] via-white to-[#FBF6ED] dark:from-[#2E1D13] dark:via-[#24160E] dark:to-[#1C1109] border-2 border-[#C28E58] ring-4 ring-[#C28E58]/20 shadow-2xl shadow-[#C28E58]/25 md:-translate-y-3"
+                  : isPkg1
+                  ? "bg-gradient-to-b from-[#F7FCF9] to-white dark:from-[#17251C] dark:to-[#19100A] border-2 border-emerald-600/35 dark:border-emerald-500/40 shadow-md hover:shadow-xl hover:border-emerald-600"
+                  : "bg-gradient-to-b from-[#FFFDF6] to-white dark:from-[#261C10] dark:to-[#19100A] border-2 border-amber-500/35 dark:border-amber-500/40 shadow-md hover:shadow-xl hover:border-amber-500"
               }`}
             >
-              Đăng Ký Thuê Ngay →
-            </button>
-          </TiltCard>
-        ))}
+              <div className="space-y-4">
+                {/* Hàng Tiêu Đề Phụ & Huy Hiệu Độc Lập Chống Đè Chữ */}
+                <div className="flex items-center justify-between gap-2 min-h-[28px]">
+                  {isPkg2 ? (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-[#8C3A16] via-[#B86E2A] to-[#6E2E10] text-white text-[11px] font-black uppercase tracking-wider shadow-sm border border-amber-300/40">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-300 animate-ping"></span>
+                      Ưa Chuộng Nhất • FaaS VIP
+                    </span>
+                  ) : isPkg1 ? (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100/90 dark:bg-emerald-950/80 text-emerald-900 dark:text-emerald-300 text-[11px] font-bold border border-emerald-300 dark:border-emerald-800">
+                      Nấm Ăn Tươi VietGAP
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100/90 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 text-[11px] font-bold border border-amber-300 dark:border-amber-800">
+                      Dược Liệu Thượng Hạng
+                    </span>
+                  )}
+                  <span className="text-[11px] font-bold text-[#8C6D53] dark:text-[#BFA895] font-mono">
+                    {pkg.duration}
+                  </span>
+                </div>
+
+                {/* Tên Gói Nấm & Phân Loại Sinh Học */}
+                <div className="pt-1">
+                  <h3 className="text-xl font-bold text-[#24170E] dark:text-white leading-tight">
+                    {pkg.name}
+                  </h3>
+                  <p className="text-xs text-[#735843] dark:text-[#DAC7B5] font-medium mt-1">
+                    {pkg.species}
+                  </p>
+                </div>
+
+                <div className="border-b border-[#EAE1D3] dark:border-[#38261A] pb-4">
+                  <span className={`text-3xl font-black ${
+                    isPkg2 
+                      ? "text-[#523522] dark:text-[#F5CE76]" 
+                      : isPkg1 
+                      ? "text-emerald-900 dark:text-emerald-300" 
+                      : "text-amber-900 dark:text-amber-300"
+                  }`}>
+                    {pkg.price}
+                  </span>
+                  <span className="text-[#8C6D53] dark:text-[#B59D89] text-xs font-semibold"> / {pkg.duration}</span>
+                </div>
+
+                <div className={`p-3 rounded-xl text-xs font-semibold flex items-center justify-between border ${
+                  isPkg2
+                    ? "bg-[#FAF5EE] dark:bg-[#331E12] text-[#4A3222] dark:text-[#E2BA78] border-[#DECFC0] dark:border-[#543825]"
+                    : isPkg1
+                    ? "bg-emerald-50/80 dark:bg-[#182C20] text-emerald-900 dark:text-emerald-200 border-emerald-200 dark:border-emerald-800"
+                    : "bg-amber-50/80 dark:bg-[#2C1F12] text-amber-900 dark:text-amber-200 border-amber-200 dark:border-amber-800"
+                }`}>
+                  <span className="flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                      <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                      <path d="M7 21h10"/>
+                      <path d="M12 3v18"/>
+                      <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>
+                    </svg>
+                    <span>Cam kết sản lượng:</span>
+                  </span>
+                  <span className="font-bold">{pkg.expectedYield}</span>
+                </div>
+
+                <ul className="space-y-3 pt-2 text-xs sm:text-sm text-[#5C4231] dark:text-[#DAC7B5]">
+                  {pkg.features.map((ft, idx) => (
+                    <li key={idx} className="flex items-start gap-2.5">
+                      <span className={`w-4 h-4 rounded-full font-bold flex items-center justify-center text-[10px] shrink-0 mt-0.5 ${
+                        isPkg2
+                          ? "bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700"
+                          : isPkg1
+                          ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700"
+                          : "bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700"
+                      }`}>
+                        ✓
+                      </span>
+                      <span>{ft}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <button
+                onClick={() => openBookingModal(pkg)}
+                className={`mt-8 w-full py-3.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition transform active:scale-95 shadow-sm ${
+                  isPkg2
+                    ? "bg-gradient-to-r from-[#995C26] via-[#C28E58] to-[#6E3C18] hover:from-[#7D491C] hover:to-[#572E10] text-white shadow-xl shadow-[#C28E58]/30"
+                    : isPkg1
+                    ? "bg-gradient-to-r from-emerald-700 via-emerald-800 to-emerald-900 hover:from-emerald-800 hover:to-emerald-950 text-white shadow-md shadow-emerald-900/20"
+                    : "bg-gradient-to-r from-[#B45309] via-[#C76F1E] to-[#A15010] hover:from-[#92400E] hover:to-[#854009] text-white shadow-md shadow-amber-900/20"
+                }`}
+              >
+                Đăng Ký Thuê Ngay →
+              </button>
+            </TiltCard>
+          );
+        })}
       </div>
 
       {/* Booking Modal với kết nối API Backend Thực Tế */}

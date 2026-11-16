@@ -4,8 +4,8 @@ import React from 'react';
 import { CountUp } from './CountUp';
 
 /**
- * Phần Thống Kê Chỉ Số Vận Hành (Stats Section) chuẩn Cafe Latte Bắc Âu
- * Hiển thị số liệu thực tế đo đạc từ hệ thống CSDL và IoT Farm-as-a-Service
+ * Phần Thống Kê Chỉ Số Vận Hành (Stats Section)
+ * Phối màu kỹ thuật Cleanroom Blueprint - Tách biệt rõ nét với nền Hero phía trên
  */
 export default function StatsSection() {
   const stats = [
@@ -14,6 +14,11 @@ export default function StatsSection() {
       value: 120,
       suffix: "+",
       detail: "Phân bổ trên 6 dàn kệ vô trùng chuẩn ISO Class 5",
+      badge: "IoT Khép Kín",
+      badgeClass: "bg-amber-100/90 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-300/70",
+      valueClass: "text-[#6E4423] dark:text-[#F3CE8E]",
+      cardBorder: "border-[#DFCFBE] dark:border-[#3E291C] hover:border-[#C28E58]",
+      iconBg: "bg-gradient-to-br from-[#FAF5EE] to-[#F2E8DC] dark:from-[#2B1C13] dark:to-[#1C120B] text-[#7A4B27] dark:text-[#E2BA78]",
       icon: (
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M3 7h18M3 12h18M3 17h18" />
@@ -28,6 +33,11 @@ export default function StatsSection() {
       value: 99,
       suffix: "%",
       detail: "Kiểm nghiệm nghiêm ngặt hoạt chất sinh học & độ ẩm",
+      badge: "Chuẩn VietGAP Loại A",
+      badgeClass: "bg-emerald-100/90 dark:bg-emerald-950/80 text-emerald-900 dark:text-emerald-300 border border-emerald-300/80",
+      valueClass: "text-emerald-800 dark:text-emerald-400",
+      cardBorder: "border-emerald-200/90 dark:border-emerald-900/60 hover:border-emerald-500",
+      iconBg: "bg-gradient-to-br from-emerald-50 to-emerald-100/60 dark:from-emerald-950/60 dark:to-[#170E08] text-emerald-700 dark:text-emerald-400",
       icon: (
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -40,6 +50,11 @@ export default function StatsSection() {
       value: 85000,
       suffix: "+",
       detail: "Cập nhật cảm biến 5s/lần qua giao thức WebSocket",
+      badge: "WebSocket 5s/lần",
+      badgeClass: "bg-sky-100/90 dark:bg-sky-950/80 text-sky-900 dark:text-sky-300 border border-sky-300/80",
+      valueClass: "text-sky-800 dark:text-sky-400",
+      cardBorder: "border-sky-200/90 dark:border-sky-900/60 hover:border-sky-500",
+      iconBg: "bg-gradient-to-br from-sky-50 to-sky-100/60 dark:from-sky-950/60 dark:to-[#170E08] text-sky-700 dark:text-sky-400",
       icon: (
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" />
@@ -55,6 +70,11 @@ export default function StatsSection() {
       value: 4,
       suffix: " ms",
       detail: "Khóa dòng ROWLOCK Serializable tức thời trên CSDL",
+      badge: "T-SQL ROWLOCK",
+      badgeClass: "bg-amber-100/90 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-300/80",
+      valueClass: "text-amber-800 dark:text-amber-400",
+      cardBorder: "border-amber-200/90 dark:border-amber-900/60 hover:border-amber-500",
+      iconBg: "bg-gradient-to-br from-amber-50 to-amber-100/60 dark:from-amber-950/60 dark:to-[#170E08] text-amber-700 dark:text-amber-400",
       icon: (
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
@@ -64,41 +84,25 @@ export default function StatsSection() {
   ];
 
   return (
-    <section className="py-14 bg-gradient-to-b from-[#FDFBF8] via-[#FAF5EE] to-[#FDFBF8] dark:from-[#170E08] dark:via-[#1F140D] dark:to-[#170E08] border-y border-[#E0D3C1]/80 dark:border-[#3D281A] transition-colors">
-      <div className="max-w-6xl mx-auto px-6">
+    <section className="py-16 bg-[#F4ECE1] dark:bg-[#18100A] border-y border-[#DDCFBE] dark:border-[#382316] transition-colors relative">
+      {/* Hairline subtle technical grid texture */}
+      <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {stats.map((s, idx) => (
             <div
               key={idx}
-              className="p-6 rounded-2xl bg-white/90 dark:bg-[#20140D]/90 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-lg hover:border-[#C28E58] transition-all duration-300 flex flex-col items-center text-center group"
+              className={`p-6 rounded-2xl bg-white/95 dark:bg-[#20140D]/95 border ${s.cardBorder} shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center group`}
             >
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FAF5EE] to-[#F2E8DC] dark:from-[#2B1C13] dark:to-[#1C120B] border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-center text-[#6B442C] dark:text-[#E2BA78] shadow-xs group-hover:scale-110 transition-transform duration-300 mb-4">
+              <div className={`w-12 h-12 rounded-2xl ${s.iconBg} border border-[#DECFC0]/60 dark:border-[#422C1D] flex items-center justify-center shadow-2xs group-hover:scale-110 transition-transform duration-300 mb-3.5`}>
                 {s.icon}
               </div>
-              <div className="text-3xl md:text-4xl font-extrabold text-[#362113] dark:text-[#FFF5EA] tracking-tight">
+              <div className={`text-3xl md:text-4xl font-black ${s.valueClass} tracking-tight font-sans`}>
                 <CountUp target={s.value} suffix={s.suffix} />
               </div>
-              {idx === 0 && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 mt-2">
-                  IoT Khép Kín
-                </span>
-              )}
-              {idx === 1 && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 mt-2">
-                  Chuẩn VietGAP Loại A
-                </span>
-              )}
-              {idx === 2 && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950/80 text-sky-800 dark:text-sky-300 mt-2">
-                  WebSocket 5s/lần
-                </span>
-              )}
-              {idx === 3 && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 mt-2">
-                  T-SQL ROWLOCK
-                </span>
-              )}
-              <h4 className="text-sm font-bold text-[#24170E] dark:text-[#F3E5D4] mt-2">
+              <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${s.badgeClass} mt-2.5`}>
+                {s.badge}
+              </span>
+              <h4 className="text-sm font-bold text-[#24170E] dark:text-[#F3E5D4] mt-2.5">
                 {s.label}
               </h4>
               <p className="text-xs text-[#735843] dark:text-[#BFA895] mt-1 leading-relaxed">
