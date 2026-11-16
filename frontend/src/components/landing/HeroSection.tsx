@@ -21,7 +21,7 @@ const chamberViews: ChamberView[] = [
     name: "Buồng Nuôi Thông Minh 3D",
     shortName: "Buồng Kính 3D",
     badge: "Buồng Nuôi ISO Class 5 • Cảm Biến IoT 24/7",
-    image: "/images/hero-chamber-champagne.jpg",
+    image: "/images/hero-chamber-fullbleed-white.jpg",
     temp: "24.2°C",
     hum: "92%",
     co2: "620 ppm",
