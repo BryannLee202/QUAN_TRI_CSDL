@@ -64,7 +64,20 @@ const chamberViews: ChamberView[] = [
 
 export default function HeroSection() {
   const [activeTab, setActiveTab] = useState(0);
+  const [lightingMode, setLightingMode] = useState<'day' | 'night' | 'uv'>('day');
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const currentView = chamberViews[activeTab];
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ x: Number((x * 6).toFixed(2)), y: Number((-y * 6).toFixed(2)) });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
 
   return (
     <section className="relative bg-gradient-to-b from-[#FDFBF8] via-[#F8F3EC] to-[#FDFBF8] dark:from-[#170E08] dark:via-[#140D07] dark:to-[#170E08] text-[#24170E] dark:text-[#F7EFE6] py-12 sm:py-20 px-6 overflow-hidden transition-colors">
@@ -96,11 +109,11 @@ export default function HeroSection() {
               Trải nghiệm mô hình nuôi trồng nấm dược liệu công nghệ cao khép kín chuẩn ISO: Thuê khay nấm trực tuyến, giám sát vi khí hậu 24/7 qua cảm biến IoT & Camera Live Stream, nhận nấm tươi thu hoạch tận nhà.
             </p>
 
-            {/* Cụm Nút CTA Kép */}
+            {/* Cụm Nút CTA Kép - Phối màu Emerald Bio & Bronze Champagne */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-2">
               <a
                 href="#packages"
-                className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#523522] to-[#361F12] hover:from-[#3D2517] hover:to-[#24140B] dark:from-[#C28E58] dark:to-[#9E6845] text-white dark:text-[#170E08] font-bold text-sm shadow-md shadow-[#523522]/20 hover:shadow-lg transition transform hover:-translate-y-0.5 flex items-center gap-2"
+                className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#1B3F2A] via-[#2A5C3D] to-[#B57C3E] hover:from-[#132E1F] hover:to-[#9E6A33] text-white font-bold text-sm shadow-md shadow-[#1B3F2A]/25 hover:shadow-xl transition transform hover:-translate-y-0.5 flex items-center gap-2"
               >
                 <span>Thuê Khay Ngay (Khám Phá)</span>
                 <span>→</span>
@@ -110,7 +123,7 @@ export default function HeroSection() {
                 href="#portal"
                 className="px-6 py-3.5 rounded-xl bg-white dark:bg-[#20140D] hover:bg-[#FAF5EE] dark:hover:bg-[#2B1C13] text-[#4A3222] dark:text-[#F7EFE6] font-bold text-sm border border-[#E0D3C1] dark:border-[#543825] shadow-xs transition flex items-center gap-2 group"
               >
-                <span className="relative flex items-center justify-center text-[#B34E2E]">
+                <span className="relative flex items-center justify-center text-[#1B3F2A] dark:text-emerald-400">
                   <svg className="w-4 h-4 transition-transform group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="m22 8-6 4 6 4V8Z" />
                     <rect width="14" height="12" x="2" y="6" rx="2" ry="2" />
@@ -120,18 +133,18 @@ export default function HeroSection() {
               </a>
             </div>
 
-            {/* Trust Badges */}
+            {/* Trust Badges với điểm nhấn Xanh Sinh Học */}
             <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs font-semibold text-[#8C6D53] dark:text-[#B59D89]">
-              <span className="flex items-center gap-1.5">
-                <span className="text-[#C28E58] font-bold">✓</span>
+              <span className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-full bg-emerald-500/15 dark:bg-emerald-500/25 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-[10px]">✓</span>
                 Giao dịch khóa dòng CSDL T-SQL
               </span>
-              <span className="flex items-center gap-1.5">
-                <span className="text-[#C28E58] font-bold">✓</span>
+              <span className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-full bg-emerald-500/15 dark:bg-emerald-500/25 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-[10px]">✓</span>
                 Chứng nhận nguồn gốc VietGAP
               </span>
-              <span className="flex items-center gap-1.5">
-                <span className="text-[#C28E58] font-bold">✓</span>
+              <span className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-full bg-emerald-500/15 dark:bg-emerald-500/25 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-[10px]">✓</span>
                 Bảo hiểm 100% sản lượng
               </span>
             </div>
@@ -189,10 +202,62 @@ export default function HeroSection() {
               ))}
             </div>
 
-            {/* Khung Kính Showcase Sang Trọng - Tone Cafe Sữa & Gỗ Ấm Đồng Bộ */}
+            {/* Thanh Điều Khiển Quang Phổ & Chế Độ Chiếu Sáng Buồng Kính */}
+            <div className="w-full flex items-center justify-between gap-2 px-1 mb-2.5">
+              <span className="text-[11px] font-bold text-[#8A5C38] dark:text-[#C28E58] uppercase tracking-wider flex items-center gap-1.5">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                Quang Phổ &amp; Vi Khí Hậu:
+              </span>
+              <div className="flex items-center gap-1 p-0.5 rounded-xl bg-white/90 dark:bg-[#20140D]/90 border border-[#E0D3C1] dark:border-[#543825] shadow-xs text-[10px]">
+                <button
+                  type="button"
+                  onClick={() => setLightingMode('day')}
+                  className={`px-2.5 py-1 rounded-lg font-bold transition flex items-center gap-1 ${
+                    lightingMode === 'day'
+                      ? 'bg-gradient-to-r from-[#523522] to-[#3B2212] text-white shadow-xs'
+                      : 'text-[#6E4B33] dark:text-[#DAC7B5] hover:text-[#24170E]'
+                  }`}
+                >
+                  <span>☀️ Ngày (5000K)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLightingMode('night')}
+                  className={`px-2.5 py-1 rounded-lg font-bold transition flex items-center gap-1 ${
+                    lightingMode === 'night'
+                      ? 'bg-gradient-to-r from-sky-800 to-sky-950 text-white shadow-xs'
+                      : 'text-[#6E4B33] dark:text-[#DAC7B5] hover:text-[#24170E]'
+                  }`}
+                >
+                  <span>🌙 Đêm Ẩm</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLightingMode('uv')}
+                  className={`px-2.5 py-1 rounded-lg font-bold transition flex items-center gap-1 ${
+                    lightingMode === 'uv'
+                      ? 'bg-gradient-to-r from-purple-800 to-indigo-900 text-white shadow-xs'
+                      : 'text-[#6E4B33] dark:text-[#DAC7B5] hover:text-[#24170E]'
+                  }`}
+                >
+                  <span>🔬 UV-C Khử Khuẩn</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Khung Kính Showcase Sang Trọng Tương Tác 3D Parallax & Quang Phổ */}
             <div 
-              className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-[#E0D3C1] dark:border-[#543825] bg-[#FAF5EE] dark:bg-[#20140D] group transition-all duration-500 hover:border-[#C28E58]"
-              style={{ isolation: 'isolate' }}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-[#E0D3C1] dark:border-[#543825] bg-[#FAF5EE] dark:bg-[#20140D] group transition-all duration-300 hover:border-[#C28E58] hover:shadow-2xl"
+              style={{ 
+                isolation: 'isolate',
+                transform: `perspective(1000px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)`,
+                transition: 'transform 0.15s ease-out, border-color 0.3s ease'
+              }}
             >
               {/* Vùng Hiển Thị Hình Ảnh */}
               <div 
@@ -208,13 +273,38 @@ export default function HeroSection() {
                   className="object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                 />
 
+                {/* Lớp Phủ Hiệu Ứng Ánh Sáng Tương Tác Theo Chế Độ Đèn (Day / Night / UV) */}
+                {lightingMode === 'day' && (
+                  <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-amber-500/10 via-transparent to-amber-300/5 transition-opacity duration-500" />
+                )}
+                {lightingMode === 'night' && (
+                  <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-sky-950/40 via-sky-800/15 to-transparent mix-blend-color transition-opacity duration-500" />
+                )}
+                {lightingMode === 'uv' && (
+                  <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-purple-900/40 via-indigo-700/20 to-purple-500/10 mix-blend-overlay transition-opacity duration-500" />
+                )}
+
+                {/* Hạt Bào Tử Nấm & Sương Mù Siêu Âm Bay Lơ Lửng */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                  <span className="absolute w-1.5 h-1.5 rounded-full bg-amber-300/60 blur-[0.5px] animate-pulse left-[25%] bottom-[30%]" style={{ animationDuration: '2.5s' }}></span>
+                  <span className="absolute w-1 h-1 rounded-full bg-emerald-400/70 blur-[0.5px] animate-ping left-[45%] bottom-[42%]" style={{ animationDuration: '3.8s' }}></span>
+                  <span className="absolute w-2 h-2 rounded-full bg-[#E2BA78]/50 blur-[1px] animate-pulse left-[65%] bottom-[25%]" style={{ animationDuration: '4.2s' }}></span>
+                  <span className="absolute w-1.5 h-1.5 rounded-full bg-sky-300/60 blur-[0.5px] animate-pulse left-[82%] bottom-[48%]" style={{ animationDuration: '3.2s' }}></span>
+                </div>
+
+                {/* Vệt Sáng Phản Quang Quét Chéo Mặt Kính */}
+                <div className="absolute -inset-full pointer-events-none bg-gradient-to-tr from-transparent via-white/10 to-transparent group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+
                 {/* Badge Trạng Thái Nổi Góc Trên Trái */}
                 <div className="absolute top-3 left-3 backdrop-blur-md bg-white/95 dark:bg-[#2B1C13]/95 border border-[#E0D3C1] dark:border-[#543825] text-[#4A3222] dark:text-[#E2BA78] text-[11px] font-bold px-3 py-1 rounded-full shadow-md flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#C28E58] animate-pulse"></span>
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C28E58] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C28E58]"></span>
+                  </span>
                   <span>{currentView.badge}</span>
                 </div>
 
-                {/* 3 Chip Cảm Biến Realtime Nổi Góc Trên Phải */}
+                {/* 3 Chip Cảm Biến Realtime Nổi Góc Trên Phải Kèm Sóng IoT Telemetry */}
                 <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
                   <div className="backdrop-blur-md bg-white/95 dark:bg-[#20140D]/95 border border-[#C28E58]/50 text-[#6E4B33] dark:text-[#F5CE76] text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1.5">
                     <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -222,8 +312,8 @@ export default function HeroSection() {
                     </svg>
                     <span>{currentView.temp}</span>
                   </div>
-                  <div className="backdrop-blur-md bg-white/95 dark:bg-[#20140D]/95 border border-sky-500/40 text-sky-700 dark:text-sky-300 text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1.5">
-                    <svg className="w-3.5 h-3.5 text-sky-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <div className="backdrop-blur-md bg-white/95 dark:bg-[#20140D]/95 border border-emerald-500/40 text-emerald-800 dark:text-emerald-300 text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
                     </svg>
                     <span>{currentView.hum}</span>
@@ -237,13 +327,14 @@ export default function HeroSection() {
                 </div>
 
                 {/* Chú Thích Dưới Đáy Ảnh */}
-                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-[#26170E]/90 via-[#26170E]/50 to-transparent p-4 text-white">
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-[#26170E]/95 via-[#26170E]/60 to-transparent p-4 text-white">
                   <div className="flex items-center justify-between">
                     <h3 className="font-bold text-sm text-white drop-shadow-sm flex items-center gap-2">
                       <span className="text-[#E2BA78]">●</span>
                       <span>{currentView.name}</span>
                     </h3>
-                    <span className="text-[10px] uppercase tracking-wider text-[#FAF5EE] bg-[#523522]/90 border border-[#C28E58]/60 px-2 py-0.5 rounded-md">
+                    <span className="text-[10px] uppercase tracking-wider text-[#FAF5EE] bg-[#523522]/90 border border-[#C28E58]/60 px-2.5 py-0.5 rounded-md flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                       IoT Telemetry 24/7
                     </span>
                   </div>
