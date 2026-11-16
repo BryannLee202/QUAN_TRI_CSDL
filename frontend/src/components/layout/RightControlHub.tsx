@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
+import MushroomBotDrawer from '../ai/MushroomBotDrawer';
 
 interface RightControlHubProps {
   isOpen: boolean;
@@ -52,6 +53,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
 
   const [isDark, setIsDark] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
+  const [isAiChatOpen, setIsAiChatOpen] = useState<boolean>(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -276,6 +278,37 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                 </div>
               </div>
             )}
+          </div>
+
+          {/* KHỐI TRỢ LÝ AI: MUSHROOMBOT (LLAMA-3.1-8B FAAS ENGINE) */}
+          <div className="rounded-2xl p-4 bg-gradient-to-br from-[#FAF5EE] via-[#F4ECE1] to-[#EAE0D3] dark:from-[#25170F] dark:via-[#1E120A] dark:to-[#170E08] border border-[#DECFC0] dark:border-[#422C1D] shadow-xs space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#6B442C] to-[#C28E58] text-white flex items-center justify-center font-bold text-base shadow-xs">
+                  🍄
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-[#24170E] dark:text-[#FFF5EA] flex items-center gap-1.5">
+                    <span>MushroomBot AI</span>
+                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded-md bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30">
+                      Llama-3.1-8B
+                    </span>
+                  </h4>
+                  <p className="text-[10px] text-[#735843] dark:text-[#DAC7B5]">
+                    Cố vấn vi khí hậu &amp; hợp đồng VietGAP 24/7
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsAiChatOpen(true)}
+              className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#2B1B11] to-[#3B2517] hover:from-[#1C1109] hover:to-[#2B1B11] text-[#E2BA78] hover:text-white font-bold text-xs transition flex items-center justify-center gap-2 shadow-xs border border-[#C28E58]/30 active:scale-98"
+            >
+              <span>Trò Chuyện Với Cố Vấn AI</span>
+              <span>→</span>
+            </button>
           </div>
 
           {/* KHỐI 2: TÙY CHỌN GIAO DIỆN & NGÔN NGỮ (PREFERENCES) */}
@@ -554,6 +587,12 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
           </p>
         </div>
       </aside>
+
+      {/* Trợ Lý AI MushroomBot Drawer (Llama-3.1-8B) */}
+      <MushroomBotDrawer
+        isOpen={isAiChatOpen}
+        onClose={() => setIsAiChatOpen(false)}
+      />
     </>
   );
 }
