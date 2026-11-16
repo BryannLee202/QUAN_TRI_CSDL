@@ -1,10 +1,11 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function CustomerBanner() {
-  const { user, isAuthenticated, openAuthModal } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   if (isAuthenticated && user) {
     return (
@@ -52,13 +53,12 @@ export default function CustomerBanner() {
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={() => openAuthModal("login")}
+      <Link
+        href="/login"
         className="px-3.5 py-1.5 rounded-xl bg-[#C28E58] hover:bg-[#B37F49] text-white font-bold text-xs transition shadow-2xs"
       >
         Đăng Nhập Khách Hàng
-      </button>
+      </Link>
     </div>
   );
 }

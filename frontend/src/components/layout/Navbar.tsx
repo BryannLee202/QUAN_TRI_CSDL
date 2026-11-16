@@ -188,18 +188,18 @@ export default function Navbar() {
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => openAuthModal("login")}
+            <Link
+              href="/login"
               className="px-3.5 py-1.5 rounded-xl border border-[#D9C8B5] dark:border-[#543825] text-xs font-bold hover:bg-[#FAF5EE] dark:hover:bg-[#281A12] text-[#523522] dark:text-[#E2BA78] transition shadow-2xs"
             >
               Đăng Nhập
-            </button>
-            <button
-              onClick={() => openAuthModal("register")}
+            </Link>
+            <Link
+              href="/register"
               className="hidden sm:inline-flex items-center justify-center gap-1.5 h-8 px-3.5 text-xs font-bold rounded-xl text-white bg-gradient-to-r from-[#4A2E1D] via-[#5C3A24] to-[#3B2212] hover:from-[#3D2517] hover:to-[#24140B] shadow-xs transition"
             >
               Đăng Ký
-            </button>
+            </Link>
           </div>
         )}
       </div>
