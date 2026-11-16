@@ -1,0 +1,33 @@
+{
+  "lastUpdated": "2026-11-16T03:53:33.323Z",
+  "currency": "VND",
+  "benchmarks": [
+    {
+      "mushroomType": "Bào Ngư Xám (Pleurotus pulmonarius)",
+      "retailPricePerKg": 85000,
+      "faasPackageName": "Gói Nấm Bào Ngư Xám",
+      "faasCost": 299000,
+      "expectedYieldKg": 3,
+      "marketValueEstimate": 255000,
+      "freshnessAdvantage": "Thu hoạch tận khay, chuẩn ISO Class 5, tươi ngon 100%"
+    },
+    {
+      "mushroomType": "Linh Chi Đỏ Dược Liệu (Ganoderma lucidum)",
+      "retailPricePerKg": 1200000,
+      "faasPackageName": "Gói Nấm Linh Chi Đỏ Luxury",
+      "faasCost": 899000,
+      "expectedYieldKg": 1.5,
+      "marketValueEstimate": 1800000,
+      "freshnessAdvantage": "Hàm lượng Polysaccharide và Triterpenes đạt đỉnh, có bảo hiểm sản lượng"
+    },
+    {
+      "mushroomType": "Đông Trùng Hạ Thảo (Cordyceps militaris)",
+      "retailPricePerKg": 3500000,
+      "faasPackageName": "Gói Đông Trùng Hạ Thảo High-Tech",
+      "faasCost": 1499000,
+      "expectedYieldKg": 1,
+      "marketValueEstimate": 3500000,
+      "freshnessAdvantage": "Nuôi cấy phòng sạch vô trùng tuyệt đối, hàm lượng Cordycepin siêu cao"
+    }
+  ]
+}
