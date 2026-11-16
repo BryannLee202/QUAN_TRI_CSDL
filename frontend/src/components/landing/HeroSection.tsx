@@ -21,7 +21,7 @@ const chamberViews: ChamberView[] = [
     name: "Buồng Nuôi Thông Minh 3D",
     shortName: "Buồng Kính 3D",
     badge: "Buồng Nuôi ISO Class 5 • Cảm Biến IoT 24/7",
-    image: "/images/hero-chamber-champagne.jpg",
+    image: "/images/hero-chamber-fullbleed-white.jpg",
     temp: "24.2°C",
     hum: "92%",
     co2: "620 ppm",
@@ -190,9 +190,15 @@ export default function HeroSection() {
             </div>
 
             {/* Khung Kính Showcase Sang Trọng - Tone Cafe Sữa & Gỗ Ấm Đồng Bộ */}
-            <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-[#E0D3C1] dark:border-[#543825] bg-[#FAF5EE] dark:bg-[#20140D] group transition-all duration-500 hover:border-[#C28E58]">
+            <div 
+              className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-[#E0D3C1] dark:border-[#543825] bg-[#FAF5EE] dark:bg-[#20140D] group transition-all duration-500 hover:border-[#C28E58]"
+              style={{ isolation: 'isolate' }}
+            >
               {/* Vùng Hiển Thị Hình Ảnh */}
-              <div className="relative aspect-[16/11] w-full bg-[#F5EEE4] dark:bg-[#20140D] overflow-hidden flex items-center justify-center">
+              <div 
+                className="relative aspect-[16/11] w-full bg-[#F5EEE4] dark:bg-[#20140D] overflow-hidden flex items-center justify-center"
+                style={{ position: 'relative', minHeight: '380px', height: '440px', maxHeight: '500px' }}
+              >
                 <Image
                   key={currentView.image}
                   src={currentView.image}
