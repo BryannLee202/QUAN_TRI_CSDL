@@ -175,3 +175,40 @@ export async function updateOperatorTrayStatusApi(trayId: number, status: "AVAIL
   if (!res.ok) throw new Error(json.error?.message || "Lỗi cập nhật khay");
   return json;
 }
+
+// -------------------------------------------------------------
+// IoT Binary Protocol & Telemetry Parser APIs
+// -------------------------------------------------------------
+export async function decodeIotHexApi(hexPayload: string) {
+  const res = await fetch(`${API_BASE}/iot/decode`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ hexPayload }),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Lỗi giải mã gói tin Hex");
+  return json;
+}
+
+export async function ingestIotHexApi(hexPayload: string, roomId: number = 1) {
+  const res = await fetch(`${API_BASE}/iot/ingest`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ hexPayload, roomId }),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Lỗi nạp dữ liệu IoT vào CSDL");
+  return json;
+}
+
+export async function getSampleIotHexApi(temp?: number, hum?: number, co2?: number) {
+  const params = new URLSearchParams();
+  if (temp != null) params.set("temp", temp.toString());
+  if (hum != null) params.set("hum", hum.toString());
+  if (co2 != null) params.set("co2", co2.toString());
+
+  const res = await fetch(`${API_BASE}/iot/sample?${params.toString()}`);
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Lỗi sinh gói tin mẫu");
+  return json;
+}
