@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { getMeApi, loginApi, logoutApi, registerApi } from "@/services/api";
 
 export interface User {
@@ -39,6 +40,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -150,7 +152,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const openAuthModal = (tab: "login" | "register" = "login") => {
     setAuthModalTab(tab);
-    setIsAuthModalOpen(true);
+    setIsAuthModalOpen(false);
+    if (tab === "register") {
+      router.push("/register");
+    } else {
+      router.push("/login");
+    }
   };
 
   const closeAuthModal = () => {

@@ -289,13 +289,13 @@ export default function OperatorPage() {
               </p>
             </div>
           </div>
-          <button
-            onClick={() => openAuthModal("login")}
+          <Link
+            href="/login"
             className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#C28E58] to-[#8A5C38] hover:from-[#B37F49] hover:to-[#704627] text-white font-bold transition shadow-xs shrink-0 flex items-center gap-1.5"
           >
             <span>Đăng Nhập Admin / Operator</span>
             <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3.333 8h9.334M8.667 4l4 4-4 4"/></svg>
-          </button>
+          </Link>
         </div>
       )}
 

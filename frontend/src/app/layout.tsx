@@ -3,7 +3,6 @@ import "./globals.css";
 import NetworkStatusBanner from "../components/NetworkStatusBanner";
 import { LanguageProvider } from "../context/LanguageContext";
 import { AuthProvider } from "../contexts/AuthContext";
-import AuthModalWrapper from "../components/auth/AuthModalWrapper";
 import BotFloatingAction from "../components/ai/BotFloatingAction";
 
 export const metadata: Metadata = {
@@ -34,7 +33,6 @@ export default function RootLayout({
           <AuthProvider>
             <NetworkStatusBanner />
             {children}
-            <AuthModalWrapper />
             <BotFloatingAction />
           </AuthProvider>
         </LanguageProvider>
