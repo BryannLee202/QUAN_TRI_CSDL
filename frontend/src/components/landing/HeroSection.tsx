@@ -133,21 +133,7 @@ export default function HeroSection() {
               </a>
             </div>
 
-            {/* Trust Badges với điểm nhấn Xanh Sinh Học */}
-            <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs font-semibold text-[#8C6D53] dark:text-[#B59D89]">
-              <span className="flex items-center gap-2">
-                <span className="w-4 h-4 rounded-full bg-emerald-500/15 dark:bg-emerald-500/25 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-[10px]">✓</span>
-                Giao dịch khóa dòng CSDL T-SQL
-              </span>
-              <span className="flex items-center gap-2">
-                <span className="w-4 h-4 rounded-full bg-emerald-500/15 dark:bg-emerald-500/25 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-[10px]">✓</span>
-                Chứng nhận nguồn gốc VietGAP
-              </span>
-              <span className="flex items-center gap-2">
-                <span className="w-4 h-4 rounded-full bg-emerald-500/15 dark:bg-emerald-500/25 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-[10px]">✓</span>
-                Bảo hiểm 100% sản lượng
-              </span>
-            </div>
+
           </div>
 
           {/* Cột Phải: Showcase Buồng Kính Hiện Đại */}
