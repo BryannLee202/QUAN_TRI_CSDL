@@ -7,11 +7,17 @@ import LanguageToggle from "./LanguageToggle";
 import NotificationBell from "./NotificationBell";
 import { useLanguage } from "../../context/LanguageContext";
 import { useAuth } from "../../contexts/AuthContext";
+import RoiCalculatorModal from "../modals/RoiCalculatorModal";
+import MarketplaceModal from "../modals/MarketplaceModal";
+import FarmNetworkModal from "../modals/FarmNetworkModal";
 
 export default function Navbar() {
   const { t } = useLanguage();
   const { user, isAuthenticated, logout, openAuthModal, isAdmin, isOperator } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isRoiOpen, setIsRoiOpen] = useState(false);
+  const [isMarketplaceOpen, setIsMarketplaceOpen] = useState(false);
+  const [isFarmNetworkOpen, setIsFarmNetworkOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Đóng dropdown khi click ra ngoài
@@ -89,24 +95,45 @@ export default function Navbar() {
       <div className="hidden md:flex items-center space-x-1 lg:space-x-1.5 text-[13px] font-semibold text-[#5C4231] dark:text-[#DAC7B5]">
         <Link
           href="/"
-          className="px-3.5 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition"
+          className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition"
         >
           {t.nav.customerPortal}
         </Link>
+        <a
+          href="/#packages"
+          className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition"
+        >
+          Gói Thuê Nấm
+        </a>
+        <button
+          onClick={() => setIsRoiOpen(true)}
+          className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition flex items-center gap-1.5"
+        >
+          <span>Máy Tính Lợi Nhuận</span>
+          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300/60 dark:border-amber-700/60">
+            ROI
+          </span>
+        </button>
+        <button
+          onClick={() => setIsMarketplaceOpen(true)}
+          className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition"
+        >
+          Sàn Nông Sản FaaS
+        </button>
+        <button
+          onClick={() => setIsFarmNetworkOpen(true)}
+          className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition"
+        >
+          Mạng Lưới Farm
+        </button>
         {(isAdmin || isOperator) && (
           <Link
             href="/operator"
-            className="px-3.5 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition flex items-center gap-1.5"
           >
             <span>{t.nav.operatorCenter}</span>
           </Link>
         )}
-        <a
-          href="/#packages"
-          className="px-3.5 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition"
-        >
-          Gói Thuê Nấm
-        </a>
       </div>
 
       {/* Right Controls & Authentication Button */}
@@ -200,6 +227,11 @@ export default function Navbar() {
           </div>
         )}
       </div>
+
+      {/* Các Modals Tính Năng Mới */}
+      <RoiCalculatorModal isOpen={isRoiOpen} onClose={() => setIsRoiOpen(false)} />
+      <MarketplaceModal isOpen={isMarketplaceOpen} onClose={() => setIsMarketplaceOpen(false)} />
+      <FarmNetworkModal isOpen={isFarmNetworkOpen} onClose={() => setIsFarmNetworkOpen(false)} />
     </nav>
   );
 }
