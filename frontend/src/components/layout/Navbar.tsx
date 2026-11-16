@@ -52,8 +52,19 @@ export default function Navbar() {
     <nav className="bg-white/95 dark:bg-[#140E0A]/95 backdrop-blur-md text-[#24170E] dark:text-[#F7EFE6] px-6 py-3 flex justify-between items-center sticky top-0 z-50 border-b border-[#EAE1D3] dark:border-[#38261A] shadow-xs transition-colors">
       {/* Brand Logo - Cafe Latte Cream Squircle with Deep Coffee Emblem */}
       <Link href="/" className="flex items-center gap-3 group">
-        <div className="w-10 h-10 rounded-2xl bg-gradient-to-b from-[#FAF5EE] via-[#F2E8DC] to-[#E8DCCE] dark:from-[#2B1C13] dark:via-[#20140D] dark:to-[#170E08] border border-[#D9C8B5] dark:border-[#543825] shadow-xs flex items-center justify-center p-1.5 transition-transform group-hover:scale-105 duration-200 shrink-0">
-          <svg className="w-full h-full" viewBox="0 0 68 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div 
+          className="w-10 h-10 logo-box rounded-2xl bg-gradient-to-b from-[#FAF5EE] via-[#F2E8DC] to-[#E8DCCE] dark:from-[#2B1C13] dark:via-[#20140D] dark:to-[#170E08] border border-[#D9C8B5] dark:border-[#543825] shadow-xs flex items-center justify-center p-1.5 transition-transform group-hover:scale-105 duration-200 shrink-0"
+          style={{ width: '40px', height: '40px', minWidth: '40px', minHeight: '40px', maxWidth: '40px', maxHeight: '40px', flexShrink: 0 }}
+        >
+          <svg 
+            width="28"
+            height="28"
+            className="w-full h-full logo-svg" 
+            style={{ width: '28px', height: '28px', maxWidth: '28px', maxHeight: '28px', display: 'block' }}
+            viewBox="0 0 68 56" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <defs>
               <linearGradient id="nav-coffee-grad" x1="12" y1="8" x2="56" y2="44" gradientUnits="userSpaceOnUse">
                 <stop stopColor="#4A2E1D" />

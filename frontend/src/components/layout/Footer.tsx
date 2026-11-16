@@ -14,8 +14,19 @@ export default function Footer() {
           {/* Cột 1 & 2: Nhận Diện Thương Hiệu & Giới Thiệu */}
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-b from-[#FAF5EE] via-[#F2E8DC] to-[#E8DCCE] dark:from-[#2B1C13] dark:via-[#20140D] dark:to-[#170E08] border border-[#D9C8B5] dark:border-[#543825] shadow-xs flex items-center justify-center p-1.5 transition-transform group-hover:scale-105 duration-200 shrink-0">
-                <svg className="w-full h-full" viewBox="0 0 68 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <div 
+                className="w-10 h-10 logo-box rounded-2xl bg-gradient-to-b from-[#FAF5EE] via-[#F2E8DC] to-[#E8DCCE] dark:from-[#2B1C13] dark:via-[#20140D] dark:to-[#170E08] border border-[#D9C8B5] dark:border-[#543825] shadow-xs flex items-center justify-center p-1.5 transition-transform group-hover:scale-105 duration-200 shrink-0"
+                style={{ width: '40px', height: '40px', minWidth: '40px', minHeight: '40px', maxWidth: '40px', maxHeight: '40px', flexShrink: 0 }}
+              >
+                <svg 
+                  width="28" 
+                  height="28" 
+                  className="w-full h-full logo-svg" 
+                  style={{ width: '28px', height: '28px', maxWidth: '28px', maxHeight: '28px', display: 'block' }} 
+                  viewBox="0 0 68 56" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg"
+                >
                   <path d="M14 27C14 16 23 8 34 8C45 8 54 16 54 27C54 30.5 50.5 32.5 46.5 31.5C41.5 30 38.5 26.5 34 26.5C29.5 26.5 26.5 30 21.5 31.5C17.5 32.5 14 30.5 14 27Z" fill="#6B442C" />
                   <path d="M22 26C24 19 28 15 34 15C40 15 44 19 46 26" stroke="#C28E58" strokeWidth="2.5" strokeLinecap="round" />
                   <path d="M28 32H40V41C40 43.8 37.3 46 34 46C30.7 46 28 43.8 28 41V32Z" fill="#6B442C" />
