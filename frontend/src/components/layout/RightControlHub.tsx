@@ -49,7 +49,7 @@ const INITIAL_NOTIFICATIONS: NotificationItem[] = [
 
 export default function RightControlHub({ isOpen, onClose }: RightControlHubProps) {
   const { language, setLanguage, t } = useLanguage();
-  const { user, isAuthenticated, logout, openAuthModal, isAdmin, isOperator } = useAuth();
+  const { user, isAuthenticated, logout, isAdmin, isOperator } = useAuth();
 
   const [isDark, setIsDark] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
@@ -256,25 +256,21 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                   Đăng nhập để giám sát khay nấm từ xa, theo dõi luồng camera trực tiếp và nhận thông báo thu hoạch chuẩn VietGAP.
                 </p>
                 <div className="grid grid-cols-2 gap-2.5">
-                  <button
-                    onClick={() => {
-                      onClose();
-                      openAuthModal('login');
-                    }}
-                    className="py-2.5 px-3 rounded-xl bg-white dark:bg-[#24170F] hover:bg-[#FAF5EE] dark:hover:bg-[#2E1D13] text-[#4A3222] dark:text-[#FFF5EA] border border-[#DECFC0] dark:border-[#422C1D] font-bold text-xs text-center transition shadow-2xs"
+                  <Link
+                    href="/login"
+                    onClick={onClose}
+                    className="py-2.5 px-3 rounded-xl bg-white dark:bg-[#24170F] hover:bg-[#FAF5EE] dark:hover:bg-[#2E1D13] text-[#4A3222] dark:text-[#FFF5EA] border border-[#DECFC0] dark:border-[#422C1D] font-bold text-xs text-center transition shadow-2xs flex items-center justify-center"
                   >
                     Đăng Nhập
-                  </button>
-                  <button
-                    onClick={() => {
-                      onClose();
-                      openAuthModal('register');
-                    }}
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={onClose}
                     className="py-2.5 px-3 rounded-xl bg-[#24170E] hover:bg-[#382417] text-white font-bold text-xs text-center border border-[#C28E58]/35 transition shadow-sm shadow-[#24170E]/20 flex items-center justify-center gap-1"
                   >
                     <span>Tạo Tài Khoản</span>
                     <span className="text-[#E2BA78] font-bold">→</span>
-                  </button>
+                  </Link>
                 </div>
               </div>
             )}
