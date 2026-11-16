@@ -7,6 +7,7 @@ import CameraFeed from '@/components/customer/CameraFeed';
 import TimelapseSlider from '@/components/customer/TimelapseSlider';
 import SensorCharts from '@/components/customer/SensorCharts';
 import HarvestModal from '@/components/customer/HarvestModal';
+import CustomerBanner from '@/components/customer/CustomerBanner';
 
 export default function Home() {
   return (
@@ -32,6 +33,9 @@ export default function Home() {
               Quản lý khay nấm cá nhân, quan sát buồng kính phòng sạch qua camera góc cận, theo dõi chỉ số vi khí hậu và gửi yêu cầu thu hoạch.
             </p>
           </div>
+
+          {/* Banner Cá Nhân Hóa Khách Hàng (Auth State) */}
+          <CustomerBanner />
 
           {/* Cụm 2 Cột Đối Xứng: Camera Giám Sát Trực Tiếp & Thước Tua Sinh Trưởng */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
