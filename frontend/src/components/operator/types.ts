@@ -6,7 +6,14 @@ export interface TrayCell {
   roomId: number;
   rackNumber: number;
   shelfLevel: number;
-  status: string; // giá trị gốc của CultivationTrays.Status
+  status: string; // AVAILABLE | OCCUPIED | MAINTENANCE
+  orderCode?: string | null;
+  customerName?: string | null;
+  speciesName?: string | null;
+  inoculationDate?: string | null;
+  expectedHarvestDate?: string | null;
+  currentOrderId?: number | null;
+  positionNumber?: number;
 }
 
 export interface RoomOption {

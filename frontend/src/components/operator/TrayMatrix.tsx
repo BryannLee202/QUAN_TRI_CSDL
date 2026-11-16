@@ -27,29 +27,36 @@ export default function TrayMatrix({ trays, roomId, roomHasAlert, onSelectTray }
   }, [inRoom]);
 
   if (inRoom.length === 0) {
-    return <p className="text-sm text-slate-500">Buồng này chưa có khay nào.</p>;
+    return (
+      <div className="py-8 text-center text-xs text-[#8C6D53] dark:text-[#A8907E]">
+        Buồng này chưa có khay nuôi nào trong cơ sở dữ liệu.
+      </div>
+    );
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto pt-2">
       <div
-        className="grid gap-2"
-        style={{ gridTemplateColumns: `repeat(${racks}, minmax(56px, 1fr))` }}
+        className="grid gap-2.5 min-w-[360px]"
+        style={{ gridTemplateColumns: `repeat(${Math.max(racks, 1)}, minmax(64px, 1fr))` }}
       >
         {Array.from({ length: shelves }).flatMap((_, s) =>
           Array.from({ length: racks }).map((__, r) => {
             const tray = byPos.get(`${r + 1}-${s + 1}`);
-            if (!tray) return <div key={`empty-${r}-${s}`} />;
+            if (!tray) return <div key={`empty-${r}-${s}`} className="h-14 rounded-xl border border-dashed border-[#E0D3C1]/50 dark:border-[#38261A]/50 bg-transparent" />;
             const ui = toUiStatus(tray.status, roomHasAlert);
             return (
               <button
                 key={tray.trayId}
                 type="button"
-                title={`${tray.trayCode} · ${STATUS_LABEL[ui]}`}
+                title={`${tray.trayCode} (${tray.speciesName || "Trống"}) · ${STATUS_LABEL[ui]}`}
                 onClick={() => onSelectTray?.(tray)}
-                className={`flex h-14 items-center justify-center rounded-lg text-xs font-medium transition hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37] ${STATUS_STYLE[ui]}`}
+                className={`group flex flex-col h-14 items-center justify-center rounded-xl p-1 text-xs font-bold transition-all duration-200 hover:scale-[1.03] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C28E58] shadow-2xs ${STATUS_STYLE[ui]}`}
               >
-                R{tray.rackNumber}-{tray.shelfLevel}
+                <span className="text-[11px] tracking-tight">{tray.trayCode}</span>
+                <span className="text-[9px] opacity-85 font-mono uppercase">
+                  {tray.speciesName ? tray.speciesName.split(" ")[0] : `R${tray.rackNumber}-${tray.shelfLevel}`}
+                </span>
               </button>
             );
           })

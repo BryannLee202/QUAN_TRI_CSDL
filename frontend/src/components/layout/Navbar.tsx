@@ -61,18 +61,10 @@ export default function Navbar() {
           {t.nav.operatorCenter}
         </Link>
         <a
-          href="#packages"
+          href="/#packages"
           className="px-3.5 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition"
         >
           Gói Thuê Nấm
-        </a>
-        <a
-          href="http://localhost:5000/api-docs"
-          target="_blank"
-          rel="noreferrer"
-          className="px-3.5 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition"
-        >
-          {t.nav.swaggerDocs}
         </a>
       </div>
 
