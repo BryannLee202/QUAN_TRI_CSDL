@@ -93,17 +93,14 @@ export default function Navbar() {
         >
           {t.nav.customerPortal}
         </Link>
-        <Link
-          href="/operator"
-          className="px-3.5 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition flex items-center gap-1.5"
-        >
-          <span>{t.nav.operatorCenter}</span>
-          {!isAdmin && !isOperator && (
-            <span className="text-[10px] text-[#A66C38] dark:text-[#C28E58] font-normal" title="Yêu cầu tài khoản Admin/Operator">
-              🔒
-            </span>
-          )}
-        </Link>
+        {(isAdmin || isOperator) && (
+          <Link
+            href="/operator"
+            className="px-3.5 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition flex items-center gap-1.5"
+          >
+            <span>{t.nav.operatorCenter}</span>
+          </Link>
+        )}
         <a
           href="/#packages"
           className="px-3.5 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition"
