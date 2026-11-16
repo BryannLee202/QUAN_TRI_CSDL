@@ -8,12 +8,25 @@ export const createRental = async (req: Request, res: Response): Promise<void> =
   try {
     const { userId, packageId, trayId, deliveryAddress, receiverPhone, paymentMethod, discountPercent, notes } = req.body;
 
+    // Xác thực an toàn đầu vào (Phòng thủ SQL Injection & Boundary Attacks)
+    if (userId !== undefined && (isNaN(Number(userId)) || Number(userId) <= 0)) {
+      res.status(400).json({ success: false, message: "ID người dùng (userId) không hợp lệ." });
+      return;
+    }
+    if (packageId !== undefined && (isNaN(Number(packageId)) || Number(packageId) <= 0)) {
+      res.status(400).json({ success: false, message: "ID gói nấm (packageId) không hợp lệ." });
+      return;
+    }
+    if (trayId !== undefined && trayId !== null && (isNaN(Number(trayId)) || Number(trayId) <= 0)) {
+      res.status(400).json({ success: false, message: "ID khay nấm (trayId) không hợp lệ." });
+      return;
+    }
+
     const pool = getPool();
     const request = pool.request();
     request.input("UserID", sql.Int, userId || 4); // Mặc định customer1 nếu không truyền
     request.input("PackageID", sql.Int, packageId || 1);
-    request.input("TrayID", sql.Int, trayId || null);
-    request.output("TrayID", sql.Int);
+    request.output("TrayID", sql.Int, trayId || null);
     request.input("DeliveryAddress", sql.NVarChar(255), deliveryAddress || "123 Đường Nấm Sạch, TP. Hồ Chí Minh");
     request.input("ReceiverPhone", sql.VarChar(20), receiverPhone || "0900000011");
     request.input("PaymentMethod", sql.VarChar(50), paymentMethod || "VNPAY");
@@ -47,7 +60,9 @@ export const createRental = async (req: Request, res: Response): Promise<void> =
       },
     });
   } catch (error: any) {
-    res.status(500).json({ success: false, message: "Lỗi xử lý thuê khay", error: error.message });
+    const isConflict = error.message && (error.message.includes("không còn khay") || error.message.includes("AVAILABLE"));
+    const statusCode = isConflict ? 409 : 400;
+    res.status(statusCode).json({ success: false, message: error.message || "Lỗi xử lý thuê khay", error: error.message });
   }
 };
 
@@ -69,7 +84,9 @@ export const assignTrayQR = async (req: Request, res: Response): Promise<void> =
       data: { orderId, qrCode },
     });
   } catch (error: any) {
-    res.status(500).json({ message: "Lỗi gán khay QR", error: error.message });
+    const isNotFound = error.message && error.message.includes("không tồn tại");
+    const statusCode = isNotFound ? 404 : 400;
+    res.status(statusCode).json({ success: false, message: error.message || "Lỗi gán khay QR", error: error.message });
   }
 };
 
@@ -106,7 +123,7 @@ export const requestHarvest = async (req: Request, res: Response): Promise<void>
       },
     });
   } catch (error: any) {
-    res.status(500).json({ message: "Lỗi yêu cầu thu hoạch", error: error.message });
+    res.status(400).json({ success: false, message: error.message || "Lỗi yêu cầu thu hoạch", error: error.message });
   }
 };
 
@@ -130,6 +147,6 @@ export const completeHarvest = async (req: Request, res: Response): Promise<void
       data: { harvestId, actualWeightKg, qualityGrade },
     });
   } catch (error: any) {
-    res.status(500).json({ message: "Lỗi hoàn tất thu hoạch", error: error.message });
+    res.status(400).json({ success: false, message: error.message || "Lỗi hoàn tất thu hoạch", error: error.message });
   }
 };

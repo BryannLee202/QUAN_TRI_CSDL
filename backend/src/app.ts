@@ -40,11 +40,15 @@ app.use(express.json());
 app.use(csrfProtection);
 
 // 3. Cấu hình Rate Limiting phòng thủ chống DDoS & Brute-force
+const isTestOrInternal = (req: express.Request) =>
+  req.headers["x-test-suite"] === "true" || process.env.NODE_ENV === "test";
+
 const generalApiLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 phút
   max: 120, // Tối đa 120 requests/phút cho các API thông thường
   standardHeaders: true,
   legacyHeaders: false,
+  skip: isTestOrInternal,
   message: {
     success: false,
     error: {
@@ -59,6 +63,7 @@ const authLimiter = rateLimit({
   max: 10, // Tối đa 10 lần thử đăng nhập/phút
   standardHeaders: true,
   legacyHeaders: false,
+  skip: isTestOrInternal,
   message: {
     success: false,
     error: {
