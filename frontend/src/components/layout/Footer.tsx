@@ -96,9 +96,7 @@ export default function Footer() {
                 <span>WebSocket Telemetry 5 Giây/Lần</span>
               </li>
               <li>
-                <Link href="/api-docs" className="hover:text-[#C28E58] transition-colors">
-                  Tài Liệu Swagger REST API
-                </Link>
+                <span>Kiến Trúc Microservices REST API</span>
               </li>
             </ul>
           </div>

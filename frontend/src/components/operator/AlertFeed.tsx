@@ -3,9 +3,9 @@
 import type { AlertItem } from "./types";
 
 const SEVERITY_STYLE: Record<string, string> = {
-  CRITICAL: "border-red-300 bg-red-50 text-red-800",
-  WARNING: "border-amber-300 bg-amber-50 text-amber-800",
-  INFO: "border-sky-300 bg-sky-50 text-sky-800",
+  CRITICAL: "border-rose-300 dark:border-rose-900 bg-rose-50/90 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200",
+  WARNING: "border-amber-300 dark:border-amber-900 bg-amber-50/90 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200",
+  INFO: "border-[#C28E58]/40 bg-[#FAF5EE] dark:bg-[#1E130B] text-[#523522] dark:text-[#E2BA78]",
 };
 
 interface Props {
@@ -18,47 +18,64 @@ export default function AlertFeed({ alerts, roomLabel, onResolve }: Props) {
   const unresolved = alerts.filter((a) => !a.isResolved).length;
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-      <header className="mb-3 flex items-center justify-between">
-        <h2 className="font-semibold text-slate-800">Cảnh báo vi khí hậu</h2>
-        <span className="relative text-xl" aria-label={`${unresolved} cảnh báo chưa xử lý`}>
-          🔔
-          {unresolved > 0 && (
-            <span className="absolute -right-2 -top-2 rounded-full bg-red-600 px-1.5 text-xs font-bold text-white">
-              {unresolved}
-            </span>
-          )}
-        </span>
+    <section className="rounded-2xl border border-[#E0D3C1] dark:border-[#38261A] bg-white dark:bg-[#20140D] p-5 shadow-sm transition-colors">
+      <header className="mb-4 flex items-center justify-between pb-3 border-b border-[#F0E6D8] dark:border-[#2D1D13]">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-[#FAF5EE] dark:bg-[#2B1B12] border border-[#DECFC0] dark:border-[#4A3222] flex items-center justify-center text-[#C28E58]">
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+            </svg>
+          </div>
+          <div>
+            <h2 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA]">Cảnh Báo Vi Khí Hậu</h2>
+            <p className="text-[11px] text-[#735843] dark:text-[#BFA895]">Thời gian thực từ cảm biến IoT buồng nuôi</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FAF5EE] dark:bg-[#2B1B12] border border-[#DECFC0] dark:border-[#4A3222] text-xs font-semibold text-[#523522] dark:text-[#E2BA78]">
+          <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+          <span>{unresolved} đang xử lý</span>
+        </div>
       </header>
 
-      <ul className="max-h-96 space-y-2 overflow-y-auto">
-        {alerts.length === 0 && <li className="text-sm text-slate-500">Chưa có cảnh báo nào.</li>}
+      <ul className="max-h-96 space-y-2.5 overflow-y-auto pr-1">
+        {alerts.length === 0 && (
+          <li className="text-xs text-[#8C6D53] dark:text-[#A8907E] py-4 text-center">
+            Hệ thống vi khí hậu ổn định, không có cảnh báo nào.
+          </li>
+        )}
         {alerts.map((a) => (
           <li
             key={a.alertId}
-            className={`rounded-xl border p-3 text-sm ${
+            className={`rounded-xl border p-3.5 text-xs transition-all ${
               a.isResolved
-                ? "border-slate-200 bg-slate-50 text-slate-500"
+                ? "border-[#E8DCCE] dark:border-[#2D1D13] bg-[#FAF7F2] dark:bg-[#170E08] text-[#8C6D53] dark:text-[#7A6455] opacity-75"
                 : SEVERITY_STYLE[a.severity] ?? SEVERITY_STYLE.WARNING
             }`}
           >
-            <div className="flex items-center justify-between gap-2">
-              <strong>
+            <div className="flex items-center justify-between gap-2 mb-1.5">
+              <strong className="font-bold tracking-tight">
                 {roomLabel(a.roomId)} · {a.alertType}
               </strong>
-              <time className="text-xs opacity-70">
+              <time className="text-[10px] font-mono opacity-80">
                 {new Date(a.alertTime).toLocaleTimeString("vi-VN")}
               </time>
             </div>
-            <p className="mt-1">{a.message}</p>
+            <p className="leading-relaxed text-[11px]">{a.message}</p>
             {!a.isResolved && onResolve && (
-              <button
-                type="button"
-                onClick={() => onResolve(a.alertId)}
-                className="mt-2 rounded-full border border-current px-3 py-0.5 text-xs font-medium hover:bg-white/60"
-              >
-                Đánh dấu đã xử lý
-              </button>
+              <div className="mt-2.5 pt-2 border-t border-current/10 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => onResolve(a.alertId)}
+                  className="inline-flex items-center gap-1 rounded-lg bg-white/90 dark:bg-black/30 hover:bg-white dark:hover:bg-black/50 border border-current/30 px-3 py-1 text-[11px] font-bold shadow-2xs transition-transform active:scale-95"
+                >
+                  <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  Đánh dấu đã xử lý
+                </button>
+              </div>
             )}
           </li>
         ))}

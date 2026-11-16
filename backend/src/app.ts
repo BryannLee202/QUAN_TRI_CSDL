@@ -12,6 +12,7 @@ import rentalRoutes from "./routes/rental.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 import analyticsRoutes from "./routes/analytics.routes.js";
 import healthRoutes from "./routes/health.routes.js";
+import operatorRoutes from "./routes/operator.routes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { csrfProtection } from "./middleware/csrf.middleware.js";
 
@@ -89,6 +90,7 @@ app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api", generalApiLimiter, rentalRoutes);
 app.use("/api", generalApiLimiter, paymentRoutes);
 app.use("/api", generalApiLimiter, analyticsRoutes);
+app.use("/api", generalApiLimiter, operatorRoutes);
 
 app.get("/", (_req, res) => {
   res.json({

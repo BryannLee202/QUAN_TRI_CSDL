@@ -110,3 +110,68 @@ export async function checkSystemHealth() {
   const res = await fetch(`${API_BASE}/health`);
   return res.json();
 }
+
+/**
+ * 5. Các API Quản trị dành cho Trung Tâm Điều Hành Kỹ Thuật Viên (Operator Hub)
+ */
+export async function getOperatorRoomsApi() {
+  const res = await fetch(`${API_BASE}/operator/rooms`);
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Lỗi tải danh sách buồng");
+  return json.data;
+}
+
+export async function getOperatorTraysApi(roomId?: number) {
+  const url = roomId ? `${API_BASE}/operator/trays?roomId=${roomId}` : `${API_BASE}/operator/trays`;
+  const res = await fetch(url);
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Lỗi tải ma trận khay");
+  return json.data;
+}
+
+export async function getOperatorAlertsApi(roomId?: number) {
+  const url = roomId ? `${API_BASE}/operator/alerts?roomId=${roomId}` : `${API_BASE}/operator/alerts`;
+  const res = await fetch(url);
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Lỗi tải cảnh báo vi khí hậu");
+  return json.data;
+}
+
+export async function resolveOperatorAlertApi(alertId: number, notes?: string) {
+  const res = await fetch(`${API_BASE}/operator/alerts/${alertId}/resolve`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ notes }),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Lỗi giải quyết cảnh báo");
+  return json;
+}
+
+export async function toggleOperatorDeviceApi(params: {
+  roomId: number;
+  deviceType: string;
+  actionState: "ON" | "OFF";
+  triggeredBy?: string;
+  details?: string;
+}) {
+  const res = await fetch(`${API_BASE}/operator/devices/toggle`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(params),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Lỗi điều khiển thiết bị");
+  return json;
+}
+
+export async function updateOperatorTrayStatusApi(trayId: number, status: "AVAILABLE" | "MAINTENANCE") {
+  const res = await fetch(`${API_BASE}/operator/trays/${trayId}/status`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status }),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Lỗi cập nhật khay");
+  return json;
+}

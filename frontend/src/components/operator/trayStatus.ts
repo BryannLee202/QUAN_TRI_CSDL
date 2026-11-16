@@ -17,8 +17,8 @@ export const STATUS_LABEL: Record<TrayUiStatus, string> = {
 };
 
 export const STATUS_STYLE: Record<TrayUiStatus, string> = {
-  active: "bg-emerald-600 text-white",
-  alert: "bg-orange-500 text-white animate-pulse",
-  maintenance: "bg-slate-400 text-white",
-  empty: "border border-slate-300 bg-white text-slate-400",
+  active: "bg-[#10B981] hover:bg-[#059669] text-white shadow-xs font-semibold",
+  alert: "bg-[#EF4444] hover:bg-[#DC2626] text-white font-bold animate-pulse shadow-xs",
+  maintenance: "bg-[#8A5C38] hover:bg-[#704627] text-white shadow-xs",
+  empty: "border border-[#D9C8B5] dark:border-[#4A3222] bg-[#FAF5EE] dark:bg-[#25170F] text-[#8C6D53] dark:text-[#A8907E] hover:border-[#C28E58]",
 };
