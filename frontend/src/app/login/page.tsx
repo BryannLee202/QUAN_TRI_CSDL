@@ -71,20 +71,38 @@ export default function LoginPage() {
     <div className="min-h-screen bg-[#FBF8F4] dark:bg-[#120B07] text-[#24170E] dark:text-[#F5EBE1] flex flex-col font-sans transition-colors duration-300">
       {/* Top Header */}
       <header className="w-full border-b border-[#E8DCCE] dark:border-[#2D1D13] bg-white/80 dark:bg-[#1A1009]/80 backdrop-blur-md sticky top-0 z-40 px-4 sm:px-8 py-3.5 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-[#52331E] to-[#C28E58] flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform">
-            <span className="text-base">🍄</span>
+        {/* Brand Logo - Đồng bộ 100% với Navbar */}
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-b from-[#FAF5EE] via-[#F2E8DC] to-[#E8DCCE] dark:from-[#2B1C13] dark:via-[#20140D] dark:to-[#170E08] border border-[#D9C8B5] dark:border-[#543825] shadow-xs flex items-center justify-center p-1.5 transition-transform group-hover:scale-105 duration-200 shrink-0">
+            <svg className="w-full h-full" viewBox="0 0 68 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="login-brand-coffee-grad" x1="12" y1="8" x2="56" y2="44" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#4A2E1D" />
+                  <stop offset="0.6" stopColor="#6B442C" />
+                  <stop offset="1" stopColor="#9E6845" />
+                </linearGradient>
+                <linearGradient id="login-brand-bronze-grad" x1="20" y1="20" x2="48" y2="40" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#C28E58" />
+                  <stop offset="1" stopColor="#E2B888" />
+                </linearGradient>
+              </defs>
+              <path d="M14 27C14 16 23 8 34 8C45 8 54 16 54 27C54 30.5 50.5 32.5 46.5 31.5C41.5 30 38.5 26.5 34 26.5C29.5 26.5 26.5 30 21.5 31.5C17.5 32.5 14 30.5 14 27Z" fill="url(#login-brand-coffee-grad)" />
+              <path d="M22 26C24 19 28 15 34 15C40 15 44 19 46 26" stroke="url(#login-brand-bronze-grad)" strokeWidth="2.5" strokeLinecap="round" />
+              <path d="M28 32H40V41C40 43.8 37.3 46 34 46C30.7 46 28 43.8 28 41V32Z" fill="url(#login-brand-coffee-grad)" />
+              <circle cx="34" cy="20" r="3" fill="url(#login-brand-bronze-grad)" />
+              <circle cx="23" cy="22" r="2" fill="#C28E58" />
+              <circle cx="45" cy="22" r="2" fill="#C28E58" />
+            </svg>
           </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-base tracking-tight text-[#24170E] dark:text-[#FFF5EA]">
-                MushroomCloud
-              </span>
+
+          <div className="flex flex-col">
+            <span className="text-lg font-black tracking-tight text-[#24170E] dark:text-[#FFF5EA] flex items-center gap-1.5 font-sans">
+              MushroomCloud
               <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58]"></span>
-            </div>
-            <p className="text-[10px] uppercase font-bold tracking-wider text-[#8C6D53] dark:text-[#B59D89]">
-              Smart Farm FaaS Platform
-            </p>
+            </span>
+            <span className="text-[10px] font-bold text-[#8A5C38] dark:text-[#D4AF7A] tracking-wider uppercase -mt-0.5">
+              Smart Farm FaaS
+            </span>
           </div>
         </Link>
 
