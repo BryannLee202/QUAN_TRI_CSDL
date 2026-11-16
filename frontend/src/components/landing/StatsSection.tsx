@@ -90,26 +90,51 @@ export default function StatsSection() {
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-emerald-400/10 blur-[120px] pointer-events-none rounded-full" />
       <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-96 h-96 bg-teal-400/10 blur-[120px] pointer-events-none rounded-full" />
 
+      {/* Watermark Nấm Sinh Học Ẩn Sâu Trong Nền Cleanroom Mint */}
+      <div className="absolute -left-12 -bottom-12 w-72 h-72 text-emerald-700 opacity-[0.04] pointer-events-none select-none -rotate-12">
+        <svg viewBox="0 0 100 100" fill="currentColor">
+          <path d="M50 15 C30 15 15 32 15 48 C15 54 22 57 32 57 C36 57 38 59 39 63 C42 75 44 85 45 92 C47 95 53 95 55 92 C56 85 58 75 61 63 C62 59 64 57 68 57 C78 57 85 54 85 48 C85 32 70 15 50 15 Z" />
+          <circle cx="35" cy="35" r="4" fill="white" fillOpacity="0.5" />
+          <circle cx="65" cy="32" r="5" fill="white" fillOpacity="0.5" />
+          <circle cx="50" cy="24" r="3.5" fill="white" fillOpacity="0.5" />
+        </svg>
+      </div>
+      <div className="absolute -right-12 -top-12 w-72 h-72 text-teal-700 opacity-[0.04] pointer-events-none select-none rotate-12">
+        <svg viewBox="0 0 100 100" fill="currentColor">
+          <path d="M50 15 C30 15 15 32 15 48 C15 54 22 57 32 57 C36 57 38 59 39 63 C42 75 44 85 45 92 C47 95 53 95 55 92 C56 85 58 75 61 63 C62 59 64 57 68 57 C78 57 85 54 85 48 C85 32 70 15 50 15 Z" />
+          <circle cx="35" cy="35" r="4" fill="white" fillOpacity="0.5" />
+          <circle cx="65" cy="32" r="5" fill="white" fillOpacity="0.5" />
+          <circle cx="50" cy="24" r="3.5" fill="white" fillOpacity="0.5" />
+        </svg>
+      </div>
+
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {stats.map((s, idx) => (
             <div
               key={idx}
-              className={`p-6 rounded-2xl bg-white/95 border ${s.cardBorder} shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center group backdrop-blur-xs`}
+              className={`p-6 rounded-2xl bg-white/95 border ${s.cardBorder} shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center group backdrop-blur-xs relative overflow-hidden`}
             >
-              <div className={`w-12 h-12 rounded-2xl ${s.iconBg} flex items-center justify-center shadow-2xs group-hover:scale-110 transition-transform duration-300 mb-3.5`}>
+              {/* Watermark Nấm Chìm Sau Thẻ Số Liệu */}
+              <div className="absolute -bottom-5 -right-5 w-24 h-24 text-emerald-800 opacity-[0.035] group-hover:opacity-[0.08] group-hover:scale-110 pointer-events-none select-none transition-all duration-500">
+                <svg viewBox="0 0 100 100" fill="currentColor">
+                  <path d="M50 15 C30 15 15 32 15 48 C15 54 22 57 32 57 C36 57 38 59 39 63 C42 75 44 85 45 92 C47 95 53 95 55 92 C56 85 58 75 61 63 C62 59 64 57 68 57 C78 57 85 54 85 48 C85 32 70 15 50 15 Z" />
+                </svg>
+              </div>
+
+              <div className={`w-12 h-12 rounded-2xl ${s.iconBg} flex items-center justify-center shadow-2xs group-hover:scale-110 transition-transform duration-300 mb-3.5 relative z-10`}>
                 {s.icon}
               </div>
-              <div className={`text-3xl md:text-4xl font-black ${s.valueClass} tracking-tight font-sans`}>
+              <div className={`text-3xl md:text-4xl font-black ${s.valueClass} tracking-tight font-sans relative z-10`}>
                 <CountUp target={s.value} suffix={s.suffix} />
               </div>
-              <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${s.badgeClass} mt-2.5`}>
+              <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${s.badgeClass} mt-2.5 relative z-10`}>
                 {s.badge}
               </span>
-              <h4 className="text-sm font-bold text-slate-800 mt-2.5 tracking-wide">
+              <h4 className="text-sm font-bold text-slate-800 mt-2.5 tracking-wide relative z-10">
                 {s.label}
               </h4>
-              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed relative z-10">
                 {s.detail}
               </p>
             </div>

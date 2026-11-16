@@ -84,6 +84,26 @@ export default function HeroSection() {
       {/* Background Subtle Warm Caramel Glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#E5D7C3]/40 dark:bg-[#3B2516]/15 blur-3xl pointer-events-none rounded-full" />
 
+      {/* Các Icon Nấm Nghệ Thuật Ẩn Sâu Trong Lớp Nền (Subtle Background Watermark Mushrooms) */}
+      <div className="absolute -top-12 -left-12 w-96 h-96 text-[#C28E58] opacity-[0.035] dark:opacity-[0.05] pointer-events-none select-none -rotate-12 transition-opacity">
+        <svg viewBox="0 0 200 200" fill="currentColor">
+          {/* Cụm nấm lớn nghệ thuật */}
+          <path d="M100 20 C60 20 30 50 30 80 C30 90 40 95 60 95 C68 95 72 98 74 105 C78 125 82 155 85 180 C88 185 112 185 115 180 C118 155 122 125 126 105 C128 98 132 95 140 95 C160 95 170 90 170 80 C170 50 140 20 100 20 Z" />
+          <ellipse cx="75" cy="55" rx="10" ry="7" fill="white" fillOpacity="0.4" />
+          <ellipse cx="125" cy="50" rx="8" ry="6" fill="white" fillOpacity="0.4" />
+          <ellipse cx="100" cy="40" rx="12" ry="8" fill="white" fillOpacity="0.4" />
+          <ellipse cx="105" cy="70" rx="7" ry="5" fill="white" fillOpacity="0.4" />
+        </svg>
+      </div>
+      <div className="absolute top-1/3 -right-16 w-[450px] h-[450px] text-emerald-800 opacity-[0.03] dark:opacity-[0.05] pointer-events-none select-none rotate-12 transition-opacity">
+        <svg viewBox="0 0 200 200" fill="currentColor">
+          {/* Cụm nấm Linh Chi / Bào Ngư đa tầng */}
+          <path d="M110 185 C105 150 100 120 95 90 C80 92 60 85 50 75 C30 55 45 30 75 25 C115 18 150 30 160 55 C165 68 155 82 135 88 C130 115 125 150 120 185 Z" />
+          <path d="M60 120 C50 110 40 100 45 85 C50 70 70 75 80 85 C85 92 82 105 75 115 Z" fillOpacity="0.6" />
+          <path d="M140 125 C150 115 160 105 155 90 C150 75 130 80 120 90 C115 97 118 110 125 120 Z" fillOpacity="0.6" />
+        </svg>
+      </div>
+
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Top Split: 2-Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
@@ -354,7 +374,13 @@ export default function HeroSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mt-16">
           
           {/* Card 1: Mô hình Farm-as-a-Service */}
-          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-[#C28E58] transition-all duration-300 flex items-start gap-4 group">
+          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-[#C28E58] transition-all duration-300 flex items-start gap-4 group relative overflow-hidden">
+            {/* Watermark Nấm Ẩn Sâu Dưới Nền Thẻ */}
+            <div className="absolute -bottom-4 -right-4 w-24 h-24 text-[#C28E58] opacity-[0.06] dark:opacity-[0.08] pointer-events-none select-none group-hover:scale-110 group-hover:opacity-[0.11] transition-all duration-500">
+              <svg viewBox="0 0 100 100" fill="currentColor">
+                <path d="M50 15 C30 15 15 32 15 48 C15 54 22 57 32 57 C36 57 38 59 39 63 C42 75 44 85 45 92 C47 95 53 95 55 92 C56 85 58 75 61 63 C62 59 64 57 68 57 C78 57 85 54 85 48 C85 32 70 15 50 15 Z" />
+              </svg>
+            </div>
             {/* Icon Tile: Buồng Kính Vô Trùng Smart FaaS Thực Tế */}
             <div className="bento-icon-box w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-2xl bg-gradient-to-br from-[#FAF3EA] via-[#F4E8D8] to-[#E8D4BB] dark:from-[#3D2517] dark:via-[#2B190E] dark:to-[#1A0F08] border border-[#D9C4AB] dark:border-[#5C3822] flex items-center justify-center shrink-0 shadow-md shadow-[#C28E58]/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2">
               <svg className="bento-svg w-7 h-7" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -397,7 +423,13 @@ export default function HeroSection() {
           </div>
 
           {/* Card 2: Cảm Biến IoT Realtime */}
-          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-emerald-600 transition-all duration-300 flex items-start gap-4 group">
+          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-emerald-600 transition-all duration-300 flex items-start gap-4 group relative overflow-hidden">
+            {/* Watermark Nấm Ẩn Sâu Dưới Nền Thẻ */}
+            <div className="absolute -bottom-4 -right-4 w-24 h-24 text-emerald-600 opacity-[0.06] dark:opacity-[0.08] pointer-events-none select-none group-hover:scale-110 group-hover:opacity-[0.11] transition-all duration-500">
+              <svg viewBox="0 0 100 100" fill="currentColor">
+                <path d="M50 15 C30 15 15 32 15 48 C15 54 22 57 32 57 C36 57 38 59 39 63 C42 75 44 85 45 92 C47 95 53 95 55 92 C56 85 58 75 61 63 C62 59 64 57 68 57 C78 57 85 54 85 48 C85 32 70 15 50 15 Z" />
+              </svg>
+            </div>
             {/* Icon Tile: Chip Cảm Biến Vi Điện Tử Bio-Tech Đa Kênh */}
             <div className="bento-icon-box w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-2xl bg-gradient-to-br from-[#ECFDF5] via-[#D1FAE5] to-[#A7F3D0] dark:from-[#064E3B]/80 dark:via-[#065F46]/60 dark:to-[#022C22] border border-emerald-300/80 dark:border-emerald-700/60 flex items-center justify-center shrink-0 shadow-md shadow-emerald-900/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2">
               <svg className="bento-svg w-7 h-7" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -431,7 +463,13 @@ export default function HeroSection() {
           </div>
 
           {/* Card 3: Camera Trực Tuyến 24/7 */}
-          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-sky-600 transition-all duration-300 flex items-start gap-4 group">
+          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-sky-600 transition-all duration-300 flex items-start gap-4 group relative overflow-hidden">
+            {/* Watermark Nấm Ẩn Sâu Dưới Nền Thẻ */}
+            <div className="absolute -bottom-4 -right-4 w-24 h-24 text-sky-600 opacity-[0.06] dark:opacity-[0.08] pointer-events-none select-none group-hover:scale-110 group-hover:opacity-[0.11] transition-all duration-500">
+              <svg viewBox="0 0 100 100" fill="currentColor">
+                <path d="M50 15 C30 15 15 32 15 48 C15 54 22 57 32 57 C36 57 38 59 39 63 C42 75 44 85 45 92 C47 95 53 95 55 92 C56 85 58 75 61 63 C62 59 64 57 68 57 C78 57 85 54 85 48 C85 32 70 15 50 15 Z" />
+              </svg>
+            </div>
             {/* Icon Tile: Ống Kính Camera PTZ 4K Siêu Nét */}
             <div className="bento-icon-box w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-2xl bg-gradient-to-br from-[#F0F9FF] via-[#E0F2FE] to-[#BAE6FD] dark:from-[#0C4A6E]/80 dark:via-[#075985]/60 dark:to-[#082F49] border border-sky-300/80 dark:border-sky-700/60 flex items-center justify-center shrink-0 shadow-md shadow-sky-900/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2">
               <svg className="bento-svg w-7 h-7" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -466,7 +504,13 @@ export default function HeroSection() {
           </div>
 
           {/* Card 4: Thu Hoạch & Giao Tận Nhà */}
-          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-amber-600 transition-all duration-300 flex items-start gap-4 group">
+          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-amber-600 transition-all duration-300 flex items-start gap-4 group relative overflow-hidden">
+            {/* Watermark Nấm Ẩn Sâu Dưới Nền Thẻ */}
+            <div className="absolute -bottom-4 -right-4 w-24 h-24 text-amber-600 opacity-[0.06] dark:opacity-[0.08] pointer-events-none select-none group-hover:scale-110 group-hover:opacity-[0.11] transition-all duration-500">
+              <svg viewBox="0 0 100 100" fill="currentColor">
+                <path d="M50 15 C30 15 15 32 15 48 C15 54 22 57 32 57 C36 57 38 59 39 63 C42 75 44 85 45 92 C47 95 53 95 55 92 C56 85 58 75 61 63 C62 59 64 57 68 57 C78 57 85 54 85 48 C85 32 70 15 50 15 Z" />
+              </svg>
+            </div>
             {/* Icon Tile: Hộp Nông Sản Hút Chân Không VietGAP Thực Tế */}
             <div className="bento-icon-box w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-2xl bg-gradient-to-br from-[#FFFBEB] via-[#FEF3C7] to-[#FDE68A] dark:from-[#78350F]/80 dark:via-[#92400E]/60 dark:to-[#451A03] border border-amber-300/80 dark:border-amber-700/60 flex items-center justify-center shrink-0 shadow-md shadow-amber-900/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2">
               <svg className="bento-svg w-7 h-7" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">

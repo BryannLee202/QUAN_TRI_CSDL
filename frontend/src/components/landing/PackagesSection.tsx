@@ -118,8 +118,22 @@ export default function PackagesSection() {
   };
 
   return (
-    <section id="packages" className="py-20 px-6 bg-[#FAF7F2]/80 dark:bg-[#140D07] text-[#24170E] dark:text-[#F7EFE6] transition-colors">
-      <div className="max-w-6xl mx-auto text-center space-y-3 mb-14">
+    <section id="packages" className="py-20 px-6 bg-[#FAF7F2]/80 dark:bg-[#140D07] text-[#24170E] dark:text-[#F7EFE6] transition-colors relative overflow-hidden">
+      {/* Watermark Nấm Dược Liệu Nền Sân Khấu Bảng Giá */}
+      <div className="absolute top-10 -left-12 w-96 h-96 text-[#C28E58] opacity-[0.035] dark:opacity-[0.05] pointer-events-none select-none -rotate-12">
+        <svg viewBox="0 0 200 200" fill="currentColor">
+          <path d="M100 25 C50 25 20 60 20 90 C20 100 30 105 50 105 C60 105 65 110 68 120 C72 145 78 175 80 185 C83 190 117 190 120 185 C122 175 128 145 132 120 C135 110 140 105 150 105 C170 105 180 100 180 90 C180 60 150 25 100 25 Z" />
+          <ellipse cx="70" cy="60" rx="12" ry="8" fill="white" fillOpacity="0.5" />
+          <ellipse cx="130" cy="55" rx="10" ry="7" fill="white" fillOpacity="0.5" />
+        </svg>
+      </div>
+      <div className="absolute bottom-10 -right-12 w-96 h-96 text-emerald-800 opacity-[0.035] dark:opacity-[0.05] pointer-events-none select-none rotate-12">
+        <svg viewBox="0 0 200 200" fill="currentColor">
+          <path d="M110 185 C105 150 100 120 95 90 C80 92 60 85 50 75 C30 55 45 30 75 25 C115 18 150 30 160 55 C165 68 155 82 135 88 C130 115 125 150 120 185 Z" />
+        </svg>
+      </div>
+
+      <div className="max-w-6xl mx-auto text-center space-y-3 mb-14 relative z-10">
         <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FAF5EE] dark:bg-[#2B1C13] border border-[#E0D3C1] dark:border-[#543825] text-xs font-bold text-[#6E4B33] dark:text-[#E2BA78]">
           <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/>
@@ -144,7 +158,7 @@ export default function PackagesSection() {
           return (
             <TiltCard
               key={pkg.id}
-              className={`rounded-3xl p-7 sm:p-8 transition-all duration-300 flex flex-col justify-between relative ${
+              className={`rounded-3xl p-7 sm:p-8 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group ${
                 isPkg2
                   ? "bg-gradient-to-b from-[#FFFDF9] via-white to-[#FDF5E8] dark:from-[#2E1D13] dark:via-[#24160E] dark:to-[#1C1109] border-2 border-[#C28E58] ring-4 ring-[#C28E58]/25 shadow-2xl shadow-[#C28E58]/30 md:-translate-y-4"
                   : isPkg1
@@ -152,6 +166,34 @@ export default function PackagesSection() {
                   : "bg-gradient-to-b from-[#F6F9FF] via-white to-[#F2F7FF] dark:from-[#0F172A] dark:via-[#131D31] dark:to-[#0F172A] border-2 border-sky-500/40 hover:border-sky-500 shadow-md hover:shadow-xl hover:shadow-sky-950/10"
               }`}
             >
+              {/* Icon Nấm Ẩn Sâu Trong Lớp Nền Thẻ (Subtle Watermark Silhouette) */}
+              {isPkg1 && (
+                <div className="absolute -bottom-8 -right-8 w-44 h-44 text-emerald-700 opacity-[0.055] dark:opacity-[0.08] pointer-events-none select-none group-hover:scale-110 group-hover:opacity-[0.09] transition-all duration-500">
+                  <svg viewBox="0 0 120 120" fill="currentColor">
+                    <path d="M60 105 C58 90 56 75 55 60 C35 62 18 52 16 38 C14 22 36 15 62 14 C90 13 108 22 106 38 C104 52 86 62 66 60 C65 75 63 90 61 105 Z" />
+                    <path d="M25 75 C18 68 15 58 20 48 C28 35 48 42 55 52 C58 58 56 68 48 74 Z" opacity="0.7" />
+                    <path d="M95 78 C102 70 106 60 100 50 C92 38 72 44 65 54 C62 60 64 70 72 76 Z" opacity="0.7" />
+                  </svg>
+                </div>
+              )}
+              {isPkg2 && (
+                <div className="absolute -bottom-8 -right-8 w-48 h-48 text-[#C28E58] opacity-[0.07] dark:opacity-[0.1] pointer-events-none select-none group-hover:scale-110 group-hover:opacity-[0.11] transition-all duration-500">
+                  <svg viewBox="0 0 120 120" fill="currentColor">
+                    <path d="M60 105 C57 85 55 68 53 50 C32 48 12 38 10 26 C8 12 34 8 60 8 C88 8 112 14 110 26 C108 38 88 48 67 50 C65 68 63 85 60 105 Z" />
+                    <path d="M25 26 C35 32 50 35 60 35 C72 35 88 32 96 26" stroke="currentColor" strokeWidth="2" strokeOpacity="0.5" fill="none" />
+                    <path d="M35 20 C42 24 52 26 60 26 C68 26 78 24 85 20" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4" fill="none" />
+                  </svg>
+                </div>
+              )}
+              {isPkg3 && (
+                <div className="absolute -bottom-8 -right-8 w-44 h-44 text-sky-700 opacity-[0.055] dark:opacity-[0.08] pointer-events-none select-none group-hover:scale-110 group-hover:opacity-[0.09] transition-all duration-500">
+                  <svg viewBox="0 0 120 120" fill="currentColor">
+                    <path d="M50 105 C48 80 44 55 48 35 C50 25 58 20 62 20 C66 20 72 26 72 38 C72 58 68 80 66 105 Z" />
+                    <path d="M30 105 C30 85 26 65 32 50 C36 42 42 40 44 45 C46 50 44 68 42 85 C40 92 38 100 36 105 Z" opacity="0.7" />
+                    <path d="M80 105 C78 88 84 70 80 55 C76 46 70 45 68 50 C66 56 70 72 72 88 C74 95 76 100 78 105 Z" opacity="0.7" />
+                  </svg>
+                </div>
+              )}
               <div className="space-y-4">
                 {/* Hàng Tiêu Đề Phụ & Huy Hiệu Độc Lập Chống Đè Chữ */}
                 <div className="flex items-center justify-between gap-2 min-h-[28px]">
