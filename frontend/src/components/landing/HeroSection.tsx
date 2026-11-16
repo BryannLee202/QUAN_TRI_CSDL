@@ -344,77 +344,164 @@ export default function HeroSection() {
 
         </div>
 
-        {/* Chân Hero: Cụm 4 Thẻ Bento Tính Năng Ngang */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
-          <div className="bg-white/90 dark:bg-[#20140D]/90 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-lg hover:border-[#C28E58] transition-all duration-300 flex items-start gap-4 group">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FAF5EE] to-[#F2E8DC] dark:from-[#2B1C13] dark:to-[#1C120B] text-[#6B442C] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform duration-300">
-              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <rect width="20" height="7" x="2" y="14" rx="2" />
-                <path d="M6 14V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8" />
-                <path d="M12 4v4" />
-                <path d="M9 10c0-1.1.9-2 2-2s2 .9 2 2" />
-                <circle cx="8" cy="17.5" r="1" fill="currentColor" />
-                <circle cx="16" cy="17.5" r="1" fill="currentColor" />
+        {/* Chân Hero: Cụm 4 Thẻ Bento Tính Năng Ngang - Thiết Kế Icon Đa Lớp Thực Tế & Sang Trọng */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mt-16">
+          
+          {/* Card 1: Mô hình Farm-as-a-Service */}
+          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-[#C28E58] transition-all duration-300 flex items-start gap-4 group">
+            {/* Icon Tile: Buồng Kính Vô Trùng Smart FaaS Thực Tế */}
+            <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#FAF3EA] via-[#F4E8D8] to-[#E8D4BB] dark:from-[#3D2517] dark:via-[#2B190E] dark:to-[#1A0F08] border border-[#D9C4AB] dark:border-[#5C3822] flex items-center justify-center shrink-0 shadow-md shadow-[#C28E58]/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2.5">
+              <svg className="w-full h-full" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="faas-glass-grad" x1="4" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#C28E58" />
+                    <stop offset="0.5" stopColor="#8C5A37" />
+                    <stop offset="1" stopColor="#4A2E1D" />
+                  </linearGradient>
+                  <linearGradient id="faas-shimmer" x1="8" y1="8" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#FFF5EA" stopOpacity="0.8" />
+                    <stop offset="1" stopColor="#C28E58" stopOpacity="0.2" />
+                  </linearGradient>
+                </defs>
+                {/* Khung Buồng Kính Ngoài */}
+                <rect x="4" y="6" width="24" height="20" rx="4" stroke="url(#faas-glass-grad)" strokeWidth="2" fill="none" />
+                {/* Mái Buồng Nuôi Tích Hợp Đèn Quang Phổ */}
+                <path d="M4 11H28" stroke="url(#faas-glass-grad)" strokeWidth="1.5" strokeLinecap="round" />
+                <rect x="9" y="8" width="14" height="1.5" rx="0.75" fill="#E2BA78" />
+                {/* Vệt Kính Phản Quang */}
+                <path d="M7 23L13 9" stroke="url(#faas-shimmer)" strokeWidth="1.5" strokeLinecap="round" />
+                <path d="M12 23L18 9" stroke="url(#faas-shimmer)" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.5" />
+                {/* Khay Nuôi & Cụm Nấm Sinh Trưởng Bên Trong */}
+                <rect x="7" y="21" width="18" height="2.5" rx="1" fill="#6B442C" />
+                <path d="M16 14C13.5 14 12 16 12 18H20C20 16 18.5 14 16 14Z" fill="#C28E58" />
+                <path d="M15 18V21H17V18H15Z" fill="#8C5A37" />
+                <circle cx="16" cy="15.5" r="0.8" fill="#FFF5EA" />
+                <circle cx="14" cy="17" r="0.6" fill="#FFF5EA" />
+                <circle cx="18" cy="17" r="0.6" fill="#FFF5EA" />
               </svg>
             </div>
             <div>
-              <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA]">Mô hình Farm-as-a-Service</h4>
+              <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA] group-hover:text-[#6B442C] dark:group-hover:text-[#E2BA78] transition-colors">
+                Mô hình Farm-as-a-Service
+              </h4>
               <p className="text-xs text-[#735843] dark:text-[#DAC7B5] mt-1 leading-relaxed">
                 Thuê khay nấm từ xa, theo dõi chu kỳ cấy giống và nhận nấm tươi tận tay
               </p>
             </div>
           </div>
 
-          <div className="bg-white/90 dark:bg-[#20140D]/90 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-lg hover:border-[#C28E58] transition-all duration-300 flex items-start gap-4 group">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FAF5EE] to-[#F2E8DC] dark:from-[#2B1C13] dark:to-[#1C120B] text-[#C28E58] border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform duration-300">
-              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <rect width="14" height="14" x="5" y="5" rx="3" />
-                <path d="M9 9h6v6H9z" />
-                <path d="M2 9h3M2 15h3M19 9h3M19 15h3M9 2v3M15 2v3M9 19v3M15 19v3" />
-                <circle cx="12" cy="12" r="1" fill="currentColor" />
+          {/* Card 2: Cảm Biến IoT Realtime */}
+          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-emerald-600 transition-all duration-300 flex items-start gap-4 group">
+            {/* Icon Tile: Chip Cảm Biến Vi Điện Tử Bio-Tech Đa Kênh */}
+            <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#ECFDF5] via-[#D1FAE5] to-[#A7F3D0] dark:from-[#064E3B]/80 dark:via-[#065F46]/60 dark:to-[#022C22] border border-emerald-300/80 dark:border-emerald-700/60 flex items-center justify-center shrink-0 shadow-md shadow-emerald-900/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2.5">
+              <svg className="w-full h-full" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="iot-chip-grad" x1="8" y1="8" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#059669" />
+                    <stop offset="0.7" stopColor="#047857" />
+                    <stop offset="1" stopColor="#064E3B" />
+                  </linearGradient>
+                </defs>
+                {/* Chân Tiếp Xúc Kim Loại Vi Mạch 4 Phía */}
+                <path d="M12 4V8M16 4V8M20 4V8M12 24V28M16 24V28M20 24V28" stroke="#10B981" strokeWidth="1.8" strokeLinecap="round" />
+                <path d="M4 12H8M4 16H8M4 20H8M24 12H28M24 16H28M24 20H28" stroke="#10B981" strokeWidth="1.8" strokeLinecap="round" />
+                {/* Thân Chip Trung Tâm Khối Nổi 3D */}
+                <rect x="8" y="8" width="16" height="16" rx="3.5" fill="url(#iot-chip-grad)" stroke="#34D399" strokeWidth="1.5" />
+                {/* Lõi CPU Vi Khí Hậu & Mạch Khắc Laser */}
+                <rect x="12" y="12" width="8" height="8" rx="1.5" fill="#022C22" stroke="#6EE7B7" strokeWidth="1" />
+                {/* Điểm Tiếp Nhận Sóng Telemetry & Chấm Đèn Xanh */}
+                <circle cx="16" cy="16" r="2" fill="#34D399" />
+                <circle cx="16" cy="16" r="3.5" stroke="#A7F3D0" strokeWidth="0.8" strokeDasharray="1.5 1.5" />
               </svg>
             </div>
             <div>
-              <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA]">Cảm Biến IoT Realtime</h4>
+              <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA] group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
+                Cảm Biến IoT Realtime
+              </h4>
               <p className="text-xs text-[#735843] dark:text-[#DAC7B5] mt-1 leading-relaxed">
                 Đo vi khí hậu đa điểm 24/7 và kích hoạt rèm lạnh đối lưu tự động qua Socket
               </p>
             </div>
           </div>
 
-          <div className="bg-white/90 dark:bg-[#20140D]/90 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-lg hover:border-[#C28E58] transition-all duration-300 flex items-start gap-4 group">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FAF5EE] to-[#F2E8DC] dark:from-[#2B1C13] dark:to-[#1C120B] text-[#8C5A37] dark:text-[#DDB988] border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform duration-300">
-              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m22 7-6 4 6 4V7Z" />
-                <rect width="14" height="12" x="2" y="6" rx="3" />
-                <circle cx="9" cy="12" r="2.5" />
-                <path d="M6 3h2" strokeLinecap="round" />
+          {/* Card 3: Camera Trực Tuyến 24/7 */}
+          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-sky-600 transition-all duration-300 flex items-start gap-4 group">
+            {/* Icon Tile: Ống Kính Camera PTZ 4K Siêu Nét */}
+            <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#F0F9FF] via-[#E0F2FE] to-[#BAE6FD] dark:from-[#0C4A6E]/80 dark:via-[#075985]/60 dark:to-[#082F49] border border-sky-300/80 dark:border-sky-700/60 flex items-center justify-center shrink-0 shadow-md shadow-sky-900/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2.5">
+              <svg className="w-full h-full" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="cam-lens-grad" x1="16" y1="8" x2="16" y2="24" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#0369A1" />
+                    <stop offset="0.5" stopColor="#0284C7" />
+                    <stop offset="1" stopColor="#082F49" />
+                  </linearGradient>
+                </defs>
+                {/* Thân Camera PTZ Công Nghệ Cao */}
+                <rect x="4" y="9" width="18" height="14" rx="3.5" fill="#0C4A6E" stroke="#38BDF8" strokeWidth="1.5" />
+                {/* Ống Phóng Zoom Góc Rộng Bên Phải */}
+                <path d="M22 13L28 9.5V22.5L22 19V13Z" fill="#0284C7" stroke="#38BDF8" strokeWidth="1.5" strokeLinejoin="round" />
+                {/* Vành Thấu Kính Quang Học Đa Lớp */}
+                <circle cx="13" cy="16" r="4.5" fill="url(#cam-lens-grad)" stroke="#BAE6FD" strokeWidth="1.2" />
+                <circle cx="13" cy="16" r="2.2" fill="#082F49" />
+                {/* Ánh Sáng Phản Chiếu Trên Thấu Kính Thủy Tinh */}
+                <circle cx="14.2" cy="14.8" r="0.9" fill="#FFFFFF" />
+                {/* Đèn Báo Ghi Hình Realtime Đỏ Rực */}
+                <circle cx="7.5" cy="12.5" r="1.2" fill="#EF4444" />
               </svg>
             </div>
             <div>
-              <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA]">Camera Trực Tuyến 24/7</h4>
+              <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA] group-hover:text-sky-700 dark:group-hover:text-sky-400 transition-colors">
+                Camera Trực Tuyến 24/7
+              </h4>
               <p className="text-xs text-[#735843] dark:text-[#DAC7B5] mt-1 leading-relaxed">
                 Quan sát buồng sạch vô trùng Full HD, lưu trữ timelapse phát triển hàng ngày
               </p>
             </div>
           </div>
 
-          <div className="bg-white/90 dark:bg-[#20140D]/90 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-lg hover:border-[#C28E58] transition-all duration-300 flex items-start gap-4 group">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FAF5EE] to-[#F2E8DC] dark:from-[#2B1C13] dark:to-[#1C120B] text-[#523522] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform duration-300">
-              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M16.5 9.4 7.55 4.24a1.8 1.8 0 0 0-1.8 0L2.7 6.02a1.8 1.8 0 0 0-.9 1.56v8.84a1.8 1.8 0 0 0 .9 1.56l3.05 1.78a1.8 1.8 0 0 0 1.8 0l8.95-5.16a1.8 1.8 0 0 0 .9-1.56V10.96a1.8 1.8 0 0 0-.9-1.56Z" />
-                <path d="m2.1 7.2 9.4 5.4 9.4-5.4" />
-                <path d="M11.5 12.6v9.4" />
-                <path d="m18 13 2 2 3.5-3.5" stroke="#C28E58" strokeWidth="2" />
+          {/* Card 4: Thu Hoạch & Giao Tận Nhà */}
+          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-amber-600 transition-all duration-300 flex items-start gap-4 group">
+            {/* Icon Tile: Hộp Nông Sản Hút Chân Không VietGAP Thực Tế */}
+            <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#FFFBEB] via-[#FEF3C7] to-[#FDE68A] dark:from-[#78350F]/80 dark:via-[#92400E]/60 dark:to-[#451A03] border border-amber-300/80 dark:border-amber-700/60 flex items-center justify-center shrink-0 shadow-md shadow-amber-900/10 group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300 p-2.5">
+              <svg className="w-full h-full" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="box-grad-top" x1="16" y1="5" x2="16" y2="13" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#F59E0B" />
+                    <stop offset="1" stopColor="#D97706" />
+                  </linearGradient>
+                  <linearGradient id="box-grad-left" x1="5" y1="13" x2="16" y2="26" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#B45309" />
+                    <stop offset="1" stopColor="#78350F" />
+                  </linearGradient>
+                  <linearGradient id="box-grad-right" x1="16" y1="13" x2="27" y2="26" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#D97706" />
+                    <stop offset="1" stopColor="#92400E" />
+                  </linearGradient>
+                </defs>
+                {/* Kiện Hàng 3D Chiều Sâu */}
+                {/* Mặt trên hộp */}
+                <path d="M16 5L27 11L16 17L5 11L16 5Z" fill="url(#box-grad-top)" stroke="#FDE68A" strokeWidth="1.2" strokeLinejoin="round" />
+                {/* Mặt bên trái */}
+                <path d="M5 11L16 17V27L5 21V11Z" fill="url(#box-grad-left)" stroke="#B45309" strokeWidth="1.2" strokeLinejoin="round" />
+                {/* Mặt bên phải */}
+                <path d="M16 17L27 11V21L16 27V17Z" fill="url(#box-grad-right)" stroke="#B45309" strokeWidth="1.2" strokeLinejoin="round" />
+                {/* Băng Keo Niêm Phong Hàng Cao Cấp */}
+                <path d="M11 8L22 14" stroke="#FFFBEB" strokeWidth="2" strokeLinecap="round" strokeDasharray="3 1.5" />
+                {/* Huy Hiệu Chứng Thực VietGAP Giao Tươi */}
+                <circle cx="21" cy="20" r="5" fill="#10B981" stroke="#FFFFFF" strokeWidth="1.5" />
+                <path d="M19 20L20.5 21.5L23.5 18.5" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
             <div>
-              <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA]">Thu Hoạch & Giao Tận Nhà</h4>
+              <h4 className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA] group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors">
+                Thu Hoạch &amp; Giao Tận Nhà
+              </h4>
               <p className="text-xs text-[#735843] dark:text-[#DAC7B5] mt-1 leading-relaxed">
                 Nghiệm thu cân ký minh bạch, đóng gói chuẩn VietGAP giao tươi trong ngày
               </p>
             </div>
           </div>
+
         </div>
 
       </div>
