@@ -8,6 +8,7 @@ const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL ?? "http://localhost:5000"
 
 export interface TrayOccupiedEvent {
   trayId: number;
+  roomId?: number;
   orderId: number;
   orderCode: string;
   packageId: number;
