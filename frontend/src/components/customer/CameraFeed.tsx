@@ -16,7 +16,7 @@ export default function CameraFeed() {
       id: 'cam-01',
       name: 'Toàn Cảnh Buồng Nuôi',
       badge: 'Góc Rộng 120°',
-      image: '/images/hero-chamber-fullbleed-white.jpg',
+      image: '/images/hero-chamber-warm-champagne.jpg',
       scale: { '1x': 'scale-100', '2x': 'scale-125', '4x': 'scale-150' },
     },
     {
