@@ -7,6 +7,7 @@ import {
   toggleDevice,
   updateTrayStatus,
 } from "../controllers/operator.controller.js";
+import { requireAuth, requireRole } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
@@ -14,8 +15,10 @@ const router = Router();
 router.get("/operator/rooms", getRooms);
 router.get("/operator/trays", getTrays);
 router.get("/operator/alerts", getAlerts);
-router.post("/operator/alerts/:alertId/resolve", resolveAlert);
-router.post("/operator/devices/toggle", toggleDevice);
-router.post("/operator/trays/:trayId/status", updateTrayStatus);
+
+// Các thao tác can thiệp phần cứng và CSDL bắt buộc quyền Admin hoặc Operator
+router.post("/operator/alerts/:alertId/resolve", requireAuth, requireRole(["Admin", "Operator"]), resolveAlert);
+router.post("/operator/devices/toggle", requireAuth, requireRole(["Admin", "Operator"]), toggleDevice);
+router.post("/operator/trays/:trayId/status", requireAuth, requireRole(["Admin", "Operator"]), updateTrayStatus);
 
 export default router;
