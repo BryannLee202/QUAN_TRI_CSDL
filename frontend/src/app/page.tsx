@@ -17,29 +17,29 @@ export default function Home() {
       {/* 1. HERO SECTION: Light Canvas Luxury (Trắng Sứ Ngọc Trai & Buồng Kính 3D) */}
       <HeroSection />
       
-      {/* 2. STATS SECTION: Midnight Telemetry Band (Dark Công Nghệ Cao Chuẩn SEAL) */}
+      {/* 2. STATS SECTION: Cleanroom Mint & Bio-Emerald (Thống Kê Sinh Học Vô Trùng) */}
       <StatsSection />
 
       {/* 3. PACKAGES SECTION: Light Editorial Pricing Canvas (3 Gói Nấm 3 Bản Sắc Màu Sắc) */}
       <PackagesSection />
 
-      {/* 4. CỔNG KHÁCH HÀNG (CUSTOMER PORTAL): Deep Cyber Cleanroom Hub (Dark Command Bridge) */}
-      <section id="portal" className="py-20 sm:py-28 px-4 sm:px-6 bg-gradient-to-b from-[#080C10] via-[#0D1217] to-[#080C10] text-[#F3F4F6] border-y border-[#1E293B] relative overflow-hidden transition-colors">
-        {/* Glow ambient background effects - Lớp ánh sáng dạ quang công nghệ cao */}
-        <div className="absolute top-0 right-1/4 w-[600px] h-[350px] bg-emerald-500/10 blur-[140px] pointer-events-none rounded-full" />
-        <div className="absolute bottom-0 left-1/4 w-[600px] h-[350px] bg-sky-500/10 blur-[140px] pointer-events-none rounded-full" />
+      {/* 4. CỔNG KHÁCH HÀNG (CUSTOMER PORTAL): Cleanroom Bio-Lab Hub */}
+      <section id="portal" className="py-20 sm:py-28 px-4 sm:px-6 bg-gradient-to-b from-[#EEF8F3]/70 via-[#F8FAF9] to-[#EEF8F3]/70 text-slate-800 border-y border-emerald-200/60 relative overflow-hidden transition-colors">
+        {/* Glow ambient background effects - Lớp sương mù sinh học xanh dịu mát */}
+        <div className="absolute top-0 right-1/4 w-[600px] h-[350px] bg-emerald-400/10 blur-[140px] pointer-events-none rounded-full" />
+        <div className="absolute bottom-0 left-1/4 w-[600px] h-[350px] bg-teal-400/10 blur-[140px] pointer-events-none rounded-full" />
 
         <div className="max-w-7xl mx-auto space-y-8 relative z-10">
-          <div className="bg-[#121820]/95 backdrop-blur-md rounded-3xl p-6 sm:p-10 border border-[#1E293B] shadow-2xl shadow-black/60 space-y-8">
+          <div className="bg-white/95 rounded-3xl p-6 sm:p-10 border border-emerald-100 shadow-xl shadow-emerald-950/5 space-y-8">
             <div className="text-center space-y-3 max-w-2xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-xs font-bold text-emerald-400">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-xs font-bold text-emerald-800">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                 <span>TRỰC TUYẾN 24/7 • TRUY XUẤT NGUỒN GỐC VIETGAP</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+              <h2 className="text-3xl sm:text-4xl font-black text-[#152E20] tracking-tight">
                 Cổng Khách Hàng Giám Sát Buồng Nấm
               </h2>
-              <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
                 Quản lý khay nấm cá nhân, quan sát buồng kính phòng sạch qua camera góc cận, theo dõi chỉ số vi khí hậu và gửi yêu cầu thu hoạch.
               </p>
             </div>

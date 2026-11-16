@@ -40,14 +40,14 @@ export default function CustomerBanner() {
   }
 
   return (
-    <div className="mb-6 p-4 rounded-2xl bg-[#161F28] border border-[#263544] flex flex-wrap items-center justify-between gap-3 text-xs shadow-md animate-fade-in text-white">
+    <div className="mb-6 p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 flex flex-wrap items-center justify-between gap-3 text-xs shadow-xs animate-fade-in text-slate-800">
       <div className="flex items-center gap-2.5">
         <span className="text-xl">🍄</span>
         <div>
-          <span className="font-bold text-white text-sm">
+          <span className="font-bold text-slate-900 text-sm">
             Bạn đang quan sát buồng nấm chế độ Demo mẫu.
           </span>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-600 mt-0.5">
             Đăng nhập tài khoản khách hàng để kết nối trực tiếp với khay nấm và kích hoạt quyền yêu cầu thu hoạch.
           </p>
         </div>
@@ -55,7 +55,7 @@ export default function CustomerBanner() {
 
       <Link
         href="/login"
-        className="px-4 py-2 rounded-xl bg-[#C28E58] hover:bg-[#B37F49] text-white font-bold text-xs transition shadow-sm"
+        className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-xs"
       >
         Đăng Nhập Khách Hàng
       </Link>

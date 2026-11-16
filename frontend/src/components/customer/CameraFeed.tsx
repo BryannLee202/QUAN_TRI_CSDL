@@ -51,11 +51,11 @@ export default function CameraFeed() {
   const currentCam = angles[selectedAngle];
 
   return (
-    <div className="bg-[#1C120C] text-[#F7EFE6] rounded-3xl p-5 sm:p-6 shadow-2xl border border-[#422C1D] space-y-4 transition-all">
+    <div className="bg-white text-slate-800 rounded-3xl p-5 sm:p-6 shadow-sm border border-emerald-100 space-y-4 transition-all">
       {/* Thanh Tiêu Đề Camera & Trạng Thái Kết Nối */}
-      <div className="flex flex-wrap justify-between items-center gap-3 border-b border-[#362114] pb-4">
+      <div className="flex flex-wrap justify-between items-center gap-3 border-b border-emerald-100 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-[#2B1C13] border border-[#543825] flex items-center justify-center text-[#E2BA78] shadow-xs">
+          <div className="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 shadow-2xs">
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="m22 7-6 4 6 4V7Z" />
               <rect width="14" height="12" x="2" y="6" rx="3" />
@@ -63,18 +63,18 @@ export default function CameraFeed() {
             </svg>
           </div>
           <div>
-            <h3 className="font-bold text-base sm:text-lg text-[#FFF5EA] flex items-center gap-2">
+            <h3 className="font-bold text-base sm:text-lg text-slate-900 flex items-center gap-2">
               <span>Camera Giám Sát Trực Tiếp 24/7</span>
             </h3>
-            <p className="text-xs text-[#DAC7B5]">
+            <p className="text-xs text-slate-500">
               Ống kính PTZ cảm biến quang học • Khay #TR-08 (Bào Ngư Xám)
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/70 text-emerald-400 border border-emerald-700/60 text-xs font-semibold">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span>1080p 60fps • Live</span>
           </span>
         </div>
@@ -88,13 +88,13 @@ export default function CameraFeed() {
             onClick={() => setSelectedAngle(idx)}
             className={`px-3.5 py-1.5 rounded-xl font-semibold transition-all duration-200 shrink-0 flex items-center gap-1.5 ${
               selectedAngle === idx
-                ? 'bg-[#C28E58] text-[#1C120C] font-bold shadow-md'
-                : 'bg-[#2B1C13] text-[#DAC7B5] hover:bg-[#3D261A] border border-[#422C1D]'
+                ? 'bg-emerald-600 text-white font-bold shadow-xs'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
             }`}
           >
             <span>{ang.name}</span>
             <span className={`text-[10px] px-1.5 py-0.5 rounded ${
-              selectedAngle === idx ? 'bg-black/20 text-[#1C120C]' : 'bg-[#1C120C] text-[#C28E58]'
+              selectedAngle === idx ? 'bg-black/20 text-white' : 'bg-slate-200 text-slate-800'
             }`}>
               {ang.badge}
             </span>
@@ -172,7 +172,7 @@ export default function CameraFeed() {
               onClick={() => setZoomLevel(z)}
               className={`px-2.5 py-1 text-xs font-bold font-mono rounded-lg transition-all ${
                 zoomLevel === z
-                  ? 'bg-[#C28E58] text-[#1C120C] shadow-sm'
+                  ? 'bg-emerald-600 text-white shadow-xs'
                   : 'text-[#DAC7B5] hover:bg-white/10'
               }`}
             >
