@@ -61,3 +61,7 @@ __pycache__/
 
 # Coursework lab exercises and reports
 tai_lieu_bao_cao_mon_hoc/
+
+# Temporary testing & screenshots
+test_shot.*
+*.tmp
