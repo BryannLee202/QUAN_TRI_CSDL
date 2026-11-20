@@ -471,10 +471,10 @@ export default function RoiCalculatorPage() {
             </div>
           </div>
 
-          {/* Sổ Cái Giao Dịch & Hợp Đồng Điện Tử Lưu Trực Tiếp Trên MS SQL Server */}
+          {/* Sổ Cái Giao Dịch & Hợp Đồng Điện Tử */}
           <TransactionLedgerPanel
             refreshTrigger={ledgerRefresh}
-            title="Sổ Cái Hợp Đồng Đầu Tư FaaS & Giao Dịch Đã Lưu CSDL (MS SQL Server)"
+            title="Sổ Cái Hợp Đồng Đầu Tư FaaS & Chứng Từ Giao Dịch"
           />
         </div>
 

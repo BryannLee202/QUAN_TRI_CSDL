@@ -347,10 +347,10 @@ export default function MarketplacePage() {
             })}
           </div>
 
-          {/* Sổ Cái Giao Dịch Lưu Trực Tiếp Trên MS SQL Server */}
+          {/* Sổ Cái Giao Dịch & Hợp Đồng Điện Tử */}
           <TransactionLedgerPanel
             refreshTrigger={ledgerRefresh}
-            title="Sổ Cái Giao Dịch Sàn Nông Sản & Hợp Đồng FaaS (MS SQL Server)"
+            title="Sổ Cái Chứng Từ Giao Dịch & Đơn Hàng Nông Sản"
           />
         </div>
 
