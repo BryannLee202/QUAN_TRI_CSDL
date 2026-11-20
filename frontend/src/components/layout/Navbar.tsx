@@ -130,6 +130,19 @@ export default function Navbar() {
 
         {/* Right Section: Cụm Kích Hoạt Sidebar Thông Minh & Đăng Nhập Tinh Gọn */}
         <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          {/* Nút Hồ sơ & Lịch sử giao dịch */}
+          <Link
+            href="/ho-so"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#D9C8B5] dark:border-[#543825] text-xs font-bold hover:bg-[#FAF5EE] dark:hover:bg-[#281A12] text-[#523522] dark:text-[#E2BA78] transition shadow-2xs whitespace-nowrap"
+            title="Hồ sơ cá nhân & Lịch sử giao dịch"
+          >
+            <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span>Hồ Sơ</span>
+          </Link>
+
           {/* Nút Đăng nhập nhanh nếu chưa đăng nhập */}
           {!isAuthenticated && (
             <Link
@@ -140,12 +153,12 @@ export default function Navbar() {
             </Link>
           )}
 
-          {/* Avatar thu nhỏ nếu đã đăng nhập */}
+          {/* Avatar thu nhỏ nếu đã đăng nhập -> Mở Hồ Sơ Cá Nhân */}
           {isAuthenticated && user && (
-            <button
-              onClick={() => setIsControlHubOpen(true)}
+            <Link
+              href="/ho-so"
               className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-2xl bg-[#FAF5EE] dark:bg-[#1C120C] border border-[#DECFC0] dark:border-[#38261A] hover:border-[#C28E58] transition shadow-2xs group"
-              title="Mở bảng điều khiển cá nhân"
+              title="Xem hồ sơ cá nhân & Lịch sử giao dịch"
             >
               <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-[#6B442C] to-[#C28E58] text-white flex items-center justify-center font-bold text-xs shadow-xs">
                 {user.fullName ? user.fullName.charAt(0).toUpperCase() : "U"}
@@ -154,7 +167,7 @@ export default function Navbar() {
                 {user.fullName}
               </span>
               <span className="hidden xl:inline">{getRoleBadge(user.role)}</span>
-            </button>
+            </Link>
           )}
 
           {/* NÚT KÍCH HOẠT RIGHT CONTROL HUB (Sidebar Bên Phải) */}

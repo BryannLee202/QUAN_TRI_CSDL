@@ -1131,13 +1131,17 @@ export default function CheckoutGatewayModal({
                   </svg>
                 </Link>
 
-                <button
-                  type="button"
+                <Link
+                  href="/ho-so"
                   onClick={onClose}
-                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-800 to-teal-800 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold shadow-md transition cursor-pointer"
+                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-800 to-teal-800 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold shadow-md transition flex items-center gap-2"
                 >
-                  Hoàn Tất &amp; Xem Sổ Cái Giao Dịch
-                </button>
+                  <span>Xem Trong Hồ Sơ &amp; Lịch Sử Giao Dịch</span>
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </Link>
               </div>
             </div>
           )}
