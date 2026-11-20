@@ -5,7 +5,6 @@ import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import CheckoutGatewayModal, { CheckoutItemConfig } from '@/components/checkout/CheckoutGatewayModal';
-import TransactionLedgerPanel from '@/components/checkout/TransactionLedgerPanel';
 
 interface MushroomSpec {
   id: string;
@@ -470,12 +469,6 @@ export default function RoiCalculatorPage() {
               </div>
             </div>
           </div>
-
-          {/* Sổ Cái Giao Dịch & Hợp Đồng Điện Tử */}
-          <TransactionLedgerPanel
-            refreshTrigger={ledgerRefresh}
-            title="Sổ Cái Hợp Đồng Đầu Tư FaaS & Chứng Từ Giao Dịch"
-          />
         </div>
 
         <CheckoutGatewayModal
@@ -483,7 +476,6 @@ export default function RoiCalculatorPage() {
           onClose={() => setCheckoutItem(null)}
           onTransactionSuccess={() => {
             setIsSuccessBooked(true);
-            setLedgerRefresh((prev) => prev + 1);
           }}
         />
       </div>

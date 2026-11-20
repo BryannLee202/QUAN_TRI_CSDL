@@ -5,7 +5,6 @@ import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import CheckoutGatewayModal, { CheckoutItemConfig } from '@/components/checkout/CheckoutGatewayModal';
-import TransactionLedgerPanel from '@/components/checkout/TransactionLedgerPanel';
 
 interface MarketBatch {
   id: string;
@@ -346,18 +345,11 @@ export default function MarketplacePage() {
               );
             })}
           </div>
-
-          {/* Sổ Cái Giao Dịch & Hợp Đồng Điện Tử */}
-          <TransactionLedgerPanel
-            refreshTrigger={ledgerRefresh}
-            title="Sổ Cái Chứng Từ Giao Dịch & Đơn Hàng Nông Sản"
-          />
         </div>
 
         <CheckoutGatewayModal
           item={checkoutItem}
           onClose={() => setCheckoutItem(null)}
-          onTransactionSuccess={() => setLedgerRefresh((prev) => prev + 1)}
         />
       </div>
 

@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { TiltCard } from "./TiltCard";
 import CheckoutGatewayModal, { CheckoutItemConfig } from "../checkout/CheckoutGatewayModal";
-import TransactionLedgerPanel from "../checkout/TransactionLedgerPanel";
 
 interface PackageItem {
   id: string;
@@ -72,7 +71,6 @@ const packages: PackageItem[] = [
 
 export default function PackagesSection() {
   const [checkoutItem, setCheckoutItem] = useState<CheckoutItemConfig | null>(null);
-  const [ledgerRefresh, setLedgerRefresh] = useState<number>(0);
 
   const openBookingModal = (pkg: PackageItem) => {
     setCheckoutItem({
@@ -264,16 +262,10 @@ export default function PackagesSection() {
         })}
       </div>
 
-      {/* Bảng Sổ Cái Giao Dịch & Hợp Đồng Điện Tử Lưu Trực Tiếp Trên MS SQL Server */}
-      <div className="relative z-10">
-        <TransactionLedgerPanel refreshTrigger={ledgerRefresh} />
-      </div>
-
       {/* Cổng Thanh Toán Điện Tử MushroomPay Sandbox (3 Bước) */}
       <CheckoutGatewayModal
         item={checkoutItem}
         onClose={() => setCheckoutItem(null)}
-        onTransactionSuccess={() => setLedgerRefresh((prev) => prev + 1)}
       />
     </section>
   );

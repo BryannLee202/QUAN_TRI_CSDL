@@ -220,13 +220,26 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 pt-1">
+                  <Link
+                    href="/ho-so"
+                    onClick={onClose}
+                    className="col-span-2 py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#24170E] to-[#3B2415] hover:from-[#382417] hover:to-[#523522] text-white font-bold text-xs text-center border border-[#C28E58]/40 transition flex items-center justify-center gap-1.5 shadow-sm"
+                  >
+                    <svg className="w-3.5 h-3.5 text-[#E2BA78]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                      <line x1="16" y1="13" x2="8" y2="13" />
+                      <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
+                    <span>Hồ Sơ &amp; Lịch Sử Giao Dịch</span>
+                  </Link>
                   {(isAdmin || isOperator) && (
                     <Link
                       href="/operator"
                       onClick={onClose}
-                      className="col-span-2 py-2 px-3 rounded-xl bg-[#24170E] hover:bg-[#382417] text-white font-bold text-xs text-center border border-[#C28E58]/35 transition flex items-center justify-center gap-1.5 shadow-sm shadow-[#24170E]/20"
+                      className="col-span-2 py-2 px-3 rounded-xl bg-[#FAF5EE] dark:bg-[#24170F] hover:border-[#C28E58] text-[#24170E] dark:text-[#E2BA78] font-bold text-xs text-center border border-[#DECFC0] dark:border-[#38261A] transition flex items-center justify-center gap-1.5"
                     >
-                      <svg className="w-3.5 h-3.5 text-[#E2BA78]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <rect width="20" height="14" x="2" y="3" rx="2" />
                         <line x1="8" x2="16" y1="21" y2="21" />
                         <line x1="12" x2="12" y1="17" y2="21" />
@@ -270,6 +283,19 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                   >
                     <span>Tạo Tài Khoản</span>
                     <span className="text-[#E2BA78] font-bold">→</span>
+                  </Link>
+                  <Link
+                    href="/ho-so"
+                    onClick={onClose}
+                    className="col-span-2 py-2.5 px-3 rounded-xl bg-[#FAF5EE] dark:bg-[#24170F] hover:border-[#C28E58] text-[#4A3222] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#422C1D] font-bold text-xs text-center transition flex items-center justify-center gap-1.5"
+                  >
+                    <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                      <line x1="16" y1="13" x2="8" y2="13" />
+                      <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
+                    <span>Xem Hồ Sơ &amp; Lịch Sử Giao Dịch</span>
                   </Link>
                 </div>
               </div>
