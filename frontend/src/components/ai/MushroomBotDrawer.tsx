@@ -17,26 +17,72 @@ interface MushroomBotDrawerProps {
   onClose: () => void;
 }
 
+/**
+ * Cửa sổ Trợ lý AI MushroomBot - Thiết kế Floating Card hiện đại chuẩn SaaS
+ * Kích thước vừa vặn (390px x 520px), không che phủ toàn màn hình,
+ * hiệu ứng kính mờ Glassmorphism và chuyển động bung nở êm ái.
+ */
 export default function MushroomBotDrawer({ isOpen, onClose }: MushroomBotDrawerProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
       sender: 'bot',
-      text: 'Xin chào! Tôi là Cố Vấn Nông Nghiệp Thông Minh MushroomBot 🍄 vận hành trên nền tảng Llama-3.1-8B. Tôi có thể giải đáp chính xác về thông số vi khí hậu buồng vô trùng, tiêu chuẩn VietGAP, hợp đồng thuê khay FaaS và bảo hiểm sản lượng.',
+      text: 'Xin chào! Tôi là Trợ Lý Nông Nghiệp Thông Minh MushroomBot 🍄 vận hành trên nền tảng Llama-3.1-8B.\nTôi sẵn sàng giải đáp về thông số vi khí hậu buồng vô trùng, tiêu chuẩn VietGAP, hợp đồng thuê khay FaaS và bảo hiểm sản lượng.',
       time: 'Vừa xong',
       modelUsed: 'Llama-3.1-8B FaaS AI',
     },
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [suggestions, setSuggestions] = useState<string[]>(SUGGESTED_QUESTIONS.slice(0, 4));
+  const [suggestions, setSuggestions] = useState<string[]>(SUGGESTED_QUESTIONS.slice(0, 5));
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
+  // Cuộn mượt xuống tin nhắn mới nhất
   useEffect(() => {
     if (isOpen) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, isOpen, isTyping]);
+
+  // Đóng khi click chuột ra ngoài (Click Outside) hoặc bấm phím Escape
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node;
+      // Không đóng nếu bấm vào chính khung chat hoặc nút FAB kích hoạt
+      if (cardRef.current && !cardRef.current.contains(target)) {
+        const fab = document.getElementById("mushroom-bot-fab");
+        if (fab && fab.contains(target)) return;
+        onClose();
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
+  // Xóa lịch sử trò chuyện để làm mới
+  const handleClearHistory = () => {
+    setMessages([
+      {
+        id: Date.now().toString(),
+        sender: 'bot',
+        text: 'Đã làm mới cuộc hội thoại! Bạn có thể đặt câu hỏi mới về nấm dược liệu hoặc hệ thống FaaS.',
+        time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
+        modelUsed: 'Llama-3.1-8B FaaS AI',
+      },
+    ]);
+  };
 
   const handleSend = async (questionText?: string) => {
     const textToSend = (questionText || input).trim();
@@ -75,7 +121,7 @@ export default function MushroomBotDrawer({ isOpen, onClose }: MushroomBotDrawer
         const botReply: Message = {
           id: (Date.now() + 1).toString(),
           sender: 'bot',
-          text: data?.reply || 'Hệ thống đã ghi nhận thông tin và đang xử lý.',
+          text: data?.reply || 'Hệ thống đã ghi nhận câu hỏi và đang cập nhật cơ sở tri thức vi khí hậu.',
           time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
           modelUsed: data?.model || 'Llama-3.1-8B FaaS AI',
           sources: data?.sources,
@@ -86,14 +132,14 @@ export default function MushroomBotDrawer({ isOpen, onClose }: MushroomBotDrawer
           setSuggestions(data.suggestedQuestions);
         }
       } else {
-        throw new Error('API server responded with error');
+        throw new Error('API server error');
       }
     } catch {
-      // Fallback an toàn nếu backend mất kết nối
+      // Fallback cục bộ an toàn nếu server AI bận
       const fallbackReply: Message = {
         id: (Date.now() + 1).toString(),
         sender: 'bot',
-        text: 'Độ ẩm tiêu chuẩn cho nấm Bào Ngư là 88-92%, Linh Chi Đỏ là 80-88% và Đông Trùng Hạ Thảo là 85-90%. Toàn bộ dữ liệu được lưu trữ khóa dòng Serializable trên CSDL T-SQL và có bảo hiểm 100% sản lượng.',
+        text: 'Nhiệt độ tối ưu cho Đông Trùng Hạ Thảo là 18-22°C, nấm Bào Ngư là 24-28°C và Linh Chi là 26-30°C. Dữ liệu cảm biến được bảo vệ khóa dòng Serializable trên T-SQL, có bảo hiểm sản lượng 100%.',
         time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
         modelUsed: 'Llama-3.1-8B (Zero-Crash Fallback)',
       };
@@ -106,122 +152,145 @@ export default function MushroomBotDrawer({ isOpen, onClose }: MushroomBotDrawer
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-xs animate-fade-in">
-      <div 
-        className="w-full sm:w-[440px] h-full bg-[#FDFBF8] dark:bg-[#150E0A] shadow-2xl flex flex-col border-l border-[#DECFC0] dark:border-[#38261A] transition-transform duration-300"
-      >
-        {/* Header Chuẩn Cafe Latte & Bio Emerald */}
-        <div className="p-4 bg-gradient-to-r from-[#24170E] via-[#332014] to-[#1F130B] text-white flex items-center justify-between border-b border-[#C28E58]/30 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#6B442C] to-[#C28E58] border border-[#E2BA78]/40 flex items-center justify-center text-xl shadow-xs">
-              🍄
-            </div>
-            <div>
-              <h3 className="font-bold text-sm text-[#E2BA78] flex items-center gap-2">
-                MushroomBot AI
-                <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                  Llama-3.1-8B
-                </span>
-              </h3>
-              <p className="text-[11px] text-[#DAC7B5] flex items-center gap-1.5 mt-0.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Cố vấn kỹ thuật nông nghiệp 24/7</span>
-              </p>
-            </div>
+    <div
+      ref={cardRef}
+      role="dialog"
+      aria-label="Cửa sổ trò chuyện Trợ lý AI MushroomBot"
+      className="fixed bottom-20 sm:bottom-24 right-3 sm:right-6 z-50 w-[calc(100vw-1.5rem)] sm:w-[390px] h-[520px] max-h-[78vh] flex flex-col rounded-3xl bg-[#FDFBF8]/95 dark:bg-[#150E0A]/95 backdrop-blur-xl border border-[#DECFC0] dark:border-[#38261A] shadow-2xl shadow-[#24170E]/30 dark:shadow-black/70 overflow-hidden transition-all duration-300 animate-in fade-in zoom-in-95"
+    >
+      {/* 1. Header Tinh Tế & Đẳng Cấp */}
+      <div className="px-4 py-3 bg-gradient-to-r from-[#24170E] via-[#332014] to-[#1F130B] text-white flex items-center justify-between border-b border-[#C28E58]/30 shrink-0">
+        <div className="flex items-center gap-2.5">
+          {/* Avatar nấm 3D với hiệu ứng phát sáng */}
+          <div className="relative w-8 h-8 rounded-xl bg-gradient-to-tr from-[#6B442C] via-[#9E653F] to-[#C28E58] border border-[#E2BA78]/50 flex items-center justify-center text-base shadow-xs shrink-0">
+            🍄
+            <span className="absolute -bottom-0.5 -right-0.5 flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400 border border-[#24170E]"></span>
+            </span>
           </div>
+
+          <div>
+            <div className="flex items-center gap-1.5">
+              <h3 className="font-bold text-xs text-[#FAF5EE] tracking-wide">MushroomBot AI</h3>
+              <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                Llama-3.1
+              </span>
+            </div>
+            <p className="text-[10px] text-[#D8C4B0] flex items-center gap-1 mt-0.5">
+              <span>Cố vấn vi khí hậu & FaaS 24/7</span>
+            </p>
+          </div>
+        </div>
+
+        {/* Cụm nút thao tác (Làm mới & Đóng) */}
+        <div className="flex items-center gap-1">
+          <button
+            onClick={handleClearHistory}
+            className="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-[#D8C4B0] hover:text-white flex items-center justify-center transition border border-white/10 text-xs"
+            title="Làm mới cuộc trò chuyện"
+            aria-label="Làm mới cuộc trò chuyện"
+          >
+            ↺
+          </button>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-[#DAC7B5] hover:text-white flex items-center justify-center transition border border-white/10"
-            title="Đóng (Esc)"
+            className="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-[#D8C4B0] hover:text-white flex items-center justify-center transition border border-white/10 text-xs font-bold"
+            title="Thu nhỏ cửa sổ (Esc)"
+            aria-label="Đóng cửa sổ"
           >
             ✕
           </button>
         </div>
+      </div>
 
-        {/* Quick Suggestion Chips */}
-        <div className="p-3 bg-[#F4ECE1] dark:bg-[#1C120C] border-b border-[#E0D3C1] dark:border-[#38261A] shrink-0">
-          <p className="text-[11px] font-bold text-[#6E4B33] dark:text-[#E2BA78] mb-1.5 flex items-center gap-1">
-            <span>💡 Câu hỏi gợi ý nhanh:</span>
-          </p>
-          <div className="flex flex-wrap gap-1.5">
-            {suggestions.map((q, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleSend(q)}
-                className="text-[11px] bg-white dark:bg-[#25170F] hover:bg-[#FAF5EE] dark:hover:bg-[#2F1D13] text-[#4A3222] dark:text-[#DAC7B5] px-2.5 py-1 rounded-xl border border-[#DECFC0] dark:border-[#422C1D] transition shadow-2xs text-left font-medium"
-              >
-                {q}
-              </button>
-            ))}
-          </div>
+      {/* 2. Thanh Gợi Ý Câu Hỏi Cuộn Ngang (Horizontal Scroll Chips - Tiết kiệm không gian) */}
+      <div className="px-3 py-1.5 bg-[#F6EFE6] dark:bg-[#1A110B] border-b border-[#EADECF] dark:border-[#2D1B11] shrink-0">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+          <span className="text-[10px] font-bold text-[#8C6D53] dark:text-[#C28E58] shrink-0 flex items-center gap-0.5 pr-0.5">
+            ✨ Gợi ý:
+          </span>
+          {suggestions.map((q, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleSend(q)}
+              className="text-[11px] whitespace-nowrap bg-white dark:bg-[#25170F] hover:bg-[#FAF5EE] dark:hover:bg-[#2F1D13] text-[#4A3222] dark:text-[#E8DCCE] px-2.5 py-1 rounded-full border border-[#DECFC0] dark:border-[#422C1D] hover:border-[#C28E58] transition shadow-2xs shrink-0 font-medium active:scale-95"
+            >
+              {q}
+            </button>
+          ))}
         </div>
+      </div>
 
-        {/* Message History */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-3.5 custom-scrollbar">
-          {messages.map((m) => (
+      {/* 3. Khung Tin Nhắn (Message Stream) */}
+      <div className="flex-1 overflow-y-auto p-3.5 space-y-3 custom-scrollbar">
+        {messages.map((m) => (
+          <div
+            key={m.id}
+            className={`flex flex-col ${
+              m.sender === 'user' ? 'items-end' : 'items-start'
+            }`}
+          >
             <div
-              key={m.id}
-              className={`flex flex-col ${
-                m.sender === 'user' ? 'items-end' : 'items-start'
+              className={`max-w-[86%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed shadow-xs ${
+                m.sender === 'user'
+                  ? 'bg-gradient-to-r from-[#2B1B11] to-[#3B2517] text-white rounded-br-xs border border-[#C28E58]/35 font-medium'
+                  : 'bg-white dark:bg-[#1E130B] text-[#24170E] dark:text-[#F7EFE6] rounded-bl-xs border border-[#EAE1D3] dark:border-[#38261A]'
               }`}
             >
-              <div
-                className={`max-w-[88%] rounded-2xl px-4 py-3 text-xs leading-relaxed shadow-xs ${
-                  m.sender === 'user'
-                    ? 'bg-gradient-to-r from-[#2B1B11] to-[#3B2517] text-white rounded-br-xs border border-[#C28E58]/30 font-medium'
-                    : 'bg-white dark:bg-[#1E130B] text-[#24170E] dark:text-[#F7EFE6] rounded-bl-xs border border-[#EAE1D3] dark:border-[#38261A]'
-                }`}
-              >
-                <p className="whitespace-pre-line">{m.text}</p>
-                {m.modelUsed && (
-                  <div className="mt-2 pt-1.5 border-t border-[#F2E8DC] dark:border-[#2D1B11] flex items-center justify-between text-[10px] text-[#8C6D53] dark:text-[#A88C76]">
-                    <span>⚡ {m.modelUsed}</span>
-                    <span>✓ VietGAP Verified</span>
-                  </div>
-                )}
-              </div>
-              <span className="text-[10px] font-mono text-[#8C6D53] dark:text-[#A88C76] mt-1 px-1">
-                {m.time}
-              </span>
+              <p className="whitespace-pre-line">{m.text}</p>
+              {m.modelUsed && (
+                <div className="mt-2 pt-1.5 border-t border-[#F2E8DC] dark:border-[#2D1B11] flex items-center justify-between text-[9px] text-[#8C6D53] dark:text-[#A88C76]">
+                  <span>⚡ {m.modelUsed}</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold">✓ VietGAP</span>
+                </div>
+              )}
             </div>
-          ))}
+            <span className="text-[9px] font-mono text-[#8C6D53] dark:text-[#A88C76] mt-1 px-1">
+              {m.time}
+            </span>
+          </div>
+        ))}
 
-          {isTyping && (
-            <div className="flex items-center gap-2 text-[#735843] dark:text-[#DAC7B5] text-xs p-2.5 bg-white dark:bg-[#1E130B] rounded-2xl border border-[#EAE1D3] dark:border-[#38261A] w-fit shadow-2xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] animate-bounce"></span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] animate-bounce [animation-delay:0.2s]"></span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] animate-bounce [animation-delay:0.4s]"></span>
-              <span className="text-[11px] font-medium">Llama-3.1-8B đang suy luận dữ liệu...</span>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
+        {isTyping && (
+          <div className="flex items-center gap-2 text-[#735843] dark:text-[#DAC7B5] text-xs p-2.5 bg-white dark:bg-[#1E130B] rounded-2xl rounded-bl-xs border border-[#EAE1D3] dark:border-[#38261A] w-fit shadow-2xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] animate-bounce"></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] animate-bounce [animation-delay:0.2s]"></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] animate-bounce [animation-delay:0.4s]"></span>
+            <span className="text-[10px] font-medium font-mono text-[#8C6D53] dark:text-[#C28E58]">Llama-3.1 đang suy luận...</span>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
 
-        {/* Input Form */}
-        <div className="p-3.5 bg-white dark:bg-[#1A110B] border-t border-[#DECFC0] dark:border-[#38261A] shrink-0">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSend();
-            }}
-            className="flex items-center gap-2"
+      {/* 4. Khung Nhập Liệu Thông Minh (Smart Input Bar) */}
+      <div className="p-2.5 bg-white/95 dark:bg-[#160E09]/95 backdrop-blur-md border-t border-[#DECFC0] dark:border-[#38261A] shrink-0">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSend();
+          }}
+          className="flex items-center gap-1.5 bg-[#FAF5EE] dark:bg-[#20140D] rounded-full border border-[#DECFC0] dark:border-[#3D281C] p-1 pl-3.5 focus-within:border-[#C28E58] focus-within:ring-2 focus-within:ring-[#C28E58]/20 transition-all"
+        >
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Hỏi về nấm, vi khí hậu, hợp đồng FaaS..."
+            className="flex-1 text-xs bg-transparent text-[#24170E] dark:text-[#FFF5EA] placeholder:text-[#9A816E] dark:placeholder:text-[#786150] outline-none"
+          />
+          <button
+            type="submit"
+            disabled={isTyping || !input.trim()}
+            className="w-7 h-7 rounded-full bg-gradient-to-r from-[#C28E58] to-[#8C5A32] hover:brightness-110 text-white flex items-center justify-center transition shadow-xs disabled:opacity-40 shrink-0 cursor-pointer active:scale-95"
+            title="Gửi câu hỏi"
+            aria-label="Gửi tin nhắn"
           >
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Hỏi về nấm, độ ẩm, mã QR VietGAP, FaaS..."
-              className="flex-1 text-xs px-3.5 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#38261A] bg-[#FAF5EE] dark:bg-[#24170F] text-[#24170E] dark:text-[#FFF5EA] focus:outline-none focus:border-[#C28E58] shadow-inner"
-            />
-            <button
-              type="submit"
-              disabled={isTyping}
-              className="bg-gradient-to-r from-[#2B1B11] to-[#3B2517] hover:from-[#1C1109] hover:to-[#2B1B11] text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-xs transition shrink-0 border border-[#C28E58]/40 disabled:opacity-50"
-            >
-              Gửi →
-            </button>
-          </form>
-        </div>
+            <svg className="w-3.5 h-3.5 translate-x-0.5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+            </svg>
+          </button>
+        </form>
       </div>
     </div>
   );
