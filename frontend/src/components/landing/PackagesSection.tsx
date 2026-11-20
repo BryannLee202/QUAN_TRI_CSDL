@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useState } from "react";
-import Link from "next/link";
-import { triggerSuccessConfetti } from "../../utils/confetti";
 import { TiltCard } from "./TiltCard";
-import { createRentalOrder, RentalResponse } from "../../services/api";
+import CheckoutGatewayModal, { CheckoutItemConfig } from "../checkout/CheckoutGatewayModal";
+import TransactionLedgerPanel from "../checkout/TransactionLedgerPanel";
 
 interface PackageItem {
   id: string;
@@ -72,49 +71,19 @@ const packages: PackageItem[] = [
 ];
 
 export default function PackagesSection() {
-  const [selectedPkg, setSelectedPkg] = useState<PackageItem | null>(null);
-  const [phone, setPhone] = useState("0900000011");
-  const [address, setAddress] = useState("123 Đường Nấm Sạch, TP. Hồ Chí Minh");
-  const [paymentMethod, setPaymentMethod] = useState("VNPAY");
-  const [loading, setLoading] = useState(false);
-  const [orderResult, setOrderResult] = useState<RentalResponse["data"] | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [checkoutItem, setCheckoutItem] = useState<CheckoutItemConfig | null>(null);
+  const [ledgerRefresh, setLedgerRefresh] = useState<number>(0);
 
   const openBookingModal = (pkg: PackageItem) => {
-    setSelectedPkg(pkg);
-    setOrderResult(null);
-    setErrorMessage(null);
-  };
-
-  const closeModal = () => {
-    setSelectedPkg(null);
-    setOrderResult(null);
-    setErrorMessage(null);
-  };
-
-  const handleConfirmBooking = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedPkg) return;
-
-    setLoading(true);
-    setErrorMessage(null);
-
-    try {
-      const res = await createRentalOrder({
-        userId: 4, // customer1
-        packageId: selectedPkg.packageId,
-        deliveryAddress: address,
-        receiverPhone: phone,
-        paymentMethod: paymentMethod,
-      });
-
-      triggerSuccessConfetti();
-      setOrderResult(res.data);
-    } catch (err: any) {
-      setErrorMessage(err.message || "Không thể tạo đơn thuê khay. Vui lòng thử lại!");
-    } finally {
-      setLoading(false);
-    }
+    setCheckoutItem({
+      orderType: "FAAS_RENTAL",
+      packageId: pkg.packageId,
+      itemName: pkg.name,
+      subtitle: pkg.species,
+      grossAmount: pkg.rawPrice,
+      durationLabel: pkg.duration,
+      yieldCommitment: pkg.expectedYield,
+    });
   };
 
   return (
@@ -295,159 +264,17 @@ export default function PackagesSection() {
         })}
       </div>
 
-      {/* Booking Modal với kết nối API Backend Thực Tế */}
-      {selectedPkg && (
-        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#1C120C] rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-5 shadow-2xl border border-[#E0D3C1] dark:border-[#543825] text-[#24170E] dark:text-[#F7EFE6] animate-fade-in relative">
-            <button
-              onClick={closeModal}
-              className="absolute top-5 right-5 text-[#8C6D53] hover:text-[#24170E] dark:hover:text-white text-xl font-bold"
-            >
-              ✕
-            </button>
+      {/* Bảng Sổ Cái Giao Dịch & Hợp Đồng Điện Tử Lưu Trực Tiếp Trên MS SQL Server */}
+      <div className="relative z-10">
+        <TransactionLedgerPanel refreshTrigger={ledgerRefresh} />
+      </div>
 
-            {!orderResult ? (
-              <form onSubmit={handleConfirmBooking} className="space-y-4">
-                <div className="space-y-1">
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FAF5EE] dark:bg-[#2B1C13] text-[11px] font-bold text-[#6E4B33] dark:text-[#E2BA78]">
-                    <span>Xác Nhận Hợp Đồng Thuê</span>
-                  </div>
-                  <h4 className="font-extrabold text-2xl text-[#24170E] dark:text-white">
-                    {selectedPkg.name}
-                  </h4>
-                  <p className="text-xs text-[#634936] dark:text-[#DAC7B5]">
-                    Giá trọn gói: <strong className="text-[#523522] dark:text-[#E2BA78]">{selectedPkg.price}</strong> • Thời hạn: {selectedPkg.duration}
-                  </p>
-                </div>
-
-                {errorMessage && (
-                  <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs font-semibold">
-                    ⚠️ {errorMessage}
-                  </div>
-                )}
-
-                <div className="space-y-3 text-left text-xs font-medium">
-                  <div>
-                    <label className="block text-[#4A3222] dark:text-[#DAC7B5] mb-1 font-bold">
-                      Số điện thoại nhận nấm:
-                    </label>
-                    <input
-                      type="text"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      required
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#543825] bg-[#FAF8F5] dark:bg-[#281A12] text-[#24170E] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#C28E58] text-xs"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[#4A3222] dark:text-[#DAC7B5] mb-1 font-bold">
-                      Địa chỉ giao nấm thu hoạch:
-                    </label>
-                    <input
-                      type="text"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      required
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#543825] bg-[#FAF8F5] dark:bg-[#281A12] text-[#24170E] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#C28E58] text-xs"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[#4A3222] dark:text-[#DAC7B5] mb-1 font-bold">
-                      Phương thức thanh toán:
-                    </label>
-                    <select
-                      value={paymentMethod}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#543825] bg-[#FAF8F5] dark:bg-[#281A12] text-[#24170E] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#C28E58] text-xs"
-                    >
-                      <option value="VNPAY">VNPAY Cổng thanh toán quốc gia</option>
-                      <option value="VIETQR">Chuyển khoản VietQR tức thì</option>
-                      <option value="COD">Thanh toán tiền mặt khi giao đợt 1</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="p-3 bg-[#FAF5EE] dark:bg-[#281A12] rounded-xl text-[11px] text-[#735843] dark:text-[#B59D89] border border-[#E0D3C1] dark:border-[#543825] space-y-1">
-                  <p className="flex items-center gap-1.5 font-semibold text-[#4A3222] dark:text-[#F7EFE6]">
-                    <svg className="w-3.5 h-3.5 text-[#C28E58] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
-                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
-                    CSDL T-SQL Locking & Concurrency:
-                  </p>
-                  <p>
-                    Lệnh đặt sẽ thực thi <code>sp_CreateRentalOrder</code> với khóa <code>ROWLOCK, UPDLOCK, READPAST</code> để tự động gán khay vô trùng và chống xung đột giao dịch.
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-end gap-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={closeModal}
-                    className="px-4 py-2.5 text-xs font-semibold text-[#8C6D53] hover:bg-[#FAF5EE] dark:hover:bg-[#281A12] rounded-xl transition"
-                  >
-                    Hủy Bỏ
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="px-6 py-2.5 bg-gradient-to-r from-[#523522] to-[#361F12] hover:from-[#3D2517] hover:to-[#24140B] text-white font-bold text-xs rounded-xl shadow-md transition disabled:opacity-50"
-                  >
-                    {loading ? "Đang xử lý khóa CSDL..." : "Xác Nhận Đặt Thuê"}
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <div className="space-y-4 text-center py-2">
-                <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-[#FAF5EE] to-[#EBE0D3] dark:from-[#362215] dark:to-[#22150D] border-2 border-[#C28E58] flex items-center justify-center text-[#C28E58] shadow-md">
-                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                    <polyline points="22 4 12 14.01 9 11.01" />
-                  </svg>
-                </div>
-                <h4 className="font-extrabold text-2xl text-[#24170E] dark:text-white">
-                  Đặt Thuê Khay Nấm Thành Công!
-                </h4>
-                <div className="p-4 bg-[#FAF5EE] dark:bg-[#281A12] border border-[#E0D3C1] dark:border-[#543825] rounded-2xl text-left space-y-2 text-xs">
-                  <div className="flex justify-between items-center border-b border-[#E0D3C1] dark:border-[#543825] pb-2">
-                    <span className="text-[#634936] dark:text-[#DAC7B5]">Mã đơn hàng CSDL:</span>
-                    <strong className="text-[#523522] dark:text-[#E2BA78] font-mono text-sm">{orderResult.orderCode}</strong>
-                  </div>
-                  <div className="flex justify-between items-center border-b border-[#E0D3C1] dark:border-[#543825] pb-2">
-                    <span className="text-[#634936] dark:text-[#DAC7B5]">Mã khay nuôi được gán:</span>
-                    <strong className="text-[#523522] dark:text-[#E2BA78] font-mono text-sm">Khay #{orderResult.trayId}</strong>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-[#634936] dark:text-[#DAC7B5]">Trạng thái phát sóng:</span>
-                    <span className="text-[#C28E58] font-semibold">Realtime socket `tray:occupied` đã gửi</span>
-                  </div>
-                </div>
-
-                <p className="text-xs text-[#735843] dark:text-[#DAC7B5]">
-                  Khay nấm đã được kích hoạt vi khí hậu trên ma trận buồng nuôi. Bạn có thể sang trang Kỹ thuật viên để xem vị trí khay được cập nhật tức thì.
-                </p>
-
-                <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
-                  <Link
-                    href="/operator"
-                    className="flex-1 py-3 px-4 bg-[#523522] hover:bg-[#3D2517] text-white font-bold text-xs rounded-xl shadow-md transition text-center"
-                  >
-                    Xem Ma Trận Điều Hành →
-                  </Link>
-                  <button
-                    onClick={closeModal}
-                    className="flex-1 py-3 px-4 bg-[#FAF5EE] hover:bg-[#F0E6D8] dark:bg-[#281A12] dark:hover:bg-[#38261A] text-[#4A3222] dark:text-[#F7EFE6] font-bold text-xs rounded-xl transition text-center"
-                  >
-                    Đóng
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Cổng Thanh Toán Điện Tử MushroomPay Sandbox (3 Bước) */}
+      <CheckoutGatewayModal
+        item={checkoutItem}
+        onClose={() => setCheckoutItem(null)}
+        onTransactionSuccess={() => setLedgerRefresh((prev) => prev + 1)}
+      />
     </section>
   );
 }
