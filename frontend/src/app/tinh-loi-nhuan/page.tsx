@@ -4,6 +4,8 @@ import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import CheckoutGatewayModal, { CheckoutItemConfig } from '@/components/checkout/CheckoutGatewayModal';
+import TransactionLedgerPanel from '@/components/checkout/TransactionLedgerPanel';
 
 interface MushroomSpec {
   id: string;
@@ -81,6 +83,8 @@ export default function RoiCalculatorPage() {
   const [trayCount, setTrayCount] = useState<number>(3);
   const [durationMonths, setDurationMonths] = useState<number>(3);
   const [isSuccessBooked, setIsSuccessBooked] = useState(false);
+  const [checkoutItem, setCheckoutItem] = useState<CheckoutItemConfig | null>(null);
+  const [ledgerRefresh, setLedgerRefresh] = useState<number>(0);
 
   const selectedSpecies = useMemo(
     () => SPECIES_OPTIONS.find((s) => s.id === selectedSpeciesId) || SPECIES_OPTIONS[0],
@@ -120,8 +124,22 @@ export default function RoiCalculatorPage() {
   };
 
   const handleBooking = () => {
-    setIsSuccessBooked(true);
-    setTimeout(() => setIsSuccessBooked(false), 5000);
+    const pkgId =
+      selectedSpecies.id === 'oyster'
+        ? 1
+        : selectedSpecies.id === 'reishi'
+        ? 2
+        : 3;
+
+    setCheckoutItem({
+      orderType: 'FAAS_RENTAL',
+      packageId: pkgId,
+      itemName: `${selectedSpecies.name} (${trayCount} Khay • ${durationMonths} Tháng)`,
+      subtitle: `${selectedSpecies.scientificName} • Dự kiến ${calculations.cycles} đợt thu hoạch`,
+      grossAmount: calculations.totalCost,
+      durationLabel: `${durationMonths * 30} Ngày`,
+      yieldCommitment: `~${calculations.totalYieldKg} kg`,
+    });
   };
 
   return (
@@ -452,7 +470,22 @@ export default function RoiCalculatorPage() {
               </div>
             </div>
           </div>
+
+          {/* Sổ Cái Giao Dịch & Hợp Đồng Điện Tử Lưu Trực Tiếp Trên MS SQL Server */}
+          <TransactionLedgerPanel
+            refreshTrigger={ledgerRefresh}
+            title="Sổ Cái Hợp Đồng Đầu Tư FaaS & Giao Dịch Đã Lưu CSDL (MS SQL Server)"
+          />
         </div>
+
+        <CheckoutGatewayModal
+          item={checkoutItem}
+          onClose={() => setCheckoutItem(null)}
+          onTransactionSuccess={() => {
+            setIsSuccessBooked(true);
+            setLedgerRefresh((prev) => prev + 1);
+          }}
+        />
       </div>
 
       <Footer />

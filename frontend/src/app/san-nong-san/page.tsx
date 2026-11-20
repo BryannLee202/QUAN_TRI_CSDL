@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import CheckoutGatewayModal, { CheckoutItemConfig } from '@/components/checkout/CheckoutGatewayModal';
+import TransactionLedgerPanel from '@/components/checkout/TransactionLedgerPanel';
 
 interface MarketBatch {
   id: string;
@@ -109,8 +111,8 @@ const MOCK_BATCHES: MarketBatch[] = [
 
 export default function MarketplacePage() {
   const [filterCategory, setFilterCategory] = useState<'ALL' | 'FRESH' | 'DRIED'>('ALL');
-  const [selectedBatch, setSelectedBatch] = useState<MarketBatch | null>(null);
-  const [orderSuccess, setOrderSuccess] = useState(false);
+  const [checkoutItem, setCheckoutItem] = useState<CheckoutItemConfig | null>(null);
+  const [ledgerRefresh, setLedgerRefresh] = useState<number>(0);
   const [searchKeyword, setSearchKeyword] = useState('');
 
   const filteredBatches = MOCK_BATCHES.filter((b) => {
@@ -127,15 +129,15 @@ export default function MarketplacePage() {
   };
 
   const handleBuy = (batch: MarketBatch) => {
-    setSelectedBatch(batch);
-  };
-
-  const confirmOrder = () => {
-    setOrderSuccess(true);
-    setTimeout(() => {
-      setOrderSuccess(false);
-      setSelectedBatch(null);
-    }, 4000);
+    setCheckoutItem({
+      orderType: 'MARKET_BATCH',
+      batchCode: batch.batchCode,
+      itemName: `${batch.speciesName} (Lô ${batch.batchCode})`,
+      subtitle: `${batch.certBadge} • Chủ khay: ${batch.ownerName}`,
+      grossAmount: Math.round(batch.quantityKg * batch.pricePerKg),
+      durationLabel: batch.category === 'FRESH' ? 'Giao hỏa tốc 2H' : 'Đóng gói tiêu chuẩn',
+      yieldCommitment: `${batch.quantityKg} kg`,
+    });
   };
 
   return (
@@ -344,74 +346,19 @@ export default function MarketplacePage() {
               );
             })}
           </div>
+
+          {/* Sổ Cái Giao Dịch Lưu Trực Tiếp Trên MS SQL Server */}
+          <TransactionLedgerPanel
+            refreshTrigger={ledgerRefresh}
+            title="Sổ Cái Giao Dịch Sàn Nông Sản & Hợp Đồng FaaS (MS SQL Server)"
+          />
         </div>
 
-        {/* Modal Xác Nhận Mua Hàng */}
-        {selectedBatch && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-            <div className="bg-white dark:bg-[#1A1009] border border-[#DECFC0] dark:border-[#4A3222] rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
-              <button
-                type="button"
-                onClick={() => setSelectedBatch(null)}
-                className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#FAF5EE] dark:bg-[#281A12] text-[#8A5C38] flex items-center justify-center font-bold hover:text-black dark:hover:text-white"
-              >
-                ✕
-              </button>
-
-              <div>
-                <span className="text-xs font-bold text-[#C28E58] uppercase">Xác Nhận Đặt Mua Lô Nông Sản</span>
-                <h3 className="text-xl font-black text-[#24170E] dark:text-[#FFF5EA] mt-1">
-                  {selectedBatch.speciesName}
-                </h3>
-                <p className="text-xs text-[#735843] dark:text-[#BFA895]">
-                  Mã lô: <span className="font-mono font-bold">{selectedBatch.batchCode}</span> • {selectedBatch.certBadge}
-                </p>
-              </div>
-
-              {orderSuccess ? (
-                <div className="p-6 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 text-emerald-900 dark:text-emerald-200 text-center space-y-2">
-                  <div className="text-3xl">🎉</div>
-                  <h4 className="font-black text-base">Đặt Hàng Thành Công!</h4>
-                  <p className="text-xs">
-                    Đơn hàng đã được điều phối đến Hub gần nhất. Shipper chuyên biệt sẽ giao tận nơi bảo quản lạnh trong vòng 45 phút.
-                  </p>
-                </div>
-              ) : (
-                <>
-                  <div className="p-4 rounded-2xl bg-[#FAF5EE] dark:bg-[#22160E] space-y-2 text-xs border border-[#EAE1D3] dark:border-[#38261A]">
-                    <div className="flex items-center justify-between">
-                      <span>Khối lượng lô:</span>
-                      <span className="font-bold">{selectedBatch.quantityKg} kg</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>Đơn giá FaaS:</span>
-                      <span className="font-bold">{formatVnd(selectedBatch.pricePerKg)}/kg</span>
-                    </div>
-                    <div className="flex items-center justify-between pt-2 border-t border-[#EAE1D3] dark:border-[#38261A]">
-                      <span className="font-bold text-sm">Tổng thanh toán:</span>
-                      <span className="font-black text-base text-[#C28E58]">
-                        {formatVnd(selectedBatch.quantityKg * selectedBatch.pricePerKg)}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <button
-                      type="button"
-                      onClick={confirmOrder}
-                      className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#C28E58] to-[#9E6845] text-[#170E08] font-black text-sm shadow-md hover:shadow-lg transition text-center"
-                    >
-                      Xác Nhận Giao Hỏa Tốc Tận Nơi →
-                    </button>
-                    <p className="text-[11px] text-center text-[#8A5C38]">
-                      Kiểm tra nấm trước khi nhận • Miễn phí vận chuyển cho đơn hàng đầu tiên
-                    </p>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        )}
+        <CheckoutGatewayModal
+          item={checkoutItem}
+          onClose={() => setCheckoutItem(null)}
+          onTransactionSuccess={() => setLedgerRefresh((prev) => prev + 1)}
+        />
       </div>
 
       <Footer />

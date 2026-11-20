@@ -64,5 +64,39 @@ BEGIN
 END;
 GO
 
-PRINT N'>>> ĐÃ TẠO THỦ TỤC sp_LogAuditEvent THÀNH CÔNG! <<<';
+-- Bảng Lưu Trữ Giao Dịch Tài Chính & Chứng Từ Thanh Toán Điện Tử (PaymentTransactions)
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PaymentTransactions')
+BEGIN
+    CREATE TABLE dbo.PaymentTransactions (
+        TransactionID INT IDENTITY(1,1) NOT NULL,
+        TransactionRef VARCHAR(60) NOT NULL,
+        OrderType VARCHAR(30) NOT NULL,
+        OrderID INT NULL,
+        OrderCode VARCHAR(40) NOT NULL,
+        TrayID INT NULL,
+        UserID INT NOT NULL,
+        CustomerName NVARCHAR(120) NOT NULL,
+        CustomerPhone VARCHAR(25) NOT NULL,
+        DeliveryAddress NVARCHAR(255) NOT NULL,
+        ItemName NVARCHAR(180) NOT NULL,
+        DurationLabel NVARCHAR(60) NULL,
+        YieldCommitment NVARCHAR(60) NULL,
+        GrossAmount DECIMAL(18,2) NOT NULL,
+        DiscountAmount DECIMAL(18,2) NOT NULL CONSTRAINT DF_PayTx_Discount DEFAULT 0,
+        NetAmount DECIMAL(18,2) NOT NULL,
+        VoucherCode VARCHAR(30) NULL,
+        PaymentMethod VARCHAR(40) NOT NULL,
+        BankOrCardInfo NVARCHAR(120) NULL,
+        PaymentStatus VARCHAR(25) NOT NULL CONSTRAINT DF_PayTx_Status DEFAULT 'PAID',
+        CreatedAt DATETIME2(3) NOT NULL CONSTRAINT DF_PayTx_CreatedAt DEFAULT SYSDATETIME(),
+        CONSTRAINT PK_PaymentTransactions PRIMARY KEY CLUSTERED (TransactionID),
+        CONSTRAINT UQ_PaymentTransactions_Ref UNIQUE (TransactionRef)
+    );
+
+    CREATE NONCLUSTERED INDEX IX_PaymentTransactions_CreatedAt
+    ON dbo.PaymentTransactions (CreatedAt DESC);
+END
+GO
+
+PRINT N'>>> ĐÃ TẠO THỦ TỤC sp_LogAuditEvent & BẢNG PaymentTransactions THÀNH CÔNG! <<<';
 GO

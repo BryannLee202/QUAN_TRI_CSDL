@@ -116,6 +116,123 @@ export async function generatePaymentQR(params: VietQRParams) {
   return json;
 }
 
+export interface PaymentInitiateParams {
+  orderType: "FAAS_RENTAL" | "MARKET_BATCH";
+  packageId?: number;
+  itemName: string;
+  grossAmount: number;
+  voucherCode?: string;
+  paymentMethod: "VIETQR_NAPAS" | "VNPAY_GATEWAY" | "INTERNATIONAL_CARD" | "COD_ESCROW";
+  customerName?: string;
+}
+
+export interface PaymentSessionData {
+  transactionRef: string;
+  orderType: "FAAS_RENTAL" | "MARKET_BATCH";
+  packageId?: number;
+  itemName: string;
+  grossAmount: number;
+  discountAmount: number;
+  netAmount: number;
+  voucherApplied: string | null;
+  voucherLabel: string | null;
+  paymentMethod: string;
+  customerName: string;
+  qrImageUrl: string;
+  bankInfo: {
+    bankCode: string;
+    bankName: string;
+    bankBin: string;
+    accountNo: string;
+    accountName: string;
+    transferMemo: string;
+  };
+  expiresInSeconds: number;
+  createdAt: string;
+}
+
+export interface PaymentConfirmParams {
+  transactionRef?: string;
+  orderType: "FAAS_RENTAL" | "MARKET_BATCH";
+  packageId?: number;
+  userId?: number;
+  customerName: string;
+  customerPhone: string;
+  deliveryAddress: string;
+  itemName: string;
+  durationLabel?: string;
+  yieldCommitment?: string;
+  grossAmount: number;
+  voucherCode?: string;
+  paymentMethod: "VIETQR_NAPAS" | "VNPAY_GATEWAY" | "INTERNATIONAL_CARD" | "COD_ESCROW";
+  bankOrCardInfo?: string;
+  batchCode?: string;
+}
+
+export interface PaymentTransactionRecord {
+  transactionId: number;
+  transactionRef: string;
+  orderType: "FAAS_RENTAL" | "MARKET_BATCH";
+  orderId: number | null;
+  orderCode: string;
+  trayId: number | null;
+  trayCode: string | null;
+  roomName?: string;
+  customerName: string;
+  customerPhone: string;
+  deliveryAddress: string;
+  itemName: string;
+  durationLabel: string | null;
+  yieldCommitment: string | null;
+  grossAmount: number;
+  discountAmount: number;
+  netAmount: number;
+  voucherCode: string | null;
+  paymentMethod: string;
+  bankOrCardInfo: string | null;
+  paymentStatus: string;
+  settledAt?: string;
+  createdAt?: string;
+}
+
+export async function initiatePaymentSessionApi(params: PaymentInitiateParams): Promise<{ success: boolean; data: PaymentSessionData }> {
+  const res = await fetch(`${API_BASE}/payments/initiate`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(params),
+  });
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.message || "Lỗi khởi tạo phiên cổng thanh toán");
+  }
+  return json;
+}
+
+export async function confirmPaymentCheckoutApi(params: PaymentConfirmParams): Promise<{ success: boolean; message: string; data: PaymentTransactionRecord }> {
+  const res = await fetch(`${API_BASE}/payments/confirm`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(params),
+  });
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.message || "Lỗi xác nhận giao dịch thanh toán");
+  }
+  return json;
+}
+
+export async function getPaymentHistoryApi(limit: number = 15): Promise<PaymentTransactionRecord[]> {
+  const res = await fetch(`${API_BASE}/payments/history?limit=${limit}`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.message || "Lỗi tải lịch sử chứng từ giao dịch");
+  }
+  return json.data || [];
+}
+
 /**
  * 4. Kiểm tra sức khỏe hệ thống Backend & CSDL MS SQL Server
  */
