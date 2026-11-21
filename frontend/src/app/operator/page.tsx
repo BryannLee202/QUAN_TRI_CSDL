@@ -260,20 +260,21 @@ export default function OperatorPage() {
     } catch (err: any) {
       // Nếu đang ở chế độ demo offline/mock, vẫn cho phép bổ sung trực tiếp trên giao diện
       const currentRoomTrays = trays.filter((t) => t.roomId === roomId);
-      const maxRack = currentRoomTrays.reduce((m, t) => Math.max(m, t.rackNumber), 1);
+      const baseSeq = currentRoomTrays.length;
       const roomCode = roomLabel(roomId).replace(/[^A-Z0-9]/gi, "").toUpperCase();
       const fallbackCreated: TrayCell[] = [];
       for (let i = 0; i < createCount; i++) {
-        const nextRack = createCount === 1 && customRack ? Number(customRack) : maxRack + 1 + Math.floor(i / 5);
-        const nextShelf = createCount === 1 && customShelf ? Number(customShelf) : (i % 5) + 1;
-        const code = `TRAY-${roomCode}-R${String(nextRack).padStart(2, "0")}-${String(nextShelf).padStart(2, "0")}`;
+        const nextSeq = baseSeq + 1 + i;
+        const nextRack = createCount === 1 && customRack ? Number(customRack) : Math.floor((nextSeq - 1) / 10) + 1;
+        const nextShelf = createCount === 1 && customShelf ? Number(customShelf) : Math.floor(((nextSeq - 1) % 10) / 2) + 1;
+        const code = `TRAY-${roomCode}-R${String(nextRack).padStart(2, "0")}-${String(nextSeq).padStart(3, "0")}`;
         fallbackCreated.push({
           trayId: Date.now() + i,
           trayCode: code,
           roomId,
           rackNumber: nextRack,
           shelfLevel: nextShelf,
-          positionNumber: nextShelf,
+          positionNumber: ((nextSeq - 1) % 2) + 1,
           status: createStatus,
         });
       }
@@ -592,10 +593,6 @@ export default function OperatorPage() {
                     <span className="text-[11px] opacity-80">Khử trùng UV-C trước khi mở thuê</span>
                   </button>
                 </div>
-              </div>
-
-              <div className="p-3 rounded-xl bg-[#FAF5EE] dark:bg-[#170E08] border border-[#E8DCCE] dark:border-[#332015] text-[11px] text-[#634936] dark:text-[#BFA895]">
-                Hệ thống sẽ tự động cấp phát mã định danh QR duy nhất theo chuẩn <strong>TRAY-{roomLabel(roomId).replace("-", "")}-Rxx-xx</strong> và nâng công suất buồng nuôi tương ứng.
               </div>
 
               <div className="pt-2 flex items-center justify-end gap-2.5">

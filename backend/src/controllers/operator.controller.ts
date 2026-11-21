@@ -51,6 +51,26 @@ export const getTrays = async (req: Request, res: Response): Promise<void> => {
   try {
     const roomId = req.query.roomId ? Number(req.query.roomId) : null;
     const pool = getPool();
+
+    // Đồng bộ định danh 3 chữ số (ví dụ TRAY-RM01-R03-029) cho các khay mới tạo
+    await pool.request().query(`
+      WITH RankedTrays AS (
+        SELECT 
+          t.TrayID,
+          t.TrayCode,
+          r.RoomCode,
+          t.RackNumber,
+          ROW_NUMBER() OVER (PARTITION BY t.RoomID ORDER BY t.TrayID ASC) AS SeqNum
+        FROM dbo.CultivationTrays t
+        JOIN dbo.Rooms r ON t.RoomID = r.RoomID
+      )
+      UPDATE dbo.CultivationTrays
+      SET TrayCode = CONCAT('TRAY-', rt.RoomCode, '-R', FORMAT(rt.RackNumber, '00'), '-', FORMAT(rt.SeqNum, '000'))
+      FROM dbo.CultivationTrays ct
+      JOIN RankedTrays rt ON ct.TrayID = rt.TrayID
+      WHERE LEN(ct.TrayCode) < 17;
+    `);
+
     const request = pool.request();
 
     let query = `
@@ -313,48 +333,34 @@ export const createNewTrays = async (req: Request, res: Response): Promise<void>
     const existingCodes = new Set<string>(
       existingRes.recordset.map((r: any) => String(r.TrayCode).toUpperCase())
     );
-    const existingPositions = new Set<string>(
-      existingRes.recordset.map((r: any) => `${r.RackNumber}-${r.ShelfLevel}`)
-    );
 
-    let maxRack = 1;
+    // Tìm số thứ tự khay lớn nhất hiện có trong buồng (theo chuẩn 3 chữ số '001'..'028')
+    let maxSeq = existingRes.recordset.length;
     for (const r of existingRes.recordset) {
-      if (r.RackNumber > maxRack) maxRack = r.RackNumber;
+      const m = String(r.TrayCode || "").match(/-(\d{1,4})$/);
+      if (m) {
+        const num = Number(m[1]);
+        if (num > maxSeq) maxSeq = num;
+      }
     }
 
-    // 2. Xác định vị trí Kệ (Rack) và Tầng (Shelf) cho từng khay mới
+    // 2. Xác định vị trí Kệ (Rack), Tầng (Shelf) và Mã 3 chữ số đồng bộ cho từng khay mới
     const createdTrays: any[] = [];
 
     for (let i = 0; i < count; i++) {
-      let targetRack = customRack && count === 1 ? customRack : maxRack;
-      let targetShelf = customShelf && count === 1 ? customShelf : 1;
+      let nextSeq = maxSeq + 1 + i;
+      const defaultRack = Math.floor((nextSeq - 1) / 10) + 1;
+      const defaultShelf = Math.floor(((nextSeq - 1) % 10) / 2) + 1;
+      const defaultPos = ((nextSeq - 1) % 2) + 1;
 
-      if (!(customRack && customShelf && count === 1 && !existingPositions.has(`${customRack}-${customShelf}`))) {
-        // Tìm vị trí kệ - tầng tiếp theo chưa có khay (Mỗi kệ chuẩn 5 tầng: 1..5)
-        let found = false;
-        for (let r = 1; r <= maxRack + 10; r++) {
-          for (let s = 1; s <= 5; s++) {
-            if (!existingPositions.has(`${r}-${s}`)) {
-              targetRack = r;
-              targetShelf = s;
-              if (r > maxRack) maxRack = r;
-              found = true;
-              break;
-            }
-          }
-          if (found) break;
-        }
-      }
-
-      existingPositions.add(`${targetRack}-${targetShelf}`);
-
+      const targetRack = customRack && count === 1 ? customRack : defaultRack;
+      const targetShelf = customShelf && count === 1 ? customShelf : defaultShelf;
       const rackStr = String(targetRack).padStart(2, "0");
-      let posNum = targetShelf;
-      let candidateCode = `TRAY-${roomPrefix}-R${rackStr}-${String(posNum).padStart(2, "0")}`;
 
+      let candidateCode = `TRAY-${roomPrefix}-R${rackStr}-${String(nextSeq).padStart(3, "0")}`;
       while (existingCodes.has(candidateCode.toUpperCase())) {
-        posNum += 1;
-        candidateCode = `TRAY-${roomPrefix}-R${rackStr}-${String(posNum).padStart(2, "0")}`;
+        nextSeq += 1;
+        candidateCode = `TRAY-${roomPrefix}-R${rackStr}-${String(nextSeq).padStart(3, "0")}`;
       }
       existingCodes.add(candidateCode.toUpperCase());
 
@@ -364,7 +370,7 @@ export const createNewTrays = async (req: Request, res: Response): Promise<void>
         .input("RoomID", sql.Int, roomId)
         .input("RackNumber", sql.Int, targetRack)
         .input("ShelfLevel", sql.Int, targetShelf)
-        .input("PositionNumber", sql.Int, posNum)
+        .input("PositionNumber", sql.Int, defaultPos)
         .input("Status", sql.VarChar(20), initialStatus)
         .query(`
           INSERT INTO dbo.CultivationTrays (
