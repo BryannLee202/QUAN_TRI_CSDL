@@ -52,23 +52,26 @@ export const getTrays = async (req: Request, res: Response): Promise<void> => {
     const roomId = req.query.roomId ? Number(req.query.roomId) : null;
     const pool = getPool();
 
-    // Đồng bộ định danh 3 chữ số (ví dụ TRAY-RM01-R03-029) cho các khay mới tạo
+    // Chỉ chuẩn hóa định danh 3 chữ số (ví dụ TRAY-RM01-R03-029) khi có bản ghi cũ chưa chuẩn, tránh Write-Lock trên mỗi lệnh GET
     await pool.request().query(`
-      WITH RankedTrays AS (
-        SELECT 
-          t.TrayID,
-          t.TrayCode,
-          r.RoomCode,
-          t.RackNumber,
-          ROW_NUMBER() OVER (PARTITION BY t.RoomID ORDER BY t.TrayID ASC) AS SeqNum
-        FROM dbo.CultivationTrays t
-        JOIN dbo.Rooms r ON t.RoomID = r.RoomID
-      )
-      UPDATE dbo.CultivationTrays
-      SET TrayCode = CONCAT('TRAY-', rt.RoomCode, '-R', FORMAT(rt.RackNumber, '00'), '-', FORMAT(rt.SeqNum, '000'))
-      FROM dbo.CultivationTrays ct
-      JOIN RankedTrays rt ON ct.TrayID = rt.TrayID
-      WHERE LEN(ct.TrayCode) < 17;
+      IF EXISTS (SELECT 1 FROM dbo.CultivationTrays WITH (NOLOCK) WHERE LEN(TrayCode) < 17)
+      BEGIN
+        WITH RankedTrays AS (
+          SELECT 
+            t.TrayID,
+            t.TrayCode,
+            r.RoomCode,
+            t.RackNumber,
+            ROW_NUMBER() OVER (PARTITION BY t.RoomID ORDER BY t.TrayID ASC) AS SeqNum
+          FROM dbo.CultivationTrays t
+          JOIN dbo.Rooms r ON t.RoomID = r.RoomID
+        )
+        UPDATE dbo.CultivationTrays
+        SET TrayCode = CONCAT('TRAY-', rt.RoomCode, '-R', FORMAT(rt.RackNumber, '00'), '-', FORMAT(rt.SeqNum, '000'))
+        FROM dbo.CultivationTrays ct
+        JOIN RankedTrays rt ON ct.TrayID = rt.TrayID
+        WHERE LEN(ct.TrayCode) < 17;
+      END
     `);
 
     const request = pool.request();
