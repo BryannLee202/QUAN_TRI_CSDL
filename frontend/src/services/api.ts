@@ -309,6 +309,24 @@ export async function updateOperatorTrayStatusApi(trayId: number, status: "AVAIL
   return json;
 }
 
+export async function createOperatorTraysApi(params: {
+  roomId: number;
+  count: number;
+  rackNumber?: number;
+  shelfLevel?: number;
+  status?: "AVAILABLE" | "MAINTENANCE";
+}) {
+  const res = await fetch(`${API_BASE}/operator/trays/create`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    credentials: "include",
+    body: JSON.stringify(params),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || json.message || "Lỗi khởi tạo khay nuôi mới");
+  return json;
+}
+
 // -------------------------------------------------------------
 // Authentication & RBAC APIs
 // -------------------------------------------------------------
