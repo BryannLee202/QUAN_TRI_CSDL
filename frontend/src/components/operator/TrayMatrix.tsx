@@ -57,12 +57,16 @@ export default function TrayMatrix({
           return (a.positionNumber || 0) - (b.positionNumber || 0);
         }
         return a.trayId - b.trayId;
-      });
+      })
+      .map((t, roomIndex) => ({
+        tray: t,
+        shortId: formatShortTrayId(t, roomIndex),
+      }));
   }, [trays, roomId]);
 
   const filteredTrays = useMemo(() => {
     if (statusFilter === "ALL") return sortedInRoom;
-    return sortedInRoom.filter((t) => toUiStatus(t.status, roomHasAlert) === statusFilter);
+    return sortedInRoom.filter((item) => toUiStatus(item.tray.status, roomHasAlert) === statusFilter);
   }, [sortedInRoom, roomHasAlert, statusFilter]);
 
   if (filteredTrays.length === 0) {
@@ -76,9 +80,8 @@ export default function TrayMatrix({
   return (
     <div className="pt-2 max-h-[560px] overflow-y-auto pr-1 custom-scrollbar">
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3">
-        {filteredTrays.map((tray, idx) => {
+        {filteredTrays.map(({ tray, shortId }) => {
           const ui = toUiStatus(tray.status, roomHasAlert);
-          const shortId = formatShortTrayId(tray, idx);
           const rackPad = String(tray.rackNumber).padStart(2, "0");
           const shelfPad = String(tray.shelfLevel).padStart(2, "0");
 

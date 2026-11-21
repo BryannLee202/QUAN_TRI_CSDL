@@ -11,6 +11,7 @@ interface VirtualTrayInspectorModalProps {
   onClose: () => void;
   onSelectTray: (nextTray: TrayCell) => void;
   onToggleStatus: () => void;
+  onTriggerHardwareMist?: () => Promise<void> | void;
   onActionNotice?: (msg: string) => void;
 }
 
@@ -50,6 +51,7 @@ export default function VirtualTrayInspectorModal({
   onClose,
   onSelectTray,
   onToggleStatus,
+  onTriggerHardwareMist,
   onActionNotice,
 }: VirtualTrayInspectorModalProps) {
   const [viewAngle, setViewAngle] = useState<ViewAngle>("REAL_TRAY_CLOSEUP");
@@ -61,7 +63,7 @@ export default function VirtualTrayInspectorModal({
   const [aiScanReport, setAiScanReport] = useState<string | null>(null);
 
   /**
-   * railPos.x: Vị trí ngang của camera dọc theo thanh ray kệ (0% = Đầu kệ bên trái, 100% = Kịch cuối kệ bên phải)
+   * railPos.x: Vị trí ngang của camera dọc theo thanh ray kệ (0% = Khoang Đầu Kệ, 50% = Khoang Giữa Kệ, 100% = Khoang Cuối Kệ)
    * railPos.y: Vị trí dọc của camera theo tầng kệ (0% = Tầng trên, 100% = Tầng dưới)
    */
   const [railPos, setRailPos] = useState<{ x: number; y: number }>({ x: 15, y: 45 });
@@ -69,9 +71,13 @@ export default function VirtualTrayInspectorModal({
   const [hoverPanEnabled, setHoverPanEnabled] = useState<boolean>(true);
   const [autoPatrol, setAutoPatrol] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [dragStart, setDragStart] = useState<{ clientX: number; clientY: number; startX: number; startY: number } | null>(null);
+  const [isPointerTracking, setIsPointerTracking] = useState<boolean>(false);
   const [isTransitioningTray, setIsTransitioningTray] = useState<boolean>(false);
+
   const viewportRef = useRef<HTMLDivElement>(null);
+  const radarTrackRef = useRef<HTMLDivElement>(null);
+  const cachedRectRef = useRef<DOMRect | null>(null);
+  const dragStartRef = useRef<{ clientX: number; clientY: number; startX: number; startY: number } | null>(null);
 
   // Sắp xếp danh sách khay trong buồng theo Kệ -> Tầng -> Vị trí
   const sortedRoomTrays = useMemo(() => {
@@ -109,9 +115,10 @@ export default function VirtualTrayInspectorModal({
     return idx >= 0 ? idx : 0;
   }, [traysOnCurrentRack, tray]);
 
-  // Khi chuyển sang khay khác, tự động trượt camera dọc thanh ray đến đúng tọa độ của khay đó trên kệ
+  // Khi chuyển sang khay khác, tự động trượt mượt camera dọc thanh ray đến đúng tọa độ của khay đó trên kệ
   useEffect(() => {
     if (!tray) return;
+    setIsPointerTracking(false);
     setIsTransitioningTray(true);
     setAiScanReport(null);
 
@@ -124,23 +131,49 @@ export default function VirtualTrayInspectorModal({
 
     setRailPos({ x: targetX, y: targetY });
 
-    const t = setTimeout(() => setIsTransitioningTray(false), 240);
+    const t = setTimeout(() => setIsTransitioningTray(false), 260);
     return () => clearTimeout(t);
   }, [tray?.trayId, currentRackTrayIndex, traysOnCurrentRack.length]);
 
-  // Chế độ Tự động trượt ray tuần tra từ đầu kệ (0%) đến cuối kệ (100%)
+  // Chế độ Tự động trượt ray tuần tra từ đầu kệ (0%) qua giữa kệ (50%) tới cuối kệ (100%)
   useEffect(() => {
     if (!autoPatrol) return;
+    setIsPointerTracking(true);
     let phase = (railPos.x / 100) * Math.PI;
     const interval = setInterval(() => {
-      phase += 0.025;
+      phase += 0.022;
       setRailPos({
         x: clampPct(((Math.sin(phase) + 1) / 2) * 100),
         y: clampPct(50 + Math.cos(phase * 0.7) * 35),
       });
-    }, 40);
+    }, 32);
     return () => clearInterval(interval);
   }, [autoPatrol]);
+
+  // Đăng ký Native Non-Passive Wheel Listener trên Viewport để chặn cuộn trang nền khi lăn chuột Zoom/Pan
+  useEffect(() => {
+    const el = viewportRef.current;
+    if (!el) return;
+
+    const onWheelNative = (e: WheelEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        const step = (e.deltaX || e.deltaY) > 0 ? 7 : -7;
+        setAutoPatrol(false);
+        setIsPointerTracking(false);
+        setRailPos((prev) => ({ ...prev, x: clampPct(prev.x + step) }));
+        return;
+      }
+
+      const delta = e.deltaY < 0 ? 0.15 : -0.15;
+      setZoom((prev) => Number(Math.min(2.4, Math.max(1.0, prev + delta)).toFixed(2)));
+    };
+
+    el.addEventListener("wheel", onWheelNative, { passive: false });
+    return () => el.removeEventListener("wheel", onWheelNative);
+  }, [tray?.trayId]);
 
   // Hỗ trợ phím mũi tên Trái / Phải để trượt camera sang khay kế tiếp
   useEffect(() => {
@@ -174,38 +207,42 @@ export default function VirtualTrayInspectorModal({
   const localLux = spectrum === "NATURAL_LIGHT" ? 850 : spectrum === "HUMID_MIST" ? 320 : 150;
   const growthProgress = isOccupied ? 68 + seed * 3 : isMaintenance ? 100 : 0;
 
-  // Chọn cặp hình ảnh thực tế cho Khoang Đầu Kệ (Bay 1) & Khoang Cuối Kệ (Bay 2) trên dải Panorama 220%
-  const { primaryImageUrl, secondaryImageUrl, imageCaption, stageSubtitle } = (() => {
+  // Chọn bộ 3 hình ảnh thực tế cho 3 Khoang Kệ Liên Tiếp (Khoang Đầu 0-33% • Khoang Giữa 33-66% • Khoang Cuối 66-100%)
+  const { bay1ImageUrl, bay2ImageUrl, bay3ImageUrl, imageCaption, stageSubtitle } = (() => {
     if (viewAngle === "CLEANROOM_RACKS") {
       return {
-        primaryImageUrl: "/images/real-farm/real-cleanroom-cultivation.jpg",
-        secondaryImageUrl: "/images/real-farm/real-mushroom-shelves.jpg",
+        bay1ImageUrl: "/images/real-farm/real-cleanroom-cultivation.jpg",
+        bay2ImageUrl: "/images/real-farm/real-mushroom-shelves.jpg",
+        bay3ImageUrl: "/images/real-farm/real-farm-racks-2.jpg",
         imageCaption: `Dàn kệ sắt đa tầng & khay nấm thực tế trong phòng nuôi (${roomCode} • Kệ ${rackPad})`,
-        stageSubtitle: "Rê chuột từ trái sang phải để lướt dọc từ khoang đầu kệ đến các khay phía cuối kệ",
+        stageSubtitle: "Rê chuột từ trái sang phải để lướt dọc qua 3 khoang kệ: Đầu kệ -> Giữa kệ -> Cuối kệ",
       };
     }
     if (viewAngle === "FARM_AISLE_PANORAMA") {
       return {
-        primaryImageUrl: "/images/real-farm/real-farm-racks-1.jpg",
-        secondaryImageUrl: "/images/real-farm/real-farm-racks-3.jpg",
+        bay1ImageUrl: "/images/real-farm/real-farm-racks-1.jpg",
+        bay2ImageUrl: "/images/real-farm/real-farm-racks-2.jpg",
+        bay3ImageUrl: "/images/real-farm/real-farm-racks-3.jpg",
         imageCaption: `Hành lang kệ phôi nấm đa tầng thực tế kéo dài tại khu vực Kệ ${rackPad}`,
-        stageSubtitle: "Lướt chuột ngang hết khung hình để kiểm tra từ đầu dãy kệ tới cuối dãy kệ (0% -> 100%)",
+        stageSubtitle: "Lướt chuột ngang hết khung hình để kiểm tra từ đầu dãy kệ tới kịch cuối dãy kệ (0% -> 100%)",
       };
     }
 
-    // Góc nhìn 1: Cận cảnh khay & phôi nấm thực tế dọc kệ
+    // Góc nhìn 1: Cận cảnh khay & phôi nấm thực tế dọc 3 khoang kệ
     if (isMaintenance) {
       return {
-        primaryImageUrl: "/images/real-farm/real-farm-racks-3.jpg",
-        secondaryImageUrl: "/images/real-farm/real-farm-racks-2.jpg",
+        bay1ImageUrl: "/images/real-farm/real-farm-racks-3.jpg",
+        bay2ImageUrl: "/images/real-farm/real-farm-racks-2.jpg",
+        bay3ImageUrl: "/images/real-farm/real-farm-racks-1.jpg",
         imageCaption: `Kệ phôi ${tray.trayCode} đang trong quy trình kiểm tra & khử trùng định kỳ`,
         stageSubtitle: "Trạng thái: Đang bảo trì kỹ thuật & kiểm định nắp lọc khuẩn dọc dãy kệ",
       };
     }
     if (!isOccupied) {
       return {
-        primaryImageUrl: "/images/real-farm/real-farm-racks-2.jpg",
-        secondaryImageUrl: "/images/real-farm/real-farm-racks-3.jpg",
+        bay1ImageUrl: "/images/real-farm/real-farm-racks-2.jpg",
+        bay2ImageUrl: "/images/real-farm/real-farm-racks-3.jpg",
+        bay3ImageUrl: "/images/real-farm/real-farm-racks-1.jpg",
         imageCaption: `Bịch phôi nấm vô trùng đậy nắp lọc khuẩn tại Khay ${shortCode} (Sẵn sàng cấy giống)`,
         stageSubtitle: "Trạng thái: Phôi cơ chất đã hấp tiệt trùng, sẵn sàng cấp phát cho đơn thuê mới",
       };
@@ -214,16 +251,18 @@ export default function VirtualTrayInspectorModal({
     const sp = (tray.speciesName || "").toLowerCase();
     if (sp.includes("linh chi")) {
       return {
-        primaryImageUrl: "/images/real-farm/real-reishi-macro.jpg",
-        secondaryImageUrl: "/images/real-farm/real-farm-racks-1.jpg",
+        bay1ImageUrl: "/images/real-farm/real-reishi-macro.jpg",
+        bay2ImageUrl: "/images/real-farm/real-farm-racks-1.jpg",
+        bay3ImageUrl: "/images/real-farm/real-reishi-macro.jpg",
         imageCaption: `Ảnh thực tế quả thể Nấm Linh Chi Đỏ (Ganoderma lucidum) tại Khay ${shortCode}`,
         stageSubtitle: "Quả thể đang hóa gỗ vành vàng, hàm lượng Polysaccharide đạt chuẩn dược liệu",
       };
     }
     if (sp.includes("hầu thủ") || sp.includes("hương")) {
       return {
-        primaryImageUrl: "/images/real-farm/real-lionsmane-macro.jpg",
-        secondaryImageUrl: "/images/real-farm/real-cleanroom-cultivation.jpg",
+        bay1ImageUrl: "/images/real-farm/real-lionsmane-macro.jpg",
+        bay2ImageUrl: "/images/real-farm/real-cleanroom-cultivation.jpg",
+        bay3ImageUrl: "/images/real-farm/real-lionsmane-macro.jpg",
         imageCaption: `Ảnh thực tế quả thể nấm dược liệu đang phát triển tại Khay ${shortCode}`,
         stageSubtitle: "Cấu trúc gai nấm trắng đồng đều, độ ẩm bề mặt tối ưu",
       };
@@ -232,58 +271,87 @@ export default function VirtualTrayInspectorModal({
     const variant = (tray.trayId + tray.shelfLevel) % 3;
     if (variant === 0) {
       return {
-        primaryImageUrl: "/images/real-farm/real-mushroom-shelves.jpg",
-        secondaryImageUrl: "/images/real-farm/real-cleanroom-cultivation.jpg",
+        bay1ImageUrl: "/images/real-farm/real-mushroom-shelves.jpg",
+        bay2ImageUrl: "/images/real-farm/real-cleanroom-cultivation.jpg",
+        bay3ImageUrl: "/images/real-farm/real-oyster-macro.jpg",
         imageCaption: `Ảnh thực tế cụm Nấm Bào Ngư Xám bung tán từ bịch phôi tại Khay ${shortCode}`,
         stageSubtitle: "Giai đoạn 4: Cụm tai nấm bung đều, rê chuột sang phải để xem tiếp các khay cuối kệ",
       };
     }
     if (variant === 1) {
       return {
-        primaryImageUrl: "/images/real-farm/real-oyster-macro.jpg",
-        secondaryImageUrl: "/images/real-farm/real-mushroom-shelves.jpg",
+        bay1ImageUrl: "/images/real-farm/real-oyster-macro.jpg",
+        bay2ImageUrl: "/images/real-farm/real-mushroom-shelves.jpg",
+        bay3ImageUrl: "/images/real-farm/real-cleanroom-cultivation.jpg",
         imageCaption: `Ảnh thực tế hệ sợi tơ trắng & nụ mầm Nấm Bào Ngư Xám tại Khay ${shortCode}`,
         stageSubtitle: "Giai đoạn 3: Hệ sợi tơ ăn kín bề mặt giá thể, nụ nấm non kết cụm dày đặc",
       };
     }
     return {
-      primaryImageUrl: "/images/real-farm/real-cleanroom-cultivation.jpg",
-      secondaryImageUrl: "/images/real-farm/real-oyster-macro.jpg",
+      bay1ImageUrl: "/images/real-farm/real-cleanroom-cultivation.jpg",
+      bay2ImageUrl: "/images/real-farm/real-mushroom-shelves.jpg",
+      bay3ImageUrl: "/images/real-farm/real-oyster-macro.jpg",
       imageCaption: `Ảnh thực tế khay nấm canh tác trên kệ phòng sạch tại Khay ${shortCode}`,
       stageSubtitle: "Giai đoạn 4: Thân nấm vươn thẳng đồng đều trên khay tiêu chuẩn",
     };
   })();
 
   /**
-   * TÍNH TOÁN KÍCH THƯỚC DẢI KỆ PANORAMA & DỊCH CHUYỂN KHÔNG VIỀN ĐEN (0% BLACK BORDER)
-   * - Dải kệ Panorama luôn rộng gấp 2.15 lần khung nhìn (215% * zoom) và cao gấp 1.35 lần (135% * zoom).
+   * TÍNH TOÁN KÍCH THƯỚC DẢI KỆ PANORAMA 3 KHOANG (260% * ZOOM) & KHÓA BIÊN 0% VIỀN ĐEN
+   * - Dải kệ Panorama 3 khoang rộng gấp 2.6 lần khung nhìn (260% * zoom) và cao gấp 1.36 lần (136% * zoom).
    * - Khi railPos.x đi từ 0% -> 100%, mép trái của dải kệ trượt từ 0% đến vừa khít mép phải 100% khung nhìn.
    */
-  const canvasWidthPct = Number((215 * zoom).toFixed(2));
-  const canvasHeightPct = Number((135 * zoom).toFixed(2));
+  const canvasWidthPct = Number((260 * zoom).toFixed(2));
+  const canvasHeightPct = Number((136 * zoom).toFixed(2));
   const maxShiftXOfCanvas = ((canvasWidthPct - 100) / canvasWidthPct) * 100;
   const maxShiftYOfCanvas = ((canvasHeightPct - 100) / canvasHeightPct) * 100;
   const translateXPct = Number((-((railPos.x / 100) * maxShiftXOfCanvas)).toFixed(3));
   const translateYPct = Number((-((railPos.y / 100) * maxShiftYOfCanvas)).toFixed(3));
 
-  // Rê chuột (Hover Move) hoặc Kéo chuột (Click & Drag) để trượt dọc toàn bộ chiều dài kệ (0% -> 100%)
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!viewportRef.current) return;
-    const rect = viewportRef.current.getBoundingClientRect();
+  // Tọa độ vật lý cố định của khay đang chọn trên dải kệ 3 khoang (dùng để neo cố định khung AI Vision)
+  const totalTraysOnRack = traysOnCurrentRack.length;
+  const selectedTrayPhysicalX =
+    totalTraysOnRack > 1
+      ? 7 + (currentRackTrayIndex / (totalTraysOnRack - 1)) * 84
+      : 50;
+  const selectedTrayPhysicalY = 20 + (((tray.shelfLevel || 1) - 1) % 5) * 13;
 
-    // Nếu đang nhấn giữ chuột để kéo (Drag-to-Pan)
-    if (isDragging && dragStart) {
-      const deltaX = ((dragStart.clientX - e.clientX) / rect.width) * 110;
-      const deltaY = ((dragStart.clientY - e.clientY) / rect.height) * 110;
+  // Khung ống kính hiện tại trên thanh Radar Minimap (tỷ lệ phần trăm bề rộng kệ đang nằm trong khung nhìn)
+  const radarViewportWidthPct = Number(Math.min(100, (100 / canvasWidthPct) * 100).toFixed(2));
+  const radarViewportLeftPct = Number(
+    ((railPos.x / 100) * (100 - radarViewportWidthPct)).toFixed(2)
+  );
+
+  // Đo kích thước khung nhìn 1 lần khi chuột đi vào (Measure Once — tránh Layout Thrashing trong onMouseMove)
+  const handleMouseEnter = () => {
+    if (viewportRef.current) {
+      cachedRectRef.current = viewportRef.current.getBoundingClientRect();
+    }
+    if (hoverPanEnabled && !autoPatrol) {
+      setIsPointerTracking(true);
+    }
+  };
+
+  // Rê chuột (Hover Move) hoặc Kéo chuột (Click & Drag) phản hồi 1:1 ở 60/120fps
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = cachedRectRef.current || viewportRef.current?.getBoundingClientRect();
+    if (!rect || rect.width <= 0 || rect.height <= 0) return;
+
+    // 1. Chế độ Kéo giữ chuột (Drag-to-Pan)
+    if (isDragging && dragStartRef.current) {
+      setIsPointerTracking(true);
+      const deltaX = ((dragStartRef.current.clientX - e.clientX) / rect.width) * 115;
+      const deltaY = ((dragStartRef.current.clientY - e.clientY) / rect.height) * 115;
       setRailPos({
-        x: clampPct(dragStart.startX + deltaX),
-        y: clampPct(dragStart.startY + deltaY),
+        x: clampPct(dragStartRef.current.startX + deltaX),
+        y: clampPct(dragStartRef.current.startY + deltaY),
       });
       return;
     }
 
-    // Nếu bật chế độ Rê Chuột Tự Do: ánh xạ vị trí con trỏ (với vùng đệm 7% ở 2 mép) sang toàn dải kệ 0% -> 100%
+    // 2. Chế độ Rê chuột tự do (Hover Pan): ánh xạ toàn dải kệ 0% -> 100% với biên đệm 7% ở 2 đầu
     if (!hoverPanEnabled || autoPatrol) return;
+    setIsPointerTracking(true);
     const rawRatioX = (e.clientX - rect.left) / rect.width;
     const rawRatioY = (e.clientY - rect.top) / rect.height;
 
@@ -297,41 +365,43 @@ export default function VirtualTrayInspectorModal({
   };
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Bỏ qua nếu nhấn vào các nút điều khiển nổi bên trong khung
     if ((e.target as HTMLElement).closest("button") || (e.target as HTMLElement).closest("input")) {
       return;
     }
+    if (viewportRef.current) {
+      cachedRectRef.current = viewportRef.current.getBoundingClientRect();
+    }
     setAutoPatrol(false);
     setIsDragging(true);
-    setDragStart({
+    setIsPointerTracking(true);
+    dragStartRef.current = {
       clientX: e.clientX,
       clientY: e.clientY,
       startX: railPos.x,
       startY: railPos.y,
-    });
+    };
   };
 
   const handleMouseUpOrLeave = () => {
-    // Giữ nguyên vị trí camera tại kệ cuối nơi người dùng dừng chuột (KHÔNG giật ngược về 0,0)
+    // Giữ nguyên vị trí camera tại kệ cuối nơi người dùng dừng chuột
     setIsDragging(false);
-    setDragStart(null);
+    setIsPointerTracking(false);
+    dragStartRef.current = null;
   };
 
-  // Cuộn con lăn chuột để Zoom quang học (1.0x -> 2.4x) hoặc giữ Shift + Cuộn để trượt dọc kệ
-  const handleWheelZoom = (e: React.WheelEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-      const step = (e.deltaX || e.deltaY) > 0 ? 8 : -8;
-      setAutoPatrol(false);
-      setRailPos((prev) => ({ ...prev, x: clampPct(prev.x + step) }));
-      return;
-    }
-    const delta = e.deltaY < 0 ? 0.15 : -0.15;
-    setZoom((prev) => Number(Math.min(2.4, Math.max(1.0, prev + delta)).toFixed(2)));
+  // Nhấp trực tiếp trên thanh Radar Minimap để đưa ống kính đến vị trí bất kỳ dọc kệ
+  const handleRadarClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!radarTrackRef.current) return;
+    const rect = radarTrackRef.current.getBoundingClientRect();
+    const clickRatio = (e.clientX - rect.left) / rect.width;
+    setAutoPatrol(false);
+    setIsPointerTracking(false);
+    setRailPos((prev) => ({ ...prev, x: clampPct(clickRatio * 100) }));
   };
 
   const handleNudgeRail = (dx: number, dy: number) => {
     setAutoPatrol(false);
+    setIsPointerTracking(false);
     setRailPos((prev) => ({
       x: clampPct(prev.x + dx),
       y: clampPct(prev.y + dy),
@@ -340,11 +410,11 @@ export default function VirtualTrayInspectorModal({
 
   const handleResetCamera = () => {
     setAutoPatrol(false);
+    setIsPointerTracking(false);
     setZoom(1.15);
-    const totalInRack = traysOnCurrentRack.length;
     const targetX =
-      totalInRack > 1
-        ? clampPct((currentRackTrayIndex / (totalInRack - 1)) * 100)
+      totalTraysOnRack > 1
+        ? clampPct((currentRackTrayIndex / (totalTraysOnRack - 1)) * 100)
         : 50;
     setRailPos({ x: targetX, y: 45 });
   };
@@ -365,10 +435,15 @@ export default function VirtualTrayInspectorModal({
     }, 1200);
   };
 
-  const handleTriggerLocalMist = () => {
+  const handleTriggerLocalMist = async () => {
     if (isMistingLocal) return;
     setIsMistingLocal(true);
     setSpectrum("HUMID_MIST");
+    try {
+      await onTriggerHardwareMist?.();
+    } catch {
+      // Bỏ qua nếu đang ở chế độ khách chỉ xem
+    }
     setTimeout(() => {
       setHumidityBoost((prev) => Number((prev + 1.8).toFixed(1)));
       setIsMistingLocal(false);
@@ -400,11 +475,11 @@ export default function VirtualTrayInspectorModal({
                 </h3>
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span>PANORAMIC RAIL CAM • LƯỚT XEM ĐẦU KỆ ĐẾN CUỐI KỆ</span>
+                  <span>3-BAY PANORAMA RAIL • 60FPS ZERO-BORDER</span>
                 </span>
               </div>
               <p className="text-xs text-[#D8C4B0] mt-0.5 tabular-nums">
-                Buồng {roomCode} • Kệ số {rackPad} • Tầng số {shelfPad} • Rê chuột ngang từ trái sang phải để trượt dọc tới các kệ phía cuối
+                Buồng {roomCode} • Kệ số {rackPad} • Tầng số {shelfPad} • Rê chuột ngang từ trái sang phải để trượt dọc qua 3 khoang kệ
               </p>
             </div>
           </div>
@@ -514,7 +589,7 @@ export default function VirtualTrayInspectorModal({
         {/* 3. Nội Dung Chính 2 Cột */}
         <div className="p-5 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 max-h-[80vh] overflow-y-auto custom-scrollbar">
           {/* ==========================================================
-              CỘT TRÁI (7 CỘT): MÀN HÌNH CAMERA PANORAMA RÊ CHUỘT KHÔNG VIỀN ĐEN
+              CỘT TRÁI (7 CỘT): MÀN HÌNH CAMERA PANORAMA 3 KHOANG & RADAR MINIMAP
           ========================================================== */}
           <div className="lg:col-span-7 flex flex-col justify-between space-y-3.5">
             {/* Thanh Chọn Góc Camera Thực Tế & Điều Khiển Chuyển Động */}
@@ -530,9 +605,7 @@ export default function VirtualTrayInspectorModal({
                     <button
                       key={tab.id}
                       type="button"
-                      onClick={() => {
-                        setViewAngle(tab.id);
-                      }}
+                      onClick={() => setViewAngle(tab.id)}
                       className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
                         active
                           ? "bg-[#24170E] text-white dark:bg-[#C28E58] dark:text-[#170E08] shadow-2xs"
@@ -562,34 +635,34 @@ export default function VirtualTrayInspectorModal({
               </div>
             </div>
 
-            {/* KHUNG VIEWPORT CAMERA PANORAMA (RÊ CHUỘT / KÉO CHUỘT ĐỂ LƯỚT TỪ ĐẦU KỆ TỚI CUỐI KỆ, 0% VIỀN ĐEN) */}
+            {/* KHUNG VIEWPORT CAMERA PANORAMA 3 KHOANG (RÊ CHUỘT 1:1 60FPS, 0% VIỀN ĐEN) */}
             <div
               ref={viewportRef}
+              onMouseEnter={handleMouseEnter}
               onMouseMove={handleMouseMove}
               onMouseDown={handleMouseDown}
               onMouseUp={handleMouseUpOrLeave}
               onMouseLeave={handleMouseUpOrLeave}
-              onWheel={handleWheelZoom}
               className="relative rounded-3xl overflow-hidden border-2 border-[#DECFC0] dark:border-[#3D271A] bg-[#1A130E] shadow-xl aspect-[16/10] select-none cursor-grab active:cursor-grabbing group"
             >
-              {/* DẢI KỆ PANORAMA RỘNG 215% * ZOOM (LUÔN PHỦ KÍN 100% VIEWPORT, TUYỆT ĐỐI KHÔNG BAO GIỜ LỘ VIỀN ĐEN) */}
+              {/* DẢI KỆ PANORAMA 3 KHOANG RỘNG 260% * ZOOM (TẮT TRANSITION KHI ĐANG RÊ CHUỘT TRỰC TIẾP ĐỂ ĐẠT 60FPS TỨC THÌ) */}
               <div
-                className={`absolute top-0 left-0 grid grid-cols-2 transition-transform duration-150 ease-out will-change-transform ${
-                  isTransitioningTray ? "opacity-90" : "opacity-100"
-                }`}
+                className={`absolute top-0 left-0 grid grid-cols-3 will-change-transform ${
+                  isPointerTracking ? "" : "transition-transform duration-300 ease-out"
+                } ${isTransitioningTray ? "opacity-90" : "opacity-100"}`}
                 style={{
                   width: `${canvasWidthPct}%`,
                   height: `${canvasHeightPct}%`,
                   transform: `translate3d(${translateXPct}%, ${translateYPct}%, 0)`,
                 }}
               >
-                {/* KHOANG 1 (0% -> 50% DẢI KỆ): DÃY KHAY ĐẦU KỆ (#001 -> #005) */}
-                <div className="relative w-full h-full overflow-hidden border-r-4 border-stone-400/40">
+                {/* KHOANG 1 (0% -> 33% DẢI KỆ): DÃY KHAY ĐẦU KỆ */}
+                <div className="relative w-full h-full overflow-hidden border-r-2 border-stone-400/35">
                   <img
-                    src={primaryImageUrl}
-                    alt={imageCaption}
+                    src={bay1ImageUrl}
+                    alt={`${imageCaption} - Khoang đầu kệ`}
                     draggable={false}
-                    className={`w-full h-full object-cover transition-all duration-300 ${
+                    className={`w-full h-full object-cover ${
                       spectrum === "HUMID_MIST"
                         ? "brightness-95 contrast-105"
                         : spectrum === "UVC_INSPECT"
@@ -598,17 +671,36 @@ export default function VirtualTrayInspectorModal({
                     }`}
                   />
                   <div className="absolute top-12 left-4 px-2.5 py-1 rounded-lg bg-black/65 backdrop-blur-xs text-[10px] font-bold text-[#E2BA78] border border-white/15 pointer-events-none">
-                    KHOANG ĐẦU KỆ {rackPad} (Vị trí 0% – 50%)
+                    KHOANG ĐẦU KỆ {rackPad} (0% – 33%)
                   </div>
                 </div>
 
-                {/* KHOANG 2 (50% -> 100% DẢI KỆ): DÃY KHAY CUỐI KỆ (#006 -> #010) */}
+                {/* KHOANG 2 (33% -> 66% DẢI KỆ): DÃY KHAY GIỮA KỆ */}
+                <div className="relative w-full h-full overflow-hidden border-r-2 border-stone-400/35">
+                  <img
+                    src={bay2ImageUrl}
+                    alt={`${imageCaption} - Khoang giữa kệ`}
+                    draggable={false}
+                    className={`w-full h-full object-cover ${
+                      spectrum === "HUMID_MIST"
+                        ? "brightness-95 contrast-105"
+                        : spectrum === "UVC_INSPECT"
+                        ? "hue-rotate-15 contrast-110 brightness-90"
+                        : "brightness-100"
+                    }`}
+                  />
+                  <div className="absolute top-12 left-4 px-2.5 py-1 rounded-lg bg-black/65 backdrop-blur-xs text-[10px] font-bold text-sky-300 border border-white/15 pointer-events-none">
+                    KHOANG GIỮA KỆ {rackPad} (33% – 66%)
+                  </div>
+                </div>
+
+                {/* KHOANG 3 (66% -> 100% DẢI KỆ): DÃY KHAY CUỐI KỆ */}
                 <div className="relative w-full h-full overflow-hidden">
                   <img
-                    src={secondaryImageUrl}
+                    src={bay3ImageUrl}
                     alt={`${imageCaption} - Khoang cuối kệ`}
                     draggable={false}
-                    className={`w-full h-full object-cover transition-all duration-300 ${
+                    className={`w-full h-full object-cover ${
                       spectrum === "HUMID_MIST"
                         ? "brightness-95 contrast-105"
                         : spectrum === "UVC_INSPECT"
@@ -617,43 +709,32 @@ export default function VirtualTrayInspectorModal({
                     }`}
                   />
                   <div className="absolute top-12 right-4 px-2.5 py-1 rounded-lg bg-black/65 backdrop-blur-xs text-[10px] font-bold text-emerald-300 border border-white/15 pointer-events-none">
-                    KHOANG CUỐI KỆ {rackPad} (Vị trí 50% – 100%)
+                    KHOANG CUỐI KỆ {rackPad} (66% – 100%)
                   </div>
                 </div>
 
-                {/* Khung Nhận Diện AI Vision Gắn Theo Tọa Độ Thực Trên Dải Kệ */}
+                {/* Khung Nhận Diện AI Vision Neo Cố Định Theo Tọa Độ Vật Lý Của Khay Đang Chọn Trên Dải Kệ */}
                 {showAiBoxes && isOccupied && (
                   <>
                     <div
-                      className="absolute w-[18%] h-[38%] border-2 border-emerald-400/90 rounded-2xl bg-emerald-500/10 pointer-events-none shadow-lg transition-all duration-300"
+                      className="absolute w-[14%] h-[36%] -translate-x-1/2 -translate-y-1/2 border-2 border-emerald-400/90 rounded-2xl bg-emerald-500/10 pointer-events-none shadow-lg"
                       style={{
-                        left: `${Math.min(76, Math.max(6, railPos.x * 0.72 + 6))}%`,
-                        top: "24%",
+                        left: `${selectedTrayPhysicalX}%`,
+                        top: `${Math.min(72, Math.max(28, selectedTrayPhysicalY + 12))}%`,
                       }}
                     >
                       <div className="absolute -top-6 left-0 px-2 py-0.5 rounded-md bg-emerald-700/95 text-white text-[10px] font-bold whitespace-nowrap tabular-nums shadow-xs">
-                        Quả Thể Thực Tế ({shortCode}) • ĐK: {62 + seed}mm • Đạt 98.6%
-                      </div>
-                    </div>
-                    <div
-                      className="absolute w-[14%] h-[32%] border-2 border-amber-300/90 rounded-2xl bg-amber-500/10 pointer-events-none transition-all duration-300"
-                      style={{
-                        left: `${Math.min(82, Math.max(18, railPos.x * 0.72 + 26))}%`,
-                        top: "34%",
-                      }}
-                    >
-                      <div className="absolute -top-6 right-0 px-2 py-0.5 rounded-md bg-amber-700/95 text-white text-[10px] font-bold whitespace-nowrap tabular-nums shadow-xs">
-                        Vùng Tơ Nấm • Độ ẩm {localHumidity}%
+                        Quả Thể ({shortCode}) • ĐK: {62 + seed}mm • Đạt 98.6%
                       </div>
                     </div>
                   </>
                 )}
 
-                {/* CÁC ĐIỂM NEO KHAY THỰC TẾ DỌC SUỐT CHIỀU DÀI KỆ (TỪ ĐẦU KỆ #001 TỚI KỊCH CUỐI KỆ #010) */}
+                {/* CÁC ĐIỂM NEO KHAY THỰC TẾ DỌC SUỐT CHIỀU DÀI 3 KHOANG KỆ (TỪ ĐẦU KỆ #001 TỚI KỊCH CUỐI KỆ #010) */}
                 {traysOnCurrentRack.map((t, idx) => {
                   const total = traysOnCurrentRack.length;
-                  const posXPct = total > 1 ? 6 + (idx / (total - 1)) * 86 : 50;
-                  const posYPct = 22 + ((idx % 3) * 20);
+                  const posXPct = total > 1 ? 7 + (idx / (total - 1)) * 84 : 50;
+                  const posYPct = 20 + (((t.shelfLevel || 1) - 1) % 5) * 13;
                   const isCurrent = t.trayId === tray.trayId;
                   const sCode = formatShortCode(t);
                   return (
@@ -684,7 +765,7 @@ export default function VirtualTrayInspectorModal({
                             : "bg-stone-300"
                         }`}
                       />
-                      <span>{sCode}</span>
+                      <span>{sCode} • T{t.shelfLevel}</span>
                     </button>
                   );
                 })}
@@ -714,7 +795,8 @@ export default function VirtualTrayInspectorModal({
                   <span>LIVE • {roomCode}-KỆ {rackPad}</span>
                 </div>
                 <div className="px-2.5 py-1 rounded-xl bg-black/75 backdrop-blur-md border border-white/15 text-[#E2BA78] text-[11px] font-bold">
-                  Zoom: {zoom.toFixed(1)}x • Vị trí ray kệ: {Math.round(railPos.x)}% ({railPos.x >= 55 ? "Cuối kệ" : railPos.x <= 35 ? "Đầu kệ" : "Giữa kệ"})
+                  Zoom: {zoom.toFixed(1)}x • Ray kệ: {Math.round(railPos.x)}% (
+                  {railPos.x >= 66 ? "Khoang Cuối Kệ" : railPos.x <= 33 ? "Khoang Đầu Kệ" : "Khoang Giữa Kệ"})
                 </div>
               </div>
 
@@ -756,7 +838,7 @@ export default function VirtualTrayInspectorModal({
                     type="button"
                     onClick={handleResetCamera}
                     className="w-6 h-6 rounded-lg bg-emerald-700 hover:bg-emerald-600 flex items-center justify-center text-[10px] font-bold cursor-pointer"
-                    title="Đặt lại tâm camera"
+                    title="Đặt lại tâm camera vào khay đang chọn"
                   >
                     •
                   </button>
@@ -829,73 +911,109 @@ export default function VirtualTrayInspectorModal({
               </div>
             </div>
 
-            {/* THANH TRƯỢT ĐƯỜNG RAY KỆ TRỰC QUAN (0% ĐẦU KỆ ────●──── 100% CUỐI KỆ) */}
-            <div className="px-4 py-2.5 rounded-2xl bg-[#F4ECE1] dark:bg-[#1E140D] border border-[#E0D3C1] dark:border-[#38261A] flex flex-wrap items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-[#4A3222] dark:text-[#E2BA78] tabular-nums">
-                  Thanh Ray Trượt Dọc Kệ {rackPad}:
+            {/* THANH RADAR MINIMAP ỐNG KÍNH SCADA & ĐƯỜNG RAY KỆ (0% ĐẦU KỆ ────[ỐNG KÍNH]──── 100% CUỐI KỆ) */}
+            <div className="p-3 rounded-2xl bg-[#F4ECE1] dark:bg-[#1E140D] border border-[#E0D3C1] dark:border-[#38261A] space-y-2 text-xs">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold text-[#4A3222] dark:text-[#E2BA78] tabular-nums">
+                    Radar Ống Kính Kệ {rackPad}:
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAutoPatrol(false);
+                      setIsPointerTracking(false);
+                      setRailPos((p) => ({ ...p, x: 0 }));
+                    }}
+                    className={`px-2 py-0.5 rounded-md text-[11px] font-bold border transition cursor-pointer ${
+                      railPos.x <= 25
+                        ? "bg-[#24170E] text-white border-[#24170E] dark:bg-[#C28E58] dark:text-[#170E08]"
+                        : "bg-white dark:bg-[#261910] text-[#523522] dark:text-[#DAC7B5] border-[#DECFC0] dark:border-[#38261A]"
+                    }`}
+                  >
+                    Đầu Kệ (0%)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAutoPatrol(false);
+                      setIsPointerTracking(false);
+                      setRailPos((p) => ({ ...p, x: 50 }));
+                    }}
+                    className={`px-2 py-0.5 rounded-md text-[11px] font-bold border transition cursor-pointer ${
+                      railPos.x > 25 && railPos.x < 75
+                        ? "bg-[#24170E] text-white border-[#24170E] dark:bg-[#C28E58] dark:text-[#170E08]"
+                        : "bg-white dark:bg-[#261910] text-[#523522] dark:text-[#DAC7B5] border-[#DECFC0] dark:border-[#38261A]"
+                    }`}
+                  >
+                    Giữa Kệ (50%)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAutoPatrol(false);
+                      setIsPointerTracking(false);
+                      setRailPos((p) => ({ ...p, x: 100 }));
+                    }}
+                    className={`px-2 py-0.5 rounded-md text-[11px] font-bold border transition cursor-pointer ${
+                      railPos.x >= 75
+                        ? "bg-[#24170E] text-white border-[#24170E] dark:bg-[#C28E58] dark:text-[#170E08]"
+                        : "bg-white dark:bg-[#261910] text-[#523522] dark:text-[#DAC7B5] border-[#DECFC0] dark:border-[#38261A]"
+                    }`}
+                  >
+                    Cuối Kệ (100%)
+                  </button>
+                </div>
+
+                <span className="font-extrabold text-emerald-800 dark:text-emerald-400 tabular-nums">
+                  Tọa độ ray: {Math.round(railPos.x)}% / 100%
                 </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAutoPatrol(false);
-                    setRailPos((p) => ({ ...p, x: 0 }));
-                  }}
-                  className={`px-2 py-0.5 rounded-md text-[11px] font-bold border transition cursor-pointer ${
-                    railPos.x <= 15
-                      ? "bg-[#24170E] text-white border-[#24170E] dark:bg-[#C28E58] dark:text-[#170E08]"
-                      : "bg-white dark:bg-[#261910] text-[#523522] dark:text-[#DAC7B5] border-[#DECFC0] dark:border-[#38261A]"
-                  }`}
-                >
-                  Đầu Kệ (0%)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAutoPatrol(false);
-                    setRailPos((p) => ({ ...p, x: 50 }));
-                  }}
-                  className={`px-2 py-0.5 rounded-md text-[11px] font-bold border transition cursor-pointer ${
-                    railPos.x > 15 && railPos.x < 85
-                      ? "bg-[#24170E] text-white border-[#24170E] dark:bg-[#C28E58] dark:text-[#170E08]"
-                      : "bg-white dark:bg-[#261910] text-[#523522] dark:text-[#DAC7B5] border-[#DECFC0] dark:border-[#38261A]"
-                  }`}
-                >
-                  Giữa Kệ (50%)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAutoPatrol(false);
-                    setRailPos((p) => ({ ...p, x: 100 }));
-                  }}
-                  className={`px-2 py-0.5 rounded-md text-[11px] font-bold border transition cursor-pointer ${
-                    railPos.x >= 85
-                      ? "bg-[#24170E] text-white border-[#24170E] dark:bg-[#C28E58] dark:text-[#170E08]"
-                      : "bg-white dark:bg-[#261910] text-[#523522] dark:text-[#DAC7B5] border-[#DECFC0] dark:border-[#38261A]"
-                  }`}
-                >
-                  Cuối Kệ (100%)
-                </button>
               </div>
 
-              <div className="flex items-center gap-2.5 flex-1 min-w-[180px]">
-                <input
-                  type="range"
-                  min={0}
-                  max={100}
-                  step={1}
-                  value={Math.round(railPos.x)}
-                  onChange={(e) => {
-                    setAutoPatrol(false);
-                    setRailPos((prev) => ({ ...prev, x: clampPct(Number(e.target.value)) }));
+              {/* Thanh Radar Trực Quan Hiển Thị Vùng Phủ Ống Kính Hiện Tại & Các Chấm Khay #001 -> #010 */}
+              <div
+                ref={radarTrackRef}
+                onClick={handleRadarClick}
+                className="relative h-7 rounded-xl bg-[#24170E] dark:bg-[#120B07] border border-[#C28E58]/40 overflow-hidden cursor-pointer select-none flex items-center"
+                title="Nhấp vào vị trí bất kỳ trên thanh Radar để trượt ống kính camera tới khoang kệ đó"
+              >
+                {/* Vạch chia 3 khoang kệ */}
+                <div className="absolute inset-0 grid grid-cols-3 pointer-events-none text-[9px] font-bold text-white/35">
+                  <div className="border-r border-white/15 flex items-center pl-2">KHOANG ĐẦU</div>
+                  <div className="border-r border-white/15 flex items-center justify-center">KHOANG GIỮA</div>
+                  <div className="flex items-center justify-end pr-2">KHOANG CUỐI</div>
+                </div>
+
+                {/* Các chấm vị trí khay trên thanh Radar */}
+                {traysOnCurrentRack.map((t, idx) => {
+                  const total = traysOnCurrentRack.length;
+                  const dotLeftPct = total > 1 ? 6 + (idx / (total - 1)) * 88 : 50;
+                  const active = t.trayId === tray.trayId;
+                  return (
+                    <div
+                      key={t.trayId}
+                      style={{ left: `${dotLeftPct}%` }}
+                      className={`absolute -translate-x-1/2 rounded-full pointer-events-none transition-all ${
+                        active
+                          ? "w-3 h-3 bg-emerald-400 ring-2 ring-white z-20"
+                          : t.status === "OCCUPIED"
+                          ? "w-2 h-2 bg-emerald-500/80 z-10"
+                          : t.status === "MAINTENANCE"
+                          ? "w-2 h-2 bg-amber-400/90 z-10"
+                          : "w-2 h-2 bg-stone-400/80 z-10"
+                      }`}
+                    />
+                  );
+                })}
+
+                {/* Khung Chữ Nhật Ống Kính Hiện Tại (Current Viewport Window) */}
+                <div
+                  className="absolute top-0.5 bottom-0.5 rounded-lg border-2 border-emerald-400 bg-emerald-500/20 pointer-events-none shadow-xs"
+                  style={{
+                    left: `${radarViewportLeftPct}%`,
+                    width: `${radarViewportWidthPct}%`,
                   }}
-                  className="w-full accent-emerald-700 cursor-pointer h-1.5 bg-[#DECFC0] dark:bg-[#38261A] rounded-lg"
-                  aria-label="Thanh trượt đường ray camera từ đầu kệ đến cuối kệ"
                 />
-                <span className="font-extrabold text-emerald-800 dark:text-emerald-400 tabular-nums w-10 text-right">
-                  {Math.round(railPos.x)}%
-                </span>
               </div>
             </div>
 

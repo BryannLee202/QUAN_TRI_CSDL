@@ -145,6 +145,10 @@ export default function OperatorPage() {
   );
   const roomHasAlert = alertRoomIds.has(roomId);
   const traysInRoom = useMemo(() => trays.filter((t) => t.roomId === roomId), [trays, roomId]);
+  const activeSelectedTray = useMemo(
+    () => (selectedTray ? trays.find((t) => t.trayId === selectedTray.trayId) ?? selectedTray : null),
+    [trays, selectedTray]
+  );
   const roomLabel = useCallback(
     (id: number) => rooms.find((r) => r.roomId === id)?.roomCode ?? `Buồng ${id}`,
     [rooms]
@@ -619,13 +623,33 @@ export default function OperatorPage() {
 
       {/* Trạm Quan Sát Nông Trại Ảo & Camera Khay Nấm Thực Tế 4K (Digital Twin Inspector) */}
       <VirtualTrayInspectorModal
-        tray={selectedTray}
+        tray={activeSelectedTray}
         traysInRoom={traysInRoom}
-        roomCode={selectedTray ? roomLabel(selectedTray.roomId) : roomLabel(roomId)}
+        roomCode={activeSelectedTray ? roomLabel(activeSelectedTray.roomId) : roomLabel(roomId)}
         isUpdatingTray={isUpdatingTray}
         onClose={() => setSelectedTray(null)}
         onSelectTray={(nextTray) => setSelectedTray(nextTray)}
         onToggleStatus={handleToggleTrayStatus}
+        onTriggerHardwareMist={async () => {
+          const targetRoomId = activeSelectedTray?.roomId || roomId;
+          setDevices((prev) => ({
+            ...prev,
+            [`${targetRoomId}:MIST_MAKER`]: {
+              on: true,
+              actionState: "ON",
+              triggeredBy: user?.fullName || "OPERATOR_RAIL_CAM",
+            },
+          }));
+          if (isAdmin || isOperator) {
+            await toggleOperatorDeviceApi({
+              roomId: targetRoomId,
+              deviceType: "MIST_MAKER",
+              actionState: "ON",
+              triggeredBy: user?.fullName || "OPERATOR_RAIL_CAM",
+              details: `Kích hoạt phun sương bù ẩm trực tiếp từ Camera Kệ ${activeSelectedTray?.rackNumber || 1}`,
+            });
+          }
+        }}
         onActionNotice={(msg) => {
           setActionNotice(msg);
           setTimeout(() => setActionNotice(null), 3500);
