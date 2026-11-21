@@ -269,3 +269,155 @@ export const updateTrayStatus = async (req: Request, res: Response): Promise<voi
     });
   }
 };
+
+// 7. POST /api/operator/trays/create - Tạo thêm khay nuôi mới (Đơn lẻ hoặc Hàng loạt) khi trang trại kín khay
+export const createNewTrays = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const roomId = Number(req.body.roomId) || 1;
+    const count = Math.min(20, Math.max(1, Number(req.body.count) || 1));
+    const customRack = req.body.rackNumber ? Number(req.body.rackNumber) : null;
+    const customShelf = req.body.shelfLevel ? Number(req.body.shelfLevel) : null;
+    const initialStatus = ["AVAILABLE", "MAINTENANCE"].includes(req.body.status)
+      ? req.body.status
+      : "AVAILABLE";
+
+    const pool = getPool();
+
+    // 1. Lấy mã buồng (RM01, RM02...) và danh sách khay hiện có trong buồng
+    const roomRes = await pool
+      .request()
+      .input("RoomID", sql.Int, roomId)
+      .query(`SELECT RoomID, RoomCode, RoomName, MaxTrays FROM dbo.Rooms WHERE RoomID = @RoomID`);
+
+    if (roomRes.recordset.length === 0) {
+      res.status(404).json({
+        success: false,
+        error: { code: "ROOM_NOT_FOUND", message: "Không tìm thấy buồng nuôi được chỉ định." },
+      });
+      return;
+    }
+
+    const roomInfo = roomRes.recordset[0];
+    const roomPrefix = (roomInfo.RoomCode || `RM0${roomId}`).replace(/[^A-Z0-9]/gi, "").toUpperCase();
+
+    const existingRes = await pool
+      .request()
+      .input("RoomID", sql.Int, roomId)
+      .query(`
+        SELECT TrayCode, RackNumber, ShelfLevel, PositionNumber
+        FROM dbo.CultivationTrays
+        WHERE RoomID = @RoomID
+        ORDER BY RackNumber DESC, ShelfLevel DESC, PositionNumber DESC
+      `);
+
+    const existingCodes = new Set<string>(
+      existingRes.recordset.map((r: any) => String(r.TrayCode).toUpperCase())
+    );
+    const existingPositions = new Set<string>(
+      existingRes.recordset.map((r: any) => `${r.RackNumber}-${r.ShelfLevel}`)
+    );
+
+    let maxRack = 1;
+    for (const r of existingRes.recordset) {
+      if (r.RackNumber > maxRack) maxRack = r.RackNumber;
+    }
+
+    // 2. Xác định vị trí Kệ (Rack) và Tầng (Shelf) cho từng khay mới
+    const createdTrays: any[] = [];
+
+    for (let i = 0; i < count; i++) {
+      let targetRack = customRack && count === 1 ? customRack : maxRack;
+      let targetShelf = customShelf && count === 1 ? customShelf : 1;
+
+      if (!(customRack && customShelf && count === 1 && !existingPositions.has(`${customRack}-${customShelf}`))) {
+        // Tìm vị trí kệ - tầng tiếp theo chưa có khay (Mỗi kệ chuẩn 5 tầng: 1..5)
+        let found = false;
+        for (let r = 1; r <= maxRack + 10; r++) {
+          for (let s = 1; s <= 5; s++) {
+            if (!existingPositions.has(`${r}-${s}`)) {
+              targetRack = r;
+              targetShelf = s;
+              if (r > maxRack) maxRack = r;
+              found = true;
+              break;
+            }
+          }
+          if (found) break;
+        }
+      }
+
+      existingPositions.add(`${targetRack}-${targetShelf}`);
+
+      const rackStr = String(targetRack).padStart(2, "0");
+      let posNum = targetShelf;
+      let candidateCode = `TRAY-${roomPrefix}-R${rackStr}-${String(posNum).padStart(2, "0")}`;
+
+      while (existingCodes.has(candidateCode.toUpperCase())) {
+        posNum += 1;
+        candidateCode = `TRAY-${roomPrefix}-R${rackStr}-${String(posNum).padStart(2, "0")}`;
+      }
+      existingCodes.add(candidateCode.toUpperCase());
+
+      const insertRes = await pool
+        .request()
+        .input("TrayCode", sql.VarChar(50), candidateCode)
+        .input("RoomID", sql.Int, roomId)
+        .input("RackNumber", sql.Int, targetRack)
+        .input("ShelfLevel", sql.Int, targetShelf)
+        .input("PositionNumber", sql.Int, posNum)
+        .input("Status", sql.VarChar(20), initialStatus)
+        .query(`
+          INSERT INTO dbo.CultivationTrays (
+            TrayCode, RoomID, RackNumber, ShelfLevel, PositionNumber, Status, LastCleanedAt
+          )
+          OUTPUT
+            INSERTED.TrayID AS trayId,
+            INSERTED.TrayCode AS trayCode,
+            INSERTED.RoomID AS roomId,
+            INSERTED.RackNumber AS rackNumber,
+            INSERTED.ShelfLevel AS shelfLevel,
+            INSERTED.PositionNumber AS positionNumber,
+            INSERTED.Status AS status
+          VALUES (
+            @TrayCode, @RoomID, @RackNumber, @ShelfLevel, @PositionNumber, @Status, SYSDATETIME()
+          );
+        `);
+
+      if (insertRes.recordset.length > 0) {
+        createdTrays.push(insertRes.recordset[0]);
+      }
+    }
+
+    // 3. Tự động nâng công suất MaxTrays của buồng nuôi nếu tổng số khay vượt trần cũ
+    const newTotalCount = existingRes.recordset.length + createdTrays.length;
+    if (newTotalCount > (roomInfo.MaxTrays || 0)) {
+      await pool
+        .request()
+        .input("RoomID", sql.Int, roomId)
+        .input("NewMax", sql.Int, newTotalCount)
+        .query(`UPDATE dbo.Rooms SET MaxTrays = @NewMax WHERE RoomID = @RoomID`);
+    }
+
+    // Phát sóng sự kiện qua Socket.io
+    broadcastEvent("tray:created", {
+      roomId,
+      count: createdTrays.length,
+      trays: createdTrays,
+      timestamp: new Date().toISOString(),
+    });
+
+    res.status(201).json({
+      success: true,
+      message: `Đã khởi tạo thành công ${createdTrays.length} khay nuôi mới trong ${roomInfo.RoomName}!`,
+      data: createdTrays,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: {
+        code: "CREATE_TRAY_ERROR",
+        message: error.message || "Lỗi khởi tạo khay nuôi mới trong CSDL",
+      },
+    });
+  }
+};
