@@ -8,6 +8,7 @@ import RoomTabs from "@/components/operator/RoomTabs";
 import StatusLegend from "@/components/operator/StatusLegend";
 import TrayMatrix from "@/components/operator/TrayMatrix";
 import IotHexInspector from "@/components/operator/IotHexInspector";
+import VirtualTrayInspectorModal from "@/components/operator/VirtualTrayInspectorModal";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 import CheatsheetDrawer from "@/components/operator/CheatsheetDrawer";
 import { isDeviceOn } from "@/components/operator/deviceState";
@@ -616,123 +617,18 @@ export default function OperatorPage() {
         </div>
       )}
 
-      {/* Modal Chi Tiết Khay & Điều Phối Bảo Dưỡng */}
-      {selectedTray && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-fade-in">
-          <div className="w-full max-w-md rounded-3xl bg-white dark:bg-[#1E130B] border border-[#DECFC0] dark:border-[#4A3222] shadow-2xl p-6 text-[#24170E] dark:text-[#FFF5EA] transition-all">
-            <div className="flex items-center justify-between border-b border-[#F0E6D8] dark:border-[#332015] pb-3.5 mb-4">
-              <div className="flex items-center gap-2.5">
-                <span className="w-3 h-3 rounded-full bg-[#C28E58]"></span>
-                <h3 className="font-extrabold text-base tabular-nums">
-                  Chi Tiết Khay Nuôi {selectedTray.trayCode}
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelectedTray(null)}
-                className="w-7 h-7 rounded-lg bg-[#FAF5EE] dark:bg-[#2B1B12] hover:bg-[#F2E8DC] text-[#735843] flex items-center justify-center text-xs font-bold transition cursor-pointer"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="space-y-3 text-xs leading-relaxed">
-              <div className="grid grid-cols-2 gap-2.5 p-3.5 rounded-2xl bg-[#FAF5EE] dark:bg-[#170E08] border border-[#E8DCCE] dark:border-[#332015] tabular-nums">
-                <div>
-                  <span className="text-[#8C6D53] dark:text-[#A8907E] block">Vị trí vật lý:</span>
-                  <p className="font-bold text-[#24170E] dark:text-[#FFF5EA] mt-0.5">
-                    Kệ {String(selectedTray.rackNumber).padStart(2, "0")} • Tầng {String(selectedTray.shelfLevel).padStart(2, "0")}
-                  </p>
-                </div>
-                <div>
-                  <span className="text-[#8C6D53] dark:text-[#A8907E] block">Buồng nuôi:</span>
-                  <p className="font-bold text-[#24170E] dark:text-[#FFF5EA] mt-0.5">{roomLabel(selectedTray.roomId)}</p>
-                </div>
-              </div>
-
-              <div className="p-3.5 rounded-2xl bg-[#FAF5EE] dark:bg-[#170E08] border border-[#E8DCCE] dark:border-[#332015] space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-[#8C6D53] dark:text-[#A8907E]">Trạng thái hiện tại:</span>
-                  <span
-                    className={`px-2.5 py-0.5 rounded-full font-bold text-[11px] ${
-                      selectedTray.status === "OCCUPIED"
-                        ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
-                        : selectedTray.status === "MAINTENANCE"
-                        ? "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300"
-                        : "bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300"
-                    }`}
-                  >
-                    {selectedTray.status === "OCCUPIED"
-                      ? "Đang nuôi (OCCUPIED)"
-                      : selectedTray.status === "MAINTENANCE"
-                      ? "Bảo trì (MAINTENANCE)"
-                      : "Sẵn sàng (AVAILABLE)"}
-                  </span>
-                </div>
-
-                {selectedTray.orderCode ? (
-                  <>
-                    <div className="flex items-center justify-between tabular-nums">
-                      <span className="text-[#8C6D53] dark:text-[#A8907E]">Số hợp đồng FaaS:</span>
-                      <strong className="font-bold text-[#8C3A16] dark:text-[#E2BA78]">{selectedTray.orderCode}</strong>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[#8C6D53] dark:text-[#A8907E]">Chủ sở hữu:</span>
-                      <span className="font-bold">{selectedTray.customerName || "Khách hàng thành viên"}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[#8C6D53] dark:text-[#A8907E]">Giống nấm canh tác:</span>
-                      <span className="font-bold text-emerald-700 dark:text-emerald-400">
-                        {selectedTray.speciesName || "Nấm dược liệu Cleanroom"}
-                      </span>
-                    </div>
-                  </>
-                ) : (
-                  <p className="text-[#8C6D53] dark:text-[#A8907E] pt-1">
-                    Khay đang trống vô trùng, sẵn sàng cấp phát tự động khi khách hàng ký hợp đồng thuê mới.
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="mt-5 pt-3.5 border-t border-[#F0E6D8] dark:border-[#332015] flex gap-2.5 justify-end">
-              {selectedTray.status !== "OCCUPIED" ? (
-                <button
-                  type="button"
-                  disabled={isUpdatingTray}
-                  onClick={handleToggleTrayStatus}
-                  className={`px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer ${
-                    selectedTray.status === "MAINTENANCE"
-                      ? "bg-emerald-700 hover:bg-emerald-600 text-white"
-                      : "bg-[#8A5C38] hover:bg-[#704627] text-white"
-                  }`}
-                >
-                  {isUpdatingTray
-                    ? "Đang cập nhật..."
-                    : selectedTray.status === "MAINTENANCE"
-                    ? "Mở Lại Sẵn Sàng (AVAILABLE)"
-                    : "Chuyển Sang Bảo Trì (MAINTENANCE)"}
-                </button>
-              ) : (
-                <span className="text-xs text-[#8C6D53] dark:text-[#A8907E] font-medium flex items-center gap-1.5">
-                  <svg className="w-3.5 h-3.5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                  </svg>
-                  <span>Đang nuôi nấm (Bảo vệ theo hợp đồng)</span>
-                </span>
-              )}
-              <button
-                type="button"
-                onClick={() => setSelectedTray(null)}
-                className="px-4 py-2.5 rounded-xl bg-[#FAF5EE] dark:bg-[#2B1B12] hover:bg-[#EAE0D3] text-[#523522] dark:text-[#E2BA78] text-xs font-bold transition cursor-pointer"
-              >
-                Đóng
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Trạm Quan Sát Nông Trại Ảo & Camera Khay Nấm Thực Tế 4K (Digital Twin Inspector) */}
+      <VirtualTrayInspectorModal
+        tray={selectedTray}
+        roomCode={selectedTray ? roomLabel(selectedTray.roomId) : roomLabel(roomId)}
+        isUpdatingTray={isUpdatingTray}
+        onClose={() => setSelectedTray(null)}
+        onToggleStatus={handleToggleTrayStatus}
+        onActionNotice={(msg) => {
+          setActionNotice(msg);
+          setTimeout(() => setActionNotice(null), 3500);
+        }}
+      />
 
       {/* Drawer Sổ Tay SOP Kỹ Thuật */}
       <CheatsheetDrawer
