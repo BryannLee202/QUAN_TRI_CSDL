@@ -620,9 +620,11 @@ export default function OperatorPage() {
       {/* Trạm Quan Sát Nông Trại Ảo & Camera Khay Nấm Thực Tế 4K (Digital Twin Inspector) */}
       <VirtualTrayInspectorModal
         tray={selectedTray}
+        traysInRoom={traysInRoom}
         roomCode={selectedTray ? roomLabel(selectedTray.roomId) : roomLabel(roomId)}
         isUpdatingTray={isUpdatingTray}
         onClose={() => setSelectedTray(null)}
+        onSelectTray={(nextTray) => setSelectedTray(nextTray)}
         onToggleStatus={handleToggleTrayStatus}
         onActionNotice={(msg) => {
           setActionNotice(msg);
