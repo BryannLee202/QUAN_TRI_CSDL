@@ -48,51 +48,65 @@ export default function OperatorPage() {
   const [customShelf, setCustomShelf] = useState<string>("");
   const [isCreatingTrays, setIsCreatingTrays] = useState(false);
 
-  // 1. Tải dữ liệu ban đầu từ Backend SQL Server
-  useEffect(() => {
-    let isMounted = true;
+  // 1. Tải dữ liệu ban đầu từ Backend SQL Server & tự động đồng bộ khi chuyển Tab hoặc có thay đổi từ Tab khác
+  const fetchOperatorSnapshot = useCallback(async (isFirstLoad: boolean = false) => {
+    try {
+      const [roomsRes, traysRes, alertsRes] = await Promise.allSettled([
+        getOperatorRoomsApi(),
+        getOperatorTraysApi(),
+        getOperatorAlertsApi(),
+      ]);
 
-    async function fetchInitialData() {
-      try {
-        const [roomsRes, traysRes, alertsRes] = await Promise.allSettled([
-          getOperatorRoomsApi(),
-          getOperatorTraysApi(),
-          getOperatorAlertsApi(),
-        ]);
-
-        if (!isMounted) return;
-
-        if (roomsRes.status === "fulfilled") {
-          const rList = Array.isArray(roomsRes.value) ? roomsRes.value : roomsRes.value?.data;
-          if (Array.isArray(rList) && rList.length > 0) {
-            setRooms(rList);
+      if (roomsRes.status === "fulfilled") {
+        const rList = Array.isArray(roomsRes.value) ? roomsRes.value : roomsRes.value?.data;
+        if (Array.isArray(rList) && rList.length > 0) {
+          setRooms(rList);
+          if (isFirstLoad) {
             setRoomId(rList[0].roomId);
           }
         }
-
-        if (traysRes.status === "fulfilled") {
-          const tList = Array.isArray(traysRes.value) ? traysRes.value : traysRes.value?.data;
-          if (Array.isArray(tList) && tList.length > 0) {
-            setTrays(tList);
-          }
-        }
-
-        if (alertsRes.status === "fulfilled") {
-          const aList = Array.isArray(alertsRes.value) ? alertsRes.value : alertsRes.value?.data;
-          if (Array.isArray(aList) && aList.length > 0) {
-            setAlerts(aList);
-          }
-        }
-      } catch (err) {
-        console.warn("Lỗi tải dữ liệu CSDL ban đầu, dùng fallback mock:", err);
       }
+
+      if (traysRes.status === "fulfilled") {
+        const tList = Array.isArray(traysRes.value) ? traysRes.value : traysRes.value?.data;
+        if (Array.isArray(tList) && tList.length > 0) {
+          setTrays(tList);
+        }
+      }
+
+      if (alertsRes.status === "fulfilled") {
+        const aList = Array.isArray(alertsRes.value) ? alertsRes.value : alertsRes.value?.data;
+        if (Array.isArray(aList) && aList.length > 0) {
+          setAlerts(aList);
+        }
+      }
+    } catch (err) {
+      console.warn("Lỗi tải dữ liệu CSDL, dùng fallback mock:", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchOperatorSnapshot(true);
+
+    // Lắng nghe kênh BroadcastChannel để đồng bộ tức thì khi Tab khác vừa đặt thuê/tạo khay/cập nhật trạng thái
+    let ch: BroadcastChannel | null = null;
+    if (typeof BroadcastChannel !== "undefined") {
+      ch = new BroadcastChannel("smartmushroom_sync");
+      ch.onmessage = () => {
+        fetchOperatorSnapshot(false);
+      };
     }
 
-    fetchInitialData();
-    return () => {
-      isMounted = false;
+    const handleFocus = () => {
+      fetchOperatorSnapshot(false);
     };
-  }, []);
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      ch?.close();
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [fetchOperatorSnapshot]);
 
   // 2. Lắng nghe sự kiện Socket.io thời gian thực
   const { connected } = useOperatorSocket({

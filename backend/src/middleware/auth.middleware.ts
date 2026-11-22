@@ -16,11 +16,11 @@ declare global {
  */
 export const requireAuth = (req: Request, res: Response, next: NextFunction): void => {
   try {
-    const token =
-      req.cookies?.token ||
-      (req.headers.authorization?.startsWith("Bearer ")
-        ? req.headers.authorization.split(" ")[1]
-        : null);
+    // Ưu tiên Authorization Bearer Header theo từng Tab trước, sau đó mới fallback sang Cookie HttpOnly
+    const bearerToken = req.headers.authorization?.startsWith("Bearer ")
+      ? req.headers.authorization.split(" ")[1]
+      : null;
+    const token = bearerToken || req.cookies?.token;
 
     if (!token) {
       res.status(401).json({

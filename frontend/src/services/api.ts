@@ -11,12 +11,27 @@ export function getAuthHeaders(): Record<string, string> {
     "Content-Type": "application/json",
   };
   if (typeof window !== "undefined") {
-    const token = localStorage.getItem("mc_token");
+    // Đọc từ sessionStorage để cô lập phiên đăng nhập độc lập cho từng Tab trình duyệt
+    const token = sessionStorage.getItem("mc_token");
     if (token) {
       headers["Authorization"] = `Bearer ${token}`;
     }
   }
   return headers;
+}
+
+/**
+ * Kênh phát tín hiệu đồng bộ tức thì giữa các Tab đang mở trên cùng trình duyệt
+ */
+export function broadcastTabSync(topic: "operator" | "orders" | "payments" | "all" = "all") {
+  if (typeof window === "undefined" || typeof BroadcastChannel === "undefined") return;
+  try {
+    const ch = new BroadcastChannel("smartmushroom_sync");
+    ch.postMessage({ topic, ts: Date.now() });
+    ch.close();
+  } catch {
+    // Bỏ qua nếu trình duyệt không hỗ trợ
+  }
 }
 
 export interface CreateRentalParams {
@@ -71,7 +86,7 @@ export interface VietQRParams {
 export async function createRentalOrder(params: CreateRentalParams): Promise<RentalResponse> {
   const res = await fetch(`${API_BASE}/rentals`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(params),
   });
 
@@ -79,6 +94,7 @@ export async function createRentalOrder(params: CreateRentalParams): Promise<Ren
   if (!res.ok) {
     throw new Error(json.message || json.error || "Lỗi tạo đơn thuê khay nấm");
   }
+  broadcastTabSync("all");
   return json;
 }
 
@@ -88,7 +104,7 @@ export async function createRentalOrder(params: CreateRentalParams): Promise<Ren
 export async function requestHarvestApi(params: RequestHarvestParams): Promise<HarvestResponse> {
   const res = await fetch(`${API_BASE}/harvest`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(params),
   });
 
@@ -96,6 +112,7 @@ export async function requestHarvestApi(params: RequestHarvestParams): Promise<H
   if (!res.ok) {
     throw new Error(json.message || json.error || "Lỗi gửi yêu cầu thu hoạch");
   }
+  broadcastTabSync("all");
   return json;
 }
 
@@ -218,6 +235,7 @@ export async function confirmPaymentCheckoutApi(params: PaymentConfirmParams): P
   if (!res.ok) {
     throw new Error(json.message || "Lỗi xác nhận giao dịch thanh toán");
   }
+  broadcastTabSync("all");
   return json;
 }
 
@@ -225,6 +243,7 @@ export async function getPaymentHistoryApi(limit: number = 15): Promise<PaymentT
   const res = await fetch(`${API_BASE}/payments/history?limit=${limit}`, {
     method: "GET",
     headers: getAuthHeaders(),
+    cache: "no-store",
   });
   const json = await res.json();
   if (!res.ok) {
@@ -237,7 +256,7 @@ export async function getPaymentHistoryApi(limit: number = 15): Promise<PaymentT
  * 4. Kiểm tra sức khỏe hệ thống Backend & CSDL MS SQL Server
  */
 export async function checkSystemHealth() {
-  const res = await fetch(`${API_BASE}/health`);
+  const res = await fetch(`${API_BASE}/health`, { cache: "no-store" });
   return res.json();
 }
 
@@ -245,7 +264,7 @@ export async function checkSystemHealth() {
  * 5. Các API Quản trị dành cho Trung Tâm Điều Hành Kỹ Thuật Viên (Operator Hub)
  */
 export async function getOperatorRoomsApi() {
-  const res = await fetch(`${API_BASE}/operator/rooms`);
+  const res = await fetch(`${API_BASE}/operator/rooms`, { cache: "no-store" });
   const json = await res.json();
   if (!res.ok) throw new Error(json.error?.message || "Lỗi tải danh sách buồng");
   return json.data;
@@ -253,7 +272,7 @@ export async function getOperatorRoomsApi() {
 
 export async function getOperatorTraysApi(roomId?: number) {
   const url = roomId ? `${API_BASE}/operator/trays?roomId=${roomId}` : `${API_BASE}/operator/trays`;
-  const res = await fetch(url);
+  const res = await fetch(url, { cache: "no-store" });
   const json = await res.json();
   if (!res.ok) throw new Error(json.error?.message || "Lỗi tải ma trận khay");
   return json.data;
@@ -261,7 +280,7 @@ export async function getOperatorTraysApi(roomId?: number) {
 
 export async function getOperatorAlertsApi(roomId?: number) {
   const url = roomId ? `${API_BASE}/operator/alerts?roomId=${roomId}` : `${API_BASE}/operator/alerts`;
-  const res = await fetch(url);
+  const res = await fetch(url, { cache: "no-store" });
   const json = await res.json();
   if (!res.ok) throw new Error(json.error?.message || "Lỗi tải cảnh báo vi khí hậu");
   return json.data;
@@ -276,6 +295,7 @@ export async function resolveOperatorAlertApi(alertId: number, notes?: string) {
   });
   const json = await res.json();
   if (!res.ok) throw new Error(json.error?.message || json.message || "Lỗi giải quyết cảnh báo");
+  broadcastTabSync("operator");
   return json;
 }
 
@@ -294,6 +314,7 @@ export async function toggleOperatorDeviceApi(params: {
   });
   const json = await res.json();
   if (!res.ok) throw new Error(json.error?.message || json.message || "Lỗi điều khiển thiết bị");
+  broadcastTabSync("operator");
   return json;
 }
 
@@ -306,6 +327,7 @@ export async function updateOperatorTrayStatusApi(trayId: number, status: "AVAIL
   });
   const json = await res.json();
   if (!res.ok) throw new Error(json.error?.message || json.message || "Lỗi cập nhật khay");
+  broadcastTabSync("operator");
   return json;
 }
 
@@ -324,6 +346,7 @@ export async function createOperatorTraysApi(params: {
   });
   const json = await res.json();
   if (!res.ok) throw new Error(json.error?.message || json.message || "Lỗi khởi tạo khay nuôi mới");
+  broadcastTabSync("operator");
   return json;
 }
 
@@ -374,7 +397,7 @@ export async function getMeApi() {
   const res = await fetch(`${API_BASE}/auth/me`, {
     method: "GET",
     headers: getAuthHeaders(),
-    credentials: "include",
+    cache: "no-store",
   });
   const json = await res.json();
   if (!res.ok) throw new Error(json.message || "Chưa đăng nhập");

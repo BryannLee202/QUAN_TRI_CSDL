@@ -47,19 +47,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [authModalTab, setAuthModalTab] = useState<"login" | "register">("login");
 
-  // Tải trạng thái đăng nhập từ localStorage và gọi /api/auth/me
+  // Tải trạng thái đăng nhập độc lập theo từng Tab từ sessionStorage và xác thực /api/auth/me
   useEffect(() => {
     async function initAuth() {
       try {
-        const storedToken = localStorage.getItem("mc_token");
-        const storedUser = localStorage.getItem("mc_user");
+        const storedToken = sessionStorage.getItem("mc_token");
+        const storedUser = sessionStorage.getItem("mc_user");
 
-        if (storedToken && storedUser) {
-          setToken(storedToken);
+        // Nếu Tab hiện tại chưa có token riêng -> giữ nguyên trạng thái Khách (không kế thừa cookie của Tab khác)
+        if (!storedToken) {
+          setUser(null);
+          setToken(null);
+          return;
+        }
+
+        setToken(storedToken);
+        if (storedUser) {
           setUser(JSON.parse(storedUser));
         }
 
-        // Kiểm tra tính hợp lệ với máy chủ
+        // Kiểm tra tính hợp lệ với máy chủ bằng Bearer token của riêng Tab này
         const res = await getMeApi();
         if (res.success && res.data) {
           const u: User = {
@@ -72,12 +79,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             avatarUrl: res.data.AvatarUrl,
           };
           setUser(u);
-          localStorage.setItem("mc_user", JSON.stringify(u));
+          sessionStorage.setItem("mc_user", JSON.stringify(u));
         }
       } catch (err) {
-        // Token hết hạn hoặc chưa đăng nhập
-        localStorage.removeItem("mc_token");
-        localStorage.removeItem("mc_user");
+        // Token hết hạn hoặc không hợp lệ -> xóa riêng phiên của Tab hiện tại
+        sessionStorage.removeItem("mc_token");
+        sessionStorage.removeItem("mc_user");
         setUser(null);
         setToken(null);
       } finally {
@@ -87,6 +94,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     initAuth();
   }, []);
+
+  // Gắn nhãn vai trò lên tiêu đề Tab trình duyệt ([Admin], [Operator], [Khách]) để dễ phân biệt khi test đa tab
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const baseTitle = document.title.replace(/^\[(Admin|Operator|Khách)\]\s*/i, "");
+    const rolePrefix = user?.role
+      ? user.role.toLowerCase() === "admin"
+        ? "[Admin]"
+        : user.role.toLowerCase() === "operator"
+        ? "[Operator]"
+        : "[Khách]"
+      : "[Khách]";
+    document.title = `${rolePrefix} ${baseTitle}`;
+  }, [user?.role]);
 
   const login = async (email: string, password: string) => {
     const res = await loginApi({ email, password });
@@ -102,8 +123,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setUser(u);
       setToken(res.data.token);
-      localStorage.setItem("mc_token", res.data.token);
-      localStorage.setItem("mc_user", JSON.stringify(u));
+      sessionStorage.setItem("mc_token", res.data.token);
+      sessionStorage.setItem("mc_user", JSON.stringify(u));
       setIsAuthModalOpen(false);
       return { success: true, message: res.message, user: u };
     }
@@ -129,8 +150,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setUser(u);
       setToken(res.data.token);
-      localStorage.setItem("mc_token", res.data.token);
-      localStorage.setItem("mc_user", JSON.stringify(u));
+      sessionStorage.setItem("mc_token", res.data.token);
+      sessionStorage.setItem("mc_user", JSON.stringify(u));
       setIsAuthModalOpen(false);
       return { success: true, message: res.message, user: u };
     }
@@ -143,8 +164,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (e) {
       // bỏ qua lỗi nếu có
     } finally {
-      localStorage.removeItem("mc_token");
-      localStorage.removeItem("mc_user");
+      sessionStorage.removeItem("mc_token");
+      sessionStorage.removeItem("mc_user");
       setUser(null);
       setToken(null);
     }
