@@ -440,3 +440,60 @@ export async function getSampleIotHexApi(temp?: number, hum?: number, co2?: numb
   if (!res.ok) throw new Error(json.error?.message || "Lỗi sinh gói tin mẫu");
   return json;
 }
+
+// ============================================================================
+// Quản lý người dùng & phân quyền RBAC (Chức năng A3 - Dành cho Admin)
+// ============================================================================
+export interface ManagedUser {
+  userId: number;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  roleId: number;
+  roleName: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export async function getManagedUsersApi(): Promise<ManagedUser[]> {
+  const res = await fetch(`${API_BASE}/operator/users`, {
+    headers: getAuthHeaders(),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Không thể tải danh sách người dùng");
+  return json.data || [];
+}
+
+export async function updateUserStatusApi(userId: number, isActive: boolean) {
+  const res = await fetch(`${API_BASE}/operator/users/${userId}/status`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ isActive }),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Lỗi cập nhật trạng thái");
+  return json;
+}
+
+export async function updateUserRoleApi(userId: number, roleId: number) {
+  const res = await fetch(`${API_BASE}/operator/users/${userId}/role`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ roleId }),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Lỗi phân công quyền");
+  return json;
+}
+
+export async function resetUserPasswordApi(userId: number) {
+  const res = await fetch(`${API_BASE}/operator/users/${userId}/reset-password`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Lỗi đặt lại mật khẩu");
+  return json;
+}
+

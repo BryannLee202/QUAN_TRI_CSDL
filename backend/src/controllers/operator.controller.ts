@@ -430,3 +430,152 @@ export const createNewTrays = async (req: Request, res: Response): Promise<void>
     });
   }
 };
+
+// 7. GET /api/operator/users - Lấy danh sách tài khoản người dùng (Dành cho Admin xem chức năng A3)
+export const getUsersList = async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const pool = getPool();
+    if (!pool) {
+      res.json({
+        success: true,
+        data: [
+          { userId: 1, fullName: "Nguyễn Quản Trị", email: "admin@mushroomcloud.test", phoneNumber: "0900000001", roleId: 1, roleName: "Admin", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
+          { userId: 2, fullName: "Trần Kỹ Thuật", email: "operator1@mushroomcloud.test", phoneNumber: "0900000002", roleId: 2, roleName: "Operator", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
+          { userId: 3, fullName: "Lê Vận Hành", email: "operator2@mushroomcloud.test", phoneNumber: "0900000003", roleId: 2, roleName: "Operator", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
+          { userId: 4, fullName: "Phạm Minh An", email: "customer1@mushroomcloud.test", phoneNumber: "0900000011", roleId: 3, roleName: "Customer", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
+          { userId: 5, fullName: "Võ Thu Hà", email: "customer2@mushroomcloud.test", phoneNumber: "0900000012", roleId: 3, roleName: "Customer", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
+        ],
+      });
+      return;
+    }
+
+    const result = await pool.request().query(`
+      SELECT 
+        u.UserID AS userId,
+        u.FullName AS fullName,
+        u.Email AS email,
+        u.PhoneNumber AS phoneNumber,
+        u.RoleID AS roleId,
+        r.RoleName AS roleName,
+        u.IsActive AS isActive,
+        u.CreatedAt AS createdAt,
+        u.UpdatedAt AS updatedAt
+      FROM dbo.Users u
+      JOIN dbo.Roles r ON u.RoleID = r.RoleID
+      ORDER BY u.RoleID ASC, u.UserID ASC;
+    `);
+
+    res.json({
+      success: true,
+      data: result.recordset,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: { code: "FETCH_USERS_ERROR", message: error.message },
+    });
+  }
+};
+
+// 8. PUT /api/operator/users/:userId/status - Vô hiệu hóa / Kích hoạt tài khoản (IsActive)
+export const updateUserStatus = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { userId } = req.params;
+    const { isActive } = req.body;
+    const pool = getPool();
+
+    if (!pool) {
+      res.json({ success: true, message: "Cập nhật trạng thái người dùng thành công (demo offline)!" });
+      return;
+    }
+
+    await pool
+      .request()
+      .input("UserID", sql.Int, Number(userId))
+      .input("IsActive", sql.Bit, isActive ? 1 : 0)
+      .query(`
+        UPDATE dbo.Users 
+        SET IsActive = @IsActive, UpdatedAt = SYSDATETIME() 
+        WHERE UserID = @UserID;
+      `);
+
+    res.json({
+      success: true,
+      message: `Đã ${isActive ? "kích hoạt" : "vô hiệu hóa"} tài khoản thành công!`,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: { code: "UPDATE_STATUS_ERROR", message: error.message },
+    });
+  }
+};
+
+// 9. PUT /api/operator/users/:userId/role - Thay đổi vai trò người dùng (Role Assignment)
+export const updateUserRole = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { userId } = req.params;
+    const { roleId } = req.body;
+    const pool = getPool();
+
+    if (!pool) {
+      res.json({ success: true, message: "Cập nhật vai trò người dùng thành công (demo offline)!" });
+      return;
+    }
+
+    await pool
+      .request()
+      .input("UserID", sql.Int, Number(userId))
+      .input("RoleID", sql.Int, Number(roleId))
+      .query(`
+        UPDATE dbo.Users 
+        SET RoleID = @RoleID, UpdatedAt = SYSDATETIME() 
+        WHERE UserID = @UserID;
+      `);
+
+    res.json({
+      success: true,
+      message: "Phân công vai trò người dùng thành công!",
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: { code: "UPDATE_ROLE_ERROR", message: error.message },
+    });
+  }
+};
+
+// 10. POST /api/operator/users/:userId/reset-password - Đặt lại mật khẩu về mặc định
+export const resetUserPassword = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { userId } = req.params;
+    const pool = getPool();
+
+    const defaultHash = "$2b$10$.ZGg4WBvFH/I0c3sZ/U7tOPBVTu0adhl.XO4BS2GpQxfzwCPaIR7C";
+
+    if (!pool) {
+      res.json({ success: true, message: "Đã đặt lại mật khẩu về 'Password123@' (demo offline)!" });
+      return;
+    }
+
+    await pool
+      .request()
+      .input("UserID", sql.Int, Number(userId))
+      .input("PasswordHash", sql.NVarChar(255), defaultHash)
+      .query(`
+        UPDATE dbo.Users 
+        SET PasswordHash = @PasswordHash, UpdatedAt = SYSDATETIME() 
+        WHERE UserID = @UserID;
+      `);
+
+    res.json({
+      success: true,
+      message: "Đã đặt lại mật khẩu về mặc định (Password123@) thành công!",
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: { code: "RESET_PASSWORD_ERROR", message: error.message },
+    });
+  }
+};
