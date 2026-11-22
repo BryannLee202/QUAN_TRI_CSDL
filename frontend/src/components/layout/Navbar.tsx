@@ -55,6 +55,7 @@ export default function Navbar() {
   const isRoiActive = pathname?.startsWith("/tinh-loi-nhuan");
   const isMarketActive = pathname?.startsWith("/san-nong-san");
   const isNetworkActive = pathname?.startsWith("/mang-luoi-farm");
+  const isFarm3DActive = pathname?.startsWith("/farm-3d");
   const isMyTraysActive = pathname?.startsWith("/khay-cua-toi");
   const isOperatorActive = pathname?.startsWith("/operator");
   const isProfileActive = pathname?.startsWith("/ho-so") || pathname?.startsWith("/profile");
@@ -181,6 +182,15 @@ export default function Navbar() {
           >
             <span>Mạng Lưới Farm</span>
             {isNetworkActive && (
+              <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
+            )}
+          </Link>
+          <Link
+            href="/farm-3d"
+            className={navLinkClass(isFarm3DActive)}
+          >
+            <span>Trang Trại 3D</span>
+            {isFarm3DActive && (
               <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
             )}
           </Link>

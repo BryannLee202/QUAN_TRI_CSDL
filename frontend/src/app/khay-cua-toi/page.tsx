@@ -437,13 +437,23 @@ export default function MyTraysPage() {
                         </p>
                       </div>
 
-                      <div className="text-right">
-                        <span className="text-[11px] uppercase font-bold text-[#8A5C38] dark:text-[#BFA895] block">
-                          Sản lượng cam kết
-                        </span>
-                        <span className="text-xl font-black text-emerald-700 dark:text-emerald-400">
-                          ~{selectedTray.expectedYieldKg} kg
-                        </span>
+                      <div className="flex flex-col items-end gap-2">
+                        <div className="text-right">
+                          <span className="text-[11px] uppercase font-bold text-[#8A5C38] dark:text-[#BFA895] block">
+                            Sản lượng cam kết
+                          </span>
+                          <span className="text-xl font-black text-emerald-700 dark:text-emerald-400">
+                            ~{selectedTray.expectedYieldKg} kg
+                          </span>
+                        </div>
+                        {selectedTray.trayCode && (
+                          <Link
+                            href={`/farm-3d?tray=${encodeURIComponent(selectedTray.trayCode)}`}
+                            className="px-3 py-1.5 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#C28E58]/60 hover:border-[#C28E58] text-[11px] font-bold text-[#6B442C] dark:text-[#E2BA78] transition"
+                          >
+                            Xem Vị Trí Trên Farm 3D →
+                          </Link>
+                        )}
                       </div>
                     </div>
 
