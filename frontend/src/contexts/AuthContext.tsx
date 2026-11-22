@@ -95,20 +95,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     initAuth();
   }, []);
 
-  // Gắn nhãn vai trò lên tiêu đề Tab trình duyệt ([Admin], [Operator], [Khách]) để dễ phân biệt khi test đa tab
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    const baseTitle = document.title.replace(/^\[(Admin|Operator|Khách)\]\s*/i, "");
-    const rolePrefix = user?.role
-      ? user.role.toLowerCase() === "admin"
-        ? "[Admin]"
-        : user.role.toLowerCase() === "operator"
-        ? "[Operator]"
-        : "[Khách]"
-      : "[Khách]";
-    document.title = `${rolePrefix} ${baseTitle}`;
-  }, [user?.role]);
-
   const login = async (email: string, password: string) => {
     const res = await loginApi({ email, password });
     if (res.success && res.data) {

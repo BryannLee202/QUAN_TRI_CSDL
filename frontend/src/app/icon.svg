@@ -1,0 +1,26 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-cream" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FDFBF8" />
+      <stop offset="1" stop-color="#EFE3D3" />
+    </linearGradient>
+    <linearGradient id="coffee-grad" x1="12" y1="10" x2="52" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4A2E1D" />
+      <stop offset="0.6" stop-color="#6B442C" />
+      <stop offset="1" stop-color="#9E6845" />
+    </linearGradient>
+    <linearGradient id="bronze-grad" x1="20" y1="20" x2="44" y2="40" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#C28E58" />
+      <stop offset="1" stop-color="#E2B888" />
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#bg-cream)" stroke="#C28E58" stroke-width="2.5" />
+  <g transform="translate(-2, 4)">
+    <path d="M14 27C14 16 23 8 34 8C45 8 54 16 54 27C54 30.5 50.5 32.5 46.5 31.5C41.5 30 38.5 26.5 34 26.5C29.5 26.5 26.5 30 21.5 31.5C17.5 32.5 14 30.5 14 27Z" fill="url(#coffee-grad)" />
+    <path d="M22 26C24 19 28 15 34 15C40 15 44 19 46 26" stroke="url(#bronze-grad)" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M28 32H40V41C40 43.8 37.3 46 34 46C30.7 46 28 43.8 28 41V32Z" fill="url(#coffee-grad)" />
+    <circle cx="34" cy="20" r="3" fill="url(#bronze-grad)" />
+    <circle cx="23" cy="22" r="2" fill="#C28E58" />
+    <circle cx="45" cy="22" r="2" fill="#C28E58" />
+  </g>
+</svg>
