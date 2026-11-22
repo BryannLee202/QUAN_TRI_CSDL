@@ -47,8 +47,8 @@ export default function Navbar() {
   const navLinkClass = (active: boolean) =>
     `relative px-3.5 py-1.5 rounded-xl transition-all duration-300 ease-out whitespace-nowrap flex items-center gap-1.5 active:scale-95 ${
       active
-        ? "bg-[#24170E] text-white dark:bg-gradient-to-r dark:from-[#C8955E] dark:to-[#DFB27D] dark:text-[#1E1B18] font-bold shadow-md shadow-[#24170E]/15 dark:shadow-[#C8955E]/20 ring-1 ring-[#C28E58]/50"
-        : "text-[#5C4231] dark:text-[#DAC7B5] hover:text-[#24170E] dark:hover:text-[#FFF5EA] hover:bg-white/90 dark:hover:bg-[#322D28] hover:-translate-y-0.5 hover:shadow-xs"
+        ? "bg-white text-[#5E3A22] dark:bg-[#38322C] dark:text-[#F0CFA0] font-bold shadow-xs border border-[#D6B892]/75 dark:border-[#C28E58]/55 ring-1 ring-[#C28E58]/15"
+        : "text-[#63564B] dark:text-[#C8BEB4] hover:text-[#24170E] dark:hover:text-[#FFF5EA] hover:bg-white/65 dark:hover:bg-[#322D28]/80 hover:-translate-y-0.5"
     }`;
 
   const isPortalActive = pathname === "/" && !isPackagesActive;
@@ -131,17 +131,20 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* Navigation Links - Segmented Glass Pill Bar với Active Highlight & Micro-interactions */}
-        <div className="hidden lg:flex items-center gap-1 p-1 rounded-2xl bg-[#F5EDE2]/80 dark:bg-[#27231F]/90 border border-[#E5D7C5] dark:border-[#474039] backdrop-blur-md text-[13px] font-semibold whitespace-nowrap flex-nowrap shadow-2xs">
+        {/* Navigation Links - Segmented Soft-Grey Pill Bar với Active Highlight tinh tế */}
+        <div className="hidden lg:flex items-center gap-1 p-1 rounded-2xl bg-stone-100/85 dark:bg-[#27231F]/90 border border-stone-200/80 dark:border-[#474039] backdrop-blur-md text-[13px] font-semibold whitespace-nowrap flex-nowrap shadow-2xs">
           <Link
             href="/"
             onClick={() => setIsPackagesActive(false)}
             className={navLinkClass(isPortalActive)}
           >
             {isPortalActive && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#E2BA78] dark:bg-[#1E1B18] animate-pulse shrink-0" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] dark:bg-[#E2BA78] animate-pulse shrink-0" />
             )}
             <span>{t.nav.customerPortal}</span>
+            {isPortalActive && (
+              <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
+            )}
           </Link>
           <a
             href="/#packages"
@@ -151,45 +154,57 @@ export default function Navbar() {
             className={navLinkClass(isPackagesActive)}
           >
             {isPackagesActive && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#E2BA78] dark:bg-[#1E1B18] animate-pulse shrink-0" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] dark:bg-[#E2BA78] animate-pulse shrink-0" />
             )}
             <span>Gói Thuê Nấm</span>
+            {isPackagesActive && (
+              <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
+            )}
           </a>
           <Link
             href="/tinh-loi-nhuan"
             className={navLinkClass(isRoiActive)}
           >
             {isRoiActive && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#E2BA78] dark:bg-[#1E1B18] animate-pulse shrink-0" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] dark:bg-[#E2BA78] animate-pulse shrink-0" />
             )}
             <span>Máy Tính Lợi Nhuận</span>
             <span
               className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md border transition-colors ${
                 isRoiActive
-                  ? "bg-white/20 text-[#E2BA78] border-white/25 dark:bg-[#1E1B18]/15 dark:text-[#1E1B18] dark:border-[#1E1B18]/25"
-                  : "bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border-amber-300/60 dark:border-amber-700/60"
+                  ? "bg-amber-50 text-amber-800 border-amber-300/80 dark:bg-[#C28E58]/20 dark:text-[#F0CFA0] dark:border-[#C28E58]/40"
+                  : "bg-amber-100/80 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border-amber-300/60 dark:border-amber-700/60"
               }`}
             >
               ROI
             </span>
+            {isRoiActive && (
+              <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
+            )}
           </Link>
           <Link
             href="/san-nong-san"
             className={navLinkClass(isMarketActive)}
           >
             {isMarketActive && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#E2BA78] dark:bg-[#1E1B18] animate-pulse shrink-0" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] dark:bg-[#E2BA78] animate-pulse shrink-0" />
             )}
             <span>Sàn Nông Sản FaaS</span>
+            {isMarketActive && (
+              <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
+            )}
           </Link>
           <Link
             href="/mang-luoi-farm"
             className={navLinkClass(isNetworkActive)}
           >
             {isNetworkActive && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#E2BA78] dark:bg-[#1E1B18] animate-pulse shrink-0" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] dark:bg-[#E2BA78] animate-pulse shrink-0" />
             )}
             <span>Mạng Lưới Farm</span>
+            {isNetworkActive && (
+              <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
+            )}
           </Link>
           {(isAdmin || isOperator) && (
             <Link
@@ -197,9 +212,12 @@ export default function Navbar() {
               className={navLinkClass(isOperatorActive)}
             >
               {isOperatorActive && (
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-[#1E1B18] animate-pulse shrink-0" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
               )}
               <span>{t.nav.operatorCenter}</span>
+              {isOperatorActive && (
+                <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-emerald-500/40 via-emerald-500 to-emerald-500/40" />
+              )}
             </Link>
           )}
         </div>
@@ -211,13 +229,13 @@ export default function Navbar() {
             href="/ho-so"
             className={`hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all duration-300 ease-out active:scale-95 whitespace-nowrap ${
               isProfileActive
-                ? "bg-[#24170E] text-white border-[#C28E58] dark:bg-gradient-to-r dark:from-[#C8955E] dark:to-[#DFB27D] dark:text-[#1E1B18] shadow-md"
-                : "border-[#D9C8B5] dark:border-[#474039] hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630] hover:-translate-y-0.5 text-[#523522] dark:text-[#E2BA78] shadow-2xs"
+                ? "bg-white text-[#5E3A22] border-[#C28E58]/80 dark:bg-[#38322C] dark:text-[#F0CFA0] dark:border-[#C28E58]/60 shadow-xs ring-1 ring-[#C28E58]/20"
+                : "border-stone-200 dark:border-[#474039] bg-stone-50/70 dark:bg-[#27231F] hover:bg-white dark:hover:bg-[#3C3630] hover:-translate-y-0.5 text-[#5E4A3A] dark:text-[#E2BA78] shadow-2xs"
             }`}
             title="Hồ sơ cá nhân & Lịch sử giao dịch"
           >
             <svg
-              className={`w-3.5 h-3.5 ${isProfileActive ? "text-[#E2BA78] dark:text-[#1E1B18]" : "text-[#C28E58]"}`}
+              className="w-3.5 h-3.5 text-[#C28E58]"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -235,8 +253,8 @@ export default function Navbar() {
               href="/login"
               className={`hidden sm:inline-flex px-3.5 py-1.5 rounded-xl border text-xs font-bold transition-all duration-300 ease-out active:scale-95 whitespace-nowrap ${
                 isLoginActive
-                  ? "bg-[#24170E] text-white border-[#C28E58] dark:bg-gradient-to-r dark:from-[#C8955E] dark:to-[#DFB27D] dark:text-[#1E1B18] shadow-md"
-                  : "border-[#D9C8B5] dark:border-[#474039] hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630] hover:-translate-y-0.5 text-[#523522] dark:text-[#E2BA78] shadow-2xs"
+                  ? "bg-white text-[#5E3A22] border-[#C28E58]/80 dark:bg-[#38322C] dark:text-[#F0CFA0] dark:border-[#C28E58]/60 shadow-xs ring-1 ring-[#C28E58]/20"
+                  : "border-stone-200 dark:border-[#474039] bg-stone-50/70 dark:bg-[#27231F] hover:bg-white dark:hover:bg-[#3C3630] hover:-translate-y-0.5 text-[#5E4A3A] dark:text-[#E2BA78] shadow-2xs"
               }`}
             >
               Đăng Nhập
