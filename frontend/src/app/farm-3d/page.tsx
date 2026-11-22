@@ -116,8 +116,8 @@ const PEEL_LAYERS: PeelLayer[] = [
     shortTitle: "IoT & Quang Phổ",
     title: "Lớp 05 • Hệ Thống Cảm Biến IoT & Đèn LED",
     subtitle: "Tách riêng lớp công nghệ điều khiển vi khí hậu 5 giây/lần và quang phổ LED 5000K / UV-C.",
-    image: "/images/view-portal-macro.jpg",
-    origin: "50% 45%",
+    image: "/images/farm3d/iot-spectrum-cleanroom.jpg",
+    origin: "50% 50%",
     specs: [
       { label: "Cảm biến", value: "LoRaWAN 5s" },
       { label: "Quang phổ", value: "5000K / UV-C" },
