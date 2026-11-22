@@ -1,15 +1,63 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useLanguage } from "../../context/LanguageContext";
 import { useAuth } from "../../contexts/AuthContext";
 import RightControlHub from "./RightControlHub";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const { t } = useLanguage();
   const { user, isAuthenticated, isAdmin, isOperator } = useAuth();
   const [isControlHubOpen, setIsControlHubOpen] = useState(false);
+  const [isPackagesActive, setIsPackagesActive] = useState(false);
+
+  // Theo dõi hash #packages hoặc vị trí cuộn tới vùng Bảng giá trên trang chủ
+  useEffect(() => {
+    if (pathname !== "/") {
+      setIsPackagesActive(false);
+      return;
+    }
+
+    const updatePackagesState = () => {
+      if (window.location.hash === "#packages") {
+        setIsPackagesActive(true);
+        return;
+      }
+      const pkgEl = document.getElementById("packages");
+      if (pkgEl) {
+        const rect = pkgEl.getBoundingClientRect();
+        setIsPackagesActive(rect.top <= 180 && rect.bottom >= 140);
+      } else {
+        setIsPackagesActive(false);
+      }
+    };
+
+    updatePackagesState();
+    window.addEventListener("hashchange", updatePackagesState);
+    window.addEventListener("scroll", updatePackagesState, { passive: true });
+    return () => {
+      window.removeEventListener("hashchange", updatePackagesState);
+      window.removeEventListener("scroll", updatePackagesState);
+    };
+  }, [pathname]);
+
+  const navLinkClass = (active: boolean) =>
+    `relative px-3.5 py-1.5 rounded-xl transition-all duration-300 ease-out whitespace-nowrap flex items-center gap-1.5 active:scale-95 ${
+      active
+        ? "bg-[#24170E] text-white dark:bg-gradient-to-r dark:from-[#C8955E] dark:to-[#DFB27D] dark:text-[#1E1B18] font-bold shadow-md shadow-[#24170E]/15 dark:shadow-[#C8955E]/20 ring-1 ring-[#C28E58]/50"
+        : "text-[#5C4231] dark:text-[#DAC7B5] hover:text-[#24170E] dark:hover:text-[#FFF5EA] hover:bg-white/90 dark:hover:bg-[#322D28] hover:-translate-y-0.5 hover:shadow-xs"
+    }`;
+
+  const isPortalActive = pathname === "/" && !isPackagesActive;
+  const isRoiActive = pathname?.startsWith("/tinh-loi-nhuan");
+  const isMarketActive = pathname?.startsWith("/san-nong-san");
+  const isNetworkActive = pathname?.startsWith("/mang-luoi-farm");
+  const isOperatorActive = pathname?.startsWith("/operator");
+  const isProfileActive = pathname?.startsWith("/ho-so") || pathname?.startsWith("/profile");
+  const isLoginActive = pathname?.startsWith("/login") || pathname?.startsWith("/dang-nhap");
 
   const getRoleBadge = (role: string = "") => {
     const r = role.toLowerCase();
@@ -83,46 +131,74 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* Navigation Links - 100% Cùng 1 dòng duy nhất (Single-line whitespace-nowrap) */}
-        <div className="hidden lg:flex items-center space-x-1 xl:space-x-2 text-[13.5px] font-semibold text-[#5C4231] dark:text-[#DAC7B5] whitespace-nowrap flex-nowrap">
+        {/* Navigation Links - Segmented Glass Pill Bar với Active Highlight & Micro-interactions */}
+        <div className="hidden lg:flex items-center gap-1 p-1 rounded-2xl bg-[#F5EDE2]/80 dark:bg-[#27231F]/90 border border-[#E5D7C5] dark:border-[#474039] backdrop-blur-md text-[13px] font-semibold whitespace-nowrap flex-nowrap shadow-2xs">
           <Link
             href="/"
-            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#3C3630] transition whitespace-nowrap"
+            onClick={() => setIsPackagesActive(false)}
+            className={navLinkClass(isPortalActive)}
           >
-            {t.nav.customerPortal}
+            {isPortalActive && (
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E2BA78] dark:bg-[#1E1B18] animate-pulse shrink-0" />
+            )}
+            <span>{t.nav.customerPortal}</span>
           </Link>
           <a
             href="/#packages"
-            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#3C3630] transition whitespace-nowrap"
+            onClick={() => {
+              if (pathname === "/") setIsPackagesActive(true);
+            }}
+            className={navLinkClass(isPackagesActive)}
           >
-            Gói Thuê Nấm
+            {isPackagesActive && (
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E2BA78] dark:bg-[#1E1B18] animate-pulse shrink-0" />
+            )}
+            <span>Gói Thuê Nấm</span>
           </a>
           <Link
             href="/tinh-loi-nhuan"
-            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#3C3630] transition flex items-center gap-1.5 whitespace-nowrap"
+            className={navLinkClass(isRoiActive)}
           >
+            {isRoiActive && (
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E2BA78] dark:bg-[#1E1B18] animate-pulse shrink-0" />
+            )}
             <span>Máy Tính Lợi Nhuận</span>
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300/60 dark:border-amber-700/60">
+            <span
+              className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md border transition-colors ${
+                isRoiActive
+                  ? "bg-white/20 text-[#E2BA78] border-white/25 dark:bg-[#1E1B18]/15 dark:text-[#1E1B18] dark:border-[#1E1B18]/25"
+                  : "bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border-amber-300/60 dark:border-amber-700/60"
+              }`}
+            >
               ROI
             </span>
           </Link>
           <Link
             href="/san-nong-san"
-            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#3C3630] transition whitespace-nowrap"
+            className={navLinkClass(isMarketActive)}
           >
-            Sàn Nông Sản FaaS
+            {isMarketActive && (
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E2BA78] dark:bg-[#1E1B18] animate-pulse shrink-0" />
+            )}
+            <span>Sàn Nông Sản FaaS</span>
           </Link>
           <Link
             href="/mang-luoi-farm"
-            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#3C3630] transition whitespace-nowrap"
+            className={navLinkClass(isNetworkActive)}
           >
-            Mạng Lưới Farm
+            {isNetworkActive && (
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E2BA78] dark:bg-[#1E1B18] animate-pulse shrink-0" />
+            )}
+            <span>Mạng Lưới Farm</span>
           </Link>
           {(isAdmin || isOperator) && (
             <Link
               href="/operator"
-              className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#3C3630] transition flex items-center gap-1.5 whitespace-nowrap text-emerald-800 dark:text-emerald-400 font-bold"
+              className={navLinkClass(isOperatorActive)}
             >
+              {isOperatorActive && (
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 dark:bg-[#1E1B18] animate-pulse shrink-0" />
+              )}
               <span>{t.nav.operatorCenter}</span>
             </Link>
           )}
@@ -133,10 +209,20 @@ export default function Navbar() {
           {/* Nút Hồ sơ & Lịch sử giao dịch */}
           <Link
             href="/ho-so"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] text-xs font-bold hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630] text-[#523522] dark:text-[#E2BA78] transition shadow-2xs whitespace-nowrap"
+            className={`hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all duration-300 ease-out active:scale-95 whitespace-nowrap ${
+              isProfileActive
+                ? "bg-[#24170E] text-white border-[#C28E58] dark:bg-gradient-to-r dark:from-[#C8955E] dark:to-[#DFB27D] dark:text-[#1E1B18] shadow-md"
+                : "border-[#D9C8B5] dark:border-[#474039] hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630] hover:-translate-y-0.5 text-[#523522] dark:text-[#E2BA78] shadow-2xs"
+            }`}
             title="Hồ sơ cá nhân & Lịch sử giao dịch"
           >
-            <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg
+              className={`w-3.5 h-3.5 ${isProfileActive ? "text-[#E2BA78] dark:text-[#1E1B18]" : "text-[#C28E58]"}`}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
               <circle cx="12" cy="7" r="4" />
             </svg>
@@ -147,7 +233,11 @@ export default function Navbar() {
           {!isAuthenticated && (
             <Link
               href="/login"
-              className="hidden sm:inline-flex px-3.5 py-1.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] text-xs font-bold hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630] text-[#523522] dark:text-[#E2BA78] transition shadow-2xs whitespace-nowrap"
+              className={`hidden sm:inline-flex px-3.5 py-1.5 rounded-xl border text-xs font-bold transition-all duration-300 ease-out active:scale-95 whitespace-nowrap ${
+                isLoginActive
+                  ? "bg-[#24170E] text-white border-[#C28E58] dark:bg-gradient-to-r dark:from-[#C8955E] dark:to-[#DFB27D] dark:text-[#1E1B18] shadow-md"
+                  : "border-[#D9C8B5] dark:border-[#474039] hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630] hover:-translate-y-0.5 text-[#523522] dark:text-[#E2BA78] shadow-2xs"
+              }`}
             >
               Đăng Nhập
             </Link>
