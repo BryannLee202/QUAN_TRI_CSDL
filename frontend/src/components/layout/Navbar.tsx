@@ -159,15 +159,6 @@ export default function Navbar() {
             className={navLinkClass(isRoiActive)}
           >
             <span>Máy Tính Lợi Nhuận</span>
-            <span
-              className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md border transition-colors ${
-                isRoiActive
-                  ? "bg-amber-50 text-amber-800 border-amber-300/80 dark:bg-[#C28E58]/20 dark:text-[#F0CFA0] dark:border-[#C28E58]/40"
-                  : "bg-amber-100/80 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border-amber-300/60 dark:border-amber-700/60"
-              }`}
-            >
-              ROI
-            </span>
             {isRoiActive && (
               <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
             )}
