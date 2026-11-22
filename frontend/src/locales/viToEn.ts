@@ -960,6 +960,7 @@ export const VI_TO_EN_EXACT: Array<[string, string]> = [
   ["Tên tài khoản hoặc Email", "Username or Email"],
   ["HotLine Kỹ Thuật 24/7", "24/7 Technical Hotline"],
   ["Hotline Kỹ Thuật 24/7", "24/7 Technical Hotline"],
+  ["Lãi ròng", "Net Profit"],
   ["Ngày 1-3", "Days 1-3"],
   ["Ngày 4-10", "Days 4-10"],
   ["Ngày 11-16", "Days 11-16"],
@@ -1000,8 +1001,15 @@ export function translateTextViToEn(input: string): string {
     out = out.replace(regex, en);
   }
 
-  // 2. Mẫu động có số lượng / mã định danh còn lại
+  // 2. Mẫu động có số lượng / đơn vị đo lường / mã định danh còn lại
   out = out
+    .replace(/Thuê\s+(\d+)\s+Khay Ngay Nhận Ưu Đãi/gi, "Rent $1 Trays & Claim Discount")
+    .replace(/\b(\d+)\s+đợt\s+(?:thu hoạch|Harvest)\b/gi, "$1 harvest cycles")
+    .replace(/\b(\d+)\s+ngày\/lứa\b/gi, "$1 days/cycle")
+    .replace(/kg\/khay\b/gi, "kg/tray")
+    .replace(/kg\s+nấm tươi\b/gi, "kg fresh mushrooms")
+    .replace(/\b1\s+Tháng\b/gi, "1 Month")
+    .replace(/\b1\s+Khay\b/gi, "1 Tray")
     .replace(/\bKhay\s+(R\d{2}-\d{3})\b/gi, "Tray $1")
     .replace(/\bKệ\s+(\d{2})\s*•\s*Tầng\s+(\d{2})\b/gi, "Rack $1 • Shelf $2")
     .replace(/\bKệ\s+(\d{2})\b/gi, "Rack $1")
@@ -1013,6 +1021,8 @@ export function translateTextViToEn(input: string): string {
     .replace(/\b(\d+)\s+Tháng\b/gi, "$1 Months")
     .replace(/\b(\d+)\s+Khay\b/gi, "$1 Trays")
     .replace(/\b(\d+)\s+Buồng\b/gi, "$1 Chambers")
+    .replace(/(?<![A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF])khay(?![A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF])/gi, "trays")
+    .replace(/(?<![A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF])tháng(?![A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF])/gi, "months")
     .replace(/\bĐạt\s+(\d+)%\s+chu kỳ\b/gi, "$1% Cycle Progress")
     .replace(/\bKhay trên Kệ\s+(\d{2}):/gi, "Trays on Rack $1:")
     .replace(/\bRadar Ống Kính Kệ\s+(\d{2}):/gi, "Rack $1 Lens Radar:")
