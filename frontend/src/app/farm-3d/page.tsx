@@ -428,64 +428,32 @@ export default function Farm3DPage() {
                       </div>
                     )}
 
-                    {/* Nút lùi / tiến lớp ở góc dưới phải & thẻ thông tin lớp ở góc dưới trái */}
-                    <div className="absolute bottom-3 left-3 right-3 z-30 flex flex-wrap items-end justify-between gap-3 pointer-events-none">
-                      <div className="sm:w-[370px] p-3.5 rounded-2xl bg-[#24170E]/95 backdrop-blur-md border border-[#E2BA78]/60 text-white shadow-2xl space-y-2 pointer-events-auto">
-                        <div className="flex items-center justify-between">
-                          <span className="font-mono text-[10px] font-black text-[#E2BA78]">
-                            BÓC TÁCH {activeLayer.code} / 05
-                          </span>
-                          <span className="text-[10px] text-emerald-300 font-bold">
-                            {selectedRoom?.roomCode || "RM01"}
-                          </span>
-                        </div>
-                        <p className="text-sm font-black leading-snug">{activeLayer.title}</p>
-                        <p className="text-[11px] text-stone-300 leading-relaxed">
-                          {activeLayer.subtitle}
-                        </p>
-                        <div className="grid grid-cols-3 gap-1.5 pt-1">
-                          {activeLayer.specs.map((sp) => (
-                            <div
-                              key={sp.label}
-                              className="p-1.5 rounded-lg bg-white/10 text-center"
-                            >
-                              <span className="text-[9px] text-stone-300 block">
-                                {sp.label}
-                              </span>
-                              <strong className="text-[10px] font-bold text-[#E2BA78]">
-                                {sp.value}
-                              </strong>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 pointer-events-auto">
-                        <button
-                          type="button"
-                          disabled={activeLayerIndex <= 0}
-                          onClick={() => {
-                            if (activeLayerIndex > 0) {
-                              setActiveLayerKey(PEEL_LAYERS[activeLayerIndex - 1].key);
-                            }
-                          }}
-                          className="px-3.5 py-2 rounded-full bg-[#24170E]/90 hover:bg-[#24170E] disabled:opacity-40 text-white border border-white/25 text-xs font-bold shadow-lg transition cursor-pointer"
-                        >
-                          ← Lớp trước
-                        </button>
-                        <button
-                          type="button"
-                          disabled={activeLayerIndex >= PEEL_LAYERS.length - 1}
-                          onClick={() => {
-                            if (activeLayerIndex < PEEL_LAYERS.length - 1) {
-                              setActiveLayerKey(PEEL_LAYERS[activeLayerIndex + 1].key);
-                            }
-                          }}
-                          className="px-3.5 py-2 rounded-full bg-[#C28E58] hover:bg-[#D4A16A] disabled:opacity-40 text-[#1E1B18] text-xs font-black shadow-lg transition cursor-pointer"
-                        >
-                          Bóc lớp tiếp →
-                        </button>
-                      </div>
+                    {/* Nút lùi / tiến lớp ở góc dưới phải */}
+                    <div className="absolute bottom-3 right-3 z-30 flex items-center gap-2 pointer-events-auto">
+                      <button
+                        type="button"
+                        disabled={activeLayerIndex <= 0}
+                        onClick={() => {
+                          if (activeLayerIndex > 0) {
+                            setActiveLayerKey(PEEL_LAYERS[activeLayerIndex - 1].key);
+                          }
+                        }}
+                        className="px-3.5 py-2 rounded-full bg-[#24170E]/90 hover:bg-[#24170E] disabled:opacity-40 text-white border border-white/25 text-xs font-bold shadow-lg transition cursor-pointer backdrop-blur-md"
+                      >
+                        ← Lớp trước
+                      </button>
+                      <button
+                        type="button"
+                        disabled={activeLayerIndex >= PEEL_LAYERS.length - 1}
+                        onClick={() => {
+                          if (activeLayerIndex < PEEL_LAYERS.length - 1) {
+                            setActiveLayerKey(PEEL_LAYERS[activeLayerIndex + 1].key);
+                          }
+                        }}
+                        className="px-3.5 py-2 rounded-full bg-[#C28E58] hover:bg-[#D4A16A] disabled:opacity-40 text-[#1E1B18] text-xs font-black shadow-lg transition cursor-pointer backdrop-blur-md"
+                      >
+                        Bóc lớp tiếp →
+                      </button>
                     </div>
                   </div>
 
