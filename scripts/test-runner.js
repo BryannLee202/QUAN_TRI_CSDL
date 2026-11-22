@@ -19,10 +19,18 @@ const tests = [
   'tests/test_audit_and_security.sql'
 ];
 
+let dbServer = process.env.DB_SERVER || '.\\MSSQLSERVER01';
+const envPath = path.resolve(__dirname, '../backend/.env');
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, 'utf8');
+  const match = envContent.match(/^DB_SERVER=(.+)$/m);
+  if (match) dbServer = match[1].trim();
+}
+
 log('========================================================================');
 log('   MUSHROOMCLOUD AUTOMATED TEST SUITE EXECUTION REPORT');
 log('   Timestamp: ' + new Date().toISOString());
-log('   Database: SmartMushroomDB (MS SQL Server .\\SQLEXPRESS01)');
+log(`   Database: SmartMushroomDB (MS SQL Server ${dbServer})`);
 log('========================================================================\n');
 
 let totalRuns = 0;
@@ -36,7 +44,7 @@ for (let round = 1; round <= 3; round++) {
   for (const t of tests) {
     totalRuns++;
     try {
-      const output = execSync('sqlcmd -S .\\SQLEXPRESS01 -d SmartMushroomDB -E -C -I -i ' + t, { encoding: 'utf8' });
+      const output = execSync(`sqlcmd -S "${dbServer}" -d SmartMushroomDB -E -C -I -i ` + t, { encoding: 'utf8' });
       const failMatch = output.match(/\[FAIL\]|Nguy hiểm!|Thất bại/);
       
       if (failMatch) {
