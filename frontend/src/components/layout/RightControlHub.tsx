@@ -7,8 +7,8 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
 import {
   AppNotification,
-  INITIAL_APP_NOTIFICATIONS,
   navigateToNotificationDestination,
+  useAppNotifications,
 } from '../../utils/notificationRouter';
 
 interface RightControlHubProps {
@@ -20,12 +20,12 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
   const router = useRouter();
   const { language, setLanguage, t } = useLanguage();
   const { user, isAuthenticated, logout, isAdmin, isOperator } = useAuth();
+  const isStaff = Boolean(isAdmin || isOperator);
 
   const [isDark, setIsDark] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
-  const [notifications, setNotifications] = useState<AppNotification[]>(INITIAL_APP_NOTIFICATIONS);
-
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const { notifications, unreadCount, markItemAsRead, markAllAsRead } =
+    useAppNotifications(isStaff);
 
   useEffect(() => {
     setMounted(true);
@@ -69,19 +69,9 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
     }
   };
 
-  const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  };
-
-  const markSingleAsRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
-    );
-  };
-
   const handleNotificationClick = (n: AppNotification) => {
-    markSingleAsRead(n.id);
-    navigateToNotificationDestination(n, router, onClose);
+    markItemAsRead(n.id);
+    navigateToNotificationDestination(n, router, isStaff, onClose);
   };
 
   const getRoleBadge = (role: string = '') => {

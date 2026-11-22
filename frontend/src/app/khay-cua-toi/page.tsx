@@ -24,7 +24,9 @@ export default function MyTraysPage() {
   const [harvestSubmitting, setHarvestSubmitting] = useState<boolean>(false);
   const [harvestNotice, setHarvestNotice] = useState<string | null>(null);
   const [highlightHarvest, setHighlightHarvest] = useState<boolean>(false);
+  const [highlightClimate, setHighlightClimate] = useState<boolean>(false);
   const harvestSectionRef = useRef<HTMLDivElement>(null);
+  const climateSectionRef = useRef<HTMLDivElement>(null);
 
   const loadMyTrays = useCallback(async () => {
     if (!isAuthenticated) {
@@ -40,6 +42,7 @@ export default function MyTraysPage() {
         typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
       const targetCode = params?.get("tray");
       const isHarvestAction = params?.get("action") === "harvest";
+      const isClimateFocus = params?.get("focus") === "climate";
 
       if (list.length > 0) {
         setTrays(list);
@@ -55,9 +58,9 @@ export default function MyTraysPage() {
           return list[0].orderId;
         });
       } else {
-        // Nếu tài khoản hiện tại (ví dụ Admin vừa reset CSDL) chưa có khay thực tế nhưng bấm thông báo thu hoạch:
+        // Nếu tài khoản hiện tại (ví dụ Admin vừa reset CSDL) chưa có khay thực tế nhưng bấm thông báo thu hoạch hoặc vi khí hậu:
         // Cung cấp khay Đông Trùng Hạ Thảo mẫu chuẩn bị cắt nấm để trải nghiệm ngay chức năng trọng điểm
-        if (isHarvestAction || targetCode) {
+        if (isHarvestAction || isClimateFocus || targetCode) {
           const sampleTray: MyTrayRecord = {
             orderId: 999,
             orderCode: "ORD-2026-CORDYCEPS",
@@ -110,7 +113,7 @@ export default function MyTraysPage() {
     loadMyTrays();
   }, [loadMyTrays]);
 
-  // Tự động cuộn và làm nổi bật mục thu hoạch khi người dùng click từ thông báo
+  // Tự động cuộn và làm nổi bật mục thu hoạch hoặc vi khí hậu khi người dùng click từ thông báo
   useEffect(() => {
     if (!loading && typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -121,6 +124,19 @@ export default function MyTraysPage() {
         }, 350);
         const fadeTimer = setTimeout(() => {
           setHighlightHarvest(false);
+        }, 6000);
+        return () => {
+          clearTimeout(scrollTimer);
+          clearTimeout(fadeTimer);
+        };
+      }
+      if (params.get("focus") === "climate") {
+        setHighlightClimate(true);
+        const scrollTimer = setTimeout(() => {
+          climateSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 350);
+        const fadeTimer = setTimeout(() => {
+          setHighlightClimate(false);
         }, 6000);
         return () => {
           clearTimeout(scrollTimer);
@@ -440,7 +456,14 @@ export default function MyTraysPage() {
                     </div>
 
                     {/* Chỉ số vi khí hậu thực tế của buồng nuôi */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div
+                      ref={climateSectionRef}
+                      className={`grid grid-cols-2 sm:grid-cols-4 gap-3 p-2 rounded-2xl transition-all duration-500 ${
+                        highlightClimate
+                          ? "ring-4 ring-emerald-500/50 shadow-xl shadow-emerald-500/10 scale-[1.01]"
+                          : ""
+                      }`}
+                    >
                       <div className="p-3.5 rounded-2xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#EAE1D3] dark:border-[#474039]">
                         <span className="text-[11px] font-bold text-[#8A5C38] dark:text-[#BFA895]">
                           Nhiệt độ buồng

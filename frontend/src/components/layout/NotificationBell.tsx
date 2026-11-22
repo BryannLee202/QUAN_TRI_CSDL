@@ -2,19 +2,22 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '../../contexts/AuthContext';
 import {
   AppNotification,
-  INITIAL_APP_NOTIFICATIONS,
   navigateToNotificationDestination,
+  useAppNotifications,
 } from '../../utils/notificationRouter';
 
 export default function NotificationBell() {
   const router = useRouter();
+  const { isAdmin, isOperator } = useAuth();
+  const isStaff = Boolean(isAdmin || isOperator);
   const [isOpen, setIsOpen] = useState(false);
-  const [notifications, setNotifications] = useState<AppNotification[]>(INITIAL_APP_NOTIFICATIONS);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const { notifications, unreadCount, markItemAsRead, markAllAsRead } =
+    useAppNotifications(isStaff);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -26,19 +29,9 @@ export default function NotificationBell() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  };
-
-  const markItemAsRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
-    );
-  };
-
   const handleNotificationClick = (n: AppNotification) => {
     markItemAsRead(n.id);
-    navigateToNotificationDestination(n, router, () => setIsOpen(false));
+    navigateToNotificationDestination(n, router, isStaff, () => setIsOpen(false));
   };
 
   return (
