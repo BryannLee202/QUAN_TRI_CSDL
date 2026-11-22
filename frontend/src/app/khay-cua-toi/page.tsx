@@ -202,9 +202,11 @@ export default function MyTraysPage() {
 
   const getTrayPreviewImage = (speciesName: string = "") => {
     const s = speciesName.toLowerCase();
-    if (s.includes("linh chi")) return "/images/hero-chamber-warm-champagne.jpg";
-    if (s.includes("đông trùng") || s.includes("hạ thảo")) return "/images/hero-chamber-light-latte.jpg";
-    return "/images/hero-view-mushroom-macro.jpg";
+    if (s.includes("linh chi")) return "/images/real-farm/real-reishi-macro.jpg";
+    if (s.includes("đông trùng") || s.includes("hạ thảo")) return "/images/real-farm/real-cordyceps-macro.jpg";
+    if (s.includes("hầu thủ")) return "/images/real-farm/real-lionsmane-macro.jpg";
+    if (s.includes("bào ngư")) return "/images/real-farm/real-oyster-macro.jpg";
+    return "/images/real-farm/real-cordyceps-macro.jpg";
   };
 
   const handleRequestHarvest = async () => {

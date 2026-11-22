@@ -66,7 +66,7 @@ const MOCK_BATCHES: MarketBatch[] = [
     category: 'DRIED',
     certBadge: 'Dược Điển VN • Cordycepin > 0.8%',
     description: 'Đông trùng hạ thảo sấy thăng hoa -45°C giữ nguyên 99% màu vàng cam óng và hoạt chất dược lý.',
-    imageUrl: '/images/hero-view-mushroom-macro.jpg',
+    imageUrl: '/images/real-farm/real-cordyceps-macro.jpg',
   },
   {
     id: 'b-04',

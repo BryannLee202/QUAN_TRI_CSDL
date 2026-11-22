@@ -305,7 +305,7 @@ export const MUSHROOM_PACKAGES: MushroomSpeciesDetail[] = [
     expectedYield: "0.8 - 1.0 kg",
     duration: "60 Ngày",
     durationDays: 60,
-    imageUrl: "/images/real-farm/real-cleanroom-cultivation.jpg",
+    imageUrl: "/images/real-farm/real-cordyceps-macro.jpg",
     shortDesc: "Nuôi cấy khép kín trong buồng vô trùng công nghệ cao, quả thể vàng cam rực rỡ, hàm lượng Cordycepin siêu cao.",
     origin: "Trung tâm Công nghệ Sinh học Tây Tạng & Việt Nam",
     certification: "Tiêu chuẩn Phòng Sạch ISO Class 5 • Kiểm định HPLC",
