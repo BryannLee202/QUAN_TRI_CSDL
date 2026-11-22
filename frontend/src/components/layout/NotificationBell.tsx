@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface NotificationItem {
   id: string;
@@ -9,6 +11,8 @@ interface NotificationItem {
   desc: string;
   time: string;
   read: boolean;
+  link: string;
+  badge: string;
 }
 
 const INITIAL_NOTIFICATIONS: NotificationItem[] = [
@@ -16,9 +20,11 @@ const INITIAL_NOTIFICATIONS: NotificationItem[] = [
     id: 'notif-1',
     type: 'alert',
     title: 'Cảnh Báo Vi Khí Hậu Buồng B-02',
-    desc: 'Nhiệt độ đạt ngưỡng 24.5°C. Hệ thống đã tự động kích hoạt rèm lạnh đối lưu.',
+    desc: 'Nhiệt độ đạt ngưỡng 24.5°C. Rèm lạnh đối lưu tự động vận hành.',
     time: '2 phút trước',
     read: false,
+    link: '/operator?room=RM02',
+    badge: 'Xem vi khí hậu buồng B-02',
   },
   {
     id: 'notif-2',
@@ -27,6 +33,8 @@ const INITIAL_NOTIFICATIONS: NotificationItem[] = [
     desc: 'Giao dịch Serialized thành công trên CSDL SmartMushroomDB.',
     time: '15 phút trước',
     read: false,
+    link: '/khay-cua-toi',
+    badge: 'Xem khay nấm của bạn',
   },
   {
     id: 'notif-3',
@@ -35,10 +43,14 @@ const INITIAL_NOTIFICATIONS: NotificationItem[] = [
     desc: 'Khay Đông Trùng Hạ Thảo của bạn đã sẵn sàng cắt nấm đợt 1.',
     time: '1 giờ trước',
     read: false,
+    link: '/khay-cua-toi?action=harvest',
+    badge: 'Yêu cầu thu hoạch ngay',
   },
 ];
 
 export default function NotificationBell() {
+  const router = useRouter();
+  const { isAdmin, isOperator } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -63,6 +75,16 @@ export default function NotificationBell() {
     setNotifications((prev) =>
       prev.map((n) => (n.id === id ? { ...n, read: true } : n))
     );
+  };
+
+  const handleNotificationClick = (n: NotificationItem) => {
+    markItemAsRead(n.id);
+    setIsOpen(false);
+    if (n.link.startsWith('/operator') && !isAdmin && !isOperator) {
+      router.push('/mang-luoi-farm');
+    } else {
+      router.push(n.link);
+    }
   };
 
   return (
@@ -98,7 +120,7 @@ export default function NotificationBell() {
 
       {/* Dropdown Menu Sang Trọng Gam Màu Cafe Latte & Espresso */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-88 bg-[#FCFAF7] dark:bg-[#27231F] border border-[#DECFC0] dark:border-[#474039] rounded-2xl shadow-2xl py-2 z-50 text-[#361F12] dark:text-[#F7EFE6] animate-in fade-in zoom-in-95 duration-150">
+        <div className="absolute right-0 mt-2 w-80 sm:w-92 bg-[#FCFAF7] dark:bg-[#27231F] border border-[#DECFC0] dark:border-[#474039] rounded-2xl shadow-2xl py-2 z-50 text-[#361F12] dark:text-[#F7EFE6] animate-in fade-in zoom-in-95 duration-150">
           <div className="px-4 py-2.5 border-b border-[#EFE7DA] dark:border-[#474039] flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58]"></span>
@@ -116,7 +138,7 @@ export default function NotificationBell() {
             )}
           </div>
 
-          <div className="max-h-72 overflow-y-auto divide-y divide-[#EFE7DA]/60 dark:divide-[#38261A]/60">
+          <div className="max-h-80 overflow-y-auto divide-y divide-[#EFE7DA]/60 dark:divide-[#38261A]/60">
             {notifications.length === 0 ? (
               <div className="p-4 text-center text-xs text-[#A88C76]">
                 Không có thông báo mới
@@ -125,8 +147,8 @@ export default function NotificationBell() {
               notifications.map((n) => (
                 <div
                   key={n.id}
-                  onClick={() => markItemAsRead(n.id)}
-                  className={`p-3 text-xs transition cursor-pointer hover:bg-[#F5EEE4]/60 dark:hover:bg-[#3C3630]/80 ${
+                  onClick={() => handleNotificationClick(n)}
+                  className={`p-3 text-xs transition cursor-pointer hover:bg-[#F5EEE4]/80 dark:hover:bg-[#3C3630]/80 group ${
                     !n.read ? 'bg-[#FAF5EE] dark:bg-[#23150D]' : ''
                   }`}
                 >
@@ -134,7 +156,7 @@ export default function NotificationBell() {
                     {/* Real Vector Icon theo từng loại thông báo */}
                     <div className="mt-0.5 shrink-0">
                       {n.type === 'alert' && (
-                        <div className="w-5 h-5 rounded-lg bg-[#FBEAE5] dark:bg-[#3D1D14] flex items-center justify-center text-[#B34E2E]">
+                        <div className="w-6 h-6 rounded-lg bg-[#FBEAE5] dark:bg-[#3D1D14] flex items-center justify-center text-[#B34E2E]">
                           <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
                             <line x1="12" y1="9" x2="12" y2="13"/>
@@ -143,7 +165,7 @@ export default function NotificationBell() {
                         </div>
                       )}
                       {n.type === 'success' && (
-                        <div className="w-5 h-5 rounded-lg bg-[#EFE9DD] dark:bg-[#2D1F15] flex items-center justify-center text-[#5C3A24] dark:text-[#C28E58]">
+                        <div className="w-6 h-6 rounded-lg bg-[#EFE9DD] dark:bg-[#2D1F15] flex items-center justify-center text-[#5C3A24] dark:text-[#C28E58]">
                           <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                             <polyline points="22 4 12 14.01 9 11.01"/>
@@ -151,7 +173,7 @@ export default function NotificationBell() {
                         </div>
                       )}
                       {n.type === 'info' && (
-                        <div className="w-5 h-5 rounded-lg bg-[#F5EEE4] dark:bg-[#322D28] flex items-center justify-center text-[#8C6E56] dark:text-[#D4AF7A]">
+                        <div className="w-6 h-6 rounded-lg bg-[#F5EEE4] dark:bg-[#322D28] flex items-center justify-center text-[#8C6E56] dark:text-[#D4AF7A]">
                           <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="12" cy="12" r="10"/>
                             <line x1="12" y1="16" x2="12" y2="12"/>
@@ -162,15 +184,20 @@ export default function NotificationBell() {
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <p className={`font-semibold ${!n.read ? 'text-[#361F12] dark:text-[#FFF5EA]' : 'text-[#634936] dark:text-[#DAC7B5]'}`}>
+                      <p className={`font-semibold text-xs group-hover:text-[#C28E58] transition-colors ${!n.read ? 'text-[#361F12] dark:text-[#FFF5EA]' : 'text-[#634936] dark:text-[#DAC7B5]'}`}>
                         {n.title}
                       </p>
                       <p className="text-[#73543E] dark:text-[#B59D89] text-[11px] mt-0.5 leading-relaxed">
                         {n.desc}
                       </p>
-                      <span className="text-[10px] text-[#A07A5D] dark:text-[#8C6E56] mt-1 block">
-                        {n.time}
-                      </span>
+                      <div className="flex items-center justify-between gap-1 mt-1.5">
+                        <span className="text-[10px] text-[#A07A5D] dark:text-[#8C6E56]">
+                          {n.time}
+                        </span>
+                        <span className="text-[10px] font-bold text-[#C28E58] group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
+                          {n.badge} →
+                        </span>
+                      </div>
                     </div>
 
                     {!n.read && (

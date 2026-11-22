@@ -66,7 +66,11 @@ export default function OperatorPage() {
         if (Array.isArray(rList) && rList.length > 0) {
           setRooms(rList);
           if (isFirstLoad) {
-            setRoomId(rList[0].roomId);
+            const urlParam = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("room") : null;
+            const matchedRoom = urlParam
+              ? rList.find((r) => r.roomCode?.toUpperCase() === urlParam.toUpperCase() || String(r.roomId) === urlParam)
+              : null;
+            setRoomId(matchedRoom ? matchedRoom.roomId : rList[0].roomId);
           }
         }
       }

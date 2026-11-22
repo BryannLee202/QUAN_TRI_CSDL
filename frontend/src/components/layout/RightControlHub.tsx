@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -17,6 +18,8 @@ interface NotificationItem {
   desc: string;
   time: string;
   read: boolean;
+  link: string;
+  badge: string;
 }
 
 const INITIAL_NOTIFICATIONS: NotificationItem[] = [
@@ -27,6 +30,8 @@ const INITIAL_NOTIFICATIONS: NotificationItem[] = [
     desc: 'Nhiệt độ đạt ngưỡng 24.5°C. Rèm lạnh đối lưu tự động vận hành.',
     time: '2 phút trước',
     read: false,
+    link: '/operator?room=RM02',
+    badge: 'Xem vi khí hậu buồng B-02',
   },
   {
     id: 'notif-2',
@@ -35,6 +40,8 @@ const INITIAL_NOTIFICATIONS: NotificationItem[] = [
     desc: 'Giao dịch Serialized thành công trên CSDL SmartMushroomDB.',
     time: '15 phút trước',
     read: false,
+    link: '/khay-cua-toi',
+    badge: 'Xem khay nấm của bạn',
   },
   {
     id: 'notif-3',
@@ -43,10 +50,13 @@ const INITIAL_NOTIFICATIONS: NotificationItem[] = [
     desc: 'Khay Đông Trùng Hạ Thảo của bạn đã sẵn sàng cắt nấm đợt 1.',
     time: '1 giờ trước',
     read: false,
+    link: '/khay-cua-toi?action=harvest',
+    badge: 'Yêu cầu thu hoạch ngay',
   },
 ];
 
 export default function RightControlHub({ isOpen, onClose }: RightControlHubProps) {
+  const router = useRouter();
   const { language, setLanguage, t } = useLanguage();
   const { user, isAuthenticated, logout, isAdmin, isOperator } = useAuth();
 
@@ -106,6 +116,16 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
     setNotifications((prev) =>
       prev.map((n) => (n.id === id ? { ...n, read: true } : n))
     );
+  };
+
+  const handleNotificationClick = (n: NotificationItem) => {
+    markSingleAsRead(n.id);
+    onClose();
+    if (n.link.startsWith('/operator') && !isAdmin && !isOperator) {
+      router.push('/mang-luoi-farm');
+    } else {
+      router.push(n.link);
+    }
   };
 
   const getRoleBadge = (role: string = '') => {
@@ -442,10 +462,10 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                 return (
                   <div
                     key={n.id}
-                    onClick={() => markSingleAsRead(n.id)}
-                    className={`p-3 rounded-xl border transition-all duration-200 cursor-pointer flex items-start gap-3 ${
+                    onClick={() => handleNotificationClick(n)}
+                    className={`p-3 rounded-xl border transition-all duration-200 cursor-pointer flex items-start gap-3 group hover:scale-[1.01] active:scale-[0.99] ${
                       n.read
-                        ? 'bg-[#FAF5EE]/40 dark:bg-[#27231F]/40 border-transparent text-[#735843] dark:text-[#B9ADA1] opacity-75'
+                        ? 'bg-[#FAF5EE]/40 dark:bg-[#27231F]/40 border-transparent text-[#735843] dark:text-[#B9ADA1] opacity-75 hover:opacity-100 hover:border-[#C28E58]/40'
                         : 'bg-[#FAF5EE] dark:bg-[#322D28] border-[#DECFC0] dark:border-[#474039] text-[#24170E] dark:text-[#FFF5EA] shadow-2xs hover:border-[#C28E58]'
                     }`}
                   >
@@ -480,7 +500,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1.5">
-                        <h4 className="text-xs font-bold text-[#24170E] dark:text-[#FFF5EA] truncate">
+                        <h4 className="text-xs font-bold text-[#24170E] dark:text-[#FFF5EA] truncate group-hover:text-[#C28E58] transition-colors">
                           {n.title}
                         </h4>
                         <span className="text-[10px] font-mono text-[#8C6D53] dark:text-[#B9ADA1] shrink-0">
@@ -490,6 +510,10 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                       <p className="text-[11px] text-[#634936] dark:text-[#DAC7B5] mt-0.5 leading-relaxed">
                         {n.desc}
                       </p>
+                      <div className="flex items-center gap-1 text-[10px] font-bold text-[#C28E58] mt-1.5 group-hover:translate-x-1 transition-transform">
+                        <span>{n.badge}</span>
+                        <span>→</span>
+                      </div>
                     </div>
                   </div>
                 );

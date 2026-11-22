@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -23,6 +23,8 @@ export default function MyTraysPage() {
   const [error, setError] = useState<string | null>(null);
   const [harvestSubmitting, setHarvestSubmitting] = useState<boolean>(false);
   const [harvestNotice, setHarvestNotice] = useState<string | null>(null);
+  const [highlightHarvest, setHighlightHarvest] = useState<boolean>(false);
+  const harvestSectionRef = useRef<HTMLDivElement>(null);
 
   const loadMyTrays = useCallback(async () => {
     if (!isAuthenticated) {
@@ -39,9 +41,15 @@ export default function MyTraysPage() {
         const params =
           typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
         const targetCode = params?.get("tray");
+        const isHarvestAction = params?.get("action") === "harvest";
         const matched = targetCode ? list.find((t) => t.trayCode === targetCode) : undefined;
+        const harvestMatch = isHarvestAction
+          ? list.find((t) => (t.speciesName || "").toLowerCase().includes("đông trùng") || (t.speciesName || "").toLowerCase().includes("hạ thảo")) || list[0]
+          : undefined;
+
         setSelectedOrderId((prev) => {
           if (matched) return matched.orderId;
+          if (harvestMatch) return harvestMatch.orderId;
           if (prev && list.some((t) => t.orderId === prev)) return prev;
           return list[0].orderId;
         });
@@ -56,6 +64,26 @@ export default function MyTraysPage() {
   useEffect(() => {
     loadMyTrays();
   }, [loadMyTrays]);
+
+  // Tự động cuộn và làm nổi bật mục thu hoạch khi người dùng click từ thông báo
+  useEffect(() => {
+    if (!loading && typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("action") === "harvest") {
+        setHighlightHarvest(true);
+        const scrollTimer = setTimeout(() => {
+          harvestSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 350);
+        const fadeTimer = setTimeout(() => {
+          setHighlightHarvest(false);
+        }, 6000);
+        return () => {
+          clearTimeout(scrollTimer);
+          clearTimeout(fadeTimer);
+        };
+      }
+    }
+  }, [loading, selectedOrderId]);
 
   // Tự động đồng bộ khi chuyển tab hoặc có đơn hàng mới từ tab/modal khác
   useEffect(() => {
@@ -409,8 +437,21 @@ export default function MyTraysPage() {
                     </div>
 
                     {/* Hành động thu hoạch */}
-                    <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#F2E8DC] dark:border-[#474039]">
+                    <div
+                      ref={harvestSectionRef}
+                      className={`flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl border transition-all duration-500 ${
+                        highlightHarvest
+                          ? "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 ring-2 ring-emerald-500/50 shadow-lg shadow-emerald-500/10 scale-[1.01]"
+                          : "border-[#F2E8DC] dark:border-[#474039]"
+                      }`}
+                    >
                       <div className="text-xs text-[#735843] dark:text-[#DAC7B5]">
+                        <div className="flex items-center gap-1.5 font-bold text-[#24170E] dark:text-white mb-0.5">
+                          {highlightHarvest && (
+                            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-ping mr-1" />
+                          )}
+                          <span>Giao Hàng &amp; Thu Hoạch Nấm</span>
+                        </div>
                         Địa chỉ nhận nấm: <strong>{selectedTray.deliveryAddress}</strong>
                       </div>
                       <button
@@ -420,6 +461,8 @@ export default function MyTraysPage() {
                         className={`px-5 py-2.5 rounded-xl text-xs font-bold transition shadow-xs ${
                           selectedTray.harvestStatus
                             ? "bg-amber-100 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800 cursor-default"
+                            : highlightHarvest
+                            ? "bg-emerald-600 hover:bg-emerald-500 text-white cursor-pointer ring-4 ring-emerald-400/30 animate-pulse"
                             : "bg-emerald-700 hover:bg-emerald-600 text-white cursor-pointer"
                         }`}
                       >
