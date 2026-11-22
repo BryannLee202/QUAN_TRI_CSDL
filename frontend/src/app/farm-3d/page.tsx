@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState, useCallback, useMemo } from "react";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -11,6 +10,7 @@ import {
   getOperatorTraysApi,
   getMyTraysApi,
 } from "@/services/api";
+import Farm3DScene from "@/components/farm3d/Farm3DScene";
 import type {
   Farm3DRoom,
   Farm3DTray,
@@ -20,18 +20,6 @@ import type {
 import CheckoutGatewayModal, {
   CheckoutItemConfig,
 } from "@/components/checkout/CheckoutGatewayModal";
-
-const Farm3DCanvas = dynamic(
-  () => import("@/components/farm3d/Farm3DCanvas"),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="w-full h-full flex items-center justify-center rounded-3xl bg-[#F4ECE1] dark:bg-[#27231F] border border-[#DECFC0] dark:border-[#474039] text-sm font-bold text-[#735843] dark:text-[#E2BA78]">
-        Đang khởi tạo mô hình Trang Trại 3D WebGL...
-      </div>
-    ),
-  }
-);
 
 const RENTAL_PACKAGES: Array<{
   id: number;
@@ -70,23 +58,23 @@ const RENTAL_PACKAGES: Array<{
 const TOUR_STEPS = [
   {
     step: "01",
-    title: "Toàn Cảnh Khu Cleanroom",
-    desc: "3 buồng nuôi vô trùng ISO Class 5 với hơn 120 khay nấm kết nối trực tiếp SQL Server.",
+    title: "Ngoại Thất Khu Agritech Center",
+    desc: "Toàn cảnh kiến trúc nhà kính vách nhôm champagne giữa khuôn viên xanh.",
   },
   {
     step: "02",
-    title: "Bay Vào Buồng Nuôi RM01",
-    desc: "Quan sát mặt cắt hành lang phòng sạch, vách kính ngăn bụi và luồng đối lưu lạnh.",
+    title: "Tách Lớp Isometric 3 Buồng Nuôi",
+    desc: "Mở lớp mái nhìn xuyên 3 buồng RM01, RM02, RM03 kết nối trực tiếp SQL Server.",
   },
   {
     step: "03",
-    title: "Giàn Kệ Thép 5 Tầng",
-    desc: "Mỗi khay nấm có mã QR định danh riêng, đặt trên hệ kệ thép không gỉ 5 tầng.",
+    title: "Hành Lang Giàn Kệ 5 Tầng",
+    desc: "Không gian phòng sạch ISO Class 5 với đèn quang phổ và phun sương siêu âm.",
   },
   {
     step: "04",
-    title: "Cận Cảnh Khay Nấm & Cảm Biến",
-    desc: "Theo dõi cụm nấm phát triển theo ngày tuổi cùng đèn quang phổ và cảm biến vi khí hậu.",
+    title: "Cận Cảnh Khay Nấm & 3 Hotspot IoT",
+    desc: "Kiểm tra trực tiếp khối phôi, đầu dò cảm biến LoRaWAN và đèn LED quang phổ.",
   },
 ];
 
@@ -296,7 +284,7 @@ export default function Farm3DPage() {
           {/* Khung chính: Sân khấu 3D (8 cột) + Bảng Kính Mờ & Biên Lai (4 cột) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
             <div className="lg:col-span-8 h-[540px] sm:h-[620px] relative">
-              <Farm3DCanvas
+              <Farm3DScene
                 rooms={rooms}
                 trays={trays}
                 ownedTrayCodes={ownedTrayCodes}
@@ -305,7 +293,6 @@ export default function Farm3DPage() {
                 cameraMode={cameraMode}
                 tourStep={tourStep}
                 lightingMode={lightingMode}
-                showHotspots={Boolean(selectedTray)}
                 activeHotspot={activeHotspot}
                 onSelectRoom={handleSelectRoom}
                 onSelectTray={handleSelectTray}
@@ -528,7 +515,7 @@ export default function Farm3DPage() {
                     {selectedRoom ? `${selectedRoom.roomCode} — ${selectedRoom.roomName}` : "Tổng Quan Trang Trại 3D"}
                   </h2>
                   <p className="text-xs text-[#735843] dark:text-[#DAC7B5] leading-relaxed">
-                    Bấm trực tiếp vào bất kỳ **khay nấm** nào trên giàn kệ 3D để camera bay vào cận cảnh, xem 3 điểm Hotspot IoT hoặc chọn thuê khay trống.
+                    Bấm trực tiếp vào từng buồng trên mô hình cắt lớp hoặc chọn <strong>khay nấm</strong> trong Sơ Đồ 2D để xem cận cảnh 3 điểm Hotspot IoT và đặt thuê trực tiếp.
                   </p>
                   <div className="grid grid-cols-2 gap-2.5 text-xs">
                     <div className="p-3 rounded-2xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#EAE1D3] dark:border-[#474039]">
