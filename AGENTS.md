@@ -12,6 +12,8 @@ Mỗi khi có thay đổi mã nguồn, tính năng hoặc giao diện mới cầ
 2. **Quy Chuẩn Danh Tính (Zero Co-Author)**:
    - Cả `GIT_AUTHOR_NAME` / `GIT_AUTHOR_EMAIL` và `GIT_COMMITTER_NAME` / `GIT_COMMITTER_EMAIL` phải trùng khớp 100% với `LeMinhTai <leminhtai2222005@gmail.com>`.
    - Tuyệt đối không thêm dòng `Co-authored-by` và không commit dưới tên bất kỳ cá nhân nào khác.
+3. **Ngôn Ngữ & Phong Cách Commit Message (Tiếng Việt Tự Nhiên)**:
+   - Toàn bộ commit message từ nay về sau bắt buộc viết bằng **tiếng Việt có dấu, ngắn gọn, tự nhiên như sinh viên gõ** (ví dụ: `xóa nút đăng xuất nhanh trên thanh menu`, `sửa lỗi giao diện trang tính lợi nhuận`). Không dùng tiếng Anh hay format kiểu `ui(navbar): ...`.
 
 ## 3. Quy Tắc Áp Dụng Kỹ Năng (Skills Enforcement)
 - **Tự động kích hoạt kỹ năng**: Luôn kiểm tra danh mục kỹ năng (Skills) đã cài đặt tại `~/.gemini/config/skills/` và `.agents/skills/` (ví dụ: `mobile-app-testing`, `webapp-testing`, `reverse-engineer-anything`, `frontend-design`, `docx`, `xlsx`, `pptx`, `pdf`, `claude-api`,...).
