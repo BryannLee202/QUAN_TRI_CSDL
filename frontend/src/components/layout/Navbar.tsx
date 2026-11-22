@@ -138,23 +138,25 @@ export default function Navbar() {
             onClick={() => setIsPackagesActive(false)}
             className={navLinkClass(isPortalActive)}
           >
-            <span>{t.nav.customerPortal}</span>
+            <span>{(isAdmin || isOperator) ? "Trang Chủ Farm" : t.nav.customerPortal}</span>
             {isPortalActive && (
               <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
             )}
           </Link>
-          <a
-            href="/#packages"
-            onClick={() => {
-              if (pathname === "/") setIsPackagesActive(true);
-            }}
-            className={navLinkClass(isPackagesActive)}
-          >
-            <span>Gói Thuê Nấm</span>
-            {isPackagesActive && (
-              <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
-            )}
-          </a>
+          {!isAdmin && !isOperator && (
+            <a
+              href="/#packages"
+              onClick={() => {
+                if (pathname === "/") setIsPackagesActive(true);
+              }}
+              className={navLinkClass(isPackagesActive)}
+            >
+              <span>Gói Thuê Nấm</span>
+              {isPackagesActive && (
+                <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
+              )}
+            </a>
+          )}
           <Link
             href="/tinh-loi-nhuan"
             className={navLinkClass(isRoiActive)}
@@ -182,7 +184,7 @@ export default function Navbar() {
               <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
             )}
           </Link>
-          {isAuthenticated && (
+          {isAuthenticated && !isAdmin && !isOperator && (
             <Link
               href="/khay-cua-toi"
               className={navLinkClass(isMyTraysActive)}
@@ -198,7 +200,10 @@ export default function Navbar() {
               href="/operator"
               className={navLinkClass(isOperatorActive)}
             >
-              <span>{t.nav.operatorCenter}</span>
+              <span className="flex items-center gap-1.5 font-bold text-emerald-800 dark:text-emerald-400">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>{t.nav.operatorCenter}</span>
+              </span>
               {isOperatorActive && (
                 <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-emerald-500/40 via-emerald-500 to-emerald-500/40" />
               )}

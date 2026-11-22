@@ -189,9 +189,19 @@ export default function UserProfileAndHistoryPage() {
                     <h1 className="text-xl sm:text-2xl font-extrabold text-[#24170E] dark:text-white tracking-tight">
                       {displayUser.fullName}
                     </h1>
-                    <span className="px-3 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
-                      {isAuthenticated ? "Thành Viên Đã Xác Thực" : "Tài Khoản Thành Viên FaaS"}
-                    </span>
+                    {isAdmin ? (
+                      <span className="px-3 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300 border border-purple-300 dark:border-purple-700">
+                        Quản Trị Viên Hệ Thống (Admin)
+                      </span>
+                    ) : isOperator ? (
+                      <span className="px-3 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-700">
+                        Kỹ Thuật Viên Vận Hành IoT (Operator)
+                      </span>
+                    ) : (
+                      <span className="px-3 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
+                        {isAuthenticated ? "Thành Viên Đã Xác Thực" : "Tài Khoản Thành Viên FaaS"}
+                      </span>
+                    )}
                   </div>
                   <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-[#6E533E] dark:text-[#BFA895]">
                     <span className="flex items-center gap-1.5">
@@ -219,26 +229,32 @@ export default function UserProfileAndHistoryPage() {
               </div>
 
               <div className="flex flex-wrap items-center gap-2.5">
-                <Link
-                  href="/#packages"
-                  className="px-4 py-2.5 rounded-xl bg-[#24170E] hover:bg-[#382417] dark:bg-gradient-to-r dark:from-[#C8955E] dark:to-[#DFB27D] dark:text-[#1E1B18] text-white text-xs font-bold border border-[#C28E58]/40 transition shadow-xs"
-                >
-                  Đăng Ký Thuê Khay Mới
-                </Link>
+                {(isAdmin || isOperator) ? (
+                  <Link
+                    href="/operator"
+                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-700 hover:from-emerald-600 hover:to-teal-600 text-white text-xs font-bold border border-emerald-400/40 transition shadow-xs flex items-center gap-2"
+                  >
+                    <svg className="w-4 h-4 text-emerald-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect width="20" height="14" x="2" y="3" rx="2" />
+                      <line x1="8" x2="16" y1="21" y2="21" />
+                      <line x1="12" x2="12" y1="17" y2="21" />
+                    </svg>
+                    <span>Vào Trung Tâm Điều Hành Farm</span>
+                  </Link>
+                ) : (
+                  <Link
+                    href="/#packages"
+                    className="px-4 py-2.5 rounded-xl bg-[#24170E] hover:bg-[#382417] dark:bg-gradient-to-r dark:from-[#C8955E] dark:to-[#DFB27D] dark:text-[#1E1B18] text-white text-xs font-bold border border-[#C28E58]/40 transition shadow-xs"
+                  >
+                    Đăng Ký Thuê Khay Mới
+                  </Link>
+                )}
                 <Link
                   href="/san-nong-san"
                   className="px-4 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#27231F] hover:border-[#C28E58] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] transition"
                 >
                   Sàn Nông Sản FaaS
                 </Link>
-                {(isAdmin || isOperator) && (
-                  <Link
-                    href="/operator"
-                    className="px-4 py-2.5 rounded-xl border border-emerald-500/40 bg-emerald-50 dark:bg-emerald-950/50 hover:border-emerald-500 text-xs font-bold text-emerald-800 dark:text-emerald-300 transition"
-                  >
-                    Trung Tâm Điều Hành
-                  </Link>
-                )}
                 {isAuthenticated && (
                   <button
                     type="button"
@@ -256,56 +272,105 @@ export default function UserProfileAndHistoryPage() {
               </div>
             </div>
 
-            {/* 3 Thẻ Chỉ Số Thống Kê Hồ Sơ */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-2xs flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" />
-                    <line x1="16" y1="13" x2="8" y2="13" />
-                    <line x1="16" y1="17" x2="8" y2="17" />
-                  </svg>
+            {/* 3 Thẻ Chỉ Số Thống Kê Hồ Sơ (Phân biệt vai trò Customer vs Kỹ Thuật Viên) */}
+            {(isAdmin || isOperator) ? (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-amber-200 dark:border-amber-900/50 shadow-2xs flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-400 flex items-center justify-center shrink-0">
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                      <rect width="18" height="18" x="3" y="3" rx="2" />
+                      <path d="M7 7h.01M17 7h.01M7 17h.01M17 17h.01" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="text-xs text-[#735843] dark:text-[#BFA895] block">Quyền Hạn Hệ Thống</span>
+                    <strong className="text-lg sm:text-xl font-extrabold text-[#24170E] dark:text-white">
+                      {isAdmin ? "Toàn Quyền Quản Trị" : "Kỹ Thuật Viên Vận Hành"}
+                    </strong>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-xs text-[#735843] dark:text-[#BFA895] block">Tổng Hợp Đồng &amp; Đơn Hàng</span>
-                  <strong className="text-2xl font-extrabold text-[#24170E] dark:text-white tabular-nums">
-                    {stats.totalOrders} chứng từ
-                  </strong>
-                </div>
-              </div>
 
-              <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-2xs flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-[#8C3A16] dark:text-[#E2BA78] flex items-center justify-center shrink-0">
-                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                    <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-                    <path d="m3.3 7 8.7 5 8.7-5" />
-                    <path d="M12 22V12" />
-                  </svg>
+                <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-emerald-200 dark:border-emerald-900/50 shadow-2xs flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                      <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="text-xs text-[#735843] dark:text-[#BFA895] block">Phân Xưởng Trực Thuộc</span>
+                    <strong className="text-lg sm:text-xl font-extrabold text-emerald-700 dark:text-emerald-400">
+                      RM01 - RM03 (Hub FaaS)
+                    </strong>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-xs text-[#735843] dark:text-[#BFA895] block">Khay Nấm Đang Sở Hữu</span>
-                  <strong className="text-2xl font-extrabold text-[#24170E] dark:text-white tabular-nums">
-                    {stats.activeTrays} khay định danh
-                  </strong>
-                </div>
-              </div>
 
-              <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-2xs flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/30 text-sky-800 dark:text-sky-400 flex items-center justify-center shrink-0">
-                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                    <rect x="2" y="5" width="20" height="14" rx="2" />
-                    <line x1="2" y1="10" x2="22" y2="10" />
-                  </svg>
-                </div>
-                <div>
-                  <span className="text-xs text-[#735843] dark:text-[#BFA895] block">Tổng Giá Trị Đã Quyết Toán</span>
-                  <strong className="text-2xl font-extrabold text-emerald-800 dark:text-emerald-400 tabular-nums">
-                    {formatVnd(stats.totalSpent)}
-                  </strong>
+                <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-sky-200 dark:border-sky-900/50 shadow-2xs flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/30 text-sky-700 dark:text-sky-400 flex items-center justify-center shrink-0">
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="text-xs text-[#735843] dark:text-[#BFA895] block">Trạng Thái Ca Trực</span>
+                    <strong className="text-lg sm:text-xl font-extrabold text-sky-700 dark:text-sky-400 flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                      <span>Trực Tuyến 24/7</span>
+                    </strong>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-2xs flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                      <line x1="16" y1="13" x2="8" y2="13" />
+                      <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="text-xs text-[#735843] dark:text-[#BFA895] block">Tổng Hợp Đồng &amp; Đơn Hàng</span>
+                    <strong className="text-2xl font-extrabold text-[#24170E] dark:text-white tabular-nums">
+                      {stats.totalOrders} chứng từ
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-2xs flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-[#8C3A16] dark:text-[#E2BA78] flex items-center justify-center shrink-0">
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                      <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                      <path d="m3.3 7 8.7 5 8.7-5" />
+                      <path d="M12 22V12" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="text-xs text-[#735843] dark:text-[#BFA895] block">Khay Nấm Đang Sở Hữu</span>
+                    <strong className="text-2xl font-extrabold text-[#24170E] dark:text-white tabular-nums">
+                      {stats.activeTrays} khay định danh
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-2xs flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/30 text-sky-800 dark:text-sky-400 flex items-center justify-center shrink-0">
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                      <rect x="2" y="5" width="20" height="14" rx="2" />
+                      <line x1="2" y1="10" x2="22" y2="10" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span className="text-xs text-[#735843] dark:text-[#BFA895] block">Tổng Giá Trị Đã Quyết Toán</span>
+                    <strong className="text-2xl font-extrabold text-emerald-800 dark:text-emerald-400 tabular-nums">
+                      {formatVnd(stats.totalSpent)}
+                    </strong>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -317,10 +382,12 @@ export default function UserProfileAndHistoryPage() {
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <h2 className="text-lg font-extrabold text-[#24170E] dark:text-white tracking-tight">
-                    Lịch Sử Mua Hàng &amp; Hợp Đồng Điện Tử
+                    {(isAdmin || isOperator) ? "Tra Cứu Giao Dịch & Chứng Từ Toàn Hệ Thống" : "Lịch Sử Mua Hàng & Hợp Đồng Điện Tử"}
                   </h2>
                   <p className="text-xs text-[#6E533E] dark:text-[#BFA895] mt-0.5">
-                    Quản lý toàn bộ các hợp đồng thuê khay nấm FaaS, đơn hàng nông sản và chứng từ thanh toán của bạn
+                    {(isAdmin || isOperator) 
+                      ? "Xem dữ liệu đối soát các hợp đồng thuê khay FaaS, đơn hàng nông sản và chứng từ thanh toán"
+                      : "Quản lý toàn bộ các hợp đồng thuê khay nấm FaaS, đơn hàng nông sản và chứng từ thanh toán của bạn"}
                   </p>
                 </div>
 

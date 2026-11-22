@@ -253,17 +253,31 @@ export default function MyTraysPage() {
               </p>
             </div>
             <div className="flex items-center gap-2.5">
-              <Link
-                href="/#packages"
-                className="px-4 py-2.5 rounded-xl bg-[#24170E] hover:bg-[#382417] dark:bg-[#C28E58] dark:hover:bg-[#D4A16A] text-white dark:text-[#1E1B18] text-xs font-bold transition shadow-xs"
-              >
-                + Thuê Thêm Khay Mới
-              </Link>
+              {(user?.role === "Operator" || user?.role === "Admin") ? (
+                <Link
+                  href="/operator"
+                  className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-700 to-teal-700 hover:from-emerald-600 hover:to-teal-600 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5"
+                >
+                  <svg className="w-3.5 h-3.5 text-emerald-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect width="20" height="14" x="2" y="3" rx="2" />
+                    <line x1="8" x2="16" y1="21" y2="21" />
+                    <line x1="12" x2="12" y1="17" y2="21" />
+                  </svg>
+                  <span>Trung Tâm Điều Hành Farm</span>
+                </Link>
+              ) : (
+                <Link
+                  href="/#packages"
+                  className="px-4 py-2.5 rounded-xl bg-[#24170E] hover:bg-[#382417] dark:bg-[#C28E58] dark:hover:bg-[#D4A16A] text-white dark:text-[#1E1B18] text-xs font-bold transition shadow-xs"
+                >
+                  + Thuê Thêm Khay Mới
+                </Link>
+              )}
               <Link
                 href="/ho-so"
                 className="px-4 py-2.5 rounded-xl bg-white dark:bg-[#27231F] border border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] transition"
               >
-                Lịch Sử Giao Dịch
+                {(user?.role === "Operator" || user?.role === "Admin") ? "Hồ Sơ Kỹ Thuật" : "Lịch Sử Giao Dịch"}
               </Link>
             </div>
           </div>
@@ -271,6 +285,31 @@ export default function MyTraysPage() {
 
         {/* Main Content */}
         <section className="max-w-7xl mx-auto px-6 py-8">
+          {isAuthenticated && (user?.role === "Operator" || user?.role === "Admin") && (
+            <div className="mb-6 p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+              <div className="flex items-center gap-3">
+                <span className="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-700 dark:text-amber-300 flex items-center justify-center shrink-0">
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                </span>
+                <div>
+                  <h4 className="text-xs font-bold">Tài khoản Kỹ thuật viên / Quản trị viên</h4>
+                  <p className="text-[11px] text-amber-800 dark:text-amber-300">
+                    Trang này phục vụ khách hàng theo dõi khay cá nhân. Để giám sát toàn bộ ma trận khay của tất cả các buồng nuôi, hãy vào Trung Tâm Điều Hành.
+                  </p>
+                </div>
+              </div>
+              <Link
+                href="/operator"
+                className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold whitespace-nowrap shrink-0 transition"
+              >
+                Vào Trung Tâm Điều Hành →
+              </Link>
+            </div>
+          )}
           {!isAuthenticated ? (
             <div className="rounded-3xl bg-white dark:bg-[#27231F] border border-[#EAE1D3] dark:border-[#474039] p-10 text-center space-y-4 shadow-sm max-w-xl mx-auto">
               <h2 className="text-xl font-black text-[#24170E] dark:text-white">
