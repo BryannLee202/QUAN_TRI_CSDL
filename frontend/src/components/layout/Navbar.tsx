@@ -10,7 +10,7 @@ import RightControlHub from "./RightControlHub";
 export default function Navbar() {
   const pathname = usePathname();
   const { t } = useLanguage();
-  const { user, isAuthenticated, isAdmin, isOperator, logout } = useAuth();
+  const { user, isAuthenticated, isAdmin, isOperator } = useAuth();
   const [isControlHubOpen, setIsControlHubOpen] = useState(false);
   const [isPackagesActive, setIsPackagesActive] = useState(false);
 
@@ -196,41 +196,25 @@ export default function Navbar() {
 
         {/* Right Section: Cụm Tài Khoản Tinh Gọn & Nút Mở Sidebar (Không bị tràn màn hình) */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {/* Khi ĐÃ đăng nhập: Gộp Hồ Sơ vào chính thẻ Avatar + thêm nút Đăng Xuất nhanh 1-click */}
+          {/* Khi ĐÃ đăng nhập: Gộp Hồ Sơ vào chính thẻ Avatar */}
           {isAuthenticated && user && (
-            <div className="hidden sm:flex items-center gap-1.5">
-              <Link
-                href="/ho-so"
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl border transition-all duration-200 shadow-2xs ${
-                  isProfileActive
-                    ? "bg-white border-[#C28E58]/80 dark:bg-[#38322C] dark:border-[#C28E58]/60 ring-1 ring-[#C28E58]/20"
-                    : "bg-[#FAF5EE] dark:bg-[#27231F] border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58]"
-                }`}
-                title="Hồ sơ cá nhân & Lịch sử giao dịch"
-              >
-                <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-[#6B442C] to-[#C28E58] text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
-                  {user.fullName ? user.fullName.charAt(0).toUpperCase() : "U"}
-                </div>
-                <span className="text-xs font-bold text-[#24170E] dark:text-[#FFF5EA] max-w-[82px] truncate leading-tight">
-                  {user.fullName}
-                </span>
-                <span className="hidden 2xl:inline">{getRoleBadge(user.role)}</span>
-              </Link>
-
-              <button
-                type="button"
-                onClick={logout}
-                className="p-2 rounded-xl border border-stone-200 dark:border-[#474039] bg-stone-50/80 dark:bg-[#27231F] hover:bg-rose-50 dark:hover:bg-rose-950/40 text-stone-600 hover:text-rose-700 dark:text-[#DAC7B5] dark:hover:text-rose-400 transition cursor-pointer"
-                title="Đăng Xuất"
-                aria-label="Đăng Xuất"
-              >
-                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                  <polyline points="16 17 21 12 16 7" />
-                  <line x1="21" y1="12" x2="9" y2="12" />
-                </svg>
-              </button>
-            </div>
+            <Link
+              href="/ho-so"
+              className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-xl border transition-all duration-200 shadow-2xs ${
+                isProfileActive
+                  ? "bg-white border-[#C28E58]/80 dark:bg-[#38322C] dark:border-[#C28E58]/60 ring-1 ring-[#C28E58]/20"
+                  : "bg-[#FAF5EE] dark:bg-[#27231F] border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58]"
+              }`}
+              title="Hồ sơ cá nhân & Lịch sử giao dịch"
+            >
+              <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-[#6B442C] to-[#C28E58] text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
+                {user.fullName ? user.fullName.charAt(0).toUpperCase() : "U"}
+              </div>
+              <span className="text-xs font-bold text-[#24170E] dark:text-[#FFF5EA] max-w-[82px] truncate leading-tight">
+                {user.fullName}
+              </span>
+              <span className="hidden 2xl:inline">{getRoleBadge(user.role)}</span>
+            </Link>
           )}
 
           {/* NÚT KÍCH HOẠT RIGHT CONTROL HUB (Sidebar Bên Phải) */}
