@@ -205,7 +205,12 @@ export default function MyTraysPage() {
     if (s.includes("linh chi")) return "/images/real-farm/real-reishi-macro.jpg";
     if (s.includes("đông trùng") || s.includes("hạ thảo")) return "/images/real-farm/real-cordyceps-macro.jpg";
     if (s.includes("hầu thủ")) return "/images/real-farm/real-lionsmane-macro.jpg";
+    if (s.includes("hoàng kim") || (s.includes("bào ngư") && s.includes("vàng"))) return "/images/real-farm/real-golden-oyster-macro.jpg";
     if (s.includes("bào ngư")) return "/images/real-farm/real-oyster-macro.jpg";
+    if (s.includes("mối đen")) return "/images/real-farm/real-black-termitomyces-macro.jpg";
+    if (s.includes("hương") || s.includes("shiitake")) return "/images/real-farm/real-shiitake-macro.jpg";
+    if (s.includes("vân chi") || s.includes("turkey")) return "/images/real-farm/real-turkeytail-macro.jpg";
+    if (s.includes("cẩm thạch") || s.includes("shimeji")) return "/images/real-farm/real-white-shimeji-macro.jpg";
     return "/images/real-farm/real-cordyceps-macro.jpg";
   };
 

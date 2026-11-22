@@ -96,7 +96,7 @@ const MOCK_BATCHES: MarketBatch[] = [
     category: 'FRESH',
     certBadge: 'VietGAP Chuẩn Sạch',
     description: 'Màu vàng hoàng kim rực rỡ, vị ngọt thanh mát, giàu vitamin nhóm B và chất xơ hòa tan.',
-    imageUrl: '/images/real-farm/real-farm-racks-1.jpg',
+    imageUrl: '/images/real-farm/real-golden-oyster-macro.jpg',
   },
   {
     id: 'b-06',
@@ -111,7 +111,7 @@ const MOCK_BATCHES: MarketBatch[] = [
     category: 'FRESH',
     certBadge: 'ISO Class 5 • Thân Giòn Ngọt',
     description: 'Nấm Shimeji trắng muốt, thân nhỏ chắc nịch, dai giòn đậm vị, nấu lẩu hoặc xào tỏi cực ngon.',
-    imageUrl: '/images/real-farm/real-mushroom-shelves.jpg',
+    imageUrl: '/images/real-farm/real-white-shimeji-macro.jpg',
   },
 ];
 
