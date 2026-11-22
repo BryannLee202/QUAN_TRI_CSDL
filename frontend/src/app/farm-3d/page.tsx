@@ -205,8 +205,11 @@ export default function Farm3DPage() {
       <div>
         <Navbar />
 
-        {/* Phần 1: Trải nghiệm cuộn chuyển cảnh liên tục chuẩn THE SOLENNE (Reel 3) */}
+        {/* Phần 1: Trải nghiệm cuộn bóc tách từng phần 3D + Video Scroll-Scrubbing */}
         <SolenneScrollTour
+          rooms={rooms}
+          trays={trays}
+          ownedTrayCodes={ownedTrayCodes}
           onJumpToInteractive={() => {
             document
               .getElementById("interactive-farm-3d")
