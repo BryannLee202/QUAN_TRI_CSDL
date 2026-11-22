@@ -223,24 +223,24 @@ export default function Navbar() {
 
         {/* Right Section: Cụm Tài Khoản Tinh Gọn & Nút Mở Sidebar (Không bị tràn màn hình) */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {/* Khi ĐÃ đăng nhập: Gộp Hồ Sơ vào chính thẻ Avatar */}
+          {/* Khi ĐÃ đăng nhập: Thu gọn thành Avatar hình tròn sang trọng, tinh tế */}
           {isAuthenticated && user && (
             <Link
               href="/ho-so"
-              className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-xl border transition-all duration-200 shadow-2xs ${
+              className={`relative flex items-center justify-center w-9 h-9 rounded-full transition-all duration-200 hover:scale-105 active:scale-95 shadow-xs shrink-0 ${
                 isProfileActive
-                  ? "bg-white border-[#C28E58]/80 dark:bg-[#38322C] dark:border-[#C28E58]/60 ring-1 ring-[#C28E58]/20"
-                  : "bg-[#FAF5EE] dark:bg-[#27231F] border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58]"
+                  ? "ring-2 ring-[#C28E58] ring-offset-2 ring-offset-white dark:ring-offset-[#1E1B18]"
+                  : "hover:ring-2 hover:ring-[#C28E58]/60"
               }`}
-              title="Hồ sơ cá nhân & Lịch sử giao dịch"
+              title={`${user.fullName} (${user.role || "Thành viên"}) • Bấm vào để xem Hồ sơ & Ca trực`}
             >
-              <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-[#6B442C] to-[#C28E58] text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
+              {/* Vòng tròn Avatar Gradient Cà Phê Đồng */}
+              <div className="w-full h-full rounded-full bg-gradient-to-tr from-[#3B2213] via-[#6B442C] to-[#C28E58] text-white flex items-center justify-center font-extrabold text-sm shadow-inner border border-[#E2BA78]/70 select-none">
                 {user.fullName ? user.fullName.charAt(0).toUpperCase() : "U"}
               </div>
-              <span className="text-xs font-bold text-[#24170E] dark:text-[#FFF5EA] max-w-[82px] truncate leading-tight">
-                {user.fullName}
-              </span>
-              <span className="hidden 2xl:inline">{getRoleBadge(user.role)}</span>
+
+              {/* Chấm Đèn Xanh Trạng Thái Online */}
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-[#1E1B18] shadow-xs"></span>
             </Link>
           )}
 
