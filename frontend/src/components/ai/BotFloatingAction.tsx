@@ -32,13 +32,10 @@ export default function BotFloatingAction() {
           title={isOpen ? "Thu nhỏ (Esc)" : "Hỏi Cố Vấn Nông Nghiệp MushroomBot AI"}
           aria-label={isOpen ? "Thu nhỏ trợ lý AI" : "Mở trợ lý AI hình tròn"}
         >
-          {/* 1. Vòng Hào Quang Nhịp Thở Đa Sắc (Ambient Aura Pulse Ring) */}
-          <span className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-[#C28E58]/60 via-emerald-500/40 to-[#E2BA78]/60 blur-md opacity-70 group-hover:opacity-100 animate-pulse pointer-events-none transition duration-500"></span>
+          {/* 1. Vòng Hào Quang Tĩnh */}
+          <span className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-[#C28E58]/50 via-emerald-500/30 to-[#E2BA78]/50 blur-md opacity-60 group-hover:opacity-100 pointer-events-none transition duration-500"></span>
 
-          {/* 2. Hiệu ứng Sóng Lan Tỏa Vô Tận (Radar Ping Ripple) */}
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C28E58] opacity-20 pointer-events-none"></span>
-
-          {/* 3. Hiệu ứng Ánh Kim Chạy Chéo (Shimmer Sweep) */}
+          {/* 2. Hiệu ứng Ánh Kim Chạy Chéo (Shimmer Sweep) */}
           <span className="absolute inset-0 rounded-full overflow-hidden pointer-events-none">
             <span className="absolute -inset-full bg-gradient-to-r from-transparent via-white/25 to-transparent transform -skew-x-12 translate-x-[-150%] group-hover:translate-x-[250%] transition-transform duration-1000 ease-out"></span>
           </span>
@@ -69,9 +66,8 @@ export default function BotFloatingAction() {
             )}
           </div>
 
-          {/* 5. Chấm Xanh Trực Tuyến (Online Status Dot) ở góc trên bên phải hình tròn */}
+          {/* 4. Chấm Xanh Trực Tuyến (Online Status Dot) ở góc trên bên phải hình tròn */}
           <span className="absolute -top-0.5 -right-0.5 flex h-3.5 w-3.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-80"></span>
             <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border-2 border-[#24170E]"></span>
           </span>
         </button>
