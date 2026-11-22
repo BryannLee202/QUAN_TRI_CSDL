@@ -10,14 +10,13 @@ import {
   getOperatorTraysApi,
   getMyTraysApi,
 } from "@/services/api";
-import Farm3DScene from "@/components/farm3d/Farm3DScene";
-import SolenneScrollTour from "@/components/farm3d/SolenneScrollTour";
-import type {
+import Farm3DScene, {
   Farm3DRoom,
   Farm3DTray,
   CameraMode,
   LightingMode,
-} from "@/components/farm3d/Farm3DCanvas";
+} from "@/components/farm3d/Farm3DScene";
+import SolenneScrollTour from "@/components/farm3d/SolenneScrollTour";
 import CheckoutGatewayModal, {
   CheckoutItemConfig,
 } from "@/components/checkout/CheckoutGatewayModal";
@@ -117,6 +116,7 @@ export default function Farm3DPage() {
   const [activeHotspot, setActiveHotspot] = useState<number>(1);
   const [selectedPkgId, setSelectedPkgId] = useState<number>(1);
   const [checkoutItem, setCheckoutItem] = useState<CheckoutItemConfig | null>(null);
+  const [customVideoUrl, setCustomVideoUrl] = useState<string | null>(null);
 
   const loadFarmData = useCallback(async () => {
     try {
@@ -205,11 +205,9 @@ export default function Farm3DPage() {
       <div>
         <Navbar />
 
-        {/* Phần 1: Trải nghiệm cuộn bóc tách từng phần 3D + Video Scroll-Scrubbing */}
+        {/* Phần 1: Sân khấu cuộn chuột mượt chuẩn THE SOLENNE (Lenis + Canvas Frame Scrubbing) */}
         <SolenneScrollTour
-          rooms={rooms}
-          trays={trays}
-          ownedTrayCodes={ownedTrayCodes}
+          customVideoUrl={customVideoUrl}
           onJumpToInteractive={() => {
             document
               .getElementById("interactive-farm-3d")
@@ -294,6 +292,20 @@ export default function Farm3DPage() {
                   {l.label}
                 </button>
               ))}
+              <label className="px-2.5 py-1.5 rounded-xl text-[11px] font-bold border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#322D28] text-[#5E4A3A] dark:text-[#E2BA78] hover:border-[#C28E58] transition cursor-pointer">
+                Nạp Video MP4
+                <input
+                  type="file"
+                  accept="video/mp4,video/webm"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    setCustomVideoUrl(URL.createObjectURL(file));
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                />
+              </label>
             </div>
           </div>
 

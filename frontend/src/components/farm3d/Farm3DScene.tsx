@@ -2,12 +2,38 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import type {
-  Farm3DRoom,
-  Farm3DTray,
-  CameraMode,
-  LightingMode,
-} from "./Farm3DCanvas";
+
+export interface Farm3DRoom {
+  roomId: number;
+  roomCode: string;
+  roomName: string;
+  totalTrays?: number;
+  occupiedTrays?: number;
+  availableTrays?: number;
+  maintenanceTrays?: number;
+  tempMin?: number;
+  tempMax?: number;
+  humidityMin?: number;
+  humidityMax?: number;
+  co2Max?: number;
+}
+
+export interface Farm3DTray {
+  trayId: number;
+  trayCode: string;
+  roomId: number;
+  rackNumber: number;
+  shelfLevel: number;
+  positionNumber: number;
+  status: string;
+  speciesName?: string | null;
+  inoculationDate?: string | null;
+  expectedHarvestDate?: string | null;
+  customerName?: string | null;
+}
+
+export type CameraMode = "overview" | "top2d" | "room" | "tray" | "tour";
+export type LightingMode = "day" | "night" | "uvc";
 
 interface Farm3DSceneProps {
   rooms: Farm3DRoom[];
