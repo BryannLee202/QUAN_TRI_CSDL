@@ -148,22 +148,9 @@ export default function RoiCalculatorPage() {
 
         {/* Breadcrumb & Hero Header */}
         <div className="bg-gradient-to-b from-[#F5EEE4] via-[#FBF7F0] to-[#FDFBF8] dark:from-[#20140D] dark:via-[#19100A] dark:to-[#140D08] border-b border-[#EAE1D3] dark:border-[#474039] py-10 px-6">
-          <div className="max-w-7xl mx-auto space-y-4">
-            <div className="flex items-center gap-2 text-xs font-semibold text-[#8A5C38] dark:text-[#C28E58]">
-              <Link href="/" className="hover:underline flex items-center gap-1">
-                <span>← Trang Chủ</span>
-              </Link>
-              <span>/</span>
-              <span className="text-[#3B2212] dark:text-[#FFF5EA]">Công Cụ Tài Chính</span>
-              <span>/</span>
-              <span className="text-[#C28E58] font-bold">Máy Tính Lợi Nhuận FaaS</span>
-            </div>
-
+          <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950/80 border border-amber-300 text-amber-900 dark:text-amber-300 text-xs font-bold mb-2">
-                  <span>📊 MÔ HÌNH KINH TẾ NÔNG NGHIỆP TUẦN HOÀN</span>
-                </div>
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#24170E] dark:text-white tracking-tight">
                   Máy Tính Lợi Nhuận &amp; Sản Lượng FaaS
                 </h1>
