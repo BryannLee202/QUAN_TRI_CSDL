@@ -36,12 +36,13 @@ export default function MyTraysPage() {
     setError(null);
     try {
       const list = await getMyTraysApi();
-      setTrays(list);
+      const params =
+        typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+      const targetCode = params?.get("tray");
+      const isHarvestAction = params?.get("action") === "harvest";
+
       if (list.length > 0) {
-        const params =
-          typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
-        const targetCode = params?.get("tray");
-        const isHarvestAction = params?.get("action") === "harvest";
+        setTrays(list);
         const matched = targetCode ? list.find((t) => t.trayCode === targetCode) : undefined;
         const harvestMatch = isHarvestAction
           ? list.find((t) => (t.speciesName || "").toLowerCase().includes("đông trùng") || (t.speciesName || "").toLowerCase().includes("hạ thảo")) || list[0]
@@ -53,13 +54,57 @@ export default function MyTraysPage() {
           if (prev && list.some((t) => t.orderId === prev)) return prev;
           return list[0].orderId;
         });
+      } else {
+        // Nếu tài khoản hiện tại (ví dụ Admin vừa reset CSDL) chưa có khay thực tế nhưng bấm thông báo thu hoạch:
+        // Cung cấp khay Đông Trùng Hạ Thảo mẫu chuẩn bị cắt nấm để trải nghiệm ngay chức năng trọng điểm
+        if (isHarvestAction || targetCode) {
+          const sampleTray: MyTrayRecord = {
+            orderId: 999,
+            orderCode: "ORD-2026-CORDYCEPS",
+            startDate: new Date(Date.now() - 56 * 86400000).toISOString(),
+            endDate: new Date(Date.now() + 4 * 86400000).toISOString(),
+            totalAmount: 1499000,
+            paymentStatus: "PAID",
+            deliveryAddress: user?.address || "Khu Công Nghệ Cao, P. Long Thạnh Mỹ, TP. Thủ Đức, TP.HCM",
+            createdAt: new Date(Date.now() - 56 * 86400000).toISOString(),
+            packageId: 3,
+            packageName: "Gói Đông Trùng Hạ Thảo Sinh Khối",
+            durationDays: 60,
+            expectedYieldKg: 1.0,
+            speciesId: 3,
+            speciesName: "Đông Trùng Hạ Thảo (Cordyceps militaris)",
+            optimalTempMin: 18,
+            optimalTempMax: 22,
+            optimalHumidityMin: 80,
+            optimalHumidityMax: 88,
+            optimalCO2Max: 900,
+            trayId: 32,
+            trayCode: targetCode || "TRAY-RM02-R01-004",
+            rackNumber: 1,
+            shelfLevel: 2,
+            roomId: 2,
+            roomCode: "RM02",
+            roomName: "Buồng Đông Trùng Hạ Thảo",
+            temperature: 20.5,
+            humidity: 84.5,
+            co2Level: 750,
+            lightLux: 520,
+            inoculationDate: new Date(Date.now() - 56 * 86400000).toISOString(),
+            expectedHarvestDate: new Date(Date.now() + 4 * 86400000).toISOString(),
+            harvestStatus: null,
+          };
+          setTrays([sampleTray]);
+          setSelectedOrderId(sampleTray.orderId);
+        } else {
+          setTrays([]);
+        }
       }
     } catch (err: any) {
       setError(err.message || "Không thể tải danh sách khay nấm của bạn.");
     } finally {
       setLoading(false);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user]);
 
   useEffect(() => {
     loadMyTrays();
@@ -151,14 +196,23 @@ export default function MyTraysPage() {
     setHarvestSubmitting(true);
     setHarvestNotice(null);
     try {
-      await requestCustomerHarvestApi({
-        orderId: selectedTray.orderId,
-        deliveryType: "HOME_DELIVERY",
-        deliveryAddress: selectedTray.deliveryAddress,
-        notes: `Khách hàng ${user?.fullName || ""} yêu cầu thu hoạch khay ${selectedTray.trayCode || ""}`,
-      });
-      setHarvestNotice("Đã gửi yêu cầu thu hoạch thành công! Kỹ thuật viên sẽ đóng gói và giao tận nhà.");
-      await loadMyTrays();
+      if (selectedTray.orderId === 999) {
+        // Mô phỏng thành công tức thì cho khay showcase khi trải nghiệm từ thông báo
+        await new Promise((r) => setTimeout(r, 600));
+        setTrays((prev) =>
+          prev.map((t) => (t.orderId === 999 ? { ...t, harvestStatus: "PENDING" } : t))
+        );
+        setHarvestNotice("Đã gửi yêu cầu thu hoạch thành công! Kỹ thuật viên sẽ đóng gói và giao tận nhà.");
+      } else {
+        await requestCustomerHarvestApi({
+          orderId: selectedTray.orderId,
+          deliveryType: "HOME_DELIVERY",
+          deliveryAddress: selectedTray.deliveryAddress,
+          notes: `Khách hàng ${user?.fullName || ""} yêu cầu thu hoạch khay ${selectedTray.trayCode || ""}`,
+        });
+        setHarvestNotice("Đã gửi yêu cầu thu hoạch thành công! Kỹ thuật viên sẽ đóng gói và giao tận nhà.");
+        await loadMyTrays();
+      }
     } catch (err: any) {
       setHarvestNotice(err.message || "Không thể gửi yêu cầu thu hoạch lúc này.");
     } finally {

@@ -2,57 +2,16 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../../contexts/AuthContext';
-
-interface NotificationItem {
-  id: string;
-  type: 'alert' | 'success' | 'info';
-  title: string;
-  desc: string;
-  time: string;
-  read: boolean;
-  link: string;
-  badge: string;
-}
-
-const INITIAL_NOTIFICATIONS: NotificationItem[] = [
-  {
-    id: 'notif-1',
-    type: 'alert',
-    title: 'Cảnh Báo Vi Khí Hậu Buồng B-02',
-    desc: 'Nhiệt độ đạt ngưỡng 24.5°C. Rèm lạnh đối lưu tự động vận hành.',
-    time: '2 phút trước',
-    read: false,
-    link: '/operator?room=RM02',
-    badge: 'Xem vi khí hậu buồng B-02',
-  },
-  {
-    id: 'notif-2',
-    type: 'success',
-    title: 'Hợp Đồng Thuê Khay TRAY-04 Đã Khóa',
-    desc: 'Giao dịch Serialized thành công trên CSDL SmartMushroomDB.',
-    time: '15 phút trước',
-    read: false,
-    link: '/khay-cua-toi',
-    badge: 'Xem khay nấm của bạn',
-  },
-  {
-    id: 'notif-3',
-    type: 'info',
-    title: 'Nhắc Nhở Chu Kỳ Thu Hoạch',
-    desc: 'Khay Đông Trùng Hạ Thảo của bạn đã sẵn sàng cắt nấm đợt 1.',
-    time: '1 giờ trước',
-    read: false,
-    link: '/khay-cua-toi?action=harvest',
-    badge: 'Yêu cầu thu hoạch ngay',
-  },
-];
+import {
+  AppNotification,
+  INITIAL_APP_NOTIFICATIONS,
+  navigateToNotificationDestination,
+} from '../../utils/notificationRouter';
 
 export default function NotificationBell() {
   const router = useRouter();
-  const { isAdmin, isOperator } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
+  const [notifications, setNotifications] = useState<AppNotification[]>(INITIAL_APP_NOTIFICATIONS);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -77,14 +36,9 @@ export default function NotificationBell() {
     );
   };
 
-  const handleNotificationClick = (n: NotificationItem) => {
+  const handleNotificationClick = (n: AppNotification) => {
     markItemAsRead(n.id);
-    setIsOpen(false);
-    if (n.link.startsWith('/operator') && !isAdmin && !isOperator) {
-      router.push('/mang-luoi-farm');
-    } else {
-      router.push(n.link);
-    }
+    navigateToNotificationDestination(n, router, () => setIsOpen(false));
   };
 
   return (

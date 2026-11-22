@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import Link from "next/link";
 import AlertFeed from "@/components/operator/AlertFeed";
 import HardwareControls from "@/components/operator/HardwareControls";
@@ -51,6 +51,10 @@ export default function OperatorPage() {
 
   // State cho Modal Quản lý Người dùng & Phân quyền RBAC (Chức năng A3 - Dành cho Admin)
   const [isUserManagementOpen, setIsUserManagementOpen] = useState(false);
+
+  // Ref và hiệu ứng làm nổi bật Cảnh báo Vi khí hậu khi người dùng click từ thông báo
+  const alertFeedRef = useRef<HTMLDivElement>(null);
+  const [highlightAlert, setHighlightAlert] = useState(false);
 
   // 1. Tải dữ liệu ban đầu từ Backend SQL Server & tự động đồng bộ khi chuyển Tab hoặc có thay đổi từ Tab khác
   const fetchOperatorSnapshot = useCallback(async (isFirstLoad: boolean = false) => {
@@ -115,6 +119,34 @@ export default function OperatorPage() {
       window.removeEventListener("focus", handleFocus);
     };
   }, [fetchOperatorSnapshot]);
+
+  // Tự động chuyển buồng và cuộn làm nổi bật Cảnh báo Vi khí hậu khi click từ thông báo
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const sp = new URLSearchParams(window.location.search);
+      const roomParam = sp.get("room");
+      const alertParam = sp.get("alert");
+      if (roomParam && rooms.length > 0) {
+        const matched = rooms.find(
+          (r) => r.roomCode?.toUpperCase() === roomParam.toUpperCase() || String(r.roomId) === roomParam
+        );
+        if (matched) {
+          setRoomId(matched.roomId);
+        }
+      }
+      if (alertParam === "true" || roomParam) {
+        setHighlightAlert(true);
+        const timer = setTimeout(() => {
+          alertFeedRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 400);
+        const fadeTimer = setTimeout(() => setHighlightAlert(false), 6000);
+        return () => {
+          clearTimeout(timer);
+          clearTimeout(fadeTimer);
+        };
+      }
+    }
+  }, [rooms]);
 
   // 2. Lắng nghe sự kiện Socket.io thời gian thực
   const { connected } = useOperatorSocket({
@@ -507,7 +539,16 @@ export default function OperatorPage() {
               setTimeout(() => setActionNotice(null), 3500);
             }}
           />
-          <AlertFeed alerts={alerts} roomLabel={roomLabel} onResolve={resolveAlert} />
+          <div
+            ref={alertFeedRef}
+            className={`transition-all duration-500 rounded-2xl ${
+              highlightAlert
+                ? "ring-4 ring-rose-500/50 shadow-xl shadow-rose-500/15 scale-[1.01]"
+                : ""
+            }`}
+          >
+            <AlertFeed alerts={alerts} roomLabel={roomLabel} onResolve={resolveAlert} />
+          </div>
         </div>
       </div>
 
