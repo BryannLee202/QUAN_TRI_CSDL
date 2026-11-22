@@ -8,9 +8,9 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="bg-[#FAF7F2] dark:bg-[#1E1B18] text-[#523522] dark:text-[#DAC7B5] border-t border-[#EAE1D3] dark:border-[#474039] transition-colors">
-      {/* Khung Nội Dung Chính 4 Cột */}
+      {/* Khung Nội Dung Chính */}
       <div className="max-w-7xl mx-auto px-6 pt-16 pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
           {/* Cột 1 & 2: Nhận Diện Thương Hiệu & Giới Thiệu */}
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-3 group">
@@ -88,31 +88,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Cột 3: Công Nghệ & CSDL */}
-          <div className="space-y-3.5">
-            <h4 className="font-bold text-xs uppercase tracking-wider text-[#24170E] dark:text-[#FFF5EA]">
-              Công Nghệ & Kỹ Thuật
-            </h4>
-            <ul className="space-y-2 text-xs text-[#735843] dark:text-[#DAC7B5]">
-              <li>
-                <span className="font-mono text-[#523522] dark:text-[#E2BA78]">Microsoft SQL Server 2022</span>
-              </li>
-              <li>
-                <span>Khóa Dòng Giao Dịch ROWLOCK</span>
-              </li>
-              <li>
-                <span>Cảm Biến IoT & Mạng LoRaWAN</span>
-              </li>
-              <li>
-                <span>WebSocket Telemetry 5 Giây/Lần</span>
-              </li>
-              <li>
-                <span>Kiến Trúc Microservices REST API</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Cột 4: Hỗ Trợ Kỹ Thuật & Liên Hệ */}
+          {/* Cột 3: Hỗ Trợ Kỹ Thuật & Liên Hệ */}
           <div className="space-y-3.5">
             <h4 className="font-bold text-xs uppercase tracking-wider text-[#24170E] dark:text-[#FFF5EA]">
               Hỗ Trợ & Liên Hệ
