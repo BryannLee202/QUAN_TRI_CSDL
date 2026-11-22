@@ -333,44 +333,34 @@ export default function Farm3DPage() {
                         className={`w-full h-full object-cover transition-all duration-500 ${lightingFilter}`}
                       />
 
-                      {/* 5 Điểm Hotspot bóc tách từng bộ phận trên mô hình */}
-                      {BREAKDOWN_LAYERS.map((layer) => {
-                        const isActive = activeLayerId === layer.id;
-                        const room =
-                          typeof layer.roomIndex === "number"
-                            ? rooms[layer.roomIndex]
-                            : undefined;
-                        return (
-                          <button
-                            key={layer.id}
-                            type="button"
-                            onClick={() => handleSelectLayer(layer)}
-                            style={{ left: layer.left, top: layer.top }}
-                            className={`absolute -translate-x-1/2 -translate-y-1/2 z-20 px-2.5 py-1.5 rounded-2xl border backdrop-blur-md shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer flex items-center gap-2 ${
-                              isActive
-                                ? "bg-[#24170E]/95 text-white border-[#E2BA78] scale-105"
-                                : "bg-white/92 text-[#24170E] border-[#DECFC0] hover:border-[#C28E58]"
-                            }`}
-                          >
-                            <span
-                              className={`w-5 h-5 rounded-full font-mono text-[10px] font-black flex items-center justify-center shrink-0 ${
-                                isActive
-                                  ? "bg-[#E2BA78] text-[#1E1B18]"
-                                  : "bg-[#24170E] text-[#E2BA78]"
-                              }`}
+                      {/* 5 Điểm Hotspot bóc tách từng bộ phận trên mô hình (chỉ hiện ở Toàn cảnh để không bị phóng to hay cắt mép khi zoom) */}
+                      {!activeLayer &&
+                        BREAKDOWN_LAYERS.map((layer) => {
+                          const room =
+                            typeof layer.roomIndex === "number"
+                              ? rooms[layer.roomIndex]
+                              : undefined;
+                          return (
+                            <button
+                              key={layer.id}
+                              type="button"
+                              onClick={() => handleSelectLayer(layer)}
+                              style={{ left: layer.left, top: layer.top }}
+                              className="absolute -translate-x-1/2 -translate-y-1/2 z-20 px-2.5 py-1.5 rounded-2xl border backdrop-blur-md shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer flex items-center gap-2 bg-white/95 text-[#24170E] border-[#DECFC0] hover:border-[#C28E58]"
                             >
-                              {layer.code}
-                            </span>
-                            <span className="text-[11px] font-bold whitespace-nowrap">
-                              {room
-                                ? `${room.roomCode} (${room.occupiedTrays ?? 0}/${room.totalTrays ?? 0})`
-                                : layer.id === "airlock"
-                                ? "Airlock & Kính"
-                                : "IoT & LED"}
-                            </span>
-                          </button>
-                        );
-                      })}
+                              <span className="w-5 h-5 rounded-full font-mono text-[10px] font-black flex items-center justify-center shrink-0 bg-[#24170E] text-[#E2BA78]">
+                                {layer.code}
+                              </span>
+                              <span className="text-[11px] font-bold whitespace-nowrap">
+                                {room
+                                  ? `${room.roomCode} (${room.occupiedTrays ?? 0}/${room.totalTrays ?? 0})`
+                                  : layer.id === "airlock"
+                                  ? "Airlock & Kính"
+                                  : "IoT & LED"}
+                              </span>
+                            </button>
+                          );
+                        })}
                     </motion.div>
 
                     {/* Nút thu nhỏ về toàn cảnh khi đang zoom bóc tách */}
@@ -386,7 +376,7 @@ export default function Farm3DPage() {
 
                     {/* Thẻ kính mờ tóm tắt lớp đang bóc tách */}
                     {activeLayer && (
-                      <div className="absolute bottom-3 left-3 right-3 sm:right-auto sm:w-96 z-30 p-3.5 rounded-2xl bg-[#1A130E]/88 backdrop-blur-md border border-[#E2BA78]/50 text-white shadow-xl space-y-2">
+                      <div className="absolute bottom-3 left-3 right-3 sm:right-auto sm:w-96 z-30 p-4 rounded-2xl bg-[#24170E]/95 backdrop-blur-md border border-[#E2BA78]/60 text-white shadow-2xl space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="font-mono text-[10px] font-black text-[#E2BA78]">
                             BÓC TÁCH LỚP {activeLayer.code}
