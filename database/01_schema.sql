@@ -17,6 +17,8 @@ USE SmartMushroomDB;
 GO
 
 -- XÓA BẢNG CŨ THEO THỨ TỰ RÀNG BUỘC (NẾU CẦN TÁI TẠO)
+IF OBJECT_ID('AuditLogs', 'U') IS NOT NULL DROP TABLE AuditLogs;
+IF OBJECT_ID('PaymentTransactions', 'U') IS NOT NULL DROP TABLE PaymentTransactions;
 IF OBJECT_ID('DeviceActionLogs', 'U') IS NOT NULL DROP TABLE DeviceActionLogs;
 IF OBJECT_ID('HarvestRequests', 'U') IS NOT NULL DROP TABLE HarvestRequests;
 IF OBJECT_ID('GrowthLogs', 'U') IS NOT NULL DROP TABLE GrowthLogs;
