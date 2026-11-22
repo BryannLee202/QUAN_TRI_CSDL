@@ -282,19 +282,6 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                     <span>Tạo Tài Khoản</span>
                     <span className="text-[#E2BA78] dark:text-[#1E1B18] font-bold">→</span>
                   </Link>
-                  <Link
-                    href="/ho-so"
-                    onClick={onClose}
-                    className="col-span-2 py-2.5 px-3 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] hover:border-[#C28E58] text-[#4A3222] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#474039] font-bold text-xs text-center transition flex items-center justify-center gap-1.5"
-                  >
-                    <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                      <polyline points="14 2 14 8 20 8" />
-                      <line x1="16" y1="13" x2="8" y2="13" />
-                      <line x1="16" y1="17" x2="8" y2="17" />
-                    </svg>
-                    <span>Xem Hồ Sơ &amp; Lịch Sử Giao Dịch</span>
-                  </Link>
                 </div>
               </div>
             )}

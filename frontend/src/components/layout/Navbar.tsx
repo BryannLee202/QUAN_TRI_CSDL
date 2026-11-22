@@ -57,7 +57,6 @@ export default function Navbar() {
   const isNetworkActive = pathname?.startsWith("/mang-luoi-farm");
   const isOperatorActive = pathname?.startsWith("/operator");
   const isProfileActive = pathname?.startsWith("/ho-so") || pathname?.startsWith("/profile");
-  const isLoginActive = pathname?.startsWith("/login") || pathname?.startsWith("/dang-nhap");
 
   const getRoleBadge = (role: string = "") => {
     const r = role.toLowerCase();
@@ -206,44 +205,6 @@ export default function Navbar() {
 
         {/* Right Section: Cụm Tài Khoản Tinh Gọn & Nút Mở Sidebar (Không bị tràn màn hình) */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {/* Khi CHƯA đăng nhập: hiện nút Hồ Sơ & Đăng Nhập */}
-          {!isAuthenticated && (
-            <>
-              <Link
-                href="/ho-so"
-                className={`hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-bold transition-all duration-300 ease-out active:scale-95 whitespace-nowrap ${
-                  isProfileActive
-                    ? "bg-white text-[#5E3A22] border-[#C28E58]/80 dark:bg-[#38322C] dark:text-[#F0CFA0] dark:border-[#C28E58]/60 shadow-xs ring-1 ring-[#C28E58]/20"
-                    : "border-stone-200 dark:border-[#474039] bg-stone-50/70 dark:bg-[#27231F] hover:bg-white dark:hover:bg-[#3C3630] hover:-translate-y-0.5 text-[#5E4A3A] dark:text-[#E2BA78] shadow-2xs"
-                }`}
-                title="Hồ sơ cá nhân & Lịch sử giao dịch"
-              >
-                <svg
-                  className="w-3.5 h-3.5 text-[#C28E58]"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                  <circle cx="12" cy="7" r="4" />
-                </svg>
-                <span>Hồ Sơ</span>
-              </Link>
-
-              <Link
-                href="/login"
-                className={`hidden sm:inline-flex px-3 py-1.5 rounded-xl border text-xs font-bold transition-all duration-300 ease-out active:scale-95 whitespace-nowrap ${
-                  isLoginActive
-                    ? "bg-white text-[#5E3A22] border-[#C28E58]/80 dark:bg-[#38322C] dark:text-[#F0CFA0] dark:border-[#C28E58]/60 shadow-xs ring-1 ring-[#C28E58]/20"
-                    : "border-stone-200 dark:border-[#474039] bg-stone-50/70 dark:bg-[#27231F] hover:bg-white dark:hover:bg-[#3C3630] hover:-translate-y-0.5 text-[#5E4A3A] dark:text-[#E2BA78] shadow-2xs"
-                }`}
-              >
-                Đăng Nhập
-              </Link>
-            </>
-          )}
-
           {/* Khi ĐÃ đăng nhập: Gộp Hồ Sơ vào chính thẻ Avatar + thêm nút Đăng Xuất nhanh 1-click */}
           {isAuthenticated && user && (
             <div className="hidden sm:flex items-center gap-1.5">
