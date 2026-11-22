@@ -19,6 +19,7 @@ interface MarketBatch {
   category: 'FRESH' | 'DRIED';
   certBadge: string;
   description: string;
+  imageUrl: string;
 }
 
 const MOCK_BATCHES: MarketBatch[] = [
@@ -35,6 +36,7 @@ const MOCK_BATCHES: MarketBatch[] = [
     category: 'FRESH',
     certBadge: 'VietGAP Loại A • ISO Class 5',
     description: 'Nấm vừa hái trực tiếp từ khay #TR-02, cánh nấm dày, cuống mềm ngọt, hàm lượng dinh dưỡng đỉnh cao.',
+    imageUrl: '/images/real-farm/real-lionsmane-macro.jpg',
   },
   {
     id: 'b-02',
@@ -49,6 +51,7 @@ const MOCK_BATCHES: MarketBatch[] = [
     category: 'FRESH',
     certBadge: '100% Organic • Không Thuốc BVTV',
     description: 'Bào ngư xám bung dù chuẩn kích thước 6-8cm, dai giòn tự nhiên, bảo quản mát 4°C nguyên rễ.',
+    imageUrl: '/images/real-farm/real-oyster-macro.jpg',
   },
   {
     id: 'b-03',
@@ -63,6 +66,7 @@ const MOCK_BATCHES: MarketBatch[] = [
     category: 'DRIED',
     certBadge: 'Dược Điển VN • Cordycepin > 0.8%',
     description: 'Đông trùng hạ thảo sấy thăng hoa -45°C giữ nguyên 99% màu vàng cam óng và hoạt chất dược lý.',
+    imageUrl: '/images/hero-view-mushroom-macro.jpg',
   },
   {
     id: 'b-04',
@@ -77,6 +81,7 @@ const MOCK_BATCHES: MarketBatch[] = [
     category: 'DRIED',
     certBadge: 'Polysaccharide > 42% • VietGAP',
     description: 'Linh chi đỏ già tuổi viền vàng phấn dày, thái lát sẵn đóng túi zip tiện lợi nấu trà bồi bổ gan.',
+    imageUrl: '/images/real-farm/real-reishi-macro.jpg',
   },
   {
     id: 'b-05',
@@ -91,6 +96,7 @@ const MOCK_BATCHES: MarketBatch[] = [
     category: 'FRESH',
     certBadge: 'VietGAP Chuẩn Sạch',
     description: 'Màu vàng hoàng kim rực rỡ, vị ngọt thanh mát, giàu vitamin nhóm B và chất xơ hòa tan.',
+    imageUrl: '/images/real-farm/real-farm-racks-1.jpg',
   },
   {
     id: 'b-06',
@@ -105,6 +111,7 @@ const MOCK_BATCHES: MarketBatch[] = [
     category: 'FRESH',
     certBadge: 'ISO Class 5 • Thân Giòn Ngọt',
     description: 'Nấm Shimeji trắng muốt, thân nhỏ chắc nịch, dai giòn đậm vị, nấu lẩu hoặc xào tỏi cực ngon.',
+    imageUrl: '/images/real-farm/real-mushroom-shelves.jpg',
   },
 ];
 
@@ -278,68 +285,95 @@ export default function MarketplacePage() {
               return (
                 <div
                   key={batch.id}
-                  className="rounded-3xl border border-[#DECFC0] dark:border-[#474039] bg-white dark:bg-[#1E1B18] p-6 shadow-sm hover:shadow-md hover:border-[#C28E58] transition flex flex-col justify-between group"
+                  className="rounded-3xl border border-[#DECFC0] dark:border-[#474039] bg-white dark:bg-[#1E1B18] overflow-hidden shadow-sm hover:shadow-md hover:border-[#C28E58] transition-all duration-300 flex flex-col justify-between group"
                 >
-                  <div className="space-y-3.5">
-                    {/* Header Card */}
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md bg-[#FAF5EE] dark:bg-[#322D28] text-[#8A5C38] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#474039]">
-                        {batch.batchCode}
-                      </span>
-                      <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300">
-                        {batch.harvestTime}
-                      </span>
+                  <div>
+                    {/* Ảnh Sản Phẩm Trực Quan với Huy Hiệu Nổi */}
+                    <div className="relative w-full h-48 overflow-hidden bg-[#FAF5EE] dark:bg-[#27231F]">
+                      <img
+                        src={batch.imageUrl}
+                        alt={batch.speciesName}
+                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+                        loading="lazy"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = "/images/hero-view-mushroom-macro.jpg";
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+
+                      {/* Header Badge nổi trên ảnh */}
+                      <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
+                        <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md text-[#FFF5EA] border border-white/20 shadow-xs">
+                          {batch.batchCode}
+                        </span>
+                        <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/90 backdrop-blur-md text-white shadow-xs flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                          <span>{batch.harvestTime}</span>
+                        </span>
+                      </div>
+
+                      {/* Tag Phân Loại (Tươi hay Sấy) */}
+                      <div className="absolute bottom-3 left-3">
+                        <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-md bg-white/90 dark:bg-[#1E1B18]/90 text-[#3B2212] dark:text-[#E2BA78] backdrop-blur-md border border-white/30 dark:border-stone-700 shadow-2xs">
+                          {batch.category === 'FRESH' ? '🌿 Nấm Tươi Vừa Hái' : '☀️ Sấy Thăng Hoa Dược Liệu'}
+                        </span>
+                      </div>
                     </div>
 
-                    <div>
-                      <h3 className="font-bold text-base text-[#24170E] dark:text-[#FFF5EA] group-hover:text-[#C28E58] transition">
-                        {batch.speciesName}
-                      </h3>
-                      <p className="text-xs text-[#735843] dark:text-[#DAC7B5] mt-1 leading-relaxed line-clamp-2">
-                        {batch.description}
-                      </p>
-                    </div>
+                    {/* Nội dung chi tiết */}
+                    <div className="p-5 space-y-3.5">
+                      <div>
+                        <h3 className="font-extrabold text-base text-[#24170E] dark:text-[#FFF5EA] group-hover:text-[#C28E58] transition leading-snug">
+                          {batch.speciesName}
+                        </h3>
+                        <p className="text-xs text-[#735843] dark:text-[#DAC7B5] mt-1.5 leading-relaxed line-clamp-2">
+                          {batch.description}
+                        </p>
+                      </div>
 
-                    <div className="text-[11px] text-[#8A5C38] space-y-1 bg-[#FAF5EE] dark:bg-[#27231F] p-3 rounded-xl border border-[#EAE1D3] dark:border-[#474039]">
-                      <div className="flex items-center justify-between">
-                        <span>Chủ khay ký gửi:</span>
-                        <span className="font-bold text-[#3B2212] dark:text-white">{batch.ownerName}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>Vị trí buồng nuôi:</span>
-                        <span className="text-[#6E4B33] dark:text-[#DAC7B5] truncate max-w-[170px]">{batch.roomName}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span>Chứng nhận:</span>
-                        <span className="font-semibold text-emerald-600 dark:text-emerald-400">{batch.certBadge}</span>
+                      <div className="text-[11px] text-[#8A5C38] space-y-1.5 bg-[#FAF5EE] dark:bg-[#27231F] p-3.5 rounded-2xl border border-[#EAE1D3] dark:border-[#474039]">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[#8C6D53]">Chủ khay ký gửi:</span>
+                          <span className="font-bold text-[#3B2212] dark:text-white">{batch.ownerName}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[#8C6D53]">Vị trí buồng nuôi:</span>
+                          <span className="text-[#6E4B33] dark:text-[#DAC7B5] truncate max-w-[170px]">{batch.roomName}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[#8C6D53]">Chứng nhận:</span>
+                          <span className="font-semibold text-emerald-600 dark:text-emerald-400">{batch.certBadge}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Giá & Action */}
-                  <div className="mt-6 pt-4 border-t border-[#EAE1D3] dark:border-[#474039] flex items-end justify-between">
-                    <div>
-                      <span className="text-[10px] text-[#8C6D53] line-through block">
-                        Giá TT: {formatVnd(batch.marketPrice)}/kg
-                      </span>
-                      <div className="flex items-baseline gap-1.5">
-                        <span className="text-lg font-black text-[#24170E] dark:text-[#FFF5EA]">
-                          {formatVnd(batch.pricePerKg)}
+                  {/* Giá & Nút Mua */}
+                  <div className="p-5 pt-0">
+                    <div className="pt-4 border-t border-[#EAE1D3] dark:border-[#474039] flex items-end justify-between">
+                      <div>
+                        <span className="text-[10px] text-[#8C6D53] line-through block">
+                          Giá TT: {formatVnd(batch.marketPrice)}/kg
                         </span>
-                        <span className="text-xs text-[#8A5C38]">/kg</span>
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="text-lg font-black text-[#24170E] dark:text-[#FFF5EA]">
+                            {formatVnd(batch.pricePerKg)}
+                          </span>
+                          <span className="text-xs text-[#8A5C38]">/kg</span>
+                        </div>
+                        <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                          Tiết kiệm {savePercent}%
+                        </span>
                       </div>
-                      <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
-                        Tiết kiệm {savePercent}%
-                      </span>
-                    </div>
 
-                    <button
-                      type="button"
-                      onClick={() => handleBuy(batch)}
-                      className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#523522] to-[#361F12] dark:from-[#C28E58] dark:to-[#9E6845] text-white dark:text-[#170E08] font-bold text-xs shadow-sm hover:shadow transition"
-                    >
-                      Mua Lô Này →
-                    </button>
+                      <button
+                        type="button"
+                        onClick={() => handleBuy(batch)}
+                        className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#523522] to-[#361F12] dark:from-[#C28E58] dark:to-[#9E6845] text-white dark:text-[#170E08] font-bold text-xs shadow-sm hover:shadow-md hover:scale-102 active:scale-98 transition-all"
+                      >
+                        Mua Lô Này →
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
