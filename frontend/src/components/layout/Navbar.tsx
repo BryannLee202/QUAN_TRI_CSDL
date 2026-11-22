@@ -138,9 +138,6 @@ export default function Navbar() {
             onClick={() => setIsPackagesActive(false)}
             className={navLinkClass(isPortalActive)}
           >
-            {isPortalActive && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] dark:bg-[#E2BA78] animate-pulse shrink-0" />
-            )}
             <span>{t.nav.customerPortal}</span>
             {isPortalActive && (
               <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
@@ -153,9 +150,6 @@ export default function Navbar() {
             }}
             className={navLinkClass(isPackagesActive)}
           >
-            {isPackagesActive && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] dark:bg-[#E2BA78] animate-pulse shrink-0" />
-            )}
             <span>Gói Thuê Nấm</span>
             {isPackagesActive && (
               <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
@@ -165,9 +159,6 @@ export default function Navbar() {
             href="/tinh-loi-nhuan"
             className={navLinkClass(isRoiActive)}
           >
-            {isRoiActive && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] dark:bg-[#E2BA78] animate-pulse shrink-0" />
-            )}
             <span>Máy Tính Lợi Nhuận</span>
             <span
               className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md border transition-colors ${
@@ -186,9 +177,6 @@ export default function Navbar() {
             href="/san-nong-san"
             className={navLinkClass(isMarketActive)}
           >
-            {isMarketActive && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] dark:bg-[#E2BA78] animate-pulse shrink-0" />
-            )}
             <span>Sàn Nông Sản FaaS</span>
             {isMarketActive && (
               <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
@@ -198,9 +186,6 @@ export default function Navbar() {
             href="/mang-luoi-farm"
             className={navLinkClass(isNetworkActive)}
           >
-            {isNetworkActive && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] dark:bg-[#E2BA78] animate-pulse shrink-0" />
-            )}
             <span>Mạng Lưới Farm</span>
             {isNetworkActive && (
               <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
@@ -211,9 +196,6 @@ export default function Navbar() {
               href="/operator"
               className={navLinkClass(isOperatorActive)}
             >
-              {isOperatorActive && (
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-              )}
               <span>{t.nav.operatorCenter}</span>
               {isOperatorActive && (
                 <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-emerald-500/40 via-emerald-500 to-emerald-500/40" />
