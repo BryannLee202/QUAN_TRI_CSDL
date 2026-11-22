@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useAuth } from "@/contexts/AuthContext";
@@ -39,10 +40,92 @@ interface FarmTray {
   speciesName?: string | null;
 }
 
-const ROOM_PIN_POSITIONS = [
-  { left: "26%", top: "28%" },
-  { left: "48%", top: "34%" },
-  { left: "73%", top: "41%" },
+interface BreakdownLayer {
+  id: string;
+  code: string;
+  title: string;
+  subtitle: string;
+  left: string;
+  top: string;
+  origin: string;
+  roomIndex?: number;
+  specs: Array<{ label: string; value: string }>;
+}
+
+const BREAKDOWN_LAYERS: BreakdownLayer[] = [
+  {
+    id: "rm01",
+    code: "01",
+    title: "Buồng RM01 • Bào Ngư Xám",
+    subtitle: "Hệ giàn kệ thép 5 tầng chuẩn phòng sạch",
+    left: "26%",
+    top: "33%",
+    origin: "26% 38%",
+    roomIndex: 0,
+    specs: [
+      { label: "Nhiệt độ chuẩn", value: "22–25 °C" },
+      { label: "Độ ẩm tối ưu", value: "85–92 % RH" },
+      { label: "Chu kỳ thu hoạch", value: "30 Ngày" },
+    ],
+  },
+  {
+    id: "rm02",
+    code: "02",
+    title: "Buồng RM02 • Nấm Hầu Thủ",
+    subtitle: "Phân khu dược liệu kiểm soát CO₂ chặt chẽ",
+    left: "48%",
+    top: "37%",
+    origin: "49% 42%",
+    roomIndex: 1,
+    specs: [
+      { label: "Nhiệt độ chuẩn", value: "20–24 °C" },
+      { label: "Độ ẩm tối ưu", value: "88–95 % RH" },
+      { label: "Giới hạn CO₂", value: "< 800 ppm" },
+    ],
+  },
+  {
+    id: "rm03",
+    code: "03",
+    title: "Buồng RM03 • Linh Chi Đỏ",
+    subtitle: "Phân khu thảo dược cao cấp 90 ngày",
+    left: "72%",
+    top: "43%",
+    origin: "72% 48%",
+    roomIndex: 2,
+    specs: [
+      { label: "Nhiệt độ chuẩn", value: "24–28 °C" },
+      { label: "Độ ẩm tối ưu", value: "85–90 % RH" },
+      { label: "Chu kỳ thu hoạch", value: "90 Ngày" },
+    ],
+  },
+  {
+    id: "airlock",
+    code: "04",
+    title: "Sảnh Kính Airlock & Vỏ Cleanroom",
+    subtitle: "Vách kính cường lực 2 lớp & cửa khóa áp suất dương",
+    left: "37%",
+    top: "68%",
+    origin: "38% 66%",
+    specs: [
+      { label: "Cấp độ sạch", value: "ISO Class 5" },
+      { label: "Lọc khí HEPA", value: "99.97% H13" },
+      { label: "Chênh áp buồng", value: "+15 Pa" },
+    ],
+  },
+  {
+    id: "iot",
+    code: "05",
+    title: "Hệ Thống Đèn LED & Cảm Biến IoT",
+    subtitle: "Đèn quang phổ 5000K + Phun sương siêu âm + LoRaWAN",
+    left: "60%",
+    top: "23%",
+    origin: "58% 26%",
+    specs: [
+      { label: "Tần suất đo", value: "5 giây / lần" },
+      { label: "Quang phổ LED", value: "5000K / UV-C" },
+      { label: "Phun sương", value: "Hạt nano 5µm" },
+    ],
+  },
 ];
 
 const RENTAL_PACKAGES = [
@@ -58,6 +141,8 @@ export default function Farm3DPage() {
   const [ownedTrayCodes, setOwnedTrayCodes] = useState<Set<string>>(new Set());
 
   const [viewMode, setViewMode] = useState<"3d" | "2d">("3d");
+  const [activeLayerId, setActiveLayerId] = useState<string | null>(null);
+  const [lightingMode, setLightingMode] = useState<"day" | "night" | "uvc">("day");
   const [selectedRoomId, setSelectedRoomId] = useState<number>(1);
   const [selectedTray, setSelectedTray] = useState<FarmTray | null>(null);
   const [selectedPkgId, setSelectedPkgId] = useState<number>(1);
@@ -117,6 +202,11 @@ export default function Farm3DPage() {
     loadFarmData();
   }, [loadFarmData]);
 
+  const activeLayer = useMemo(
+    () => BREAKDOWN_LAYERS.find((l) => l.id === activeLayerId) || null,
+    [activeLayerId]
+  );
+
   const selectedRoom = useMemo(
     () => rooms.find((r) => r.roomId === selectedRoomId) || rooms[0] || null,
     [rooms, selectedRoomId]
@@ -139,24 +229,62 @@ export default function Farm3DPage() {
     selectedTray && ownedTrayCodes.has(selectedTray.trayCode)
   );
 
+  const handleSelectLayer = (layer: BreakdownLayer) => {
+    if (activeLayerId === layer.id) {
+      setActiveLayerId(null);
+      return;
+    }
+    setActiveLayerId(layer.id);
+    if (typeof layer.roomIndex === "number" && rooms[layer.roomIndex]) {
+      setSelectedRoomId(rooms[layer.roomIndex].roomId);
+      setSelectedTray(null);
+    }
+  };
+
+  const lightingFilter =
+    lightingMode === "uvc"
+      ? "hue-rotate-[215deg] saturate-150 brightness-90"
+      : lightingMode === "night"
+      ? "brightness-75 contrast-110 sepia-[0.2]"
+      : "brightness-100";
+
   return (
     <main className="min-h-screen bg-[#FDFBF8] dark:bg-[#140D08] text-[#24170E] dark:text-[#F7EFE6] flex flex-col justify-between font-sans transition-colors">
       <div>
         <Navbar />
 
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-5">
-          {/* Thanh tiêu đề gọn gàng */}
-          <div className="flex flex-wrap items-center justify-between gap-4">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-7 space-y-4">
+          {/* Thanh tiêu đề & bộ điều khiển */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#24170E] dark:text-white">
                 Mô Hình Trang Trại Nấm 3D
               </h1>
               <p className="text-xs sm:text-sm text-[#735843] dark:text-[#BFA895] mt-1">
-                Quan sát mô hình cắt lớp 3 buồng nuôi vô trùng và chọn khay trực tiếp trên hệ thống.
+                Bấm vào từng điểm bóc tách <strong className="text-[#C28E58]">01 → 05</strong> trên mô hình để phóng to chi tiết từng phân khu và thuê khay trực tiếp.
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              {viewMode === "3d" && (
+                <div className="flex items-center gap-1 p-1 rounded-xl bg-[#FAF5EE] dark:bg-[#27231F] border border-[#DECFC0] dark:border-[#474039]">
+                  {(["day", "night", "uvc"] as const).map((lm) => (
+                    <button
+                      key={lm}
+                      type="button"
+                      onClick={() => setLightingMode(lm)}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${
+                        lightingMode === lm
+                          ? "bg-[#24170E] text-[#E2BA78]"
+                          : "text-[#5E4A3A] dark:text-[#DAC7B5]"
+                      }`}
+                    >
+                      {lm === "day" ? "Ngày 5000K" : lm === "night" ? "Đêm Ấm" : "UV-C"}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               <button
                 type="button"
                 onClick={() => setViewMode("3d")}
@@ -182,49 +310,140 @@ export default function Farm3DPage() {
             </div>
           </div>
 
-          {/* Khung chính: Mô hình đơn sắc nét (8 cột) + Thông tin buồng/khay (4 cột) */}
+          {/* Khung chính: Mô hình đơn sắc nét có hiệu ứng zoom bóc tách (8 cột) + Panel thông tin (4 cột) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-            <div className="lg:col-span-8">
+            <div className="lg:col-span-8 space-y-3">
               {viewMode === "3d" ? (
-                <div className="relative w-full h-[480px] sm:h-[580px] rounded-3xl overflow-hidden border border-[#DECFC0] dark:border-[#474039] shadow-xl bg-[#F3EDE3] dark:bg-[#1E1B18]">
-                  <img
-                    src="/images/farm3d/overview-cutaway.jpg"
-                    alt="Mô hình trang trại nấm MushroomCloud 3D"
-                    className="w-full h-full object-cover"
-                  />
+                <>
+                  <div className="relative w-full h-[460px] sm:h-[540px] rounded-3xl overflow-hidden border border-[#DECFC0] dark:border-[#474039] shadow-xl bg-[#F3EDE3] dark:bg-[#1E1B18]">
+                    {/* Mô hình 3D sắc nét với hiệu ứng Zoom mượt khóa đúng tâm bộ phận bóc tách */}
+                    <motion.div
+                      animate={{
+                        scale: activeLayer ? 1.52 : 1,
+                      }}
+                      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                      style={{
+                        transformOrigin: activeLayer ? activeLayer.origin : "50% 50%",
+                      }}
+                      className="w-full h-full relative"
+                    >
+                      <img
+                        src="/images/farm3d/overview-cutaway.jpg"
+                        alt="Mô hình trang trại nấm MushroomCloud 3D"
+                        className={`w-full h-full object-cover transition-all duration-500 ${lightingFilter}`}
+                      />
 
-                  {/* 3 Nhãn buồng nuôi sắc nét trên mô hình */}
-                  {rooms.slice(0, 3).map((room, idx) => {
-                    const pos = ROOM_PIN_POSITIONS[idx] || ROOM_PIN_POSITIONS[0];
-                    const isSelected = selectedRoomId === room.roomId;
-                    return (
+                      {/* 5 Điểm Hotspot bóc tách từng bộ phận trên mô hình */}
+                      {BREAKDOWN_LAYERS.map((layer) => {
+                        const isActive = activeLayerId === layer.id;
+                        const room =
+                          typeof layer.roomIndex === "number"
+                            ? rooms[layer.roomIndex]
+                            : undefined;
+                        return (
+                          <button
+                            key={layer.id}
+                            type="button"
+                            onClick={() => handleSelectLayer(layer)}
+                            style={{ left: layer.left, top: layer.top }}
+                            className={`absolute -translate-x-1/2 -translate-y-1/2 z-20 px-2.5 py-1.5 rounded-2xl border backdrop-blur-md shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer flex items-center gap-2 ${
+                              isActive
+                                ? "bg-[#24170E]/95 text-white border-[#E2BA78] scale-105"
+                                : "bg-white/92 text-[#24170E] border-[#DECFC0] hover:border-[#C28E58]"
+                            }`}
+                          >
+                            <span
+                              className={`w-5 h-5 rounded-full font-mono text-[10px] font-black flex items-center justify-center shrink-0 ${
+                                isActive
+                                  ? "bg-[#E2BA78] text-[#1E1B18]"
+                                  : "bg-[#24170E] text-[#E2BA78]"
+                              }`}
+                            >
+                              {layer.code}
+                            </span>
+                            <span className="text-[11px] font-bold whitespace-nowrap">
+                              {room
+                                ? `${room.roomCode} (${room.occupiedTrays ?? 0}/${room.totalTrays ?? 0})`
+                                : layer.id === "airlock"
+                                ? "Airlock & Kính"
+                                : "IoT & LED"}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </motion.div>
+
+                    {/* Nút thu nhỏ về toàn cảnh khi đang zoom bóc tách */}
+                    {activeLayer && (
                       <button
-                        key={room.roomId}
                         type="button"
-                        onClick={() => {
-                          setSelectedRoomId(room.roomId);
-                          setSelectedTray(null);
-                        }}
-                        style={{ left: pos.left, top: pos.top }}
-                        className={`absolute -translate-x-1/2 -translate-y-1/2 px-3.5 py-2 rounded-2xl border backdrop-blur-md shadow-lg transition-all hover:scale-105 cursor-pointer flex items-center gap-2 ${
-                          isSelected
-                            ? "bg-[#24170E]/95 text-white border-[#E2BA78] scale-105"
-                            : "bg-white/92 text-[#24170E] border-[#DECFC0] hover:border-[#C28E58]"
-                        }`}
+                        onClick={() => setActiveLayerId(null)}
+                        className="absolute top-3 left-3 z-30 px-3.5 py-1.5 rounded-full bg-[#24170E]/90 hover:bg-[#24170E] text-white border border-[#E2BA78]/60 text-xs font-bold shadow-lg transition cursor-pointer"
                       >
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
-                        <div className="text-left leading-tight">
-                          <span className="text-xs font-black block">{room.roomCode}</span>
-                          <span className="text-[10px] opacity-75 whitespace-nowrap">
-                            {room.occupiedTrays ?? 0}/{room.totalTrays ?? 0} khay
+                        ← Thu nhỏ toàn cảnh
+                      </button>
+                    )}
+
+                    {/* Thẻ kính mờ tóm tắt lớp đang bóc tách */}
+                    {activeLayer && (
+                      <div className="absolute bottom-3 left-3 right-3 sm:right-auto sm:w-96 z-30 p-3.5 rounded-2xl bg-[#1A130E]/88 backdrop-blur-md border border-[#E2BA78]/50 text-white shadow-xl space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-mono text-[10px] font-black text-[#E2BA78]">
+                            BÓC TÁCH LỚP {activeLayer.code}
+                          </span>
+                          <span className="text-[10px] text-emerald-300 font-bold">
+                            Đang hoạt động
                           </span>
                         </div>
-                      </button>
-                    );
-                  })}
-                </div>
+                        <p className="text-sm font-black">{activeLayer.title}</p>
+                        <p className="text-[11px] text-stone-300">{activeLayer.subtitle}</p>
+                        <div className="grid grid-cols-3 gap-1.5 pt-1">
+                          {activeLayer.specs.map((sp) => (
+                            <div
+                              key={sp.label}
+                              className="p-1.5 rounded-lg bg-white/10 text-center"
+                            >
+                              <span className="text-[9px] text-stone-300 block">
+                                {sp.label}
+                              </span>
+                              <strong className="text-[10px] font-bold text-[#E2BA78]">
+                                {sp.value}
+                              </strong>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Thanh chọn nhanh 5 lớp bóc tách ngay dưới mô hình */}
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                    {BREAKDOWN_LAYERS.map((layer) => {
+                      const isActive = activeLayerId === layer.id;
+                      return (
+                        <button
+                          key={layer.id}
+                          type="button"
+                          onClick={() => handleSelectLayer(layer)}
+                          className={`p-2.5 rounded-2xl border text-left transition cursor-pointer ${
+                            isActive
+                              ? "bg-[#24170E] text-white border-[#C28E58] shadow-md"
+                              : "bg-white dark:bg-[#27231F] text-[#24170E] dark:text-[#F7EFE6] border-[#EAE1D3] dark:border-[#474039] hover:border-[#C28E58]"
+                          }`}
+                        >
+                          <span className="font-mono text-[10px] font-black text-[#C28E58] block">
+                            {layer.code}
+                          </span>
+                          <span className="text-[11px] font-bold block truncate mt-0.5">
+                            {layer.title.split("•")[0].trim()}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
               ) : (
-                <div className="w-full min-h-[480px] sm:min-h-[580px] rounded-3xl bg-white dark:bg-[#27231F] border border-[#DECFC0] dark:border-[#474039] p-5 shadow-xl space-y-4">
+                <div className="w-full min-h-[540px] rounded-3xl bg-white dark:bg-[#27231F] border border-[#DECFC0] dark:border-[#474039] p-5 shadow-xl space-y-4">
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#F2E8DC] dark:border-[#474039] pb-3">
                     <div className="flex items-center gap-2">
                       {rooms.map((r) => (
@@ -339,7 +558,6 @@ export default function Farm3DPage() {
                   </div>
                 </div>
 
-                {/* Chi tiết khay nếu đã chọn */}
                 {selectedTray ? (
                   <div className="p-4 rounded-2xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] space-y-3">
                     <div className="flex items-center justify-between">
