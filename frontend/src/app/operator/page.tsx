@@ -157,7 +157,7 @@ export default function OperatorPage() {
   }, [rooms]);
 
   // 2. Lắng nghe sự kiện Socket.io thời gian thực
-  const { connected } = useOperatorSocket({
+  useOperatorSocket({
     onAlert: (a) =>
       setAlerts((prev) => (prev.some((x) => x.alertId === a.alertId) ? prev : [a, ...prev].slice(0, 50))),
     onDevice: (d) =>
@@ -505,17 +505,6 @@ export default function OperatorPage() {
             </svg>
             <span>Sổ Tay Kỹ Thuật SOP</span>
           </button>
-
-          <span
-            className={`rounded-xl px-3 py-2 text-xs font-semibold shrink-0 whitespace-nowrap shadow-2xs flex items-center gap-2 tabular-nums ${
-              connected
-                ? "bg-[#FAF5EE] text-[#523522] dark:bg-[#322D28] dark:text-[#E2BA78] border border-[#C28E58]"
-                : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-300"
-            }`}
-          >
-            <span className={`w-2 h-2 rounded-full ${connected ? "bg-emerald-500 animate-pulse" : "bg-slate-400"}`}></span>
-            <span>{connected ? "Socket CSDL: 5000" : "Đang kết nối..."}</span>
-          </span>
 
           <ThemeToggle />
         </div>
