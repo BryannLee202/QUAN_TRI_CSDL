@@ -30,12 +30,13 @@ interface Handlers {
   onHarvestRequested?: (h: HarvestRequestedEvent) => void;
 }
 
-export function useOperatorSocket(handlers: Handlers) {
+export function useOperatorSocket(handlers: Handlers, enabled: boolean = true) {
   const [connected, setConnected] = useState(false);
   const latest = useRef(handlers);
   latest.current = handlers;
 
   useEffect(() => {
+    if (!enabled) return;
     const socket = io(SOCKET_URL, { transports: ["websocket", "polling"] });
     
     socket.on("connect", () => {
@@ -52,7 +53,7 @@ export function useOperatorSocket(handlers: Handlers) {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [enabled]);
 
   return { connected };
 }

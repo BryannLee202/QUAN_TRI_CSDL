@@ -66,8 +66,8 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <Link href="/operator" className="hover:text-[#C28E58] transition-colors">
-                  Trung Tâm Điều Hành (Operator)
+                <Link href="/khay-cua-toi" className="hover:text-[#C28E58] transition-colors">
+                  Khay Nấm Của Tôi
                 </Link>
               </li>
               <li>

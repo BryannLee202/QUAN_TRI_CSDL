@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import Link from "next/link";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import AlertFeed from "@/components/operator/AlertFeed";
 import HardwareControls from "@/components/operator/HardwareControls";
 import RoomTabs from "@/components/operator/RoomTabs";
@@ -29,6 +31,8 @@ import {
 
 export default function OperatorPage() {
   const { user, isAdmin, isOperator, isAuthenticated, openAuthModal } = useAuth();
+  const isStaff = Boolean(isAdmin || isOperator);
+
   const [rooms, setRooms] = useState<RoomOption[]>(MOCK_ROOMS);
   const [roomId, setRoomId] = useState<number>(MOCK_ROOMS[0].roomId);
   const [alerts, setAlerts] = useState<AlertItem[]>(MOCK_ALERTS);
@@ -58,6 +62,10 @@ export default function OperatorPage() {
 
   // 1. Tải dữ liệu ban đầu từ Backend SQL Server & tự động đồng bộ khi chuyển Tab hoặc có thay đổi từ Tab khác
   const fetchOperatorSnapshot = useCallback(async (isFirstLoad: boolean = false) => {
+    // Cấm tuyệt đối: Không tải bất kỳ dữ liệu buồng/khay/cảnh báo nội bộ nếu không phải Quản trị viên hoặc Kỹ thuật viên
+    if (!isAuthenticated || !isStaff) {
+      return;
+    }
     try {
       const [roomsRes, traysRes, alertsRes] = await Promise.allSettled([
         getOperatorRoomsApi(),
@@ -191,7 +199,7 @@ export default function OperatorPage() {
       };
       setAlerts((prev) => [newAlert, ...prev].slice(0, 50));
     },
-  });
+  }, isStaff);
 
   const alertRoomIds = useMemo(
     () => new Set(alerts.filter((a) => !a.isResolved).map((a) => a.roomId)),
@@ -346,6 +354,84 @@ export default function OperatorPage() {
       setIsCreatingTrays(false);
     }
   };
+
+  // ==========================================================================
+  // KHÓA BẢO MẬT & PHÂN QUYỀN RBAC NGHIÊM NGẶT
+  // Cấm tuyệt đối: Tài khoản Khách hàng hoặc chưa đăng nhập không được vào khu vực quản trị
+  // ==========================================================================
+  if (!isAuthenticated) {
+    return (
+      <main className="min-h-screen bg-[#FDFBF8] dark:bg-[#150E0A] flex flex-col justify-between font-sans">
+        <Navbar />
+        <div className="max-w-xl mx-auto my-auto p-8 sm:p-10 text-center space-y-5 rounded-3xl bg-white dark:bg-[#27231F] border border-rose-200 dark:border-rose-900 shadow-2xl">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-rose-100 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-800 text-rose-600 flex items-center justify-center text-3xl shadow-inner">
+            🔒
+          </div>
+          <span className="px-3.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-300 dark:border-rose-800">
+            Yêu Cầu Quyền Quản Trị
+          </span>
+          <h1 className="text-2xl font-black text-[#24170E] dark:text-white">
+            Khu Vực Quản Trị &amp; Điều Hành Nội Bộ
+          </h1>
+          <p className="text-sm text-[#735843] dark:text-[#DAC7B5] leading-relaxed">
+            Bạn cần đăng nhập tài khoản <strong>Quản trị viên (Admin)</strong> hoặc <strong>Kỹ thuật viên (Operator)</strong> để truy cập trung tâm điều hành thiết bị và buồng nuôi.
+          </p>
+          <div className="pt-2 flex items-center justify-center gap-3">
+            <Link
+              href="/login"
+              className="px-6 py-2.5 rounded-xl bg-[#24170E] hover:bg-[#382417] text-white text-xs font-bold transition shadow-sm"
+            >
+              Đăng Nhập Quản Trị →
+            </Link>
+            <Link
+              href="/"
+              className="px-5 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] text-[#5C402B] dark:text-[#DAC7B5] text-xs font-bold hover:bg-[#FAF5EE] transition"
+            >
+              Quay Về Trang Chủ
+            </Link>
+          </div>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
+
+  if (!isAdmin && !isOperator) {
+    return (
+      <main className="min-h-screen bg-[#FDFBF8] dark:bg-[#150E0A] flex flex-col justify-between font-sans">
+        <Navbar />
+        <div className="max-w-xl mx-auto my-auto p-8 sm:p-10 text-center space-y-5 rounded-3xl bg-white dark:bg-[#27231F] border border-rose-300 dark:border-rose-900 shadow-2xl">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-rose-100 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-800 text-rose-600 flex items-center justify-center text-3xl shadow-inner">
+            ⛔
+          </div>
+          <span className="px-3.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-300 dark:border-rose-800">
+            403 • Cấm Tuyệt Đối Truy Cập
+          </span>
+          <h1 className="text-2xl font-black text-[#24170E] dark:text-white">
+            Từ Chối Quyền Vào Trung Tâm Quản Trị
+          </h1>
+          <p className="text-sm text-[#735843] dark:text-[#DAC7B5] leading-relaxed">
+            Tài khoản của bạn mang vai trò <strong>Khách Hàng (Customer)</strong>. Hệ thống nghiêm cấm khách hàng can thiệp vào trang điều hành buồng nuôi, rèm lạnh đối lưu và cơ sở dữ liệu nhà xưởng của ban quản trị.
+          </p>
+          <div className="pt-2 flex items-center justify-center gap-3">
+            <Link
+              href="/khay-cua-toi"
+              className="px-6 py-2.5 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm"
+            >
+              Xem Khay Nấm Của Bạn →
+            </Link>
+            <Link
+              href="/ho-so"
+              className="px-5 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] text-[#5C402B] dark:text-[#DAC7B5] text-xs font-bold hover:bg-[#FAF5EE] transition"
+            >
+              Hồ Sơ &amp; Hợp Đồng
+            </Link>
+          </div>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-[#FAF7F2] dark:bg-[#1E1B18] p-6 lg:p-8 text-[#24170E] dark:text-[#F7EFE6] transition-colors font-sans">
