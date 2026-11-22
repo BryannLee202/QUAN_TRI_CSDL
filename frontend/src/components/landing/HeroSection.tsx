@@ -80,7 +80,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative bg-gradient-to-b from-[#FDFBF8] via-[#F8F3EC] to-[#FDFBF8] dark:from-[#170E08] dark:via-[#140D07] dark:to-[#170E08] text-[#24170E] dark:text-[#F7EFE6] pt-6 sm:pt-10 pb-12 sm:pb-20 px-6 overflow-hidden transition-colors">
+    <section className="relative bg-gradient-to-b from-[#FDFBF8] via-[#F8F3EC] to-[#FDFBF8] dark:from-[#1E1B18] dark:via-[#140D07] dark:to-[#1E1B18] text-[#24170E] dark:text-[#F7EFE6] pt-6 sm:pt-10 pb-12 sm:pb-20 px-6 overflow-hidden transition-colors">
       {/* Background Subtle Warm Caramel Glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#E5D7C3]/40 dark:bg-[#3B2516]/15 blur-3xl pointer-events-none rounded-full" />
 
@@ -111,7 +111,7 @@ export default function HeroSection() {
           {/* Cột Trái: Tiêu đề, Thông điệp & CTA */}
           <div className="lg:col-span-6 space-y-5 text-center lg:text-left pt-1">
             {/* High-End Telemetry Pill Badge */}
-            <div className="inline-flex flex-wrap items-center gap-2 px-4 py-2 rounded-full bg-white/90 dark:bg-[#20140D]/90 border border-[#E0D3C1] dark:border-[#543825] text-xs font-semibold text-[#523522] dark:text-[#E2BA78] shadow-xs backdrop-blur-xs">
+            <div className="inline-flex flex-wrap items-center gap-2 px-4 py-2 rounded-full bg-white/90 dark:bg-[#27231F]/90 border border-[#E0D3C1] dark:border-[#474039] text-xs font-semibold text-[#523522] dark:text-[#E2BA78] shadow-xs backdrop-blur-xs">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C28E58] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C28E58]"></span>
@@ -140,15 +140,15 @@ export default function HeroSection() {
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-1">
               <a
                 href="#packages"
-                className="px-6 py-3.5 rounded-xl bg-[#24170E] hover:bg-[#382417] text-white font-bold text-sm border border-[#C28E58]/35 shadow-lg shadow-[#24170E]/20 hover:shadow-xl hover:border-[#C28E58] transition duration-200 transform hover:-translate-y-0.5 flex items-center gap-2.5 group"
+                className="px-6 py-3.5 rounded-xl bg-[#24170E] hover:bg-[#382417] dark:bg-gradient-to-r dark:from-[#C8955E] dark:to-[#DFB27D] dark:hover:from-[#D4A16A] dark:hover:to-[#E8BF8C] text-white dark:text-[#1E1B18] font-bold text-sm border border-[#C28E58]/35 dark:border-[#E2B888]/60 shadow-lg shadow-[#24170E]/20 hover:shadow-xl hover:border-[#C28E58] transition duration-200 transform hover:-translate-y-0.5 flex items-center gap-2.5 group"
               >
                 <span>Thuê Khay Ngay (Khám Phá)</span>
-                <span className="text-[#E2BA78] group-hover:translate-x-0.5 transition-transform font-bold">→</span>
+                <span className="text-[#E2BA78] dark:text-[#1E1B18] group-hover:translate-x-0.5 transition-transform font-bold">→</span>
               </a>
 
               <a
                 href="#portal"
-                className="px-6 py-3.5 rounded-xl bg-white/90 dark:bg-[#20140D]/90 hover:bg-[#FAF5EE] dark:hover:bg-[#2B1C13] text-[#4A3222] dark:text-[#F7EFE6] font-bold text-sm border border-[#E0D3C1] dark:border-[#543825] hover:border-[#C28E58]/60 shadow-xs transition duration-200 flex items-center gap-2 group"
+                className="px-6 py-3.5 rounded-xl bg-white/90 dark:bg-[#27231F]/90 hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630] text-[#4A3222] dark:text-[#F7EFE6] font-bold text-sm border border-[#E0D3C1] dark:border-[#474039] hover:border-[#C28E58]/60 shadow-xs transition duration-200 flex items-center gap-2 group"
               >
                 <span className="relative flex items-center justify-center text-[#8C5A37] dark:text-[#E2BA78]">
                   <svg className="w-4 h-4 transition-transform group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -166,7 +166,7 @@ export default function HeroSection() {
           <div className="lg:col-span-6 relative flex flex-col items-center">
             
             {/* Bộ Nút Chuyển Đổi Góc Nhìn */}
-            <div className="w-full flex items-center justify-between gap-1 p-1 mb-3 rounded-2xl bg-white dark:bg-[#20140D] border border-[#E0D3C1] dark:border-[#543825] shadow-sm">
+            <div className="w-full flex items-center justify-between gap-1 p-1 mb-3 rounded-2xl bg-white dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039] shadow-sm">
               {chamberViews.map((v, idx) => (
                 <button
                   key={v.id}
@@ -174,7 +174,7 @@ export default function HeroSection() {
                   className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all text-center flex items-center justify-center gap-1.5 ${
                     activeTab === idx
                       ? "bg-[#523522] dark:bg-[#C28E58] text-white dark:text-[#170E08] shadow-sm shadow-[#523522]/20"
-                      : "text-[#634936] dark:text-[#DAC7B5] hover:text-[#3B2212] dark:hover:text-white hover:bg-[#FAF5EE] dark:hover:bg-[#2B1C13]"
+                      : "text-[#634936] dark:text-[#DAC7B5] hover:text-[#3B2212] dark:hover:text-white hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630]"
                   }`}
                   title={v.name}
                 >
@@ -223,7 +223,7 @@ export default function HeroSection() {
                 </span>
                 Quang Phổ &amp; Vi Khí Hậu:
               </span>
-              <div className="flex items-center gap-1 p-0.5 rounded-xl bg-white/90 dark:bg-[#20140D]/90 border border-[#E0D3C1] dark:border-[#543825] shadow-xs text-[10px]">
+              <div className="flex items-center gap-1 p-0.5 rounded-xl bg-white/90 dark:bg-[#27231F]/90 border border-[#E0D3C1] dark:border-[#474039] shadow-xs text-[10px]">
                 <button
                   type="button"
                   onClick={() => setLightingMode('day')}
@@ -264,7 +264,7 @@ export default function HeroSection() {
             <div 
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
-              className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-[#E0D3C1] dark:border-[#543825] bg-[#FAF5EE] dark:bg-[#20140D] group transition-all duration-300 hover:border-[#C28E58] hover:shadow-2xl"
+              className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-[#E0D3C1] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#27231F] group transition-all duration-300 hover:border-[#C28E58] hover:shadow-2xl"
               style={{ 
                 isolation: 'isolate',
                 transform: `perspective(1000px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)`,
@@ -273,7 +273,7 @@ export default function HeroSection() {
             >
               {/* Vùng Hiển Thị Hình Ảnh */}
               <div 
-                className="relative aspect-[16/11] w-full bg-[#F5EEE4] dark:bg-[#20140D] overflow-hidden flex items-center justify-center"
+                className="relative aspect-[16/11] w-full bg-[#F5EEE4] dark:bg-[#27231F] overflow-hidden flex items-center justify-center"
                 style={{ position: 'relative', minHeight: '380px', height: '440px', maxHeight: '500px' }}
               >
                 <Image
@@ -308,7 +308,7 @@ export default function HeroSection() {
                 <div className="absolute -inset-full pointer-events-none bg-gradient-to-tr from-transparent via-white/10 to-transparent group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
 
                 {/* Badge Trạng Thái Nổi Góc Trên Trái */}
-                <div className="absolute top-3 left-3 backdrop-blur-md bg-white/95 dark:bg-[#2B1C13]/95 border border-[#E0D3C1] dark:border-[#543825] text-[#4A3222] dark:text-[#E2BA78] text-[11px] font-bold px-3 py-1 rounded-full shadow-md flex items-center gap-2">
+                <div className="absolute top-3 left-3 backdrop-blur-md bg-white/95 dark:bg-[#322D28]/95 border border-[#E0D3C1] dark:border-[#474039] text-[#4A3222] dark:text-[#E2BA78] text-[11px] font-bold px-3 py-1 rounded-full shadow-md flex items-center gap-2">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C28E58] opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C28E58]"></span>
@@ -318,19 +318,19 @@ export default function HeroSection() {
 
                 {/* 3 Chip Cảm Biến Realtime Nổi Góc Trên Phải Kèm Sóng IoT Telemetry */}
                 <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
-                  <div className="backdrop-blur-md bg-white/95 dark:bg-[#20140D]/95 border border-[#C28E58]/50 text-[#6E4B33] dark:text-[#F5CE76] text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1.5">
+                  <div className="backdrop-blur-md bg-white/95 dark:bg-[#27231F]/95 border border-[#C28E58]/50 text-[#6E4B33] dark:text-[#F5CE76] text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1.5">
                     <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
                     </svg>
                     <span>{currentView.temp}</span>
                   </div>
-                  <div className="backdrop-blur-md bg-white/95 dark:bg-[#20140D]/95 border border-emerald-500/40 text-emerald-800 dark:text-emerald-300 text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1.5">
+                  <div className="backdrop-blur-md bg-white/95 dark:bg-[#27231F]/95 border border-emerald-500/40 text-emerald-800 dark:text-emerald-300 text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1.5">
                     <svg className="w-3.5 h-3.5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
                     </svg>
                     <span>{currentView.hum}</span>
                   </div>
-                  <div className="backdrop-blur-md bg-white/95 dark:bg-[#20140D]/95 border border-amber-600/40 text-amber-800 dark:text-amber-300 text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1.5">
+                  <div className="backdrop-blur-md bg-white/95 dark:bg-[#27231F]/95 border border-amber-600/40 text-amber-800 dark:text-amber-300 text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1.5">
                     <svg className="w-3.5 h-3.5 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2M9.6 4.6A2 2 0 1 1 11 8H2M12.6 19.4A2 2 0 1 0 14 16H2"/>
                     </svg>
@@ -374,7 +374,7 @@ export default function HeroSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mt-16">
           
           {/* Card 1: Mô hình Farm-as-a-Service */}
-          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-[#C28E58] transition-all duration-300 flex items-start gap-4 group relative overflow-hidden">
+          <div className="bg-white/95 dark:bg-[#27231F]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#474039] shadow-xs hover:shadow-xl hover:border-[#C28E58] transition-all duration-300 flex items-start gap-4 group relative overflow-hidden">
             {/* Watermark Nấm Ẩn Sâu Dưới Nền Thẻ */}
             <div className="absolute -bottom-4 -right-4 w-24 h-24 text-[#C28E58] opacity-[0.06] dark:opacity-[0.08] pointer-events-none select-none group-hover:scale-110 group-hover:opacity-[0.11] transition-all duration-500">
               <svg viewBox="0 0 100 100" fill="currentColor">
@@ -423,7 +423,7 @@ export default function HeroSection() {
           </div>
 
           {/* Card 2: Cảm Biến IoT Realtime */}
-          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-emerald-600 transition-all duration-300 flex items-start gap-4 group relative overflow-hidden">
+          <div className="bg-white/95 dark:bg-[#27231F]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#474039] shadow-xs hover:shadow-xl hover:border-emerald-600 transition-all duration-300 flex items-start gap-4 group relative overflow-hidden">
             {/* Watermark Nấm Ẩn Sâu Dưới Nền Thẻ */}
             <div className="absolute -bottom-4 -right-4 w-24 h-24 text-emerald-600 opacity-[0.06] dark:opacity-[0.08] pointer-events-none select-none group-hover:scale-110 group-hover:opacity-[0.11] transition-all duration-500">
               <svg viewBox="0 0 100 100" fill="currentColor">
@@ -463,7 +463,7 @@ export default function HeroSection() {
           </div>
 
           {/* Card 3: Camera Trực Tuyến 24/7 */}
-          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-sky-600 transition-all duration-300 flex items-start gap-4 group relative overflow-hidden">
+          <div className="bg-white/95 dark:bg-[#27231F]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#474039] shadow-xs hover:shadow-xl hover:border-sky-600 transition-all duration-300 flex items-start gap-4 group relative overflow-hidden">
             {/* Watermark Nấm Ẩn Sâu Dưới Nền Thẻ */}
             <div className="absolute -bottom-4 -right-4 w-24 h-24 text-sky-600 opacity-[0.06] dark:opacity-[0.08] pointer-events-none select-none group-hover:scale-110 group-hover:opacity-[0.11] transition-all duration-500">
               <svg viewBox="0 0 100 100" fill="currentColor">
@@ -504,7 +504,7 @@ export default function HeroSection() {
           </div>
 
           {/* Card 4: Thu Hoạch & Giao Tận Nhà */}
-          <div className="bg-white/95 dark:bg-[#20140D]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#543825] shadow-xs hover:shadow-xl hover:border-amber-600 transition-all duration-300 flex items-start gap-4 group relative overflow-hidden">
+          <div className="bg-white/95 dark:bg-[#27231F]/95 rounded-2xl p-5 border border-[#E0D3C1] dark:border-[#474039] shadow-xs hover:shadow-xl hover:border-amber-600 transition-all duration-300 flex items-start gap-4 group relative overflow-hidden">
             {/* Watermark Nấm Ẩn Sâu Dưới Nền Thẻ */}
             <div className="absolute -bottom-4 -right-4 w-24 h-24 text-amber-600 opacity-[0.06] dark:opacity-[0.08] pointer-events-none select-none group-hover:scale-110 group-hover:opacity-[0.11] transition-all duration-500">
               <svg viewBox="0 0 100 100" fill="currentColor">

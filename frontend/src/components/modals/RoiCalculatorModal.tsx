@@ -134,11 +134,11 @@ export default function RoiCalculatorModal({ isOpen, onClose }: RoiCalculatorMod
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-[#1A1009] border border-[#DECFC0] dark:border-[#422C1D] w-full max-w-4xl rounded-3xl shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-scale-up"
+        className="bg-white dark:bg-[#1E1B18] border border-[#DECFC0] dark:border-[#474039] w-full max-w-4xl rounded-3xl shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-scale-up"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Modal */}
-        <div className="px-6 py-4 border-b border-[#EAE1D3] dark:border-[#38261A] flex items-center justify-between bg-gradient-to-r from-[#FAF5EE] via-[#F4ECE1] to-[#FAF5EE] dark:from-[#20140D] dark:to-[#170E08]">
+        <div className="px-6 py-4 border-b border-[#EAE1D3] dark:border-[#474039] flex items-center justify-between bg-gradient-to-r from-[#FAF5EE] via-[#F4ECE1] to-[#FAF5EE] dark:from-[#20140D] dark:to-[#1E1B18]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-[#523522] text-[#FFF5EA] flex items-center justify-center shadow-xs">
               <svg className="w-5 h-5 text-[#E2BA78]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -171,7 +171,7 @@ export default function RoiCalculatorModal({ isOpen, onClose }: RoiCalculatorMod
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-xl bg-white/80 dark:bg-[#2B1C13] border border-[#DECFC0] dark:border-[#543825] text-[#735843] dark:text-[#DAC7B5] hover:text-[#24170E] dark:hover:text-white flex items-center justify-center transition"
+            className="w-8 h-8 rounded-xl bg-white/80 dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] text-[#735843] dark:text-[#DAC7B5] hover:text-[#24170E] dark:hover:text-white flex items-center justify-center transition"
           >
             ✕
           </button>
@@ -196,8 +196,8 @@ export default function RoiCalculatorModal({ isOpen, onClose }: RoiCalculatorMod
                       onClick={() => setSelectedSpeciesId(spec.id)}
                       className={`text-left p-3 rounded-2xl border transition-all ${
                         isSelected
-                          ? 'border-[#C28E58] bg-[#FAF5EE] dark:bg-[#2B1C13] shadow-sm ring-1 ring-[#C28E58]'
-                          : 'border-[#E0D3C1] dark:border-[#38261A] hover:bg-[#FAF7F2] dark:hover:bg-[#22160E]'
+                          ? 'border-[#C28E58] bg-[#FAF5EE] dark:bg-[#322D28] shadow-sm ring-1 ring-[#C28E58]'
+                          : 'border-[#E0D3C1] dark:border-[#474039] hover:bg-[#FAF7F2] dark:hover:bg-[#22160E]'
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -211,7 +211,7 @@ export default function RoiCalculatorModal({ isOpen, onClose }: RoiCalculatorMod
                       <div className="text-[10px] text-[#8C6D53] dark:text-[#BFA895] italic mt-0.5">
                         {spec.scientificName}
                       </div>
-                      <div className="mt-2 flex items-center justify-between text-[11px] pt-1.5 border-t border-[#EAE1D3] dark:border-[#38261A]">
+                      <div className="mt-2 flex items-center justify-between text-[11px] pt-1.5 border-t border-[#EAE1D3] dark:border-[#474039]">
                         <span className="text-[#6E4B33] dark:text-[#DAC7B5]">Định mức:</span>
                         <strong className="text-[#24170E] dark:text-[#FFF5EA]">~{spec.yieldPerTrayKg} kg / khay</strong>
                       </div>
@@ -222,7 +222,7 @@ export default function RoiCalculatorModal({ isOpen, onClose }: RoiCalculatorMod
             </div>
 
             {/* 2. Kéo chọn số lượng khay */}
-            <div className="p-4 rounded-2xl bg-[#FAF7F2] dark:bg-[#22160E] border border-[#EAE1D3] dark:border-[#38261A] space-y-3">
+            <div className="p-4 rounded-2xl bg-[#FAF7F2] dark:bg-[#27231F] border border-[#EAE1D3] dark:border-[#474039] space-y-3">
               <div className="flex items-center justify-between">
                 <div>
                   <label className="text-xs font-bold uppercase tracking-wider text-[#523522] dark:text-[#DAC7B5]">
@@ -252,7 +252,7 @@ export default function RoiCalculatorModal({ isOpen, onClose }: RoiCalculatorMod
                     className={`flex-1 py-1 text-[11px] font-semibold rounded-lg border transition ${
                       trayCount === preset
                         ? 'bg-[#C28E58] text-white border-[#C28E58]'
-                        : 'bg-white dark:bg-[#1A1009] border-[#E0D3C1] dark:border-[#422C1D] text-[#735843] dark:text-[#DAC7B5]'
+                        : 'bg-white dark:bg-[#1E1B18] border-[#E0D3C1] dark:border-[#474039] text-[#735843] dark:text-[#DAC7B5]'
                     }`}
                   >
                     {preset} khay
@@ -273,8 +273,8 @@ export default function RoiCalculatorModal({ isOpen, onClose }: RoiCalculatorMod
                     onClick={() => setDurationMonths(dur.months)}
                     className={`p-2.5 rounded-xl border text-center transition ${
                       durationMonths === dur.months
-                        ? 'border-[#C28E58] bg-[#FAF5EE] dark:bg-[#2B1C13] shadow-xs'
-                        : 'border-[#E0D3C1] dark:border-[#38261A] hover:bg-[#FAF7F2] dark:hover:bg-[#22160E]'
+                        ? 'border-[#C28E58] bg-[#FAF5EE] dark:bg-[#322D28] shadow-xs'
+                        : 'border-[#E0D3C1] dark:border-[#474039] hover:bg-[#FAF7F2] dark:hover:bg-[#22160E]'
                     }`}
                   >
                     <span className="block text-xs font-bold text-[#24170E] dark:text-[#FFF5EA]">

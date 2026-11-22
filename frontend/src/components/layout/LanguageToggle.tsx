@@ -11,14 +11,14 @@ export default function LanguageToggle() {
   const { language, setLanguage } = useLanguage();
 
   return (
-    <div className="flex items-center rounded-xl bg-[#F2E8DC]/80 dark:bg-[#20140D] p-1 border border-[#DECFC0] dark:border-[#422C1D] shadow-inner shrink-0 whitespace-nowrap text-xs">
+    <div className="flex items-center rounded-xl bg-[#F2E8DC]/80 dark:bg-[#27231F] p-1 border border-[#DECFC0] dark:border-[#474039] shadow-inner shrink-0 whitespace-nowrap text-xs">
       {/* Nút Tiếng Việt */}
       <button
         onClick={() => setLanguage("vi")}
         className={`px-2.5 py-1 rounded-lg transition-all duration-200 flex items-center gap-1.5 text-[11px] font-bold ${
           language === "vi"
-            ? "bg-white dark:bg-[#331E12] text-[#361F12] dark:text-[#FFF5EA] shadow-xs"
-            : "text-[#8C6E56] dark:text-[#A88C76] hover:text-[#361F12] dark:hover:text-[#FFF5EA]"
+            ? "bg-white dark:bg-[#322D28] text-[#361F12] dark:text-[#FFF5EA] shadow-xs"
+            : "text-[#8C6E56] dark:text-[#B9ADA1] hover:text-[#361F12] dark:hover:text-[#FFF5EA]"
         }`}
         title="Tiếng Việt"
         aria-label="Chuyển sang Tiếng Việt"
@@ -44,8 +44,8 @@ export default function LanguageToggle() {
         onClick={() => setLanguage("en")}
         className={`px-2.5 py-1 rounded-lg transition-all duration-200 flex items-center gap-1.5 text-[11px] font-bold ${
           language === "en"
-            ? "bg-white dark:bg-[#331E12] text-[#361F12] dark:text-[#FFF5EA] shadow-xs"
-            : "text-[#8C6E56] dark:text-[#A88C76] hover:text-[#361F12] dark:hover:text-[#FFF5EA]"
+            ? "bg-white dark:bg-[#322D28] text-[#361F12] dark:text-[#FFF5EA] shadow-xs"
+            : "text-[#8C6E56] dark:text-[#B9ADA1] hover:text-[#361F12] dark:hover:text-[#FFF5EA]"
         }`}
         title="English"
         aria-label="Switch to English"

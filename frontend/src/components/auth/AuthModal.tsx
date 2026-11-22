@@ -69,7 +69,7 @@ export default function AuthModal() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-fade-in">
       <div
-        className="w-full max-w-lg rounded-3xl bg-[#FAF7F2] dark:bg-[#1A1009] border border-[#DECFC0] dark:border-[#4A3222] shadow-2xl text-[#24170E] dark:text-[#F7EFE6] overflow-hidden transition-all"
+        className="w-full max-w-lg rounded-3xl bg-[#FAF7F2] dark:bg-[#1E1B18] border border-[#DECFC0] dark:border-[#474039] shadow-2xl text-[#24170E] dark:text-[#F7EFE6] overflow-hidden transition-all"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Modal */}
@@ -163,7 +163,7 @@ export default function AuthModal() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="Ví dụ: Nguyễn Văn A"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#4A3222] bg-white dark:bg-[#20140D] text-xs focus:ring-2 focus:ring-[#C28E58] focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-white dark:bg-[#27231F] text-xs focus:ring-2 focus:ring-[#C28E58] focus:outline-none"
                   />
                 </div>
               </div>
@@ -179,7 +179,7 @@ export default function AuthModal() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tenban@email.com"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#4A3222] bg-white dark:bg-[#20140D] text-xs focus:ring-2 focus:ring-[#C28E58] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-white dark:bg-[#27231F] text-xs focus:ring-2 focus:ring-[#C28E58] focus:outline-none"
               />
             </div>
 
@@ -194,7 +194,7 @@ export default function AuthModal() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Tối thiểu 8 ký tự"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#4A3222] bg-white dark:bg-[#20140D] text-xs focus:ring-2 focus:ring-[#C28E58] focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-white dark:bg-[#27231F] text-xs focus:ring-2 focus:ring-[#C28E58] focus:outline-none"
               />
             </div>
 
@@ -209,7 +209,7 @@ export default function AuthModal() {
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     placeholder="0901234567"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#4A3222] bg-white dark:bg-[#20140D] text-xs focus:ring-2 focus:ring-[#C28E58] focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-white dark:bg-[#27231F] text-xs focus:ring-2 focus:ring-[#C28E58] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -221,7 +221,7 @@ export default function AuthModal() {
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     placeholder="Số nhà, đường, quận/huyện, TP.HCM"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#4A3222] bg-white dark:bg-[#20140D] text-xs focus:ring-2 focus:ring-[#C28E58] focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-white dark:bg-[#27231F] text-xs focus:ring-2 focus:ring-[#C28E58] focus:outline-none"
                   />
                 </div>
               </>
@@ -238,7 +238,7 @@ export default function AuthModal() {
           </form>
 
           {/* Khối Đăng Nhập Nhanh Demo 1-Click (Dành cho kiểm thử & chấm đồ án) */}
-          <div className="pt-4 border-t border-[#DECFC0] dark:border-[#38261A]">
+          <div className="pt-4 border-t border-[#DECFC0] dark:border-[#474039]">
             <div className="flex items-center gap-2 mb-2.5">
               <span className="w-2 h-2 rounded-full bg-[#C28E58]"></span>
               <span className="text-xs font-bold uppercase tracking-wider text-[#735843] dark:text-[#D4AF7A]">
@@ -250,7 +250,7 @@ export default function AuthModal() {
               <button
                 type="button"
                 onClick={() => handleQuickLogin("admin@mushroomcloud.test", "Password123@")}
-                className="p-2.5 rounded-xl bg-white dark:bg-[#22160E] border border-[#DECFC0] dark:border-[#422C1D] hover:border-[#C28E58] text-left transition group shadow-2xs"
+                className="p-2.5 rounded-xl bg-white dark:bg-[#27231F] border border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58] text-left transition group shadow-2xs"
               >
                 <div className="flex items-center gap-1.5 text-xs font-bold text-[#8A5C38] dark:text-[#E2BA78]">
                   <span>Quản Trị Viên</span>
@@ -264,7 +264,7 @@ export default function AuthModal() {
               <button
                 type="button"
                 onClick={() => handleQuickLogin("operator1@mushroomcloud.test", "Password123@")}
-                className="p-2.5 rounded-xl bg-white dark:bg-[#22160E] border border-[#DECFC0] dark:border-[#422C1D] hover:border-[#C28E58] text-left transition group shadow-2xs"
+                className="p-2.5 rounded-xl bg-white dark:bg-[#27231F] border border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58] text-left transition group shadow-2xs"
               >
                 <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-400">
                   <span>Kỹ Thuật Viên</span>
@@ -278,7 +278,7 @@ export default function AuthModal() {
               <button
                 type="button"
                 onClick={() => handleQuickLogin("customer1@mushroomcloud.test", "Password123@")}
-                className="p-2.5 rounded-xl bg-white dark:bg-[#22160E] border border-[#DECFC0] dark:border-[#422C1D] hover:border-[#C28E58] text-left transition group shadow-2xs"
+                className="p-2.5 rounded-xl bg-white dark:bg-[#27231F] border border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58] text-left transition group shadow-2xs"
               >
                 <div className="flex items-center gap-1.5 text-xs font-bold text-[#523522] dark:text-[#E2BA78]">
                   <span>Khách Hàng</span>

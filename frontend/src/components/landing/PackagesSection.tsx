@@ -101,7 +101,7 @@ export default function PackagesSection() {
       </div>
 
       <div className="max-w-6xl mx-auto text-center space-y-3 mb-14 relative z-10">
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FAF5EE] dark:bg-[#2B1C13] border border-[#E0D3C1] dark:border-[#543825] text-xs font-bold text-[#6E4B33] dark:text-[#E2BA78]">
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FAF5EE] dark:bg-[#322D28] border border-[#E0D3C1] dark:border-[#474039] text-xs font-bold text-[#6E4B33] dark:text-[#E2BA78]">
           <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/>
             <path d="M7 7h.01"/>
@@ -193,7 +193,7 @@ export default function PackagesSection() {
                   </p>
                 </div>
 
-                <div className="border-b border-[#EAE1D3] dark:border-[#38261A] pb-4">
+                <div className="border-b border-[#EAE1D3] dark:border-[#474039] pb-4">
                   <span className={`text-3xl font-black ${
                     isPkg2 
                       ? "text-[#523522] dark:text-[#F5CE76]" 
@@ -208,7 +208,7 @@ export default function PackagesSection() {
 
                 <div className={`p-3 rounded-xl text-xs font-semibold flex items-center justify-between border ${
                   isPkg2
-                    ? "bg-[#FAF5EE] dark:bg-[#331E12] text-[#4A3222] dark:text-[#E2BA78] border-[#DECFC0] dark:border-[#543825]"
+                    ? "bg-[#FAF5EE] dark:bg-[#322D28] text-[#4A3222] dark:text-[#E2BA78] border-[#DECFC0] dark:border-[#474039]"
                     : isPkg1
                     ? "bg-emerald-50/80 dark:bg-[#162A20] text-emerald-900 dark:text-emerald-200 border-emerald-200 dark:border-emerald-800"
                     : "bg-sky-50/80 dark:bg-[#132238] text-sky-900 dark:text-sky-200 border-sky-200 dark:border-sky-800"

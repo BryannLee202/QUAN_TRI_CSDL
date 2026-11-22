@@ -85,7 +85,7 @@ export default function HarvestModal() {
         {/* Modal Popup Confirm */}
         {isOpen && (
           <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white dark:bg-[#1C120C] rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-[#E0D3C1] dark:border-[#543825] text-[#24170E] dark:text-[#F7EFE6]">
+            <div className="bg-white dark:bg-[#27231F] rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-[#E0D3C1] dark:border-[#474039] text-[#24170E] dark:text-[#F7EFE6]">
               <h4 className="font-bold text-xl text-[#24170E] dark:text-[#E2BA78]">
                 Xác Nhận Thu Hoạch Nấm
               </h4>
@@ -105,7 +105,7 @@ export default function HarvestModal() {
                   type="button"
                   onClick={() => setIsOpen(false)}
                   disabled={loading}
-                  className="px-4 py-2 text-sm font-semibold text-[#8C6D53] hover:bg-[#FAF5EE] dark:hover:bg-[#281A12] rounded-lg transition disabled:opacity-50"
+                  className="px-4 py-2 text-sm font-semibold text-[#8C6D53] hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630] rounded-lg transition disabled:opacity-50"
                 >
                   Hủy Bỏ
                 </button>

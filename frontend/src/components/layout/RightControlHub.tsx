@@ -125,7 +125,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
       );
     }
     return (
-      <span className="text-[10px] font-mono uppercase font-black px-2 py-0.5 rounded-md bg-[#FAF5EE] dark:bg-[#25170F] border border-[#DECFC0] dark:border-[#4A3222] text-[#8A5C38] dark:text-[#E2BA78]">
+      <span className="text-[10px] font-mono uppercase font-black px-2 py-0.5 rounded-md bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] text-[#8A5C38] dark:text-[#E2BA78]">
         Customer
       </span>
     );
@@ -144,7 +144,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
 
       {/* Thanh Sidebar Trượt Từ Phải Sang (Drawer) */}
       <aside
-        className={`fixed top-0 right-0 z-50 h-full w-full sm:w-[420px] bg-[#FDFBF8] dark:bg-[#150E0A] text-[#24170E] dark:text-[#F7EFE6] border-l border-[#DECFC0] dark:border-[#38261A] shadow-2xl transition-transform duration-300 ease-out flex flex-col ${
+        className={`fixed top-0 right-0 z-50 h-full w-full sm:w-[420px] bg-[#FDFBF8] dark:bg-[#150E0A] text-[#24170E] dark:text-[#F7EFE6] border-l border-[#DECFC0] dark:border-[#474039] shadow-2xl transition-transform duration-300 ease-out flex flex-col ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         role="dialog"
@@ -152,7 +152,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
         aria-label="Trung tâm điều khiển và tiện ích"
       >
         {/* Header của Sidebar */}
-        <div className="p-4 sm:p-5 border-b border-[#EAE1D3] dark:border-[#2D1B11] flex items-center justify-between bg-white/60 dark:bg-[#1A110C]/60 backdrop-blur-md shrink-0">
+        <div className="p-4 sm:p-5 border-b border-[#EAE1D3] dark:border-[#474039] flex items-center justify-between bg-white/60 dark:bg-[#1E1B18]/60 backdrop-blur-md shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#6B442C] to-[#C28E58] flex items-center justify-center text-white shadow-xs">
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -174,7 +174,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-xl bg-[#FAF5EE] dark:bg-[#22160E] hover:bg-[#F2E8DC] dark:hover:bg-[#2D1C12] border border-[#DECFC0] dark:border-[#38261A] text-[#735843] dark:text-[#DAC7B5] hover:text-[#24170E] dark:hover:text-white flex items-center justify-center transition shadow-2xs"
+            className="w-8 h-8 rounded-xl bg-[#FAF5EE] dark:bg-[#27231F] hover:bg-[#F2E8DC] dark:hover:bg-[#2D1C12] border border-[#DECFC0] dark:border-[#474039] text-[#735843] dark:text-[#DAC7B5] hover:text-[#24170E] dark:hover:text-white flex items-center justify-center transition shadow-2xs"
             title="Đóng sidebar (Esc)"
             aria-label="Đóng"
           >
@@ -189,7 +189,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
         <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-5 custom-scrollbar">
 
           {/* KHỐI 1: TÀI KHOẢN & ĐỊNH DANH NGƯỜI DÙNG */}
-          <div className="rounded-2xl p-4 bg-white dark:bg-[#1C120C] border border-[#EAE1D3] dark:border-[#332015] shadow-xs space-y-3">
+          <div className="rounded-2xl p-4 bg-white dark:bg-[#27231F] border border-[#EAE1D3] dark:border-[#474039] shadow-xs space-y-3">
             <div className="flex items-center justify-between text-xs font-bold text-[#6E4B33] dark:text-[#D4AF7A]">
               <span className="flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
                 <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -203,7 +203,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
 
             {isAuthenticated && user ? (
               <div className="space-y-3 pt-1">
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-[#FAF5EE] dark:bg-[#24170F] border border-[#DECFC0] dark:border-[#38261A]">
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039]">
                   <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-[#6B442C] via-[#8C5A37] to-[#C28E58] text-white flex items-center justify-center font-black text-sm shadow-sm shrink-0">
                     {user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U'}
                   </div>
@@ -235,7 +235,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                     <Link
                       href="/operator"
                       onClick={onClose}
-                      className="col-span-2 py-2 px-3 rounded-xl bg-[#FAF5EE] dark:bg-[#24170F] hover:border-[#C28E58] text-[#24170E] dark:text-[#E2BA78] font-bold text-xs text-center border border-[#DECFC0] dark:border-[#38261A] transition flex items-center justify-center gap-1.5"
+                      className="col-span-2 py-2 px-3 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] hover:border-[#C28E58] text-[#24170E] dark:text-[#E2BA78] font-bold text-xs text-center border border-[#DECFC0] dark:border-[#474039] transition flex items-center justify-center gap-1.5"
                     >
                       <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <rect width="20" height="14" x="2" y="3" rx="2" />
@@ -250,7 +250,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                       logout();
                       onClose();
                     }}
-                    className="col-span-2 py-2 px-3 rounded-xl bg-[#FAF5EE] hover:bg-rose-50 dark:bg-[#22160E] dark:hover:bg-rose-950/30 text-rose-700 dark:text-rose-400 border border-[#DECFC0] dark:border-[#38261A] font-bold text-xs transition flex items-center justify-center gap-1.5"
+                    className="col-span-2 py-2 px-3 rounded-xl bg-[#FAF5EE] hover:bg-rose-50 dark:bg-[#27231F] dark:hover:bg-rose-950/30 text-rose-700 dark:text-rose-400 border border-[#DECFC0] dark:border-[#474039] font-bold text-xs transition flex items-center justify-center gap-1.5"
                   >
                     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -270,22 +270,22 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                   <Link
                     href="/login"
                     onClick={onClose}
-                    className="py-2.5 px-3 rounded-xl bg-white dark:bg-[#24170F] hover:bg-[#FAF5EE] dark:hover:bg-[#2E1D13] text-[#4A3222] dark:text-[#FFF5EA] border border-[#DECFC0] dark:border-[#422C1D] font-bold text-xs text-center transition shadow-2xs flex items-center justify-center"
+                    className="py-2.5 px-3 rounded-xl bg-white dark:bg-[#322D28] hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630] text-[#4A3222] dark:text-[#FFF5EA] border border-[#DECFC0] dark:border-[#474039] font-bold text-xs text-center transition shadow-2xs flex items-center justify-center"
                   >
                     Đăng Nhập
                   </Link>
                   <Link
                     href="/register"
                     onClick={onClose}
-                    className="py-2.5 px-3 rounded-xl bg-[#24170E] hover:bg-[#382417] text-white font-bold text-xs text-center border border-[#C28E58]/35 transition shadow-sm shadow-[#24170E]/20 flex items-center justify-center gap-1"
+                    className="py-2.5 px-3 rounded-xl bg-[#24170E] hover:bg-[#382417] dark:bg-gradient-to-r dark:from-[#C8955E] dark:to-[#DFB27D] dark:hover:from-[#D4A16A] dark:hover:to-[#E8BF8C] text-white dark:text-[#1E1B18] font-bold text-xs text-center border border-[#C28E58]/35 transition shadow-sm shadow-[#24170E]/20 flex items-center justify-center gap-1"
                   >
                     <span>Tạo Tài Khoản</span>
-                    <span className="text-[#E2BA78] font-bold">→</span>
+                    <span className="text-[#E2BA78] dark:text-[#1E1B18] font-bold">→</span>
                   </Link>
                   <Link
                     href="/ho-so"
                     onClick={onClose}
-                    className="col-span-2 py-2.5 px-3 rounded-xl bg-[#FAF5EE] dark:bg-[#24170F] hover:border-[#C28E58] text-[#4A3222] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#422C1D] font-bold text-xs text-center transition flex items-center justify-center gap-1.5"
+                    className="col-span-2 py-2.5 px-3 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] hover:border-[#C28E58] text-[#4A3222] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#474039] font-bold text-xs text-center transition flex items-center justify-center gap-1.5"
                   >
                     <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -301,7 +301,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
           </div>
 
           {/* KHỐI 2: TÙY CHỌN GIAO DIỆN & NGÔN NGỮ (PREFERENCES) */}
-          <div className="rounded-2xl p-4 bg-white dark:bg-[#1C120C] border border-[#EAE1D3] dark:border-[#332015] shadow-xs space-y-4">
+          <div className="rounded-2xl p-4 bg-white dark:bg-[#27231F] border border-[#EAE1D3] dark:border-[#474039] shadow-xs space-y-4">
             <span className="flex items-center gap-1.5 uppercase tracking-wider text-[11px] font-bold text-[#6E4B33] dark:text-[#D4AF7A]">
               <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="3" />
@@ -318,14 +318,14 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                   {isDark ? 'Ban Đêm (Dark)' : 'Ban Ngày (Light)'}
                 </span>
               </div>
-              <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-[#FAF5EE] dark:bg-[#25170F] border border-[#DECFC0] dark:border-[#38261A]">
+              <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039]">
                 <button
                   type="button"
                   onClick={() => toggleTheme(false)}
                   className={`py-2 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 ${
                     !isDark
                       ? 'bg-white text-[#24170E] shadow-xs border border-[#DECFC0]'
-                      : 'text-[#8A5C38] dark:text-[#A88C76] hover:text-[#24170E]'
+                      : 'text-[#8A5C38] dark:text-[#B9ADA1] hover:text-[#24170E]'
                   }`}
                 >
                   <svg className="w-3.5 h-3.5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -348,7 +348,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                   className={`py-2 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 ${
                     isDark
                       ? 'bg-[#331E12] text-[#FFF5EA] shadow-xs border border-[#543825]'
-                      : 'text-[#8A5C38] dark:text-[#A88C76] hover:text-[#24170E]'
+                      : 'text-[#8A5C38] dark:text-[#B9ADA1] hover:text-[#24170E]'
                   }`}
                 >
                   <svg className="w-3.5 h-3.5 text-[#E2BA78]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -367,14 +367,14 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                   {language === 'vi' ? 'Tiếng Việt' : 'English'}
                 </span>
               </div>
-              <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-[#FAF5EE] dark:bg-[#25170F] border border-[#DECFC0] dark:border-[#38261A]">
+              <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039]">
                 <button
                   type="button"
                   onClick={() => setLanguage('vi')}
                   className={`py-2 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 ${
                     language === 'vi'
-                      ? 'bg-white dark:bg-[#331E12] text-[#24170E] dark:text-[#FFF5EA] shadow-xs border border-[#DECFC0] dark:border-[#543825]'
-                      : 'text-[#8A5C38] dark:text-[#A88C76] hover:text-[#24170E]'
+                      ? 'bg-white dark:bg-[#322D28] text-[#24170E] dark:text-[#FFF5EA] shadow-xs border border-[#DECFC0] dark:border-[#474039]'
+                      : 'text-[#8A5C38] dark:text-[#B9ADA1] hover:text-[#24170E]'
                   }`}
                 >
                   <svg className="w-4 h-3 rounded-[2px] shadow-2xs shrink-0 overflow-hidden" viewBox="0 0 14 10" fill="none">
@@ -389,8 +389,8 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                   onClick={() => setLanguage('en')}
                   className={`py-2 px-3 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 ${
                     language === 'en'
-                      ? 'bg-white dark:bg-[#331E12] text-[#24170E] dark:text-[#FFF5EA] shadow-xs border border-[#DECFC0] dark:border-[#543825]'
-                      : 'text-[#8A5C38] dark:text-[#A88C76] hover:text-[#24170E]'
+                      ? 'bg-white dark:bg-[#322D28] text-[#24170E] dark:text-[#FFF5EA] shadow-xs border border-[#DECFC0] dark:border-[#474039]'
+                      : 'text-[#8A5C38] dark:text-[#B9ADA1] hover:text-[#24170E]'
                   }`}
                 >
                   <svg className="w-4 h-3 rounded-[2px] shadow-2xs shrink-0 overflow-hidden" viewBox="0 0 60 30" fill="none">
@@ -410,10 +410,10 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
           </div>
 
           {/* KHỐI 3: THÔNG BÁO IOT & NÔNG TRẠI REALTIME */}
-          <div className="rounded-2xl p-4 sm:p-4.5 bg-white dark:bg-[#1C120C] border border-[#EAE1D3] dark:border-[#332015] shadow-xs space-y-3.5">
-            <div className="flex items-center justify-between border-b border-[#F2E8DC] dark:border-[#2D1B11] pb-2.5">
+          <div className="rounded-2xl p-4 sm:p-4.5 bg-white dark:bg-[#27231F] border border-[#EAE1D3] dark:border-[#474039] shadow-xs space-y-3.5">
+            <div className="flex items-center justify-between border-b border-[#F2E8DC] dark:border-[#474039] pb-2.5">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-lg bg-[#FAF5EE] dark:bg-[#2B1C13] border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-center text-[#C28E58]">
+                <div className="w-6 h-6 rounded-lg bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] flex items-center justify-center text-[#C28E58]">
                   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                     <path d="M13.73 21a2 2 0 0 1-3.46 0" />
@@ -450,8 +450,8 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                     onClick={() => markSingleAsRead(n.id)}
                     className={`p-3 rounded-xl border transition-all duration-200 cursor-pointer flex items-start gap-3 ${
                       n.read
-                        ? 'bg-[#FAF5EE]/40 dark:bg-[#20140D]/40 border-transparent text-[#735843] dark:text-[#A88C76] opacity-75'
-                        : 'bg-[#FAF5EE] dark:bg-[#24170F] border-[#DECFC0] dark:border-[#38261A] text-[#24170E] dark:text-[#FFF5EA] shadow-2xs hover:border-[#C28E58]'
+                        ? 'bg-[#FAF5EE]/40 dark:bg-[#27231F]/40 border-transparent text-[#735843] dark:text-[#B9ADA1] opacity-75'
+                        : 'bg-[#FAF5EE] dark:bg-[#322D28] border-[#DECFC0] dark:border-[#474039] text-[#24170E] dark:text-[#FFF5EA] shadow-2xs hover:border-[#C28E58]'
                     }`}
                   >
                     {/* Icon Tile Đại Diện Chuyên Biệt */}
@@ -488,7 +488,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                         <h4 className="text-xs font-bold text-[#24170E] dark:text-[#FFF5EA] truncate">
                           {n.title}
                         </h4>
-                        <span className="text-[10px] font-mono text-[#8C6D53] dark:text-[#A88C76] shrink-0">
+                        <span className="text-[10px] font-mono text-[#8C6D53] dark:text-[#B9ADA1] shrink-0">
                           {n.time}
                         </span>
                       </div>
@@ -503,9 +503,9 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
           </div>
 
           {/* KHỐI 4: HỖ TRỢ KỸ THUẬT & TIÊU CHUẨN NÔNG NGHIỆP */}
-          <div className="rounded-2xl p-4 sm:p-4.5 bg-white dark:bg-[#1C120C] border border-[#EAE1D3] dark:border-[#332015] shadow-xs space-y-3.5">
-            <div className="flex items-center gap-2 border-b border-[#F2E8DC] dark:border-[#2D1B11] pb-2.5">
-              <div className="w-6 h-6 rounded-lg bg-[#FAF5EE] dark:bg-[#2B1C13] border border-[#DECFC0] dark:border-[#422C1D] flex items-center justify-center text-[#C28E58]">
+          <div className="rounded-2xl p-4 sm:p-4.5 bg-white dark:bg-[#27231F] border border-[#EAE1D3] dark:border-[#474039] shadow-xs space-y-3.5">
+            <div className="flex items-center gap-2 border-b border-[#F2E8DC] dark:border-[#474039] pb-2.5">
+              <div className="w-6 h-6 rounded-lg bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] flex items-center justify-center text-[#C28E58]">
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
                   <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
@@ -518,7 +518,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
 
             <div className="space-y-2.5">
               {/* Dòng Hotline Kỹ Thuật Viên */}
-              <div className="p-3 rounded-xl bg-[#FAF5EE] dark:bg-[#24170F] border border-[#DECFC0] dark:border-[#38261A] flex items-center justify-between gap-3 shadow-2xs hover:border-[#C28E58] transition">
+              <div className="p-3 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] flex items-center justify-between gap-3 shadow-2xs hover:border-[#C28E58] transition">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-900/60 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shrink-0">
                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -543,7 +543,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
               </div>
 
               {/* Dòng Tiêu Chuẩn Kiểm Nghiệm */}
-              <div className="p-3 rounded-xl bg-[#FAF5EE] dark:bg-[#24170F] border border-[#DECFC0] dark:border-[#38261A] flex items-center justify-between gap-3 shadow-2xs hover:border-[#C28E58] transition">
+              <div className="p-3 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] flex items-center justify-between gap-3 shadow-2xs hover:border-[#C28E58] transition">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-900/60 text-[#C28E58] dark:text-[#E2BA78] flex items-center justify-center shrink-0">
                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -560,7 +560,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                     </p>
                   </div>
                 </div>
-                <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-[#1E130B] border border-[#DECFC0] dark:border-[#422C1D] font-bold text-[11px] text-[#523522] dark:text-[#E2BA78] shadow-2xs shrink-0">
+                <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-[#27231F] border border-[#DECFC0] dark:border-[#474039] font-bold text-[11px] text-[#523522] dark:text-[#E2BA78] shadow-2xs shrink-0">
                   VietGAP &amp; ISO Class 5
                 </span>
               </div>
@@ -570,8 +570,8 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
         </div>
 
         {/* Footer của Sidebar */}
-        <div className="p-3.5 border-t border-[#EAE1D3] dark:border-[#2D1B11] bg-white/60 dark:bg-[#1A110C]/60 text-center shrink-0">
-          <p className="text-[11px] text-[#8C6D53] dark:text-[#A88C76]">
+        <div className="p-3.5 border-t border-[#EAE1D3] dark:border-[#474039] bg-white/60 dark:bg-[#1E1B18]/60 text-center shrink-0">
+          <p className="text-[11px] text-[#8C6D53] dark:text-[#B9ADA1]">
             MushroomCloud Smart Farm • Phiên bản 2.5
           </p>
         </div>

@@ -68,12 +68,12 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF8F4] dark:bg-[#120B07] text-[#24170E] dark:text-[#F5EBE1] flex flex-col font-sans transition-colors duration-300">
+    <div className="min-h-screen bg-[#FBF8F4] dark:bg-[#1E1B18] text-[#24170E] dark:text-[#F5EBE1] flex flex-col font-sans transition-colors duration-300">
       {/* Top Header */}
-      <header className="w-full border-b border-[#E8DCCE] dark:border-[#2D1D13] bg-white/80 dark:bg-[#1A1009]/80 backdrop-blur-md sticky top-0 z-40 px-4 sm:px-8 py-3.5 flex items-center justify-between">
+      <header className="w-full border-b border-[#E8DCCE] dark:border-[#2D1D13] bg-white/80 dark:bg-[#1E1B18]/80 backdrop-blur-md sticky top-0 z-40 px-4 sm:px-8 py-3.5 flex items-center justify-between">
         {/* Brand Logo - Đồng bộ 100% với Navbar */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-b from-[#FAF5EE] via-[#F2E8DC] to-[#E8DCCE] dark:from-[#2B1C13] dark:via-[#20140D] dark:to-[#170E08] border border-[#D9C8B5] dark:border-[#543825] shadow-xs flex items-center justify-center p-1.5 transition-transform group-hover:scale-105 duration-200 shrink-0">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-b from-[#FAF5EE] via-[#F2E8DC] to-[#E8DCCE] dark:from-[#2B1C13] dark:via-[#27231F] dark:to-[#1E1B18] border border-[#D9C8B5] dark:border-[#474039] shadow-xs flex items-center justify-center p-1.5 transition-transform group-hover:scale-105 duration-200 shrink-0">
             <svg className="w-full h-full" viewBox="0 0 68 56" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="login-brand-coffee-grad" x1="12" y1="8" x2="56" y2="44" gradientUnits="userSpaceOnUse">
@@ -108,7 +108,7 @@ export default function LoginPage() {
 
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] text-xs font-semibold hover:bg-[#FAF5EE] dark:hover:bg-[#281A12] text-[#523522] dark:text-[#E2BA78] transition shadow-2xs"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] text-xs font-semibold hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630] text-[#523522] dark:text-[#E2BA78] transition shadow-2xs"
         >
           <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -120,12 +120,12 @@ export default function LoginPage() {
 
       {/* Main Body Split Card */}
       <main className="flex-1 flex items-center justify-center p-4 sm:p-8 lg:p-12">
-        <div className="w-full max-w-5xl bg-white dark:bg-[#1C120B] rounded-3xl border border-[#DECFC0] dark:border-[#38261A] shadow-2xl overflow-hidden flex flex-col lg:flex-row">
+        <div className="w-full max-w-5xl bg-white dark:bg-[#1C120B] rounded-3xl border border-[#DECFC0] dark:border-[#474039] shadow-2xl overflow-hidden flex flex-col lg:flex-row">
           {/* Left Column: Brand & Value Proposition Showcase */}
-          <div className="lg:w-[44%] bg-gradient-to-br from-[#FAF5EE] via-[#F4EBE0] to-[#EAE0D2] dark:from-[#24170E] dark:via-[#1E130B] dark:to-[#170E08] p-6 sm:p-8 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#DECFC0] dark:border-[#38261A]">
+          <div className="lg:w-[44%] bg-gradient-to-br from-[#FAF5EE] via-[#F4EBE0] to-[#EAE0D2] dark:from-[#24170E] dark:via-[#27231F] dark:to-[#1E1B18] p-6 sm:p-8 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#DECFC0] dark:border-[#474039]">
             <div>
               {/* Badge */}
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 dark:bg-[#2F1F15]/90 border border-[#D9C8B5] dark:border-[#4A3222] shadow-2xs mb-4">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 dark:bg-[#2F1F15]/90 border border-[#D9C8B5] dark:border-[#474039] shadow-2xs mb-4">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span className="text-[11px] font-bold text-[#6B442C] dark:text-[#E2BA78] tracking-wide uppercase">
                   MushroomCloud • Nông Trại FaaS
@@ -141,7 +141,7 @@ export default function LoginPage() {
               </p>
 
               {/* Chamber Visual Box */}
-              <div className="mt-5 relative rounded-2xl overflow-hidden border border-[#D9C8B5] dark:border-[#4A3222] shadow-md group">
+              <div className="mt-5 relative rounded-2xl overflow-hidden border border-[#D9C8B5] dark:border-[#474039] shadow-md group">
                 <div className="relative h-44 w-full bg-[#3B2414]">
                   <Image
                     src="/images/duyet-phuong-an-2-champagne-am.jpg"
@@ -172,7 +172,7 @@ export default function LoginPage() {
 
               {/* 3 Value Pillars */}
               <div className="mt-5 space-y-2.5">
-                <div className="p-2.5 rounded-xl bg-white/80 dark:bg-[#1E130B]/80 border border-[#E5D7C7] dark:border-[#38261A] flex items-start gap-2.5 shadow-2xs">
+                <div className="p-2.5 rounded-xl bg-white/80 dark:bg-[#27231F]/80 border border-[#E5D7C7] dark:border-[#474039] flex items-start gap-2.5 shadow-2xs">
                   <div className="w-6 h-6 rounded-lg bg-[#EAE0D2] dark:bg-[#2D1E13] flex items-center justify-center text-xs text-[#6B442C] dark:text-[#E2BA78] shrink-0 mt-0.5 font-bold">
                     ✓
                   </div>
@@ -184,7 +184,7 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                <div className="p-2.5 rounded-xl bg-white/80 dark:bg-[#1E130B]/80 border border-[#E5D7C7] dark:border-[#38261A] flex items-start gap-2.5 shadow-2xs">
+                <div className="p-2.5 rounded-xl bg-white/80 dark:bg-[#27231F]/80 border border-[#E5D7C7] dark:border-[#474039] flex items-start gap-2.5 shadow-2xs">
                   <div className="w-6 h-6 rounded-lg bg-[#EAE0D2] dark:bg-[#2D1E13] flex items-center justify-center text-xs text-[#6B442C] dark:text-[#E2BA78] shrink-0 mt-0.5 font-bold">
                     ✓
                   </div>
@@ -196,7 +196,7 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                <div className="p-2.5 rounded-xl bg-white/80 dark:bg-[#1E130B]/80 border border-[#E5D7C7] dark:border-[#38261A] flex items-start gap-2.5 shadow-2xs">
+                <div className="p-2.5 rounded-xl bg-white/80 dark:bg-[#27231F]/80 border border-[#E5D7C7] dark:border-[#474039] flex items-start gap-2.5 shadow-2xs">
                   <div className="w-6 h-6 rounded-lg bg-[#EAE0D2] dark:bg-[#2D1E13] flex items-center justify-center text-xs text-[#6B442C] dark:text-[#E2BA78] shrink-0 mt-0.5 font-bold">
                     ✓
                   </div>
@@ -216,7 +216,7 @@ export default function LoginPage() {
             <div>
               {/* Form Header */}
               <div className="mb-6">
-                <span className="inline-block px-2.5 py-0.5 rounded-md bg-[#FAF5EE] dark:bg-[#281A12] border border-[#E5D7C7] dark:border-[#3D2517] text-[10px] font-bold text-[#8C6D53] dark:text-[#D4A373] uppercase tracking-wider mb-2">
+                <span className="inline-block px-2.5 py-0.5 rounded-md bg-[#FAF5EE] dark:bg-[#322D28] border border-[#E5D7C7] dark:border-[#3D2517] text-[10px] font-bold text-[#8C6D53] dark:text-[#D4A373] uppercase tracking-wider mb-2">
                   Cổng Đăng Nhập Hệ Thống
                 </span>
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-[#24170E] dark:text-[#FFF5EA] tracking-tight">
@@ -261,7 +261,7 @@ export default function LoginPage() {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="tenban@mushroomcloud.test hoặc email cá nhân"
                       required
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-[#FCFBF8] dark:bg-[#120B07] text-[#24170E] dark:text-[#FFF5EA] text-xs focus:ring-2 focus:ring-[#C28E58] focus:border-transparent outline-none transition shadow-2xs placeholder-[#A89280]"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-[#FCFBF8] dark:bg-[#1E1B18] text-[#24170E] dark:text-[#FFF5EA] text-xs focus:ring-2 focus:ring-[#C28E58] focus:border-transparent outline-none transition shadow-2xs placeholder-[#A89280]"
                     />
                   </div>
                 </div>
@@ -292,7 +292,7 @@ export default function LoginPage() {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Nhập mật khẩu (tối thiểu 8 ký tự)"
                       required
-                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-[#FCFBF8] dark:bg-[#120B07] text-[#24170E] dark:text-[#FFF5EA] text-xs focus:ring-2 focus:ring-[#C28E58] focus:border-transparent outline-none transition shadow-2xs placeholder-[#A89280]"
+                      className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-[#FCFBF8] dark:bg-[#1E1B18] text-[#24170E] dark:text-[#FFF5EA] text-xs focus:ring-2 focus:ring-[#C28E58] focus:border-transparent outline-none transition shadow-2xs placeholder-[#A89280]"
                     />
                     <button
                       type="button"
@@ -354,7 +354,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() => handleFillDemo("admin@mushroomcloud.test", "Password123@")}
-                    className="p-2.5 rounded-xl border border-[#DECFC0] dark:border-[#38261A] bg-[#FAF5EE] dark:bg-[#1E130B] hover:border-[#C28E58] transition text-left group"
+                    className="p-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#27231F] hover:border-[#C28E58] transition text-left group"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold text-[#24170E] dark:text-[#FFF5EA]">Quản Trị Viên</span>
@@ -366,7 +366,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() => handleFillDemo("operator1@mushroomcloud.test", "Password123@")}
-                    className="p-2.5 rounded-xl border border-[#DECFC0] dark:border-[#38261A] bg-[#FAF5EE] dark:bg-[#1E130B] hover:border-[#C28E58] transition text-left group"
+                    className="p-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#27231F] hover:border-[#C28E58] transition text-left group"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold text-[#24170E] dark:text-[#FFF5EA]">Kỹ Thuật Viên</span>
@@ -378,7 +378,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() => handleFillDemo("customer1@mushroomcloud.test", "Password123@")}
-                    className="p-2.5 rounded-xl border border-[#DECFC0] dark:border-[#38261A] bg-[#FAF5EE] dark:bg-[#1E130B] hover:border-[#C28E58] transition text-left group"
+                    className="p-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#27231F] hover:border-[#C28E58] transition text-left group"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold text-[#24170E] dark:text-[#FFF5EA]">Khách Hàng</span>

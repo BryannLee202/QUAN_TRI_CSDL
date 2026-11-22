@@ -28,7 +28,7 @@ export default function RootLayout({
           img { max-width: 100%; height: auto; }
         `}} />
       </head>
-      <body className="min-h-screen bg-[#FDFBF8] dark:bg-[#140E0A] text-[#24170E] dark:text-[#F7EFE6] antialiased selection:bg-[#E8DCCE] selection:text-[#3B2212]">
+      <body className="min-h-screen bg-[#FDFBF8] dark:bg-[#1E1B18] text-[#24170E] dark:text-[#F7EFE6] antialiased selection:bg-[#E8DCCE] selection:text-[#3B2212]">
         <LanguageProvider>
           <AuthProvider>
             <NetworkStatusBanner />

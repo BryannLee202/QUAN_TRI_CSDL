@@ -28,7 +28,7 @@ export default function Navbar() {
       );
     }
     return (
-      <span className="text-[10px] font-mono uppercase font-black px-2 py-0.5 rounded-md bg-[#FAF5EE] dark:bg-[#25170F] border border-[#DECFC0] dark:border-[#4A3222] text-[#8A5C38] dark:text-[#E2BA78]">
+      <span className="text-[10px] font-mono uppercase font-black px-2 py-0.5 rounded-md bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] text-[#8A5C38] dark:text-[#E2BA78]">
         Customer
       </span>
     );
@@ -36,11 +36,11 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="bg-white/95 dark:bg-[#140E0A]/95 backdrop-blur-md text-[#24170E] dark:text-[#F7EFE6] px-4 sm:px-6 py-2.5 sm:py-3 flex justify-between items-center sticky top-0 z-40 border-b border-[#EAE1D3] dark:border-[#38261A] shadow-xs transition-colors">
+      <nav className="bg-white/95 dark:bg-[#1E1B18]/95 backdrop-blur-md text-[#24170E] dark:text-[#F7EFE6] px-4 sm:px-6 py-2.5 sm:py-3 flex justify-between items-center sticky top-0 z-40 border-b border-[#EAE1D3] dark:border-[#474039] shadow-xs transition-colors">
         {/* Brand Logo - Cafe Latte Cream Squircle with Deep Coffee Emblem */}
         <Link href="/" className="flex items-center gap-3 group shrink-0">
           <div 
-            className="w-10 h-10 logo-box rounded-2xl bg-gradient-to-b from-[#FAF5EE] via-[#F2E8DC] to-[#E8DCCE] dark:from-[#2B1C13] dark:via-[#20140D] dark:to-[#170E08] border border-[#D9C8B5] dark:border-[#543825] shadow-xs flex items-center justify-center p-1.5 transition-transform group-hover:scale-105 duration-200 shrink-0"
+            className="w-10 h-10 logo-box rounded-2xl bg-gradient-to-b from-[#FAF5EE] via-[#F2E8DC] to-[#E8DCCE] dark:from-[#2B1C13] dark:via-[#27231F] dark:to-[#1E1B18] border border-[#D9C8B5] dark:border-[#474039] shadow-xs flex items-center justify-center p-1.5 transition-transform group-hover:scale-105 duration-200 shrink-0"
             style={{ width: '40px', height: '40px', minWidth: '40px', minHeight: '40px', maxWidth: '40px', maxHeight: '40px', flexShrink: 0 }}
           >
             <svg 
@@ -87,19 +87,19 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center space-x-1 xl:space-x-2 text-[13.5px] font-semibold text-[#5C4231] dark:text-[#DAC7B5] whitespace-nowrap flex-nowrap">
           <Link
             href="/"
-            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition whitespace-nowrap"
+            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#3C3630] transition whitespace-nowrap"
           >
             {t.nav.customerPortal}
           </Link>
           <a
             href="/#packages"
-            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition whitespace-nowrap"
+            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#3C3630] transition whitespace-nowrap"
           >
             Gói Thuê Nấm
           </a>
           <Link
             href="/tinh-loi-nhuan"
-            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition flex items-center gap-1.5 whitespace-nowrap"
+            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#3C3630] transition flex items-center gap-1.5 whitespace-nowrap"
           >
             <span>Máy Tính Lợi Nhuận</span>
             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300/60 dark:border-amber-700/60">
@@ -108,20 +108,20 @@ export default function Navbar() {
           </Link>
           <Link
             href="/san-nong-san"
-            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition whitespace-nowrap"
+            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#3C3630] transition whitespace-nowrap"
           >
             Sàn Nông Sản FaaS
           </Link>
           <Link
             href="/mang-luoi-farm"
-            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition whitespace-nowrap"
+            className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#3C3630] transition whitespace-nowrap"
           >
             Mạng Lưới Farm
           </Link>
           {(isAdmin || isOperator) && (
             <Link
               href="/operator"
-              className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#281A12] transition flex items-center gap-1.5 whitespace-nowrap text-emerald-800 dark:text-emerald-400 font-bold"
+              className="px-3 py-1.5 rounded-xl hover:text-[#3B2212] dark:hover:text-[#FFF5EA] hover:bg-[#F7EFE4] dark:hover:bg-[#3C3630] transition flex items-center gap-1.5 whitespace-nowrap text-emerald-800 dark:text-emerald-400 font-bold"
             >
               <span>{t.nav.operatorCenter}</span>
             </Link>
@@ -133,7 +133,7 @@ export default function Navbar() {
           {/* Nút Hồ sơ & Lịch sử giao dịch */}
           <Link
             href="/ho-so"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#D9C8B5] dark:border-[#543825] text-xs font-bold hover:bg-[#FAF5EE] dark:hover:bg-[#281A12] text-[#523522] dark:text-[#E2BA78] transition shadow-2xs whitespace-nowrap"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] text-xs font-bold hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630] text-[#523522] dark:text-[#E2BA78] transition shadow-2xs whitespace-nowrap"
             title="Hồ sơ cá nhân & Lịch sử giao dịch"
           >
             <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -147,7 +147,7 @@ export default function Navbar() {
           {!isAuthenticated && (
             <Link
               href="/login"
-              className="hidden sm:inline-flex px-3.5 py-1.5 rounded-xl border border-[#D9C8B5] dark:border-[#543825] text-xs font-bold hover:bg-[#FAF5EE] dark:hover:bg-[#281A12] text-[#523522] dark:text-[#E2BA78] transition shadow-2xs whitespace-nowrap"
+              className="hidden sm:inline-flex px-3.5 py-1.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] text-xs font-bold hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630] text-[#523522] dark:text-[#E2BA78] transition shadow-2xs whitespace-nowrap"
             >
               Đăng Nhập
             </Link>
@@ -157,7 +157,7 @@ export default function Navbar() {
           {isAuthenticated && user && (
             <Link
               href="/ho-so"
-              className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-2xl bg-[#FAF5EE] dark:bg-[#1C120C] border border-[#DECFC0] dark:border-[#38261A] hover:border-[#C28E58] transition shadow-2xs group"
+              className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-2xl bg-[#FAF5EE] dark:bg-[#27231F] border border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58] transition shadow-2xs group"
               title="Xem hồ sơ cá nhân & Lịch sử giao dịch"
             >
               <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-[#6B442C] to-[#C28E58] text-white flex items-center justify-center font-bold text-xs shadow-xs">
@@ -174,7 +174,7 @@ export default function Navbar() {
           <button
             onClick={() => setIsControlHubOpen(true)}
             aria-label="Mở trung tâm điều khiển và tiện ích hệ thống"
-            className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-gradient-to-b from-[#FAF5EE] to-[#F2E8DC] dark:from-[#24170F] dark:to-[#170E08] border border-[#DECFC0] dark:border-[#422C1D] hover:border-[#C28E58] dark:hover:border-[#C28E58] text-[#5C3A24] dark:text-[#E8DCCE] transition-all duration-200 shadow-2xs group cursor-pointer active:scale-95"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-gradient-to-b from-[#FAF5EE] to-[#F2E8DC] dark:from-[#24170F] dark:to-[#1E1B18] border border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58] dark:hover:border-[#C28E58] text-[#5C3A24] dark:text-[#E8DCCE] transition-all duration-200 shadow-2xs group cursor-pointer active:scale-95"
             title="Mở Tiện Ích, Thông Báo & Cài Đặt (Sidebar)"
           >
             {/* Icon Bảng Điều Khiển Squircle 4 Ô */}
@@ -206,7 +206,7 @@ export default function Navbar() {
 
             {/* Icon Mũi Tên Hướng Vào Phải */}
             <svg 
-              className="w-3.5 h-3.5 text-[#8A5C38] dark:text-[#A88C76] group-hover:translate-x-0.5 transition-transform" 
+              className="w-3.5 h-3.5 text-[#8A5C38] dark:text-[#B9ADA1] group-hover:translate-x-0.5 transition-transform" 
               viewBox="0 0 24 24" 
               fill="none" 
               stroke="currentColor" 

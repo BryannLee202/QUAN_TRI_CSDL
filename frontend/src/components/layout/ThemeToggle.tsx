@@ -38,7 +38,7 @@ export default function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="h-9 w-20 bg-[#F2E8DC] dark:bg-[#20140D] rounded-xl animate-pulse shrink-0 border border-[#DECFC0] dark:border-[#422C1D]"></div>
+      <div className="h-9 w-20 bg-[#F2E8DC] dark:bg-[#27231F] rounded-xl animate-pulse shrink-0 border border-[#DECFC0] dark:border-[#474039]"></div>
     );
   }
 
@@ -46,7 +46,7 @@ export default function ThemeToggle() {
     <button
       onClick={toggleTheme}
       aria-label="Chuyển đổi giao diện Sáng / Tối"
-      className="h-9 px-3 rounded-xl bg-[#FAF5EE] hover:bg-[#F2E8DC] dark:bg-[#20140D] dark:hover:bg-[#2B1C13] text-[#5C3A24] dark:text-[#E8DCCE] transition-all duration-200 active:scale-95 shrink-0 whitespace-nowrap shadow-xs border border-[#DECFC0] dark:border-[#422C1D] flex items-center gap-1.5 text-[11px] font-bold group"
+      className="h-9 px-3 rounded-xl bg-[#FAF5EE] hover:bg-[#F2E8DC] dark:bg-[#27231F] dark:hover:bg-[#3C3630] text-[#5C3A24] dark:text-[#E8DCCE] transition-all duration-200 active:scale-95 shrink-0 whitespace-nowrap shadow-xs border border-[#DECFC0] dark:border-[#474039] flex items-center gap-1.5 text-[11px] font-bold group"
     >
       {isDark ? (
         // Icon Mặt Trời Vector

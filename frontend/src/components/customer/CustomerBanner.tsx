@@ -9,7 +9,7 @@ export default function CustomerBanner() {
 
   if (isAuthenticated && user) {
     return (
-      <div className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-[#FAF5EE] via-[#F5ECE1] to-[#EFE2D3] dark:from-[#25170F] dark:via-[#1E120A] dark:to-[#170E08] border border-[#D9C8B5] dark:border-[#4A3222] flex flex-wrap items-center justify-between gap-3 text-xs shadow-xs animate-fade-in">
+      <div className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-[#FAF5EE] via-[#F5ECE1] to-[#EFE2D3] dark:from-[#25170F] dark:via-[#1E120A] dark:to-[#1E1B18] border border-[#D9C8B5] dark:border-[#474039] flex flex-wrap items-center justify-between gap-3 text-xs shadow-xs animate-fade-in">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#6B442C] to-[#C28E58] text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
             {user.fullName ? user.fullName.charAt(0).toUpperCase() : "K"}
@@ -19,7 +19,7 @@ export default function CustomerBanner() {
               <span className="font-bold text-sm text-[#24170E] dark:text-[#FFF5EA]">
                 Xin chào, {user.fullName}!
               </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-md font-bold bg-[#FAF5EE] dark:bg-[#120B07] text-[#C28E58] border border-[#DECFC0] dark:border-[#422C1D]">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-md font-bold bg-[#FAF5EE] dark:bg-[#1E1B18] text-[#C28E58] border border-[#DECFC0] dark:border-[#474039]">
                 {user.role}
               </span>
             </div>

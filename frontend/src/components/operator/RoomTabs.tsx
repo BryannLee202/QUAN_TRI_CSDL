@@ -24,7 +24,7 @@ export default function RoomTabs({ rooms, selectedRoomId, alertRoomIds, onSelect
             className={`relative rounded-xl px-4 py-2 text-xs font-bold transition-all flex items-center gap-2 ${
               active
                 ? "bg-gradient-to-r from-[#6B442C] to-[#543522] text-[#FFF5EA] shadow-sm border border-[#C28E58]"
-                : "bg-[#FAF5EE] dark:bg-[#1E130B] text-[#523522] dark:text-[#D4AF7A] border border-[#DECFC0] dark:border-[#3D281B] hover:bg-[#F2E8DC] dark:hover:bg-[#281A12]"
+                : "bg-[#FAF5EE] dark:bg-[#27231F] text-[#523522] dark:text-[#D4AF7A] border border-[#DECFC0] dark:border-[#3D281B] hover:bg-[#F2E8DC] dark:hover:bg-[#3C3630]"
             }`}
           >
             <span>{r.roomCode}</span>

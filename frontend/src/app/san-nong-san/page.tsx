@@ -145,7 +145,7 @@ export default function MarketplacePage() {
         <Navbar />
 
         {/* Hero Banner Header */}
-        <div className="bg-gradient-to-b from-[#F5EEE4] via-[#FBF7F0] to-[#FDFBF8] dark:from-[#20140D] dark:via-[#19100A] dark:to-[#140D08] border-b border-[#EAE1D3] dark:border-[#38261A] py-10 px-6">
+        <div className="bg-gradient-to-b from-[#F5EEE4] via-[#FBF7F0] to-[#FDFBF8] dark:from-[#20140D] dark:via-[#19100A] dark:to-[#140D08] border-b border-[#EAE1D3] dark:border-[#474039] py-10 px-6">
           <div className="max-w-7xl mx-auto space-y-4">
             <div className="flex items-center gap-2 text-xs font-semibold text-[#8A5C38] dark:text-[#C28E58]">
               <Link href="/" className="hover:underline flex items-center gap-1">
@@ -173,7 +173,7 @@ export default function MarketplacePage() {
               <div className="flex items-center gap-3">
                 <Link
                   href="/tinh-loi-nhuan"
-                  className="px-4 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#422C1D] bg-white dark:bg-[#1C120C] text-xs font-bold hover:border-[#C28E58] transition"
+                  className="px-4 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-white dark:bg-[#27231F] text-xs font-bold hover:border-[#C28E58] transition"
                 >
                   Tính Lợi Nhuận Thuê Khay →
                 </Link>
@@ -186,7 +186,7 @@ export default function MarketplacePage() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           {/* 3 Metric Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            <div className="p-4 rounded-2xl bg-white dark:bg-[#1A1009] border border-[#EAE1D3] dark:border-[#38261A] shadow-xs flex items-center gap-3.5">
+            <div className="p-4 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-xs flex items-center gap-3.5">
               <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-lg">
                 ⚡
               </div>
@@ -196,7 +196,7 @@ export default function MarketplacePage() {
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-white dark:bg-[#1A1009] border border-[#EAE1D3] dark:border-[#38261A] shadow-xs flex items-center gap-3.5">
+            <div className="p-4 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-xs flex items-center gap-3.5">
               <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold flex items-center justify-center text-lg">
                 🏷️
               </div>
@@ -206,7 +206,7 @@ export default function MarketplacePage() {
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-white dark:bg-[#1A1009] border border-[#EAE1D3] dark:border-[#38261A] shadow-xs flex items-center gap-3.5">
+            <div className="p-4 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-xs flex items-center gap-3.5">
               <div className="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 font-bold flex items-center justify-center text-lg">
                 🛡️
               </div>
@@ -218,7 +218,7 @@ export default function MarketplacePage() {
           </div>
 
           {/* Filter Bar */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-4 rounded-2xl bg-white dark:bg-[#1A1009] border border-[#DECFC0] dark:border-[#38261A] mb-8 shadow-xs">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-4 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#DECFC0] dark:border-[#474039] mb-8 shadow-xs">
             {/* Category Tabs */}
             <div className="flex items-center gap-1.5 flex-wrap">
               <button
@@ -227,7 +227,7 @@ export default function MarketplacePage() {
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                   filterCategory === 'ALL'
                     ? 'bg-[#523522] dark:bg-[#C28E58] text-white dark:text-[#170E08] shadow-sm'
-                    : 'text-[#6E4B33] dark:text-[#DAC7B5] hover:bg-[#FAF5EE] dark:hover:bg-[#25170F]'
+                    : 'text-[#6E4B33] dark:text-[#DAC7B5] hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630]'
                 }`}
               >
                 Tất Cả Lô Nấm ({MOCK_BATCHES.length})
@@ -238,7 +238,7 @@ export default function MarketplacePage() {
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                   filterCategory === 'FRESH'
                     ? 'bg-[#523522] dark:bg-[#C28E58] text-white dark:text-[#170E08] shadow-sm'
-                    : 'text-[#6E4B33] dark:text-[#DAC7B5] hover:bg-[#FAF5EE] dark:hover:bg-[#25170F]'
+                    : 'text-[#6E4B33] dark:text-[#DAC7B5] hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630]'
                 }`}
               >
                 <span>🌿 Nấm Tươi Hỏa Tốc (2H)</span>
@@ -249,7 +249,7 @@ export default function MarketplacePage() {
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                   filterCategory === 'DRIED'
                     ? 'bg-[#523522] dark:bg-[#C28E58] text-white dark:text-[#170E08] shadow-sm'
-                    : 'text-[#6E4B33] dark:text-[#DAC7B5] hover:bg-[#FAF5EE] dark:hover:bg-[#25170F]'
+                    : 'text-[#6E4B33] dark:text-[#DAC7B5] hover:bg-[#FAF5EE] dark:hover:bg-[#3C3630]'
                 }`}
               >
                 <span>☀️ Sấy Thăng Hoa &amp; Dược Liệu</span>
@@ -263,7 +263,7 @@ export default function MarketplacePage() {
                 placeholder="Tìm giống nấm, mã lô..."
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
-                className="w-full px-3.5 py-2 pl-9 rounded-xl border border-[#DECFC0] dark:border-[#422C1D] bg-[#FAF5EE] dark:bg-[#20140D] text-xs text-[#24170E] dark:text-white placeholder-[#8A5C38] focus:outline-none focus:border-[#C28E58]"
+                className="w-full px-3.5 py-2 pl-9 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#27231F] text-xs text-[#24170E] dark:text-white placeholder-[#8A5C38] focus:outline-none focus:border-[#C28E58]"
               />
               <span className="absolute left-3 top-2.5 text-xs text-[#8A5C38]">🔍</span>
             </div>
@@ -278,12 +278,12 @@ export default function MarketplacePage() {
               return (
                 <div
                   key={batch.id}
-                  className="rounded-3xl border border-[#DECFC0] dark:border-[#38261A] bg-white dark:bg-[#1A1009] p-6 shadow-sm hover:shadow-md hover:border-[#C28E58] transition flex flex-col justify-between group"
+                  className="rounded-3xl border border-[#DECFC0] dark:border-[#474039] bg-white dark:bg-[#1E1B18] p-6 shadow-sm hover:shadow-md hover:border-[#C28E58] transition flex flex-col justify-between group"
                 >
                   <div className="space-y-3.5">
                     {/* Header Card */}
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md bg-[#FAF5EE] dark:bg-[#25170F] text-[#8A5C38] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#38261A]">
+                      <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md bg-[#FAF5EE] dark:bg-[#322D28] text-[#8A5C38] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#474039]">
                         {batch.batchCode}
                       </span>
                       <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300">
@@ -300,7 +300,7 @@ export default function MarketplacePage() {
                       </p>
                     </div>
 
-                    <div className="text-[11px] text-[#8A5C38] space-y-1 bg-[#FAF5EE] dark:bg-[#22160E] p-3 rounded-xl border border-[#EAE1D3] dark:border-[#332014]">
+                    <div className="text-[11px] text-[#8A5C38] space-y-1 bg-[#FAF5EE] dark:bg-[#27231F] p-3 rounded-xl border border-[#EAE1D3] dark:border-[#474039]">
                       <div className="flex items-center justify-between">
                         <span>Chủ khay ký gửi:</span>
                         <span className="font-bold text-[#3B2212] dark:text-white">{batch.ownerName}</span>
@@ -317,7 +317,7 @@ export default function MarketplacePage() {
                   </div>
 
                   {/* Giá & Action */}
-                  <div className="mt-6 pt-4 border-t border-[#EAE1D3] dark:border-[#332014] flex items-end justify-between">
+                  <div className="mt-6 pt-4 border-t border-[#EAE1D3] dark:border-[#474039] flex items-end justify-between">
                     <div>
                       <span className="text-[10px] text-[#8C6D53] line-through block">
                         Giá TT: {formatVnd(batch.marketPrice)}/kg

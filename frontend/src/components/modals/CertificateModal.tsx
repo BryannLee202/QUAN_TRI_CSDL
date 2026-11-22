@@ -35,7 +35,7 @@ export default function CertificateModal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header điều khiển */}
-        <div className="px-6 py-3.5 border-b border-[#E0D3C1] dark:border-[#543825] flex items-center justify-between bg-[#FAF5EE] dark:bg-[#20140D]">
+        <div className="px-6 py-3.5 border-b border-[#E0D3C1] dark:border-[#474039] flex items-center justify-between bg-[#FAF5EE] dark:bg-[#27231F]">
           <div className="flex items-center gap-2.5">
             <svg className="w-5 h-5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -60,7 +60,7 @@ export default function CertificateModal({
             </button>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-xl bg-[#FAF5EE] dark:bg-[#2B1C13] hover:bg-[#EAE1D3] dark:hover:bg-[#38261A] text-[#523522] dark:text-[#DAC7B5] flex items-center justify-center text-sm font-bold transition border border-[#DECFC0] dark:border-[#422C1D]"
+              className="w-8 h-8 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] hover:bg-[#EAE1D3] dark:hover:bg-[#38261A] text-[#523522] dark:text-[#DAC7B5] flex items-center justify-center text-sm font-bold transition border border-[#DECFC0] dark:border-[#474039]"
             >
               ✕
             </button>
@@ -78,7 +78,7 @@ export default function CertificateModal({
 
             {/* Logo & Quốc hiệu */}
             <div className="mb-3">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#FAF5EE] to-[#EAE1D3] dark:from-[#2B1C13] dark:to-[#170E08] text-[#523522] dark:text-[#E2BA78] flex items-center justify-center mx-auto border-2 border-[#C28E58] shadow-sm mb-2 p-2">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#FAF5EE] to-[#EAE1D3] dark:from-[#2B1C13] dark:to-[#1E1B18] text-[#523522] dark:text-[#E2BA78] flex items-center justify-center mx-auto border-2 border-[#C28E58] shadow-sm mb-2 p-2">
                 <svg className="w-full h-full" viewBox="0 0 68 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M14 27C14 16 23 8 34 8C45 8 54 16 54 27C54 30.5 50.5 32.5 46.5 31.5C41.5 30 38.5 26.5 34 26.5C29.5 26.5 26.5 30 21.5 31.5C17.5 32.5 14 30.5 14 27Z" fill="#6B442C" />
                   <path d="M22 26C24 19 28 15 34 15C40 15 44 19 46 26" stroke="#C28E58" strokeWidth="2.5" strokeLinecap="round" />

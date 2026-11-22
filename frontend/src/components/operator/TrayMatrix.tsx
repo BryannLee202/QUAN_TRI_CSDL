@@ -20,7 +20,7 @@ const CARD_STYLE: Record<TrayUiStatus, string> = {
   maintenance:
     "bg-gradient-to-br from-[#8A5C38] to-[#6E472A] hover:from-[#9A6842] hover:to-[#7A5030] text-white border-[#C28E58]/60 shadow-sm",
   empty:
-    "bg-[#FAF5EE] dark:bg-[#1B120C] hover:bg-[#F3EAE0] dark:hover:bg-[#241810] text-[#3B2516] dark:text-[#E8DCCE] border-[#DECFC0] dark:border-[#3D271A] hover:border-[#C28E58]",
+    "bg-[#FAF5EE] dark:bg-[#27231F] hover:bg-[#F3EAE0] dark:hover:bg-[#241810] text-[#3B2516] dark:text-[#E8DCCE] border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58]",
 };
 
 /**
@@ -71,7 +71,7 @@ export default function TrayMatrix({
 
   if (filteredTrays.length === 0) {
     return (
-      <div className="py-12 text-center text-xs text-[#8C6D53] dark:text-[#A8907E] rounded-2xl border border-dashed border-[#DECFC0] dark:border-[#38261A]">
+      <div className="py-12 text-center text-xs text-[#8C6D53] dark:text-[#B9ADA1] rounded-2xl border border-dashed border-[#DECFC0] dark:border-[#474039]">
         Không có khay nuôi nào thuộc trạng thái đang lọc trong buồng này.
       </div>
     );

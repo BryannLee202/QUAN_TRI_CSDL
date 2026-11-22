@@ -269,12 +269,12 @@ export default function CheckoutGatewayModal({
       aria-modal="true"
       aria-label="Cổng thanh toán điện tử MushroomCloud"
     >
-      <div className="my-auto w-full max-w-4xl rounded-3xl bg-[#FDFBF8] dark:bg-[#160F0A] border border-[#D9C8B4] dark:border-[#3D271A] shadow-2xl overflow-hidden text-[#24170E] dark:text-[#F5EBE0]">
+      <div className="my-auto w-full max-w-4xl rounded-3xl bg-[#FDFBF8] dark:bg-[#160F0A] border border-[#D9C8B4] dark:border-[#474039] shadow-2xl overflow-hidden text-[#24170E] dark:text-[#F5EBE0]">
         {/* Thanh Header Trang Trọng & Đồng Bộ Nhận Diện Thương Hiệu */}
         <div className="px-6 py-4 bg-gradient-to-r from-[#1E130B] via-[#2B1B10] to-[#1A1009] text-white border-b border-[#C28E58]/35 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
             {/* Biểu tượng Thương hiệu MushroomCloud Đồng Bộ Navbar */}
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-b from-[#FAF5EE] to-[#EADACA] dark:from-[#2C1D14] dark:to-[#1F140E] border border-[#D5C3B0] dark:border-[#4A3222] flex items-center justify-center shadow-sm shrink-0">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-b from-[#FAF5EE] to-[#EADACA] dark:from-[#2C1D14] dark:to-[#1F140E] border border-[#D5C3B0] dark:border-[#474039] flex items-center justify-center shadow-sm shrink-0">
               <svg className="w-6 h-6" viewBox="0 0 68 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="checkout-brand-grad" x1="12" y1="8" x2="56" y2="44" gradientUnits="userSpaceOnUse">
@@ -323,7 +323,7 @@ export default function CheckoutGatewayModal({
         </div>
 
         {/* Thanh Tiến Trình 3 Bước Đồng Bộ Phông Chữ */}
-        <div className="px-6 py-3.5 bg-[#F4ECE1] dark:bg-[#1E130C] border-b border-[#E3D5C3] dark:border-[#332014] flex items-center justify-between text-xs">
+        <div className="px-6 py-3.5 bg-[#F4ECE1] dark:bg-[#27231F] border-b border-[#E3D5C3] dark:border-[#474039] flex items-center justify-between text-xs">
           <div className="flex items-center gap-3 sm:gap-6 flex-wrap">
             <div className={`flex items-center gap-2 ${step >= 1 ? "text-[#24170E] dark:text-[#E2BA78] font-bold" : "text-[#8C6D53] font-medium"}`}>
               <span className={`w-5 h-5 rounded-full text-[11px] font-bold flex items-center justify-center ${
@@ -406,8 +406,8 @@ export default function CheckoutGatewayModal({
             <form onSubmit={handleProceedToGateway} className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               {/* Cột Trái (7 cột) */}
               <div className="lg:col-span-7 space-y-5">
-                <div className="p-5 rounded-2xl bg-white dark:bg-[#1E140D] border border-[#E3D5C3] dark:border-[#38261A] space-y-4 shadow-2xs">
-                  <div className="flex items-center justify-between border-b border-[#F0E6D8] dark:border-[#2C1D13] pb-3">
+                <div className="p-5 rounded-2xl bg-white dark:bg-[#27231F] border border-[#E3D5C3] dark:border-[#474039] space-y-4 shadow-2xs">
+                  <div className="flex items-center justify-between border-b border-[#F0E6D8] dark:border-[#474039] pb-3">
                     <h4 className="text-xs font-bold uppercase tracking-wider text-[#4A3222] dark:text-[#E2BA78] flex items-center gap-2">
                       <svg className="w-4 h-4 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
@@ -431,7 +431,7 @@ export default function CheckoutGatewayModal({
                         value={customerName}
                         onChange={(e) => setCustomerName(e.target.value)}
                         placeholder="Nhập họ và tên đầy đủ"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-[#FAF7F2] dark:bg-[#261810] text-[#24170E] dark:text-white focus:outline-none focus:border-[#C28E58] font-medium"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-[#FAF7F2] dark:bg-[#322D28] text-[#24170E] dark:text-white focus:outline-none focus:border-[#C28E58] font-medium"
                       />
                     </div>
                     <div>
@@ -444,7 +444,7 @@ export default function CheckoutGatewayModal({
                         value={customerPhone}
                         onChange={(e) => setCustomerPhone(e.target.value)}
                         placeholder="09xx xxx xxx"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-[#FAF7F2] dark:bg-[#261810] text-[#24170E] dark:text-white focus:outline-none focus:border-[#C28E58] font-medium tabular-nums"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-[#FAF7F2] dark:bg-[#322D28] text-[#24170E] dark:text-white focus:outline-none focus:border-[#C28E58] font-medium tabular-nums"
                       />
                     </div>
                   </div>
@@ -459,13 +459,13 @@ export default function CheckoutGatewayModal({
                       value={deliveryAddress}
                       onChange={(e) => setDeliveryAddress(e.target.value)}
                       placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố"
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-[#FAF7F2] dark:bg-[#261810] text-[#24170E] dark:text-white focus:outline-none focus:border-[#C28E58] font-medium"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-[#FAF7F2] dark:bg-[#322D28] text-[#24170E] dark:text-white focus:outline-none focus:border-[#C28E58] font-medium"
                     />
                   </div>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-white dark:bg-[#1E140D] border border-[#E3D5C3] dark:border-[#38261A] space-y-3.5 shadow-2xs">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#4A3222] dark:text-[#E2BA78] flex items-center gap-2 border-b border-[#F0E6D8] dark:border-[#2C1D13] pb-3">
+                <div className="p-5 rounded-2xl bg-white dark:bg-[#27231F] border border-[#E3D5C3] dark:border-[#474039] space-y-3.5 shadow-2xs">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#4A3222] dark:text-[#E2BA78] flex items-center gap-2 border-b border-[#F0E6D8] dark:border-[#474039] pb-3">
                     <svg className="w-4 h-4 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                       <rect x="2" y="5" width="20" height="14" rx="2" />
                       <line x1="2" y1="10" x2="22" y2="10" />
@@ -484,7 +484,7 @@ export default function CheckoutGatewayModal({
                           className={`w-full p-3.5 rounded-2xl border text-left transition-all flex items-start gap-3.5 cursor-pointer ${
                             isSelected
                               ? `${ch.accentBorder} ${ch.accentBg}`
-                              : "border-[#E3D5C3] dark:border-[#332014] bg-[#FDFBF8] dark:bg-[#18100A] hover:border-[#C28E58]"
+                              : "border-[#E3D5C3] dark:border-[#474039] bg-[#FDFBF8] dark:bg-[#18100A] hover:border-[#C28E58]"
                           }`}
                         >
                           <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
@@ -548,8 +548,8 @@ export default function CheckoutGatewayModal({
 
               {/* Cột Phải (5 cột): Bản Kê Chi Phí */}
               <div className="lg:col-span-5 flex flex-col justify-between space-y-5">
-                <div className="p-5 rounded-2xl bg-white dark:bg-[#1E140D] border border-[#E3D5C3] dark:border-[#38261A] space-y-4 shadow-2xs">
-                  <div className="border-b border-[#F0E6D8] dark:border-[#2C1D13] pb-3">
+                <div className="p-5 rounded-2xl bg-white dark:bg-[#27231F] border border-[#E3D5C3] dark:border-[#474039] space-y-4 shadow-2xs">
+                  <div className="border-b border-[#F0E6D8] dark:border-[#474039] pb-3">
                     <span className="text-[11px] font-bold uppercase tracking-wider text-[#8C6D53] dark:text-[#C28E58] block">
                       {item.orderType === "FAAS_RENTAL" ? "Thông Tin Gói Thuê Khay" : "Thông Tin Đơn Hàng Nông Sản"}
                     </span>
@@ -562,11 +562,11 @@ export default function CheckoutGatewayModal({
                   </div>
 
                   <div className="grid grid-cols-2 gap-2.5 text-xs">
-                    <div className="p-3 rounded-xl bg-[#FAF6F0] dark:bg-[#261910] border border-[#EAE0D3] dark:border-[#38261A]">
+                    <div className="p-3 rounded-xl bg-[#FAF6F0] dark:bg-[#322D28] border border-[#EAE0D3] dark:border-[#474039]">
                       <span className="text-[11px] text-[#8C6D53] block">Thời hạn hợp đồng:</span>
                       <strong className="text-xs font-bold text-[#24170E] dark:text-[#E2BA78] mt-0.5 block">{item.durationLabel}</strong>
                     </div>
-                    <div className="p-3 rounded-xl bg-[#FAF6F0] dark:bg-[#261910] border border-[#EAE0D3] dark:border-[#38261A]">
+                    <div className="p-3 rounded-xl bg-[#FAF6F0] dark:bg-[#322D28] border border-[#EAE0D3] dark:border-[#474039]">
                       <span className="text-[11px] text-[#8C6D53] block">Sản lượng cam kết:</span>
                       <strong className="text-xs font-bold text-emerald-800 dark:text-emerald-400 mt-0.5 block">{item.yieldCommitment}</strong>
                     </div>
@@ -582,13 +582,13 @@ export default function CheckoutGatewayModal({
                         value={voucherCode}
                         onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
                         placeholder="Nhập mã ưu đãi"
-                        className="flex-1 px-3.5 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-[#FAF7F2] dark:bg-[#261810] text-xs font-bold uppercase text-[#24170E] dark:text-[#E2BA78] focus:outline-none focus:border-[#C28E58]"
+                        className="flex-1 px-3.5 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-[#FAF7F2] dark:bg-[#322D28] text-xs font-bold uppercase text-[#24170E] dark:text-[#E2BA78] focus:outline-none focus:border-[#C28E58]"
                       />
                       {voucherCode && (
                         <button
                           type="button"
                           onClick={() => setVoucherCode("")}
-                          className="px-3 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] text-xs font-semibold text-[#8C6D53] hover:text-[#24170E] dark:hover:text-white"
+                          className="px-3 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#474039] text-xs font-semibold text-[#8C6D53] hover:text-[#24170E] dark:hover:text-white"
                         >
                           Bỏ chọn
                         </button>
@@ -616,7 +616,7 @@ export default function CheckoutGatewayModal({
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-[#F0E6D8] dark:border-[#2C1D13] space-y-2.5 text-xs">
+                  <div className="pt-3 border-t border-[#F0E6D8] dark:border-[#474039] space-y-2.5 text-xs">
                     <div className="flex justify-between text-[#634936] dark:text-[#BFA895]">
                       <span>Giá trị hợp đồng niêm yết:</span>
                       <span className="font-semibold text-[#24170E] dark:text-white tabular-nums">{formatVnd(item.grossAmount)}</span>
@@ -629,7 +629,7 @@ export default function CheckoutGatewayModal({
                       <span>Bảo hiểm sản lượng &amp; Vận chuyển:</span>
                       <span className="font-semibold text-emerald-800 dark:text-emerald-400">Miễn phí</span>
                     </div>
-                    <div className="pt-3 border-t border-[#E3D5C3] dark:border-[#38261A] flex items-baseline justify-between">
+                    <div className="pt-3 border-t border-[#E3D5C3] dark:border-[#474039] flex items-baseline justify-between">
                       <span className="font-bold text-sm text-[#24170E] dark:text-white">Tổng Thanh Toán:</span>
                       <span className="font-extrabold text-xl text-[#8C3A16] dark:text-[#E2BA78] tabular-nums">
                         {formatVnd(previewNetAmount)}
@@ -637,7 +637,7 @@ export default function CheckoutGatewayModal({
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-[#FAF5EE] dark:bg-[#24160E] border border-[#E3D5C3] dark:border-[#3D271A] text-xs text-[#634936] dark:text-[#BFA895] space-y-1">
+                  <div className="p-3.5 rounded-xl bg-[#FAF5EE] dark:bg-[#24160E] border border-[#E3D5C3] dark:border-[#474039] text-xs text-[#634936] dark:text-[#BFA895] space-y-1">
                     <div className="font-bold text-[#3B2516] dark:text-[#E2BA78] flex items-center gap-1.5">
                       <svg className="w-4 h-4 text-[#C28E58] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -654,7 +654,7 @@ export default function CheckoutGatewayModal({
                   <button
                     type="button"
                     onClick={onClose}
-                    className="px-4 py-3.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] text-xs font-bold text-[#6E4B33] dark:text-[#DAC7B5] hover:bg-[#F4ECE1] dark:hover:bg-[#261810] transition cursor-pointer"
+                    className="px-4 py-3.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] text-xs font-bold text-[#6E4B33] dark:text-[#DAC7B5] hover:bg-[#F4ECE1] dark:hover:bg-[#3C3630] transition cursor-pointer"
                   >
                     Hủy Bỏ
                   </button>
@@ -679,7 +679,7 @@ export default function CheckoutGatewayModal({
           ============================================================ */}
           {step === 2 && sessionData && (
             <div className="space-y-6">
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-[#F4ECE1] via-[#FAF6F0] to-[#F4ECE1] dark:from-[#22160E] dark:via-[#1C120B] dark:to-[#22160E] border border-[#DECFC0] dark:border-[#3D271A] flex flex-wrap items-center justify-between gap-4">
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-[#F4ECE1] via-[#FAF6F0] to-[#F4ECE1] dark:from-[#22160E] dark:via-[#1C120B] dark:to-[#22160E] border border-[#DECFC0] dark:border-[#474039] flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-xl bg-emerald-800 text-white flex items-center justify-center shrink-0">
                     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -694,7 +694,7 @@ export default function CheckoutGatewayModal({
                       <span className="text-xs font-bold text-[#24170E] dark:text-white">
                         Mã Tham Chiếu Giao Dịch:
                       </span>
-                      <span className="font-bold text-xs px-2.5 py-0.5 rounded-lg bg-white dark:bg-[#2C1C12] border border-[#D9C8B5] dark:border-[#4A3222] text-[#8C3A16] dark:text-[#E2BA78] tabular-nums">
+                      <span className="font-bold text-xs px-2.5 py-0.5 rounded-lg bg-white dark:bg-[#2C1C12] border border-[#D9C8B5] dark:border-[#474039] text-[#8C3A16] dark:text-[#E2BA78] tabular-nums">
                         {sessionData.transactionRef}
                       </span>
                     </div>
@@ -704,7 +704,7 @@ export default function CheckoutGatewayModal({
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white dark:bg-[#160F0A] border border-[#DECFC0] dark:border-[#38261A]">
+                <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white dark:bg-[#160F0A] border border-[#DECFC0] dark:border-[#474039]">
                   <svg className="w-4 h-4 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <circle cx="12" cy="12" r="10" />
                     <polyline points="12 6 12 12 16 14" />
@@ -720,8 +720,8 @@ export default function CheckoutGatewayModal({
 
               {(paymentMethod === "VIETQR_NAPAS" || paymentMethod === "VNPAY_GATEWAY") && (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-                  <div className="lg:col-span-5 p-5 rounded-2xl bg-white dark:bg-[#1E140D] border-2 border-emerald-600/40 dark:border-emerald-500/40 flex flex-col items-center justify-between text-center shadow-sm">
-                    <div className="w-full flex items-center justify-between pb-3 border-b border-[#F0E6D8] dark:border-[#2C1D13]">
+                  <div className="lg:col-span-5 p-5 rounded-2xl bg-white dark:bg-[#27231F] border-2 border-emerald-600/40 dark:border-emerald-500/40 flex flex-col items-center justify-between text-center shadow-sm">
+                    <div className="w-full flex items-center justify-between pb-3 border-b border-[#F0E6D8] dark:border-[#474039]">
                       <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider">
                         {paymentMethod === "VIETQR_NAPAS" ? "VIETQR • NAPAS 247" : "CỔNG VNPAY-QR"}
                       </span>
@@ -743,14 +743,14 @@ export default function CheckoutGatewayModal({
                     </p>
                   </div>
 
-                  <div className="lg:col-span-7 p-5 sm:p-6 rounded-2xl bg-white dark:bg-[#1E140D] border border-[#E3D5C3] dark:border-[#38261A] flex flex-col justify-between space-y-5">
+                  <div className="lg:col-span-7 p-5 sm:p-6 rounded-2xl bg-white dark:bg-[#27231F] border border-[#E3D5C3] dark:border-[#474039] flex flex-col justify-between space-y-5">
                     <div className="space-y-4">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-[#4A3222] dark:text-[#E2BA78] border-b border-[#F0E6D8] dark:border-[#2C1D13] pb-2.5">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-[#4A3222] dark:text-[#E2BA78] border-b border-[#F0E6D8] dark:border-[#474039] pb-2.5">
                         Thông Tin Tài Khoản Thụ Hưởng Doanh Nghiệp
                       </h4>
 
                       <div className="space-y-3 text-xs">
-                        <div className="p-3 rounded-xl bg-[#FAF7F2] dark:bg-[#261810] border border-[#EAE0D3] dark:border-[#38261A] flex items-center justify-between gap-2">
+                        <div className="p-3 rounded-xl bg-[#FAF7F2] dark:bg-[#322D28] border border-[#EAE0D3] dark:border-[#474039] flex items-center justify-between gap-2">
                           <div>
                             <span className="text-[11px] text-[#8C6D53] block">Ngân hàng thụ hưởng:</span>
                             <strong className="text-[#24170E] dark:text-white font-bold">{sessionData.bankInfo.bankName}</strong>
@@ -760,13 +760,13 @@ export default function CheckoutGatewayModal({
                           </span>
                         </div>
 
-                        <div className="p-3 rounded-xl bg-[#FAF7F2] dark:bg-[#261810] border border-[#EAE0D3] dark:border-[#38261A]">
+                        <div className="p-3 rounded-xl bg-[#FAF7F2] dark:bg-[#322D28] border border-[#EAE0D3] dark:border-[#474039]">
                           <span className="text-[11px] text-[#8C6D53] block">Đơn vị thụ hưởng:</span>
                           <strong className="text-[#24170E] dark:text-white font-bold">{sessionData.bankInfo.accountName}</strong>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          <div className="p-3 rounded-xl bg-[#FAF7F2] dark:bg-[#261810] border border-[#EAE0D3] dark:border-[#38261A] flex items-center justify-between">
+                          <div className="p-3 rounded-xl bg-[#FAF7F2] dark:bg-[#322D28] border border-[#EAE0D3] dark:border-[#474039] flex items-center justify-between">
                             <div>
                               <span className="text-[11px] text-[#8C6D53] block">Số tài khoản:</span>
                               <strong className="text-sm font-bold text-[#24170E] dark:text-[#E2BA78] tabular-nums">{sessionData.bankInfo.accountNo}</strong>
@@ -774,13 +774,13 @@ export default function CheckoutGatewayModal({
                             <button
                               type="button"
                               onClick={() => handleCopy("0382482793", "ACCOUNT")}
-                              className="px-2.5 py-1 rounded-lg bg-white dark:bg-[#1A1009] border border-[#D9C8B5] dark:border-[#4A3222] text-[11px] font-semibold text-[#523522] dark:text-[#E2BA78] hover:border-[#C28E58] cursor-pointer"
+                              className="px-2.5 py-1 rounded-lg bg-white dark:bg-[#1E1B18] border border-[#D9C8B5] dark:border-[#474039] text-[11px] font-semibold text-[#523522] dark:text-[#E2BA78] hover:border-[#C28E58] cursor-pointer"
                             >
                               {copiedField === "ACCOUNT" ? "Đã chép" : "Sao chép"}
                             </button>
                           </div>
 
-                          <div className="p-3 rounded-xl bg-[#FAF7F2] dark:bg-[#261810] border border-[#EAE0D3] dark:border-[#38261A] flex items-center justify-between">
+                          <div className="p-3 rounded-xl bg-[#FAF7F2] dark:bg-[#322D28] border border-[#EAE0D3] dark:border-[#474039] flex items-center justify-between">
                             <div>
                               <span className="text-[11px] text-[#8C6D53] block">Nội dung thanh toán:</span>
                               <strong className="text-sm font-bold text-emerald-800 dark:text-emerald-400 tabular-nums">{sessionData.bankInfo.transferMemo}</strong>
@@ -788,7 +788,7 @@ export default function CheckoutGatewayModal({
                             <button
                               type="button"
                               onClick={() => handleCopy(sessionData.bankInfo.transferMemo, "MEMO")}
-                              className="px-2.5 py-1 rounded-lg bg-white dark:bg-[#1A1009] border border-[#D9C8B5] dark:border-[#4A3222] text-[11px] font-semibold text-[#523522] dark:text-[#E2BA78] hover:border-[#C28E58] cursor-pointer"
+                              className="px-2.5 py-1 rounded-lg bg-white dark:bg-[#1E1B18] border border-[#D9C8B5] dark:border-[#474039] text-[11px] font-semibold text-[#523522] dark:text-[#E2BA78] hover:border-[#C28E58] cursor-pointer"
                             >
                               {copiedField === "MEMO" ? "Đã chép" : "Sao chép"}
                             </button>
@@ -805,7 +805,7 @@ export default function CheckoutGatewayModal({
                     </div>
 
                     {isConfirming ? (
-                      <div className="p-4 rounded-2xl bg-[#FAF5EE] dark:bg-[#261810] border border-[#C28E58] text-xs space-y-1.5">
+                      <div className="p-4 rounded-2xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#C28E58] text-xs space-y-1.5">
                         <div className="flex items-center gap-2.5 font-bold text-[#24170E] dark:text-[#E2BA78]">
                           <span className="w-4 h-4 rounded-full border-2 border-[#C28E58] border-t-transparent animate-spin shrink-0"></span>
                           <span>{processingStage}</span>
@@ -816,7 +816,7 @@ export default function CheckoutGatewayModal({
                         <button
                           type="button"
                           onClick={() => setStep(1)}
-                          className="px-4 py-3.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] text-xs font-bold text-[#6E4B33] dark:text-[#DAC7B5] hover:bg-[#F4ECE1] dark:hover:bg-[#261810] transition cursor-pointer"
+                          className="px-4 py-3.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] text-xs font-bold text-[#6E4B33] dark:text-[#DAC7B5] hover:bg-[#F4ECE1] dark:hover:bg-[#3C3630] transition cursor-pointer"
                         >
                           ← Quay Lại
                         </button>
@@ -880,15 +880,15 @@ export default function CheckoutGatewayModal({
                         setCardCvv("888");
                         setCardOtp("123456");
                       }}
-                      className="w-full py-2.5 px-4 rounded-xl bg-[#FAF5EE] dark:bg-[#261810] border border-[#C28E58] text-xs font-bold text-[#523522] dark:text-[#E2BA78] hover:bg-[#F0E6D8] transition cursor-pointer"
+                      className="w-full py-2.5 px-4 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#C28E58] text-xs font-bold text-[#523522] dark:text-[#E2BA78] hover:bg-[#F0E6D8] transition cursor-pointer"
                     >
                       Điền Thông Tin Thẻ Mẫu (4242 •••• 4242)
                     </button>
                   </div>
 
-                  <div className="lg:col-span-7 p-5 sm:p-6 rounded-2xl bg-white dark:bg-[#1E140D] border border-[#E3D5C3] dark:border-[#38261A] flex flex-col justify-between space-y-4">
+                  <div className="lg:col-span-7 p-5 sm:p-6 rounded-2xl bg-white dark:bg-[#27231F] border border-[#E3D5C3] dark:border-[#474039] flex flex-col justify-between space-y-4">
                     <div className="space-y-3.5 text-xs">
-                      <h4 className="font-bold uppercase tracking-wider text-[#4A3222] dark:text-[#E2BA78] border-b border-[#F0E6D8] dark:border-[#2C1D13] pb-2.5">
+                      <h4 className="font-bold uppercase tracking-wider text-[#4A3222] dark:text-[#E2BA78] border-b border-[#F0E6D8] dark:border-[#474039] pb-2.5">
                         Thông Tin Ủy Quyền Thẻ Quốc Tế (3D-Secure 2.0)
                       </h4>
 
@@ -899,7 +899,7 @@ export default function CheckoutGatewayModal({
                             type="text"
                             value={cardNumber}
                             onChange={(e) => setCardNumber(e.target.value)}
-                            className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-[#FAF7F2] dark:bg-[#261810] font-bold tabular-nums"
+                            className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-[#FAF7F2] dark:bg-[#322D28] font-bold tabular-nums"
                           />
                         </div>
                         <div>
@@ -908,7 +908,7 @@ export default function CheckoutGatewayModal({
                             type="text"
                             value={cardHolder}
                             onChange={(e) => setCardHolder(e.target.value.toUpperCase())}
-                            className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-[#FAF7F2] dark:bg-[#261810] font-bold uppercase"
+                            className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-[#FAF7F2] dark:bg-[#322D28] font-bold uppercase"
                           />
                         </div>
                       </div>
@@ -920,7 +920,7 @@ export default function CheckoutGatewayModal({
                             type="text"
                             value={cardExpiry}
                             onChange={(e) => setCardExpiry(e.target.value)}
-                            className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-[#FAF7F2] dark:bg-[#261810] font-bold tabular-nums"
+                            className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-[#FAF7F2] dark:bg-[#322D28] font-bold tabular-nums"
                           />
                         </div>
                         <div>
@@ -930,7 +930,7 @@ export default function CheckoutGatewayModal({
                             value={cardCvv}
                             onChange={(e) => setCardCvv(e.target.value)}
                             maxLength={4}
-                            className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-[#FAF7F2] dark:bg-[#261810] font-bold tabular-nums"
+                            className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-[#FAF7F2] dark:bg-[#322D28] font-bold tabular-nums"
                           />
                         </div>
                         <div>
@@ -944,7 +944,7 @@ export default function CheckoutGatewayModal({
                         </div>
                       </div>
 
-                      <div className="p-3.5 rounded-xl bg-[#FAF5EE] dark:bg-[#261810] border border-[#DECFC0] dark:border-[#3D271A] flex items-center justify-between">
+                      <div className="p-3.5 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] flex items-center justify-between">
                         <span className="font-bold">Tổng số tiền thanh toán:</span>
                         <strong className="text-lg font-extrabold text-[#8C3A16] dark:text-[#E2BA78] tabular-nums">
                           {formatVnd(sessionData.netAmount)}
@@ -953,7 +953,7 @@ export default function CheckoutGatewayModal({
                     </div>
 
                     {isConfirming ? (
-                      <div className="p-4 rounded-2xl bg-[#FAF5EE] dark:bg-[#261810] border border-[#C28E58] text-xs font-bold flex items-center gap-2.5">
+                      <div className="p-4 rounded-2xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#C28E58] text-xs font-bold flex items-center gap-2.5">
                         <span className="w-4 h-4 rounded-full border-2 border-[#C28E58] border-t-transparent animate-spin shrink-0"></span>
                         <span>{processingStage}</span>
                       </div>
@@ -962,7 +962,7 @@ export default function CheckoutGatewayModal({
                         <button
                           type="button"
                           onClick={() => setStep(1)}
-                          className="px-4 py-3.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] text-xs font-bold text-[#6E4B33] dark:text-[#DAC7B5] cursor-pointer"
+                          className="px-4 py-3.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] text-xs font-bold text-[#6E4B33] dark:text-[#DAC7B5] cursor-pointer"
                         >
                           ← Quay Lại
                         </button>
@@ -980,7 +980,7 @@ export default function CheckoutGatewayModal({
               )}
 
               {paymentMethod === "COD_ESCROW" && (
-                <div className="p-6 rounded-2xl bg-white dark:bg-[#1E140D] border border-[#E3D5C3] dark:border-[#38261A] space-y-5">
+                <div className="p-6 rounded-2xl bg-white dark:bg-[#27231F] border border-[#E3D5C3] dark:border-[#474039] space-y-5">
                   <div className="space-y-2">
                     <h4 className="text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300">
                       Xác Nhận Hợp Đồng Thanh Toán Khi Nhận Bàn Giao (COD)
@@ -991,7 +991,7 @@ export default function CheckoutGatewayModal({
                   </div>
 
                   {isConfirming ? (
-                    <div className="p-4 rounded-2xl bg-[#FAF5EE] dark:bg-[#261810] border border-[#C28E58] text-xs font-bold flex items-center gap-2.5">
+                    <div className="p-4 rounded-2xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#C28E58] text-xs font-bold flex items-center gap-2.5">
                       <span className="w-4 h-4 rounded-full border-2 border-[#C28E58] border-t-transparent animate-spin shrink-0"></span>
                       <span>{processingStage}</span>
                     </div>
@@ -1000,7 +1000,7 @@ export default function CheckoutGatewayModal({
                       <button
                         type="button"
                         onClick={() => setStep(1)}
-                        className="px-4 py-3.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] text-xs font-bold text-[#6E4B33] dark:text-[#DAC7B5] cursor-pointer"
+                        className="px-4 py-3.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] text-xs font-bold text-[#6E4B33] dark:text-[#DAC7B5] cursor-pointer"
                       >
                         ← Quay Lại
                       </button>
@@ -1025,7 +1025,7 @@ export default function CheckoutGatewayModal({
             <div className="space-y-6">
               <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#1C120B] border-2 border-[#C28E58] shadow-xl relative overflow-hidden space-y-6">
                 {/* Tiêu đề Chứng từ & Dấu xác nhận đồng bộ font chữ */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-dashed border-[#DECFC0] dark:border-[#3D271A]">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-dashed border-[#DECFC0] dark:border-[#474039]">
                   <div className="flex items-center gap-3.5">
                     <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-700 to-emerald-900 text-white flex items-center justify-center shadow-sm border border-emerald-500/40 shrink-0">
                       <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -1051,8 +1051,8 @@ export default function CheckoutGatewayModal({
 
                 {/* Bảng thông tin 2 cột đồng bộ phông chữ Plus Jakarta Sans */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
-                  <div className="p-5 rounded-2xl bg-[#FAF7F2] dark:bg-[#24170F] border border-[#EAE0D3] dark:border-[#38261A] space-y-3">
-                    <div className="text-[11px] font-bold uppercase tracking-wider text-[#7A5B43] dark:text-[#C28E58] border-b border-[#EAE0D3] dark:border-[#38261A] pb-2">
+                  <div className="p-5 rounded-2xl bg-[#FAF7F2] dark:bg-[#322D28] border border-[#EAE0D3] dark:border-[#474039] space-y-3">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-[#7A5B43] dark:text-[#C28E58] border-b border-[#EAE0D3] dark:border-[#474039] pb-2">
                       I. Thông Tin Định Danh Chứng Từ
                     </div>
                     <div className="flex items-center justify-between gap-2">
@@ -1077,8 +1077,8 @@ export default function CheckoutGatewayModal({
                     </div>
                   </div>
 
-                  <div className="p-5 rounded-2xl bg-[#FAF7F2] dark:bg-[#24170F] border border-[#EAE0D3] dark:border-[#38261A] space-y-3">
-                    <div className="text-[11px] font-bold uppercase tracking-wider text-[#7A5B43] dark:text-[#C28E58] border-b border-[#EAE0D3] dark:border-[#38261A] pb-2">
+                  <div className="p-5 rounded-2xl bg-[#FAF7F2] dark:bg-[#322D28] border border-[#EAE0D3] dark:border-[#474039] space-y-3">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-[#7A5B43] dark:text-[#C28E58] border-b border-[#EAE0D3] dark:border-[#474039] pb-2">
                       II. Chủ Sở Hữu &amp; Giá Trị Quyết Toán
                     </div>
                     <div className="flex items-center justify-between gap-2">
@@ -1095,7 +1095,7 @@ export default function CheckoutGatewayModal({
                         -{formatVnd(receiptRecord.discountAmount)} {receiptRecord.voucherCode ? `(${receiptRecord.voucherCode})` : ""}
                       </strong>
                     </div>
-                    <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#EAE0D3] dark:border-[#38261A]">
+                    <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#EAE0D3] dark:border-[#474039]">
                       <span className="font-bold text-[#24170E] dark:text-white">Tổng Giá Trị Quyết Toán:</span>
                       <strong className="text-base font-extrabold text-[#8C3A16] dark:text-[#E2BA78] tabular-nums">
                         {formatVnd(receiptRecord.netAmount)}
@@ -1110,7 +1110,7 @@ export default function CheckoutGatewayModal({
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="px-4 py-3 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#1E140D] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] hover:border-[#C28E58] transition flex items-center gap-2 cursor-pointer"
+                  className="px-4 py-3 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-white dark:bg-[#27231F] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] hover:border-[#C28E58] transition flex items-center gap-2 cursor-pointer"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                     <polyline points="6 9 6 2 18 2 18 9" />

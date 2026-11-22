@@ -5,7 +5,7 @@ import type { AlertItem } from "./types";
 const SEVERITY_STYLE: Record<string, string> = {
   CRITICAL: "border-rose-300 dark:border-rose-900 bg-rose-50/90 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200",
   WARNING: "border-amber-300 dark:border-amber-900 bg-amber-50/90 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200",
-  INFO: "border-[#C28E58]/40 bg-[#FAF5EE] dark:bg-[#1E130B] text-[#523522] dark:text-[#E2BA78]",
+  INFO: "border-[#C28E58]/40 bg-[#FAF5EE] dark:bg-[#27231F] text-[#523522] dark:text-[#E2BA78]",
 };
 
 interface Props {
@@ -18,10 +18,10 @@ export default function AlertFeed({ alerts, roomLabel, onResolve }: Props) {
   const unresolved = alerts.filter((a) => !a.isResolved).length;
 
   return (
-    <section className="rounded-2xl border border-[#E0D3C1] dark:border-[#38261A] bg-white dark:bg-[#20140D] p-5 shadow-sm transition-colors">
+    <section className="rounded-2xl border border-[#E0D3C1] dark:border-[#474039] bg-white dark:bg-[#27231F] p-5 shadow-sm transition-colors">
       <header className="mb-4 flex items-center justify-between pb-3 border-b border-[#F0E6D8] dark:border-[#2D1D13]">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-[#FAF5EE] dark:bg-[#2B1B12] border border-[#DECFC0] dark:border-[#4A3222] flex items-center justify-center text-[#C28E58]">
+          <div className="w-8 h-8 rounded-lg bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] flex items-center justify-center text-[#C28E58]">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
               <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
@@ -33,7 +33,7 @@ export default function AlertFeed({ alerts, roomLabel, onResolve }: Props) {
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FAF5EE] dark:bg-[#2B1B12] border border-[#DECFC0] dark:border-[#4A3222] text-xs font-semibold text-[#523522] dark:text-[#E2BA78]">
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] text-xs font-semibold text-[#523522] dark:text-[#E2BA78]">
           <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
           <span>{unresolved} đang xử lý</span>
         </div>
@@ -41,7 +41,7 @@ export default function AlertFeed({ alerts, roomLabel, onResolve }: Props) {
 
       <ul className="max-h-96 space-y-2.5 overflow-y-auto pr-1">
         {alerts.length === 0 && (
-          <li className="text-xs text-[#8C6D53] dark:text-[#A8907E] py-4 text-center">
+          <li className="text-xs text-[#8C6D53] dark:text-[#B9ADA1] py-4 text-center">
             Hệ thống vi khí hậu ổn định, không có cảnh báo nào.
           </li>
         )}
@@ -50,7 +50,7 @@ export default function AlertFeed({ alerts, roomLabel, onResolve }: Props) {
             key={a.alertId}
             className={`rounded-xl border p-3.5 text-xs transition-all ${
               a.isResolved
-                ? "border-[#E8DCCE] dark:border-[#2D1D13] bg-[#FAF7F2] dark:bg-[#170E08] text-[#8C6D53] dark:text-[#7A6455] opacity-75"
+                ? "border-[#E8DCCE] dark:border-[#2D1D13] bg-[#FAF7F2] dark:bg-[#1E1B18] text-[#8C6D53] dark:text-[#7A6455] opacity-75"
                 : SEVERITY_STYLE[a.severity] ?? SEVERITY_STYLE.WARNING
             }`}
           >

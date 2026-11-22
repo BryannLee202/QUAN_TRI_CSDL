@@ -117,7 +117,7 @@ export default function UserProfileAndHistoryPage() {
         <Navbar />
 
         {/* Header Trang Hồ Sơ & Lịch Sử Giao Dịch */}
-        <div className="bg-gradient-to-b from-[#F5EEE4] via-[#FBF7F0] to-[#FDFBF8] dark:from-[#20140D] dark:via-[#19100A] dark:to-[#140D08] border-b border-[#EAE1D3] dark:border-[#38261A] py-10 px-6">
+        <div className="bg-gradient-to-b from-[#F5EEE4] via-[#FBF7F0] to-[#FDFBF8] dark:from-[#20140D] dark:via-[#19100A] dark:to-[#140D08] border-b border-[#EAE1D3] dark:border-[#474039] py-10 px-6">
           <div className="max-w-7xl mx-auto space-y-6">
             <div className="flex items-center gap-2 text-xs font-semibold text-[#8A5C38] dark:text-[#C28E58]">
               <Link href="/" className="hover:underline flex items-center gap-1">
@@ -130,7 +130,7 @@ export default function UserProfileAndHistoryPage() {
             </div>
 
             {/* Khối Định Danh Hồ Sơ Cá Nhân */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#1A1009] border border-[#DECFC0] dark:border-[#38261A] shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#1E1B18] border border-[#DECFC0] dark:border-[#474039] shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div className="flex items-start sm:items-center gap-5">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#3B2213] via-[#6B442C] to-[#C28E58] text-white flex items-center justify-center font-extrabold text-2xl shadow-md border border-[#E2BA78]/40 shrink-0">
                   {displayUser.fullName.charAt(0).toUpperCase()}
@@ -178,7 +178,7 @@ export default function UserProfileAndHistoryPage() {
                 </Link>
                 <Link
                   href="/san-nong-san"
-                  className="px-4 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#422C1D] bg-[#FAF5EE] dark:bg-[#22160E] hover:border-[#C28E58] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] transition"
+                  className="px-4 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#27231F] hover:border-[#C28E58] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] transition"
                 >
                   Sàn Nông Sản FaaS
                 </Link>
@@ -187,7 +187,7 @@ export default function UserProfileAndHistoryPage() {
 
             {/* 3 Thẻ Chỉ Số Thống Kê Hồ Sơ */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="p-5 rounded-2xl bg-white dark:bg-[#1A1009] border border-[#EAE1D3] dark:border-[#38261A] shadow-2xs flex items-center gap-4">
+              <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-2xs flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shrink-0">
                   <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -204,7 +204,7 @@ export default function UserProfileAndHistoryPage() {
                 </div>
               </div>
 
-              <div className="p-5 rounded-2xl bg-white dark:bg-[#1A1009] border border-[#EAE1D3] dark:border-[#38261A] shadow-2xs flex items-center gap-4">
+              <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-2xs flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-[#8C3A16] dark:text-[#E2BA78] flex items-center justify-center shrink-0">
                   <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                     <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
@@ -220,7 +220,7 @@ export default function UserProfileAndHistoryPage() {
                 </div>
               </div>
 
-              <div className="p-5 rounded-2xl bg-white dark:bg-[#1A1009] border border-[#EAE1D3] dark:border-[#38261A] shadow-2xs flex items-center gap-4">
+              <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-2xs flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/30 text-sky-800 dark:text-sky-400 flex items-center justify-center shrink-0">
                   <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                     <rect x="2" y="5" width="20" height="14" rx="2" />
@@ -240,9 +240,9 @@ export default function UserProfileAndHistoryPage() {
 
         {/* Khu Vực Bảng Lịch Sử Mua Hàng, Hợp Đồng Thuê Khay & Chứng Từ Thanh Toán */}
         <div className="max-w-7xl mx-auto px-6 py-10">
-          <div className="rounded-3xl bg-white dark:bg-[#1A110B] border border-[#DECFC0] dark:border-[#3D271A] shadow-md overflow-hidden">
+          <div className="rounded-3xl bg-white dark:bg-[#1A110B] border border-[#DECFC0] dark:border-[#474039] shadow-md overflow-hidden">
             {/* Thanh Công Cụ & Bộ Lọc */}
-            <div className="p-6 bg-gradient-to-r from-[#FAF5EE] via-white to-[#F4ECE1] dark:from-[#23160E] dark:via-[#1C120B] dark:to-[#23160E] border-b border-[#E3D5C3] dark:border-[#332014] space-y-4">
+            <div className="p-6 bg-gradient-to-r from-[#FAF5EE] via-white to-[#F4ECE1] dark:from-[#23160E] dark:via-[#1C120B] dark:to-[#23160E] border-b border-[#E3D5C3] dark:border-[#474039] space-y-4">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <h2 className="text-lg font-extrabold text-[#24170E] dark:text-white tracking-tight">
@@ -260,7 +260,7 @@ export default function UserProfileAndHistoryPage() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Tìm số hợp đồng, mã khay, gói nấm..."
-                      className="w-full px-3.5 py-2 pl-9 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#160F0A] text-xs text-[#24170E] dark:text-white placeholder:text-[#8C6D53] focus:outline-none focus:border-[#C28E58]"
+                      className="w-full px-3.5 py-2 pl-9 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-white dark:bg-[#160F0A] text-xs text-[#24170E] dark:text-white placeholder:text-[#8C6D53] focus:outline-none focus:border-[#C28E58]"
                     />
                     <svg className="w-3.5 h-3.5 text-[#8C6D53] absolute left-3 top-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <circle cx="11" cy="11" r="8" />
@@ -272,7 +272,7 @@ export default function UserProfileAndHistoryPage() {
                     type="button"
                     onClick={loadTransactions}
                     disabled={loading}
-                    className="px-3.5 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#160F0A] hover:border-[#C28E58] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] transition flex items-center gap-1.5 cursor-pointer shrink-0"
+                    className="px-3.5 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-white dark:bg-[#160F0A] hover:border-[#C28E58] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] transition flex items-center gap-1.5 cursor-pointer shrink-0"
                   >
                     <svg className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
@@ -293,7 +293,7 @@ export default function UserProfileAndHistoryPage() {
                   className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
                     filterType === "ALL"
                       ? "bg-[#24170E] text-white dark:bg-[#C28E58] dark:text-[#170E08] shadow-xs"
-                      : "bg-white dark:bg-[#160F0A] text-[#6E4B33] dark:text-[#DAC7B5] border border-[#E3D5C3] dark:border-[#332014] hover:border-[#C28E58]"
+                      : "bg-white dark:bg-[#160F0A] text-[#6E4B33] dark:text-[#DAC7B5] border border-[#E3D5C3] dark:border-[#474039] hover:border-[#C28E58]"
                   }`}
                 >
                   Tất Cả Giao Dịch ({stats.totalOrders})
@@ -304,7 +304,7 @@ export default function UserProfileAndHistoryPage() {
                   className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
                     filterType === "FAAS_RENTAL"
                       ? "bg-[#24170E] text-white dark:bg-[#C28E58] dark:text-[#170E08] shadow-xs"
-                      : "bg-white dark:bg-[#160F0A] text-[#6E4B33] dark:text-[#DAC7B5] border border-[#E3D5C3] dark:border-[#332014] hover:border-[#C28E58]"
+                      : "bg-white dark:bg-[#160F0A] text-[#6E4B33] dark:text-[#DAC7B5] border border-[#E3D5C3] dark:border-[#474039] hover:border-[#C28E58]"
                   }`}
                 >
                   Hợp Đồng Thuê Khay FaaS ({stats.rentalCount})
@@ -315,7 +315,7 @@ export default function UserProfileAndHistoryPage() {
                   className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
                     filterType === "MARKET_BATCH"
                       ? "bg-[#24170E] text-white dark:bg-[#C28E58] dark:text-[#170E08] shadow-xs"
-                      : "bg-white dark:bg-[#160F0A] text-[#6E4B33] dark:text-[#DAC7B5] border border-[#E3D5C3] dark:border-[#332014] hover:border-[#C28E58]"
+                      : "bg-white dark:bg-[#160F0A] text-[#6E4B33] dark:text-[#DAC7B5] border border-[#E3D5C3] dark:border-[#474039] hover:border-[#C28E58]"
                   }`}
                 >
                   Đơn Mua Nông Sản ({stats.marketCount})
@@ -327,7 +327,7 @@ export default function UserProfileAndHistoryPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="bg-[#FAF6F0] dark:bg-[#22160E] text-[#5C402B] dark:text-[#D8C4B0] border-b border-[#E3D5C3] dark:border-[#332014] font-bold uppercase text-[11px] tracking-wider">
+                  <tr className="bg-[#FAF6F0] dark:bg-[#27231F] text-[#5C402B] dark:text-[#D8C4B0] border-b border-[#E3D5C3] dark:border-[#474039] font-bold uppercase text-[11px] tracking-wider">
                     <th className="py-3.5 px-4">Mã Tham Chiếu / Thời Gian</th>
                     <th className="py-3.5 px-4">Số Hợp Đồng / Mã Khay Nuôi</th>
                     <th className="py-3.5 px-4">Hạng Mục Đăng Ký</th>
@@ -428,7 +428,7 @@ export default function UserProfileAndHistoryPage() {
                             <button
                               type="button"
                               onClick={() => setSelectedReceipt(rec)}
-                              className="px-3 py-1.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-[#FAF6F0] dark:bg-[#24160E] hover:border-[#C28E58] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] transition cursor-pointer"
+                              className="px-3 py-1.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-[#FAF6F0] dark:bg-[#24160E] hover:border-[#C28E58] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] transition cursor-pointer"
                             >
                               Xem Chứng Từ
                             </button>
@@ -451,7 +451,7 @@ export default function UserProfileAndHistoryPage() {
             aria-modal="true"
           >
             <div className="w-full max-w-2xl rounded-3xl bg-white dark:bg-[#1C120B] border-2 border-[#C28E58] shadow-2xl p-6 sm:p-8 space-y-6 text-[#24170E] dark:text-[#F5EBE0]">
-              <div className="flex items-start justify-between gap-4 pb-4 border-b border-dashed border-[#DECFC0] dark:border-[#3D271A]">
+              <div className="flex items-start justify-between gap-4 pb-4 border-b border-dashed border-[#DECFC0] dark:border-[#474039]">
                 <div className="flex items-center gap-3.5">
                   <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-700 to-emerald-900 text-white flex items-center justify-center shadow-sm shrink-0">
                     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
@@ -471,15 +471,15 @@ export default function UserProfileAndHistoryPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedReceipt(null)}
-                  className="w-8 h-8 rounded-xl bg-[#FAF5EE] dark:bg-[#261810] text-[#735843] hover:text-[#24170E] dark:hover:text-white flex items-center justify-center border border-[#DECFC0] dark:border-[#3D271A] cursor-pointer"
+                  className="w-8 h-8 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] text-[#735843] hover:text-[#24170E] dark:hover:text-white flex items-center justify-center border border-[#DECFC0] dark:border-[#474039] cursor-pointer"
                 >
                   ✕
                 </button>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                <div className="p-4 rounded-2xl bg-[#FAF7F2] dark:bg-[#24170F] border border-[#EAE0D3] dark:border-[#38261A] space-y-2.5">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-[#7A5B43] dark:text-[#C28E58] border-b border-[#EAE0D3] dark:border-[#38261A] pb-1.5">
+                <div className="p-4 rounded-2xl bg-[#FAF7F2] dark:bg-[#322D28] border border-[#EAE0D3] dark:border-[#474039] space-y-2.5">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-[#7A5B43] dark:text-[#C28E58] border-b border-[#EAE0D3] dark:border-[#474039] pb-1.5">
                     I. Thông Tin Định Danh
                   </div>
                   <div className="flex justify-between gap-2">
@@ -502,8 +502,8 @@ export default function UserProfileAndHistoryPage() {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-[#FAF7F2] dark:bg-[#24170F] border border-[#EAE0D3] dark:border-[#38261A] space-y-2.5">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-[#7A5B43] dark:text-[#C28E58] border-b border-[#EAE0D3] dark:border-[#38261A] pb-1.5">
+                <div className="p-4 rounded-2xl bg-[#FAF7F2] dark:bg-[#322D28] border border-[#EAE0D3] dark:border-[#474039] space-y-2.5">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-[#7A5B43] dark:text-[#C28E58] border-b border-[#EAE0D3] dark:border-[#474039] pb-1.5">
                     II. Chi Tiết Quyết Toán
                   </div>
                   <div className="flex justify-between gap-2">
@@ -518,7 +518,7 @@ export default function UserProfileAndHistoryPage() {
                     <span className="text-[#6E533E] dark:text-[#BFA895]">Kênh thanh toán:</span>
                     <strong className="font-semibold text-right">{selectedReceipt.bankOrCardInfo || selectedReceipt.paymentMethod}</strong>
                   </div>
-                  <div className="flex justify-between gap-2 pt-1.5 border-t border-[#EAE0D3] dark:border-[#38261A]">
+                  <div className="flex justify-between gap-2 pt-1.5 border-t border-[#EAE0D3] dark:border-[#474039]">
                     <span className="font-bold">Tổng thanh toán:</span>
                     <strong className="text-sm font-extrabold text-[#8C3A16] dark:text-[#E2BA78] tabular-nums">
                       {formatVnd(selectedReceipt.netAmount)}
@@ -531,7 +531,7 @@ export default function UserProfileAndHistoryPage() {
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="px-4 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] hover:border-[#C28E58] transition flex items-center gap-1.5 cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] hover:border-[#C28E58] transition flex items-center gap-1.5 cursor-pointer"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                     <polyline points="6 9 6 2 18 2 18 9" />

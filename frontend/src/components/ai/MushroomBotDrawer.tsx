@@ -156,7 +156,7 @@ export default function MushroomBotDrawer({ isOpen, onClose }: MushroomBotDrawer
       ref={cardRef}
       role="dialog"
       aria-label="Cửa sổ trò chuyện Trợ lý AI MushroomBot"
-      className="fixed bottom-20 sm:bottom-24 right-3 sm:right-6 z-50 w-[calc(100vw-1.5rem)] sm:w-[390px] h-[520px] max-h-[78vh] flex flex-col rounded-3xl bg-[#FDFBF8]/95 dark:bg-[#150E0A]/95 backdrop-blur-xl border border-[#DECFC0] dark:border-[#38261A] shadow-2xl shadow-[#24170E]/30 dark:shadow-black/70 overflow-hidden transition-all duration-300 animate-in fade-in zoom-in-95"
+      className="fixed bottom-20 sm:bottom-24 right-3 sm:right-6 z-50 w-[calc(100vw-1.5rem)] sm:w-[390px] h-[520px] max-h-[78vh] flex flex-col rounded-3xl bg-[#FDFBF8]/95 dark:bg-[#150E0A]/95 backdrop-blur-xl border border-[#DECFC0] dark:border-[#474039] shadow-2xl shadow-[#24170E]/30 dark:shadow-black/70 overflow-hidden transition-all duration-300 animate-in fade-in zoom-in-95"
     >
       {/* 1. Header Tinh Tế & Đẳng Cấp */}
       <div className="px-4 py-3 bg-gradient-to-r from-[#24170E] via-[#332014] to-[#1F130B] text-white flex items-center justify-between border-b border-[#C28E58]/30 shrink-0">
@@ -205,7 +205,7 @@ export default function MushroomBotDrawer({ isOpen, onClose }: MushroomBotDrawer
       </div>
 
       {/* 2. Thanh Gợi Ý Câu Hỏi Cuộn Ngang (Horizontal Scroll Chips - Tiết kiệm không gian) */}
-      <div className="px-3 py-1.5 bg-[#F6EFE6] dark:bg-[#1A110B] border-b border-[#EADECF] dark:border-[#2D1B11] shrink-0">
+      <div className="px-3 py-1.5 bg-[#F6EFE6] dark:bg-[#1A110B] border-b border-[#EADECF] dark:border-[#474039] shrink-0">
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
           <span className="text-[10px] font-bold text-[#8C6D53] dark:text-[#C28E58] shrink-0 flex items-center gap-0.5 pr-0.5">
             ✨ Gợi ý:
@@ -214,7 +214,7 @@ export default function MushroomBotDrawer({ isOpen, onClose }: MushroomBotDrawer
             <button
               key={idx}
               onClick={() => handleSend(q)}
-              className="text-[11px] whitespace-nowrap bg-white dark:bg-[#25170F] hover:bg-[#FAF5EE] dark:hover:bg-[#2F1D13] text-[#4A3222] dark:text-[#E8DCCE] px-2.5 py-1 rounded-full border border-[#DECFC0] dark:border-[#422C1D] hover:border-[#C28E58] transition shadow-2xs shrink-0 font-medium active:scale-95"
+              className="text-[11px] whitespace-nowrap bg-white dark:bg-[#322D28] hover:bg-[#FAF5EE] dark:hover:bg-[#2F1D13] text-[#4A3222] dark:text-[#E8DCCE] px-2.5 py-1 rounded-full border border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58] transition shadow-2xs shrink-0 font-medium active:scale-95"
             >
               {q}
             </button>
@@ -235,25 +235,25 @@ export default function MushroomBotDrawer({ isOpen, onClose }: MushroomBotDrawer
               className={`max-w-[86%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed shadow-xs ${
                 m.sender === 'user'
                   ? 'bg-gradient-to-r from-[#2B1B11] to-[#3B2517] text-white rounded-br-xs border border-[#C28E58]/35 font-medium'
-                  : 'bg-white dark:bg-[#1E130B] text-[#24170E] dark:text-[#F7EFE6] rounded-bl-xs border border-[#EAE1D3] dark:border-[#38261A]'
+                  : 'bg-white dark:bg-[#27231F] text-[#24170E] dark:text-[#F7EFE6] rounded-bl-xs border border-[#EAE1D3] dark:border-[#474039]'
               }`}
             >
               <p className="whitespace-pre-line">{m.text}</p>
               {m.modelUsed && (
-                <div className="mt-2 pt-1.5 border-t border-[#F2E8DC] dark:border-[#2D1B11] flex items-center justify-between text-[9px] text-[#8C6D53] dark:text-[#A88C76]">
+                <div className="mt-2 pt-1.5 border-t border-[#F2E8DC] dark:border-[#474039] flex items-center justify-between text-[9px] text-[#8C6D53] dark:text-[#B9ADA1]">
                   <span>⚡ {m.modelUsed}</span>
                   <span className="text-emerald-600 dark:text-emerald-400 font-semibold">✓ VietGAP</span>
                 </div>
               )}
             </div>
-            <span className="text-[9px] font-mono text-[#8C6D53] dark:text-[#A88C76] mt-1 px-1">
+            <span className="text-[9px] font-mono text-[#8C6D53] dark:text-[#B9ADA1] mt-1 px-1">
               {m.time}
             </span>
           </div>
         ))}
 
         {isTyping && (
-          <div className="flex items-center gap-2 text-[#735843] dark:text-[#DAC7B5] text-xs p-2.5 bg-white dark:bg-[#1E130B] rounded-2xl rounded-bl-xs border border-[#EAE1D3] dark:border-[#38261A] w-fit shadow-2xs">
+          <div className="flex items-center gap-2 text-[#735843] dark:text-[#DAC7B5] text-xs p-2.5 bg-white dark:bg-[#27231F] rounded-2xl rounded-bl-xs border border-[#EAE1D3] dark:border-[#474039] w-fit shadow-2xs">
             <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] animate-bounce"></span>
             <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] animate-bounce [animation-delay:0.2s]"></span>
             <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58] animate-bounce [animation-delay:0.4s]"></span>
@@ -264,13 +264,13 @@ export default function MushroomBotDrawer({ isOpen, onClose }: MushroomBotDrawer
       </div>
 
       {/* 4. Khung Nhập Liệu Thông Minh (Smart Input Bar) */}
-      <div className="p-2.5 bg-white/95 dark:bg-[#160E09]/95 backdrop-blur-md border-t border-[#DECFC0] dark:border-[#38261A] shrink-0">
+      <div className="p-2.5 bg-white/95 dark:bg-[#160E09]/95 backdrop-blur-md border-t border-[#DECFC0] dark:border-[#474039] shrink-0">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSend();
           }}
-          className="flex items-center gap-1.5 bg-[#FAF5EE] dark:bg-[#20140D] rounded-full border border-[#DECFC0] dark:border-[#3D281C] p-1 pl-3.5 focus-within:border-[#C28E58] focus-within:ring-2 focus-within:ring-[#C28E58]/20 transition-all"
+          className="flex items-center gap-1.5 bg-[#FAF5EE] dark:bg-[#27231F] rounded-full border border-[#DECFC0] dark:border-[#3D281C] p-1 pl-3.5 focus-within:border-[#C28E58] focus-within:ring-2 focus-within:ring-[#C28E58]/20 transition-all"
         >
           <input
             type="text"

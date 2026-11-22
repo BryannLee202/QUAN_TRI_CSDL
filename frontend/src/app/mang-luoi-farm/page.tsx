@@ -96,7 +96,7 @@ export default function FarmNetworkPage() {
         <Navbar />
 
         {/* Hero Header */}
-        <div className="bg-gradient-to-b from-[#F5EEE4] via-[#FBF7F0] to-[#FDFBF8] dark:from-[#20140D] dark:via-[#19100A] dark:to-[#140D08] border-b border-[#EAE1D3] dark:border-[#38261A] py-10 px-6">
+        <div className="bg-gradient-to-b from-[#F5EEE4] via-[#FBF7F0] to-[#FDFBF8] dark:from-[#20140D] dark:via-[#19100A] dark:to-[#140D08] border-b border-[#EAE1D3] dark:border-[#474039] py-10 px-6">
           <div className="max-w-7xl mx-auto space-y-4">
             <div className="flex items-center gap-2 text-xs font-semibold text-[#8A5C38] dark:text-[#C28E58]">
               <Link href="/" className="hover:underline flex items-center gap-1">
@@ -124,7 +124,7 @@ export default function FarmNetworkPage() {
               <div className="flex items-center gap-3">
                 <Link
                   href="/tinh-loi-nhuan"
-                  className="px-4 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#422C1D] bg-white dark:bg-[#1C120C] text-xs font-bold hover:border-[#C28E58] transition"
+                  className="px-4 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-white dark:bg-[#27231F] text-xs font-bold hover:border-[#C28E58] transition"
                 >
                   Tính Lợi Nhuận FaaS →
                 </Link>
@@ -136,25 +136,25 @@ export default function FarmNetworkPage() {
         {/* Thống kê tổng quan */}
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div className="p-5 rounded-2xl bg-white dark:bg-[#1A1009] border border-[#EAE1D3] dark:border-[#38261A] shadow-xs">
+            <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-xs">
               <span className="text-[11px] text-[#8C6D53] block">Tổng số cơ sở Farm:</span>
               <span className="text-2xl font-black text-[#24170E] dark:text-white mt-1 block">4 Trung Tâm</span>
               <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">100% Đang Hoạt Động</span>
             </div>
 
-            <div className="p-5 rounded-2xl bg-white dark:bg-[#1A1009] border border-[#EAE1D3] dark:border-[#38261A] shadow-xs">
+            <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-xs">
               <span className="text-[11px] text-[#8C6D53] block">Quy mô buồng kính ISO:</span>
               <span className="text-2xl font-black text-[#C28E58] mt-1 block">336 Buồng</span>
               <span className="text-[10px] text-[#8A5C38]">Kiểm soát vi khí hậu độc lập</span>
             </div>
 
-            <div className="p-5 rounded-2xl bg-white dark:bg-[#1A1009] border border-[#EAE1D3] dark:border-[#38261A] shadow-xs">
+            <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-xs">
               <span className="text-[11px] text-[#8C6D53] block">Tổng dung lượng khay nấm:</span>
               <span className="text-2xl font-black text-[#24170E] dark:text-white mt-1 block">13.440 Khay</span>
               <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">Tỷ lệ lấp đầy: 91.2%</span>
             </div>
 
-            <div className="p-5 rounded-2xl bg-white dark:bg-[#1A1009] border border-[#EAE1D3] dark:border-[#38261A] shadow-xs">
+            <div className="p-5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] shadow-xs">
               <span className="text-[11px] text-[#8C6D53] block">Bán kính giao nấm tươi:</span>
               <span className="text-2xl font-black text-[#24170E] dark:text-white mt-1 block">&lt; 60 Phút</span>
               <span className="text-[10px] text-sky-600 dark:text-sky-400 font-bold">Bảo quản mát 4°C tận nhà</span>
@@ -194,8 +194,8 @@ export default function FarmNetworkPage() {
                       onClick={() => setSelectedHubId(hub.id)}
                       className={`w-full text-left p-5 rounded-2xl border transition-all flex flex-col justify-between ${
                         isSelected
-                          ? 'border-[#C28E58] bg-[#FAF5EE] dark:bg-[#281A12] shadow-md ring-2 ring-[#C28E58]/30'
-                          : 'border-[#DECFC0] dark:border-[#38261A] bg-white dark:bg-[#1A1009] hover:border-[#C28E58]'
+                          ? 'border-[#C28E58] bg-[#FAF5EE] dark:bg-[#322D28] shadow-md ring-2 ring-[#C28E58]/30'
+                          : 'border-[#DECFC0] dark:border-[#474039] bg-white dark:bg-[#1E1B18] hover:border-[#C28E58]'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-2">
@@ -222,7 +222,7 @@ export default function FarmNetworkPage() {
                         📍 {hub.address}
                       </p>
 
-                      <div className="mt-3 pt-3 border-t border-[#EAE1D3] dark:border-[#332014] flex items-center justify-between text-xs">
+                      <div className="mt-3 pt-3 border-t border-[#EAE1D3] dark:border-[#474039] flex items-center justify-between text-xs">
                         <span className="text-[#8C6D53]">Quy mô:</span>
                         <span className="font-bold text-[#3B2212] dark:text-white">
                           {hub.chambers} buồng ({hub.totalTrays} khay)
@@ -236,8 +236,8 @@ export default function FarmNetworkPage() {
 
             {/* Cột Phải (7 Cột): Chi Tiết Hub Đang Chọn & Bản Đồ Vận Hành */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#1A1009] border border-[#DECFC0] dark:border-[#38261A] shadow-md space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#EAE1D3] dark:border-[#38261A]">
+              <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#1E1B18] border border-[#DECFC0] dark:border-[#474039] shadow-md space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#EAE1D3] dark:border-[#474039]">
                   <div>
                     <span className="text-xs font-bold text-[#C28E58] uppercase">
                       Hồ Sơ Năng Lực Cơ Sở
@@ -265,12 +265,12 @@ export default function FarmNetworkPage() {
 
                 {/* Đặc điểm & Chuyên môn */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="p-4 rounded-2xl bg-[#FAF5EE] dark:bg-[#22160E] border border-[#EAE1D3] dark:border-[#332014] space-y-1">
+                  <div className="p-4 rounded-2xl bg-[#FAF5EE] dark:bg-[#27231F] border border-[#EAE1D3] dark:border-[#474039] space-y-1">
                     <span className="text-[11px] font-bold text-[#8A5C38] block">Chủng nấm chuyên canh:</span>
                     <p className="text-xs font-bold text-[#24170E] dark:text-white">{selectedHub.specialty}</p>
                   </div>
 
-                  <div className="p-4 rounded-2xl bg-[#FAF5EE] dark:bg-[#22160E] border border-[#EAE1D3] dark:border-[#332014] space-y-1">
+                  <div className="p-4 rounded-2xl bg-[#FAF5EE] dark:bg-[#27231F] border border-[#EAE1D3] dark:border-[#474039] space-y-1">
                     <span className="text-[11px] font-bold text-[#8A5C38] block">Thời gian giao hàng:</span>
                     <p className="text-xs font-bold text-[#C28E58]">{selectedHub.deliverySpeed}</p>
                   </div>
@@ -283,7 +283,7 @@ export default function FarmNetworkPage() {
                     {selectedHub.tags.map((tag, idx) => (
                       <span
                         key={idx}
-                        className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-[#FAF5EE] dark:bg-[#25170F] border border-[#DECFC0] dark:border-[#38261A] text-[#6E4B33] dark:text-[#E2BA78]"
+                        className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] text-[#6E4B33] dark:text-[#E2BA78]"
                       >
                         ✓ {tag}
                       </span>

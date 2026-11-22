@@ -147,7 +147,7 @@ export default function RoiCalculatorPage() {
         <Navbar />
 
         {/* Breadcrumb & Hero Header */}
-        <div className="bg-gradient-to-b from-[#F5EEE4] via-[#FBF7F0] to-[#FDFBF8] dark:from-[#20140D] dark:via-[#19100A] dark:to-[#140D08] border-b border-[#EAE1D3] dark:border-[#38261A] py-10 px-6">
+        <div className="bg-gradient-to-b from-[#F5EEE4] via-[#FBF7F0] to-[#FDFBF8] dark:from-[#20140D] dark:via-[#19100A] dark:to-[#140D08] border-b border-[#EAE1D3] dark:border-[#474039] py-10 px-6">
           <div className="max-w-7xl mx-auto space-y-4">
             <div className="flex items-center gap-2 text-xs font-semibold text-[#8A5C38] dark:text-[#C28E58]">
               <Link href="/" className="hover:underline flex items-center gap-1">
@@ -175,7 +175,7 @@ export default function RoiCalculatorPage() {
               <div className="flex items-center gap-3">
                 <Link
                   href="/san-nong-san"
-                  className="px-4 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#422C1D] bg-white dark:bg-[#1C120C] text-xs font-bold hover:border-[#C28E58] transition"
+                  className="px-4 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-white dark:bg-[#27231F] text-xs font-bold hover:border-[#C28E58] transition"
                 >
                   Tham Khảo Sàn Nông Sản →
                 </Link>
@@ -205,7 +205,7 @@ export default function RoiCalculatorPage() {
             {/* Cột Trái (8 Cột): Chọn Giống Nấm, Số Khay, Thời Hạn */}
             <div className="lg:col-span-7 xl:col-span-8 space-y-8">
               {/* Mục 1: Chọn Chủng Nấm Dược Liệu */}
-              <div className="bg-white dark:bg-[#1A1009] p-6 sm:p-8 rounded-3xl border border-[#DECFC0] dark:border-[#38261A] shadow-sm space-y-4">
+              <div className="bg-white dark:bg-[#1E1B18] p-6 sm:p-8 rounded-3xl border border-[#DECFC0] dark:border-[#474039] shadow-sm space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-lg font-black text-[#24170E] dark:text-[#FFF5EA] flex items-center gap-2">
@@ -228,8 +228,8 @@ export default function RoiCalculatorPage() {
                         onClick={() => setSelectedSpeciesId(spec.id)}
                         className={`text-left p-4 rounded-2xl border transition-all relative flex flex-col justify-between ${
                           isSelected
-                            ? 'border-[#C28E58] bg-[#FAF5EE] dark:bg-[#281A12] shadow-md ring-2 ring-[#C28E58]/30'
-                            : 'border-[#EAE1D3] dark:border-[#332014] bg-white dark:bg-[#170E08] hover:border-[#DECFC0] dark:hover:border-[#4A3222]'
+                            ? 'border-[#C28E58] bg-[#FAF5EE] dark:bg-[#322D28] shadow-md ring-2 ring-[#C28E58]/30'
+                            : 'border-[#EAE1D3] dark:border-[#474039] bg-white dark:bg-[#1E1B18] hover:border-[#DECFC0] dark:hover:border-[#4A3222]'
                         }`}
                       >
                         <div>
@@ -271,7 +271,7 @@ export default function RoiCalculatorPage() {
               </div>
 
               {/* Mục 2: Số Lượng Khay Nấm Thông Minh */}
-              <div className="bg-white dark:bg-[#1A1009] p-6 sm:p-8 rounded-3xl border border-[#DECFC0] dark:border-[#38261A] shadow-sm space-y-4">
+              <div className="bg-white dark:bg-[#1E1B18] p-6 sm:p-8 rounded-3xl border border-[#DECFC0] dark:border-[#474039] shadow-sm space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-lg font-black text-[#24170E] dark:text-[#FFF5EA] flex items-center gap-2">
@@ -308,7 +308,7 @@ export default function RoiCalculatorPage() {
                         className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                           trayCount === count
                             ? 'bg-[#C28E58] text-white shadow-sm'
-                            : 'bg-[#FAF5EE] dark:bg-[#25170F] text-[#6E4B33] dark:text-[#DAC7B5] hover:bg-[#F2E6D8]'
+                            : 'bg-[#FAF5EE] dark:bg-[#322D28] text-[#6E4B33] dark:text-[#DAC7B5] hover:bg-[#F2E6D8]'
                         }`}
                       >
                         {count} khay {count >= 5 && '🔥'}
@@ -319,7 +319,7 @@ export default function RoiCalculatorPage() {
               </div>
 
               {/* Mục 3: Thời Hạn Thuê & Ưu Đãi Chiết Khấu */}
-              <div className="bg-white dark:bg-[#1A1009] p-6 sm:p-8 rounded-3xl border border-[#DECFC0] dark:border-[#38261A] shadow-sm space-y-4">
+              <div className="bg-white dark:bg-[#1E1B18] p-6 sm:p-8 rounded-3xl border border-[#DECFC0] dark:border-[#474039] shadow-sm space-y-4">
                 <div>
                   <h2 className="text-lg font-black text-[#24170E] dark:text-[#FFF5EA] flex items-center gap-2">
                     <span className="w-6 h-6 rounded-lg bg-[#523522] text-white flex items-center justify-center text-xs">3</span>
@@ -340,8 +340,8 @@ export default function RoiCalculatorPage() {
                         onClick={() => setDurationMonths(d.months)}
                         className={`p-3.5 rounded-2xl border text-center transition-all ${
                           isSelected
-                            ? 'border-[#C28E58] bg-[#FAF5EE] dark:bg-[#281A12] ring-2 ring-[#C28E58]/30 shadow-sm'
-                            : 'border-[#EAE1D3] dark:border-[#332014] bg-white dark:bg-[#170E08] hover:border-[#DECFC0]'
+                            ? 'border-[#C28E58] bg-[#FAF5EE] dark:bg-[#322D28] ring-2 ring-[#C28E58]/30 shadow-sm'
+                            : 'border-[#EAE1D3] dark:border-[#474039] bg-white dark:bg-[#1E1B18] hover:border-[#DECFC0]'
                         }`}
                       >
                         <span className="block font-bold text-sm text-[#24170E] dark:text-[#FFF5EA]">
@@ -458,7 +458,7 @@ export default function RoiCalculatorPage() {
               </div>
 
               {/* Box Hỗ Trợ Kỹ Thuật */}
-              <div className="p-5 rounded-3xl bg-white dark:bg-[#1A1009] border border-[#DECFC0] dark:border-[#38261A] text-xs space-y-2">
+              <div className="p-5 rounded-3xl bg-white dark:bg-[#1E1B18] border border-[#DECFC0] dark:border-[#474039] text-xs space-y-2">
                 <div className="flex items-center gap-2 font-bold text-[#24170E] dark:text-[#FFF5EA]">
                   <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
                   <span>Kỹ Sư Nông Nghiệp Trực Tuyến 24/7</span>

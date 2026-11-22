@@ -105,11 +105,11 @@ export default function MarketplaceModal({ isOpen, onClose }: MarketplaceModalPr
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-[#1A1009] border border-[#DECFC0] dark:border-[#422C1D] w-full max-w-4xl rounded-3xl shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-scale-up"
+        className="bg-white dark:bg-[#1E1B18] border border-[#DECFC0] dark:border-[#474039] w-full max-w-4xl rounded-3xl shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-scale-up"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Sàn Giao Dịch */}
-        <div className="px-6 py-4 border-b border-[#EAE1D3] dark:border-[#38261A] flex items-center justify-between bg-gradient-to-r from-[#FAF5EE] via-[#F4ECE1] to-[#FAF5EE] dark:from-[#20140D] dark:to-[#170E08]">
+        <div className="px-6 py-4 border-b border-[#EAE1D3] dark:border-[#474039] flex items-center justify-between bg-gradient-to-r from-[#FAF5EE] via-[#F4ECE1] to-[#FAF5EE] dark:from-[#20140D] dark:to-[#1E1B18]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-[#523522] text-[#FFF5EA] flex items-center justify-center shadow-xs">
               <svg className="w-5 h-5 text-[#E2BA78]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -135,7 +135,7 @@ export default function MarketplaceModal({ isOpen, onClose }: MarketplaceModalPr
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-xl bg-white/80 dark:bg-[#2B1C13] border border-[#DECFC0] dark:border-[#543825] text-[#735843] dark:text-[#DAC7B5] hover:text-[#24170E] dark:hover:text-white flex items-center justify-center transition"
+            className="w-8 h-8 rounded-xl bg-white/80 dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] text-[#735843] dark:text-[#DAC7B5] hover:text-[#24170E] dark:hover:text-white flex items-center justify-center transition"
           >
             ✕
           </button>
@@ -150,14 +150,14 @@ export default function MarketplaceModal({ isOpen, onClose }: MarketplaceModalPr
         )}
 
         {/* Bộ Lọc Tabs */}
-        <div className="px-6 pt-4 flex flex-wrap items-center justify-between gap-3 border-b border-[#EAE1D3] dark:border-[#38261A] pb-3">
-          <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[#FAF5EE] dark:bg-[#22160E] border border-[#E0D3C1] dark:border-[#38261A] text-xs">
+        <div className="px-6 pt-4 flex flex-wrap items-center justify-between gap-3 border-b border-[#EAE1D3] dark:border-[#474039] pb-3">
+          <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[#FAF5EE] dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039] text-xs">
             <button
               onClick={() => setActiveTab('ALL')}
               className={`px-3.5 py-1.5 rounded-xl font-bold transition ${
                 activeTab === 'ALL'
                   ? 'bg-[#523522] text-white shadow-xs'
-                  : 'text-[#735843] dark:text-[#DAC7B5] hover:bg-[#F2E8DC] dark:hover:bg-[#2B1C13]'
+                  : 'text-[#735843] dark:text-[#DAC7B5] hover:bg-[#F2E8DC] dark:hover:bg-[#3C3630]'
               }`}
             >
               Tất Cả Lô Nấm ({MOCK_BATCHES.length})
@@ -167,7 +167,7 @@ export default function MarketplaceModal({ isOpen, onClose }: MarketplaceModalPr
               className={`px-3.5 py-1.5 rounded-xl font-bold transition ${
                 activeTab === 'FRESH'
                   ? 'bg-[#523522] text-white shadow-xs'
-                  : 'text-[#735843] dark:text-[#DAC7B5] hover:bg-[#F2E8DC] dark:hover:bg-[#2B1C13]'
+                  : 'text-[#735843] dark:text-[#DAC7B5] hover:bg-[#F2E8DC] dark:hover:bg-[#3C3630]'
               }`}
             >
               Nấm Tươi Mới Hái (2h)
@@ -177,7 +177,7 @@ export default function MarketplaceModal({ isOpen, onClose }: MarketplaceModalPr
               className={`px-3.5 py-1.5 rounded-xl font-bold transition ${
                 activeTab === 'DRIED'
                   ? 'bg-[#523522] text-white shadow-xs'
-                  : 'text-[#735843] dark:text-[#DAC7B5] hover:bg-[#F2E8DC] dark:hover:bg-[#2B1C13]'
+                  : 'text-[#735843] dark:text-[#DAC7B5] hover:bg-[#F2E8DC] dark:hover:bg-[#3C3630]'
               }`}
             >
               Sấy Thăng Hoa Cao Cấp
@@ -196,7 +196,7 @@ export default function MarketplaceModal({ isOpen, onClose }: MarketplaceModalPr
             {filteredBatches.map((batch) => (
               <div
                 key={batch.id}
-                className="p-5 rounded-3xl bg-[#FAF7F2] dark:bg-[#22160E] border border-[#EAE1D3] dark:border-[#38261A] hover:border-[#C28E58] transition shadow-xs flex flex-col justify-between space-y-4 group"
+                className="p-5 rounded-3xl bg-[#FAF7F2] dark:bg-[#27231F] border border-[#EAE1D3] dark:border-[#474039] hover:border-[#C28E58] transition shadow-xs flex flex-col justify-between space-y-4 group"
               >
                 <div>
                   <div className="flex items-start justify-between gap-2">
@@ -255,7 +255,7 @@ export default function MarketplaceModal({ isOpen, onClose }: MarketplaceModalPr
           </div>
 
           {/* Banner Ký Gửi Nấm Thu Hoạch */}
-          <div className="p-5 rounded-3xl bg-gradient-to-r from-[#FAF5EE] via-[#F4ECE1] to-[#FAF5EE] dark:from-[#20140D] dark:to-[#170E08] border border-[#DECFC0] dark:border-[#543825] flex flex-wrap items-center justify-between gap-4">
+          <div className="p-5 rounded-3xl bg-gradient-to-r from-[#FAF5EE] via-[#F4ECE1] to-[#FAF5EE] dark:from-[#20140D] dark:to-[#1E1B18] border border-[#DECFC0] dark:border-[#474039] flex flex-wrap items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-black text-[#24170E] dark:text-[#FFF5EA]">

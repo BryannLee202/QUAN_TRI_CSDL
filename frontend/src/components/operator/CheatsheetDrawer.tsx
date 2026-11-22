@@ -15,11 +15,11 @@ export default function CheatsheetDrawer({ isOpen, onClose }: CheatsheetDrawerPr
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-xs transition-opacity duration-200">
       <div 
-        className="w-full sm:w-[480px] h-full bg-[#FAF7F2] dark:bg-[#1A1009] shadow-2xl flex flex-col border-l border-[#E0D3C1] dark:border-[#38261A] text-[#24170E] dark:text-[#F7EFE6] transition-all"
+        className="w-full sm:w-[480px] h-full bg-[#FAF7F2] dark:bg-[#1E1B18] shadow-2xl flex flex-col border-l border-[#E0D3C1] dark:border-[#474039] text-[#24170E] dark:text-[#F7EFE6] transition-all"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-4 bg-[#24170E] dark:bg-[#120B07] text-[#FFF5EA] flex items-center justify-between border-b border-[#3D281B]">
+        <div className="p-4 bg-[#24170E] dark:bg-[#1E1B18] text-[#FFF5EA] flex items-center justify-between border-b border-[#3D281B]">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-[#38261A] flex items-center justify-center text-[#C28E58] border border-[#543825]">
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -44,13 +44,13 @@ export default function CheatsheetDrawer({ isOpen, onClose }: CheatsheetDrawerPr
         </div>
 
         {/* Tab selection */}
-        <div className="flex border-b border-[#E0D3C1] dark:border-[#38261A] bg-[#F2EDE4] dark:bg-[#150D07] p-1.5 gap-1.5 text-xs font-bold">
+        <div className="flex border-b border-[#E0D3C1] dark:border-[#474039] bg-[#F2EDE4] dark:bg-[#150D07] p-1.5 gap-1.5 text-xs font-bold">
           <button
             onClick={() => setActiveTab('climate')}
             className={`flex-1 py-2 px-3 rounded-lg transition-all flex items-center justify-center gap-1.5 ${
               activeTab === 'climate'
                 ? 'bg-[#C28E58] text-white shadow-xs'
-                : 'text-[#6B513E] dark:text-[#A8907E] hover:bg-[#EAE0D3] dark:hover:bg-[#25170F]'
+                : 'text-[#6B513E] dark:text-[#B9ADA1] hover:bg-[#EAE0D3] dark:hover:bg-[#3C3630]'
             }`}
           >
             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -63,7 +63,7 @@ export default function CheatsheetDrawer({ isOpen, onClose }: CheatsheetDrawerPr
             className={`flex-1 py-2 px-3 rounded-lg transition-all flex items-center justify-center gap-1.5 ${
               activeTab === 'sop'
                 ? 'bg-[#C28E58] text-white shadow-xs'
-                : 'text-[#6B513E] dark:text-[#A8907E] hover:bg-[#EAE0D3] dark:hover:bg-[#25170F]'
+                : 'text-[#6B513E] dark:text-[#B9ADA1] hover:bg-[#EAE0D3] dark:hover:bg-[#3C3630]'
             }`}
           >
             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -78,7 +78,7 @@ export default function CheatsheetDrawer({ isOpen, onClose }: CheatsheetDrawerPr
             className={`flex-1 py-2 px-3 rounded-lg transition-all flex items-center justify-center gap-1.5 ${
               activeTab === 'sql'
                 ? 'bg-[#C28E58] text-white shadow-xs'
-                : 'text-[#6B513E] dark:text-[#A8907E] hover:bg-[#EAE0D3] dark:hover:bg-[#25170F]'
+                : 'text-[#6B513E] dark:text-[#B9ADA1] hover:bg-[#EAE0D3] dark:hover:bg-[#3C3630]'
             }`}
           >
             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -98,7 +98,7 @@ export default function CheatsheetDrawer({ isOpen, onClose }: CheatsheetDrawerPr
                 <span>Ngưỡng Vi Khí Hậu Chuẩn VietGAP Từng Loài</span>
               </h4>
 
-              <div className="p-3.5 rounded-xl bg-white dark:bg-[#20140D] border border-[#E0D3C1] dark:border-[#38261A] shadow-2xs space-y-1.5">
+              <div className="p-3.5 rounded-xl bg-white dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039] shadow-2xs space-y-1.5">
                 <span className="font-bold text-[#A66C38] dark:text-[#E2BA78] text-xs">
                   1. Đông Trùng Hạ Thảo (Cordyceps militaris)
                 </span>
@@ -110,7 +110,7 @@ export default function CheatsheetDrawer({ isOpen, onClose }: CheatsheetDrawerPr
                 </ul>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-white dark:bg-[#20140D] border border-[#E0D3C1] dark:border-[#38261A] shadow-2xs space-y-1.5">
+              <div className="p-3.5 rounded-xl bg-white dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039] shadow-2xs space-y-1.5">
                 <span className="font-bold text-[#8A5C38] dark:text-[#D4AF7A] text-xs">
                   2. Nấm Linh Chi Đỏ Dược Liệu (Ganoderma lucidum)
                 </span>
@@ -122,7 +122,7 @@ export default function CheatsheetDrawer({ isOpen, onClose }: CheatsheetDrawerPr
                 </ul>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-white dark:bg-[#20140D] border border-[#E0D3C1] dark:border-[#38261A] shadow-2xs space-y-1.5">
+              <div className="p-3.5 rounded-xl bg-white dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039] shadow-2xs space-y-1.5">
                 <span className="font-bold text-[#523522] dark:text-[#C5B09E] text-xs">
                   3. Nấm Bào Ngư Xám Phòng Sạch
                 </span>
@@ -142,27 +142,27 @@ export default function CheatsheetDrawer({ isOpen, onClose }: CheatsheetDrawerPr
               </h4>
 
               <div className="space-y-2.5">
-                <div className="p-3 rounded-xl bg-white dark:bg-[#20140D] border border-[#E0D3C1] dark:border-[#38261A] flex gap-3">
+                <div className="p-3 rounded-xl bg-white dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039] flex gap-3">
                   <span className="w-5 h-5 rounded-full bg-rose-100 text-rose-800 font-bold flex items-center justify-center shrink-0 text-xs">1</span>
                   <p className="text-xs text-[#523522] dark:text-[#DAC7B5]"><strong className="text-[#24170E] dark:text-[#FFF5EA]">Giám sát AlertFeed:</strong> Khi phát hiện cảnh báo đỏ (nhiệt độ tăng cao, độ ẩm tụt), xác định ngay mã Buồng Kính (RoomID).</p>
                 </div>
 
-                <div className="p-3 rounded-xl bg-white dark:bg-[#20140D] border border-[#E0D3C1] dark:border-[#38261A] flex gap-3">
+                <div className="p-3 rounded-xl bg-white dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039] flex gap-3">
                   <span className="w-5 h-5 rounded-full bg-amber-100 text-amber-800 font-bold flex items-center justify-center shrink-0 text-xs">2</span>
                   <p className="text-xs text-[#523522] dark:text-[#DAC7B5]"><strong className="text-[#24170E] dark:text-[#FFF5EA]">Can thiệp cưỡng bức:</strong> Dùng bảng HardwareControls bật công tắc Quạt hút CO₂ hoặc Máy phun sương bù ẩm.</p>
                 </div>
 
-                <div className="p-3 rounded-xl bg-white dark:bg-[#20140D] border border-[#E0D3C1] dark:border-[#38261A] flex gap-3">
+                <div className="p-3 rounded-xl bg-white dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039] flex gap-3">
                   <span className="w-5 h-5 rounded-full bg-sky-100 text-sky-800 font-bold flex items-center justify-center shrink-0 text-xs">3</span>
                   <p className="text-xs text-[#523522] dark:text-[#DAC7B5]"><strong className="text-[#24170E] dark:text-[#FFF5EA]">Kiểm tra ma trận khay:</strong> Nhấp vào TrayMatrix để kiểm tra xem khay nào đang nuôi nấm trong buồng bị ảnh hưởng.</p>
                 </div>
 
-                <div className="p-3 rounded-xl bg-white dark:bg-[#20140D] border border-[#E0D3C1] dark:border-[#38261A] flex gap-3">
+                <div className="p-3 rounded-xl bg-white dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039] flex gap-3">
                   <span className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-800 font-bold flex items-center justify-center shrink-0 text-xs">4</span>
                   <p className="text-xs text-[#523522] dark:text-[#DAC7B5]"><strong className="text-[#24170E] dark:text-[#FFF5EA]">Bảo trì / Cách ly:</strong> Nếu khay cần vệ sinh, chuyển trạng thái sang MAINTENANCE để ngăn xếp đơn hàng mới.</p>
                 </div>
 
-                <div className="p-3 rounded-xl bg-white dark:bg-[#20140D] border border-[#E0D3C1] dark:border-[#38261A] flex gap-3">
+                <div className="p-3 rounded-xl bg-white dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039] flex gap-3">
                   <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0 text-xs">5</span>
                   <p className="text-xs text-[#523522] dark:text-[#DAC7B5]"><strong className="text-[#24170E] dark:text-[#FFF5EA]">Xử lý hoàn tất:</strong> Nhấn "Đánh dấu đã xử lý" trên cảnh báo sau khi thông số đo lường vi khí hậu trở về ngưỡng xanh an toàn.</p>
                 </div>
@@ -177,17 +177,17 @@ export default function CheatsheetDrawer({ isOpen, onClose }: CheatsheetDrawerPr
               </h4>
 
               <div className="space-y-2.5 font-mono text-[11px]">
-                <div className="p-3 rounded-xl bg-white dark:bg-[#20140D] border border-[#E0D3C1] dark:border-[#38261A]">
+                <div className="p-3 rounded-xl bg-white dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039]">
                   <p className="font-bold text-rose-600 dark:text-rose-400">Error 1205: Deadlock Victim</p>
                   <p className="text-[#6B513E] dark:text-[#DAC7B5] font-sans mt-1">Xung đột khóa vòng lặp giữa hai giao dịch đồng thời. Hệ thống tự động ROLLBACK giao dịch ưu tiên thấp và retry.</p>
                 </div>
 
-                <div className="p-3 rounded-xl bg-white dark:bg-[#20140D] border border-[#E0D3C1] dark:border-[#38261A]">
+                <div className="p-3 rounded-xl bg-white dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039]">
                   <p className="font-bold text-amber-600 dark:text-amber-400">Error 2627 / 2601: Duplicate Key Violation</p>
                   <p className="text-[#6B513E] dark:text-[#DAC7B5] font-sans mt-1">Vi phạm ràng buộc UNIQUE (trùng mã khay nuôi, mã hợp đồng thuê hoặc mã QR khay nấm).</p>
                 </div>
 
-                <div className="p-3 rounded-xl bg-white dark:bg-[#20140D] border border-[#E0D3C1] dark:border-[#38261A]">
+                <div className="p-3 rounded-xl bg-white dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039]">
                   <p className="font-bold text-[#C28E58] dark:text-[#E2BA78]">Isolation Level: SERIALIZABLE</p>
                   <p className="text-[#6B513E] dark:text-[#DAC7B5] font-sans mt-1">Mức cô lập cao nhất với khoá phạm vi (Range Locks) ngăn ngừa 100% Dirty Read, Non-Repeatable Read và Phantom Read khi phân bổ khay nuôi.</p>
                 </div>
@@ -197,8 +197,8 @@ export default function CheatsheetDrawer({ isOpen, onClose }: CheatsheetDrawerPr
         </div>
 
         {/* Footer */}
-        <div className="p-3 bg-[#F2EDE4] dark:bg-[#120B07] border-t border-[#E0D3C1] dark:border-[#38261A] text-center">
-          <span className="text-[10px] text-[#8C6D53] dark:text-[#A8907E]">
+        <div className="p-3 bg-[#F2EDE4] dark:bg-[#1E1B18] border-t border-[#E0D3C1] dark:border-[#474039] text-center">
+          <span className="text-[10px] text-[#8C6D53] dark:text-[#B9ADA1]">
             MushroomCloud Operator Standard Reference • Phiên bản 2.0 (FaaS Platform)
           </span>
         </div>

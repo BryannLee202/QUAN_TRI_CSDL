@@ -308,7 +308,7 @@ export default function OperatorPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FAF7F2] dark:bg-[#120B07] p-6 lg:p-8 text-[#24170E] dark:text-[#F7EFE6] transition-colors font-sans">
+    <main className="min-h-screen bg-[#FAF7F2] dark:bg-[#1E1B18] p-6 lg:p-8 text-[#24170E] dark:text-[#F7EFE6] transition-colors font-sans">
       {/* Thông báo thao tác tức thì (Toast) */}
       {actionNotice && (
         <div className="fixed top-5 right-5 z-50 rounded-xl bg-[#24170E] text-[#FFF5EA] px-4 py-3 shadow-xl border border-[#C28E58] flex items-center gap-2.5 text-xs font-semibold animate-fade-in">
@@ -320,11 +320,11 @@ export default function OperatorPage() {
       )}
 
       {/* Header Điều Hành */}
-      <header className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-[#E0D3C1] dark:border-[#38261A] pb-5">
+      <header className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-[#E0D3C1] dark:border-[#474039] pb-5">
         <div className="flex items-center gap-3">
           <Link
             href="/"
-            className="px-3.5 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#543825] text-xs font-bold hover:bg-[#F2E8DC] dark:hover:bg-[#281A12] text-[#523522] dark:text-[#E2BA78] transition-colors flex items-center gap-1.5 shrink-0 shadow-2xs"
+            className="px-3.5 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#474039] text-xs font-bold hover:bg-[#F2E8DC] dark:hover:bg-[#3C3630] text-[#523522] dark:text-[#E2BA78] transition-colors flex items-center gap-1.5 shrink-0 shadow-2xs"
           >
             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <line x1="19" y1="12" x2="5" y2="12" />
@@ -338,7 +338,7 @@ export default function OperatorPage() {
               <h1 className="text-xl lg:text-2xl font-black text-[#24170E] dark:text-[#FFF5EA] tracking-tight">
                 Trung Tâm Điều Hành Trang Trại FaaS
               </h1>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-md bg-[#FAF5EE] dark:bg-[#25170F] text-[#C28E58] border border-[#DECFC0] dark:border-[#4A3222]">
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-md bg-[#FAF5EE] dark:bg-[#322D28] text-[#C28E58] border border-[#DECFC0] dark:border-[#474039]">
                 Operator Hub
               </span>
             </div>
@@ -365,7 +365,7 @@ export default function OperatorPage() {
           <span
             className={`rounded-xl px-3 py-2 text-xs font-semibold shrink-0 whitespace-nowrap shadow-2xs flex items-center gap-2 tabular-nums ${
               connected
-                ? "bg-[#FAF5EE] text-[#523522] dark:bg-[#2B1C13] dark:text-[#E2BA78] border border-[#C28E58]"
+                ? "bg-[#FAF5EE] text-[#523522] dark:bg-[#322D28] dark:text-[#E2BA78] border border-[#C28E58]"
                 : "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-300"
             }`}
           >
@@ -411,7 +411,7 @@ export default function OperatorPage() {
       {/* Lưới Quản Lý Chính */}
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Khối Trái: Ma Trận Khay Nuôi Vật Lý */}
-        <section className="space-y-4 rounded-3xl border border-[#E0D3C1] dark:border-[#38261A] bg-white dark:bg-[#20140D] p-5 sm:p-6 shadow-sm lg:col-span-2 transition-colors">
+        <section className="space-y-4 rounded-3xl border border-[#E0D3C1] dark:border-[#474039] bg-white dark:bg-[#27231F] p-5 sm:p-6 shadow-sm lg:col-span-2 transition-colors">
           <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#F0E6D8] dark:border-[#2D1D13]">
             <div>
               <h2 className="font-extrabold text-base text-[#24170E] dark:text-[#FFF5EA] tracking-tight">
@@ -488,8 +488,8 @@ export default function OperatorPage() {
       {/* Modal Khởi Tạo & Mở Rộng Khay Nuôi Mới (Dành cho Admin / Operator) */}
       {isCreateTrayOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-xs p-4 animate-fade-in">
-          <div className="w-full max-w-lg rounded-3xl bg-white dark:bg-[#1E130B] border border-[#DECFC0] dark:border-[#4A3222] shadow-2xl p-6 sm:p-7 text-[#24170E] dark:text-[#FFF5EA]">
-            <div className="flex items-center justify-between border-b border-[#F0E6D8] dark:border-[#332015] pb-3.5 mb-5">
+          <div className="w-full max-w-lg rounded-3xl bg-white dark:bg-[#27231F] border border-[#DECFC0] dark:border-[#474039] shadow-2xl p-6 sm:p-7 text-[#24170E] dark:text-[#FFF5EA]">
+            <div className="flex items-center justify-between border-b border-[#F0E6D8] dark:border-[#474039] pb-3.5 mb-5">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl bg-emerald-800 text-white flex items-center justify-center shrink-0">
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
@@ -509,7 +509,7 @@ export default function OperatorPage() {
               <button
                 type="button"
                 onClick={() => setIsCreateTrayOpen(false)}
-                className="w-8 h-8 rounded-xl bg-[#FAF5EE] dark:bg-[#2B1B12] hover:bg-[#F2E8DC] text-[#735843] flex items-center justify-center text-xs font-bold transition cursor-pointer"
+                className="w-8 h-8 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] hover:bg-[#F2E8DC] text-[#735843] flex items-center justify-center text-xs font-bold transition cursor-pointer"
               >
                 ✕
               </button>
@@ -536,7 +536,7 @@ export default function OperatorPage() {
                         className={`p-3 rounded-2xl border text-center transition cursor-pointer ${
                           active
                             ? "border-emerald-600 bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 ring-2 ring-emerald-500/20"
-                            : "border-[#DECFC0] dark:border-[#38261A] bg-[#FAF7F2] dark:bg-[#25170F] hover:border-[#C28E58]"
+                            : "border-[#DECFC0] dark:border-[#474039] bg-[#FAF7F2] dark:bg-[#322D28] hover:border-[#C28E58]"
                         }`}
                       >
                         <strong className="block text-sm font-extrabold tabular-nums">{opt.label}</strong>
@@ -549,7 +549,7 @@ export default function OperatorPage() {
 
               {/* Nếu tạo 1 khay đơn lẻ, cho phép tùy chọn Kệ & Tầng (hoặc để trống tự động) */}
               {createCount === 1 && (
-                <div className="grid grid-cols-2 gap-3 p-3.5 rounded-2xl bg-[#FAF6F0] dark:bg-[#170E08] border border-[#E8DCCE] dark:border-[#332015]">
+                <div className="grid grid-cols-2 gap-3 p-3.5 rounded-2xl bg-[#FAF6F0] dark:bg-[#1E1B18] border border-[#E8DCCE] dark:border-[#474039]">
                   <div>
                     <label className="block font-semibold text-[#523522] dark:text-[#DAC7B5] mb-1">
                       Số Kệ (Rack) tùy chọn:
@@ -561,7 +561,7 @@ export default function OperatorPage() {
                       value={customRack}
                       onChange={(e) => setCustomRack(e.target.value)}
                       placeholder="Tự động cấp kệ kế tiếp"
-                      className="w-full px-3 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#24160E] font-bold tabular-nums"
+                      className="w-full px-3 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-white dark:bg-[#24160E] font-bold tabular-nums"
                     />
                   </div>
                   <div>
@@ -575,7 +575,7 @@ export default function OperatorPage() {
                       value={customShelf}
                       onChange={(e) => setCustomShelf(e.target.value)}
                       placeholder="Tự động cấp tầng trống"
-                      className="w-full px-3 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#24160E] font-bold tabular-nums"
+                      className="w-full px-3 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-white dark:bg-[#24160E] font-bold tabular-nums"
                     />
                   </div>
                 </div>
@@ -593,7 +593,7 @@ export default function OperatorPage() {
                     className={`p-3 rounded-xl border text-left transition cursor-pointer ${
                       createStatus === "AVAILABLE"
                         ? "border-emerald-600 bg-emerald-50/70 dark:bg-emerald-950/30 font-bold text-emerald-900 dark:text-emerald-300"
-                        : "border-[#DECFC0] dark:border-[#38261A] bg-[#FAF7F2] dark:bg-[#25170F]"
+                        : "border-[#DECFC0] dark:border-[#474039] bg-[#FAF7F2] dark:bg-[#322D28]"
                     }`}
                   >
                     <span className="block font-bold">Sẵn sàng cấp phát (AVAILABLE)</span>
@@ -604,8 +604,8 @@ export default function OperatorPage() {
                     onClick={() => setCreateStatus("MAINTENANCE")}
                     className={`p-3 rounded-xl border text-left transition cursor-pointer ${
                       createStatus === "MAINTENANCE"
-                        ? "border-[#C28E58] bg-[#FAF5EE] dark:bg-[#2B1B12] font-bold text-[#523522] dark:text-[#E2BA78]"
-                        : "border-[#DECFC0] dark:border-[#38261A] bg-[#FAF7F2] dark:bg-[#25170F]"
+                        ? "border-[#C28E58] bg-[#FAF5EE] dark:bg-[#322D28] font-bold text-[#523522] dark:text-[#E2BA78]"
+                        : "border-[#DECFC0] dark:border-[#474039] bg-[#FAF7F2] dark:bg-[#322D28]"
                     }`}
                   >
                     <span className="block font-bold">Chờ khử khuẩn (MAINTENANCE)</span>
@@ -618,7 +618,7 @@ export default function OperatorPage() {
                 <button
                   type="button"
                   onClick={() => setIsCreateTrayOpen(false)}
-                  className="px-4 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] text-xs font-bold text-[#6E4B33] dark:text-[#DAC7B5] cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#474039] text-xs font-bold text-[#6E4B33] dark:text-[#DAC7B5] cursor-pointer"
                 >
                   Hủy Bỏ
                 </button>

@@ -7,7 +7,7 @@ import Link from "next/link";
  */
 export default function Footer() {
   return (
-    <footer className="bg-[#FAF7F2] dark:bg-[#120B07] text-[#523522] dark:text-[#DAC7B5] border-t border-[#EAE1D3] dark:border-[#38261A] transition-colors">
+    <footer className="bg-[#FAF7F2] dark:bg-[#1E1B18] text-[#523522] dark:text-[#DAC7B5] border-t border-[#EAE1D3] dark:border-[#474039] transition-colors">
       {/* Khung Nội Dung Chính 4 Cột */}
       <div className="max-w-7xl mx-auto px-6 pt-16 pb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
@@ -15,7 +15,7 @@ export default function Footer() {
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-3 group">
               <div 
-                className="w-10 h-10 logo-box rounded-2xl bg-gradient-to-b from-[#FAF5EE] via-[#F2E8DC] to-[#E8DCCE] dark:from-[#2B1C13] dark:via-[#20140D] dark:to-[#170E08] border border-[#D9C8B5] dark:border-[#543825] shadow-xs flex items-center justify-center p-1.5 transition-transform group-hover:scale-105 duration-200 shrink-0"
+                className="w-10 h-10 logo-box rounded-2xl bg-gradient-to-b from-[#FAF5EE] via-[#F2E8DC] to-[#E8DCCE] dark:from-[#2B1C13] dark:via-[#27231F] dark:to-[#1E1B18] border border-[#D9C8B5] dark:border-[#474039] shadow-xs flex items-center justify-center p-1.5 transition-transform group-hover:scale-105 duration-200 shrink-0"
                 style={{ width: '40px', height: '40px', minWidth: '40px', minHeight: '40px', maxWidth: '40px', maxHeight: '40px', flexShrink: 0 }}
               >
                 <svg 

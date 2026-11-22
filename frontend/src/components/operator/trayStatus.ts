@@ -20,5 +20,5 @@ export const STATUS_STYLE: Record<TrayUiStatus, string> = {
   active: "bg-[#10B981] hover:bg-[#059669] text-white shadow-xs font-semibold",
   alert: "bg-[#EF4444] hover:bg-[#DC2626] text-white font-bold animate-pulse shadow-xs",
   maintenance: "bg-[#8A5C38] hover:bg-[#704627] text-white shadow-xs",
-  empty: "border border-[#D9C8B5] dark:border-[#4A3222] bg-[#FAF5EE] dark:bg-[#25170F] text-[#8C6D53] dark:text-[#A8907E] hover:border-[#C28E58]",
+  empty: "border border-[#D9C8B5] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#322D28] text-[#8C6D53] dark:text-[#B9ADA1] hover:border-[#C28E58]",
 };

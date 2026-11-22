@@ -89,11 +89,11 @@ export default function FarmNetworkModal({ isOpen, onClose }: FarmNetworkModalPr
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-[#1A1009] border border-[#DECFC0] dark:border-[#422C1D] w-full max-w-4xl rounded-3xl shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-scale-up"
+        className="bg-white dark:bg-[#1E1B18] border border-[#DECFC0] dark:border-[#474039] w-full max-w-4xl rounded-3xl shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-scale-up"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Modal */}
-        <div className="px-6 py-4 border-b border-[#EAE1D3] dark:border-[#38261A] flex items-center justify-between bg-gradient-to-r from-[#FAF5EE] via-[#F4ECE1] to-[#FAF5EE] dark:from-[#20140D] dark:to-[#170E08]">
+        <div className="px-6 py-4 border-b border-[#EAE1D3] dark:border-[#474039] flex items-center justify-between bg-gradient-to-r from-[#FAF5EE] via-[#F4ECE1] to-[#FAF5EE] dark:from-[#20140D] dark:to-[#1E1B18]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-[#523522] text-[#FFF5EA] flex items-center justify-center shadow-xs">
               <svg className="w-5 h-5 text-[#E2BA78]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -118,33 +118,33 @@ export default function FarmNetworkModal({ isOpen, onClose }: FarmNetworkModalPr
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-xl bg-white/80 dark:bg-[#2B1C13] border border-[#DECFC0] dark:border-[#543825] text-[#735843] dark:text-[#DAC7B5] hover:text-[#24170E] dark:hover:text-white flex items-center justify-center transition"
+            className="w-8 h-8 rounded-xl bg-white/80 dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] text-[#735843] dark:text-[#DAC7B5] hover:text-[#24170E] dark:hover:text-white flex items-center justify-center transition"
           >
             ✕
           </button>
         </div>
 
         {/* 4 Thẻ Thống Kê Tổng Quan */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-6 border-b border-[#EAE1D3] dark:border-[#38261A] bg-[#FAF7F2] dark:bg-[#1E130B]">
-          <div className="p-3 rounded-2xl bg-white dark:bg-[#25170F] border border-[#DECFC0] dark:border-[#422C1D] shadow-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-6 border-b border-[#EAE1D3] dark:border-[#474039] bg-[#FAF7F2] dark:bg-[#27231F]">
+          <div className="p-3 rounded-2xl bg-white dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] shadow-xs">
             <span className="text-[10px] uppercase tracking-wider text-[#8C6D53] dark:text-[#BFA895] block">Tổng Buồng Kính</span>
             <strong className="text-lg font-black text-[#523522] dark:text-[#E2BA78]">320+ Buồng</strong>
             <span className="text-[10px] text-emerald-600 block mt-0.5">Chuẩn ISO Class 5</span>
           </div>
 
-          <div className="p-3 rounded-2xl bg-white dark:bg-[#25170F] border border-[#DECFC0] dark:border-[#422C1D] shadow-xs">
+          <div className="p-3 rounded-2xl bg-white dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] shadow-xs">
             <span className="text-[10px] uppercase tracking-wider text-[#8C6D53] dark:text-[#BFA895] block">Công Suất Khay</span>
             <strong className="text-lg font-black text-[#523522] dark:text-[#E2BA78]">12.800 Khay</strong>
             <span className="text-[10px] text-[#8C6D53] block mt-0.5">Vận hành tự động</span>
           </div>
 
-          <div className="p-3 rounded-2xl bg-white dark:bg-[#25170F] border border-[#DECFC0] dark:border-[#422C1D] shadow-xs">
+          <div className="p-3 rounded-2xl bg-white dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] shadow-xs">
             <span className="text-[10px] uppercase tracking-wider text-[#8C6D53] dark:text-[#BFA895] block">Giao Hàng Hỏa Tốc</span>
             <strong className="text-lg font-black text-amber-700 dark:text-amber-400">2 Giờ</strong>
             <span className="text-[10px] text-amber-800 dark:text-amber-300 block mt-0.5">Sau khi bấm thu hoạch</span>
           </div>
 
-          <div className="p-3 rounded-2xl bg-white dark:bg-[#25170F] border border-[#DECFC0] dark:border-[#422C1D] shadow-xs">
+          <div className="p-3 rounded-2xl bg-white dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] shadow-xs">
             <span className="text-[10px] uppercase tracking-wider text-[#8C6D53] dark:text-[#BFA895] block">Uptime Vi Khí Hậu</span>
             <strong className="text-lg font-black text-emerald-600 dark:text-emerald-400">99.98%</strong>
             <span className="text-[10px] text-emerald-700 block mt-0.5">SQL Telemetry Sync</span>
@@ -167,8 +167,8 @@ export default function FarmNetworkModal({ isOpen, onClose }: FarmNetworkModalPr
                     onClick={() => setSelectedHubId(hub.id)}
                     className={`w-full text-left p-3.5 rounded-2xl border transition-all ${
                       isSelected
-                        ? 'border-[#C28E58] bg-[#FAF5EE] dark:bg-[#2B1C13] shadow-sm ring-1 ring-[#C28E58]'
-                        : 'border-[#E0D3C1] dark:border-[#38261A] hover:bg-[#FAF7F2] dark:hover:bg-[#22160E]'
+                        ? 'border-[#C28E58] bg-[#FAF5EE] dark:bg-[#322D28] shadow-sm ring-1 ring-[#C28E58]'
+                        : 'border-[#E0D3C1] dark:border-[#474039] hover:bg-[#FAF7F2] dark:hover:bg-[#22160E]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -188,7 +188,7 @@ export default function FarmNetworkModal({ isOpen, onClose }: FarmNetworkModalPr
                       {hub.address}
                     </p>
 
-                    <div className="mt-2.5 pt-2 border-t border-[#EAE1D3] dark:border-[#38261A] flex items-center justify-between text-[11px]">
+                    <div className="mt-2.5 pt-2 border-t border-[#EAE1D3] dark:border-[#474039] flex items-center justify-between text-[11px]">
                       <span className="text-[#6E4B33] dark:text-[#DAC7B5]">Quy mô:</span>
                       <span className="font-semibold text-[#24170E] dark:text-[#FFF5EA]">
                         {hub.chambers} buồng ({hub.totalTrays} khay)
@@ -202,7 +202,7 @@ export default function FarmNetworkModal({ isOpen, onClose }: FarmNetworkModalPr
 
           {/* Cột Phải: Chi tiết Hub & Bản đồ mô phỏng (7 cols) */}
           <div className="lg:col-span-7 space-y-4">
-            <div className="p-5 rounded-3xl bg-[#FAF5EE] dark:bg-[#22160E] border border-[#DECFC0] dark:border-[#422C1D] shadow-xs space-y-4">
+            <div className="p-5 rounded-3xl bg-[#FAF5EE] dark:bg-[#27231F] border border-[#DECFC0] dark:border-[#474039] shadow-xs space-y-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <span className="text-[10px] font-mono uppercase font-bold px-2 py-0.5 rounded-md bg-[#523522] text-[#FFF5EA]">
@@ -224,7 +224,7 @@ export default function FarmNetworkModal({ isOpen, onClose }: FarmNetworkModalPr
               </div>
 
               {/* Thông số kỹ thuật chuyên canh */}
-              <div className="p-3.5 rounded-2xl bg-white dark:bg-[#1A1009] border border-[#EAE1D3] dark:border-[#38261A] space-y-2 text-xs">
+              <div className="p-3.5 rounded-2xl bg-white dark:bg-[#1E1B18] border border-[#EAE1D3] dark:border-[#474039] space-y-2 text-xs">
                 <div className="flex items-center justify-between">
                   <span className="text-[#8C6D53] dark:text-[#BFA895]">Chủng nấm chuyên canh:</span>
                   <strong className="text-[#24170E] dark:text-[#FFF5EA]">{currentHub.specialty}</strong>
@@ -240,7 +240,7 @@ export default function FarmNetworkModal({ isOpen, onClose }: FarmNetworkModalPr
                 {currentHub.tags.map((tag, idx) => (
                   <span
                     key={idx}
-                    className="px-2.5 py-1 rounded-lg bg-white dark:bg-[#2B1C13] border border-[#DECFC0] dark:border-[#543825] text-[10px] font-semibold text-[#6E4B33] dark:text-[#E2BA78]"
+                    className="px-2.5 py-1 rounded-lg bg-white dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] text-[10px] font-semibold text-[#6E4B33] dark:text-[#E2BA78]"
                   >
                     ✓ {tag}
                   </span>

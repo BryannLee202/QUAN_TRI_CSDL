@@ -458,7 +458,7 @@ export default function VirtualTrayInspectorModal({
       aria-modal="true"
       aria-label={`Trạm quan sát kệ nấm thực tế ${tray.trayCode}`}
     >
-      <div className="my-auto w-full max-w-6xl rounded-3xl bg-[#FDFBF8] dark:bg-[#170F0A] border border-[#DECFC0] dark:border-[#4A3222] shadow-2xl overflow-hidden text-[#24170E] dark:text-[#FFF5EA]">
+      <div className="my-auto w-full max-w-6xl rounded-3xl bg-[#FDFBF8] dark:bg-[#1E1B18] border border-[#DECFC0] dark:border-[#474039] shadow-2xl overflow-hidden text-[#24170E] dark:text-[#FFF5EA]">
         {/* 1. Thanh Header Trạm Quan Sát & Điều Hướng Đường Ray Kệ */}
         <div className="px-5 sm:px-6 py-3.5 bg-gradient-to-r from-[#1E130B] via-[#2C1B10] to-[#1A1009] text-white border-b border-[#C28E58]/35 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
@@ -524,7 +524,7 @@ export default function VirtualTrayInspectorModal({
         </div>
 
         {/* 2. Thanh Điều Hướng Di Chuyển Từng Kệ (Rack Selector) & Từng Khay Trên Kệ */}
-        <div className="px-5 sm:px-6 py-2.5 bg-[#F4ECE1] dark:bg-[#1E130C] border-b border-[#E3D5C3] dark:border-[#332014] flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="px-5 sm:px-6 py-2.5 bg-[#F4ECE1] dark:bg-[#27231F] border-b border-[#E3D5C3] dark:border-[#474039] flex flex-wrap items-center justify-between gap-3 text-xs">
           {/* Chọn Kệ (Rack) để trượt camera đến kệ đó */}
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="font-bold text-[#523522] dark:text-[#C28E58] mr-1">
@@ -543,7 +543,7 @@ export default function VirtualTrayInspectorModal({
                   className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer tabular-nums ${
                     isCurrentRack
                       ? "bg-[#24170E] text-white dark:bg-[#C28E58] dark:text-[#170E08] shadow-2xs"
-                      : "bg-white dark:bg-[#261810] text-[#523522] dark:text-[#DAC7B5] border border-[#DECFC0] dark:border-[#3D271A] hover:border-[#C28E58]"
+                      : "bg-white dark:bg-[#322D28] text-[#523522] dark:text-[#DAC7B5] border border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58]"
                   }`}
                 >
                   Kệ {String(rNum).padStart(2, "0")}
@@ -574,7 +574,7 @@ export default function VirtualTrayInspectorModal({
                   className={`px-2 py-1 rounded-lg text-[11px] font-bold transition flex items-center gap-1 shrink-0 cursor-pointer tabular-nums ${
                     active
                       ? "bg-emerald-800 text-white ring-2 ring-emerald-500/30"
-                      : "bg-white dark:bg-[#261810] text-[#4A3222] dark:text-[#DAC7B5] border border-[#DECFC0] dark:border-[#3D271A] hover:border-[#C28E58]"
+                      : "bg-white dark:bg-[#322D28] text-[#4A3222] dark:text-[#DAC7B5] border border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58]"
                   }`}
                   title={`Trượt camera tới Khay ${t.trayCode} (Tầng ${t.shelfLevel})`}
                 >
@@ -594,7 +594,7 @@ export default function VirtualTrayInspectorModal({
           <div className="lg:col-span-7 flex flex-col justify-between space-y-3.5">
             {/* Thanh Chọn Góc Camera Thực Tế & Điều Khiển Chuyển Động */}
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-center gap-1 bg-[#F4ECE1] dark:bg-[#22160E] p-1 rounded-2xl border border-[#E0D3C1] dark:border-[#38261A]">
+              <div className="flex items-center gap-1 bg-[#F4ECE1] dark:bg-[#27231F] p-1 rounded-2xl border border-[#E0D3C1] dark:border-[#474039]">
                 {[
                   { id: "REAL_TRAY_CLOSEUP" as ViewAngle, label: "Cận Cảnh Khay & Phôi Thật" },
                   { id: "CLEANROOM_RACKS" as ViewAngle, label: "Dàn Kệ Phòng Sạch" },
@@ -626,7 +626,7 @@ export default function VirtualTrayInspectorModal({
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition cursor-pointer flex items-center gap-1.5 ${
                     autoPatrol
                       ? "bg-emerald-800 text-white border-emerald-600 shadow-xs"
-                      : "bg-[#FAF5EE] dark:bg-[#22160E] text-[#523522] dark:text-[#E2BA78] border-[#DECFC0] dark:border-[#38261A] hover:border-[#C28E58]"
+                      : "bg-[#FAF5EE] dark:bg-[#27231F] text-[#523522] dark:text-[#E2BA78] border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58]"
                   }`}
                 >
                   <span className={`w-2 h-2 rounded-full ${autoPatrol ? "bg-emerald-300 animate-ping" : "bg-[#C28E58]"}`} />
@@ -643,7 +643,7 @@ export default function VirtualTrayInspectorModal({
               onMouseDown={handleMouseDown}
               onMouseUp={handleMouseUpOrLeave}
               onMouseLeave={handleMouseUpOrLeave}
-              className="relative rounded-3xl overflow-hidden border-2 border-[#DECFC0] dark:border-[#3D271A] bg-[#1A130E] shadow-xl aspect-[16/10] select-none cursor-grab active:cursor-grabbing group"
+              className="relative rounded-3xl overflow-hidden border-2 border-[#DECFC0] dark:border-[#474039] bg-[#1A130E] shadow-xl aspect-[16/10] select-none cursor-grab active:cursor-grabbing group"
             >
               {/* DẢI KỆ PANORAMA 3 KHOANG RỘNG 260% * ZOOM (TẮT TRANSITION KHI ĐANG RÊ CHUỘT TRỰC TIẾP ĐỂ ĐẠT 60FPS TỨC THÌ) */}
               <div
@@ -912,7 +912,7 @@ export default function VirtualTrayInspectorModal({
             </div>
 
             {/* THANH RADAR MINIMAP ỐNG KÍNH SCADA & ĐƯỜNG RAY KỆ (0% ĐẦU KỆ ────[ỐNG KÍNH]──── 100% CUỐI KỆ) */}
-            <div className="p-3 rounded-2xl bg-[#F4ECE1] dark:bg-[#1E140D] border border-[#E0D3C1] dark:border-[#38261A] space-y-2 text-xs">
+            <div className="p-3 rounded-2xl bg-[#F4ECE1] dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039] space-y-2 text-xs">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-1.5">
                   <span className="font-bold text-[#4A3222] dark:text-[#E2BA78] tabular-nums">
@@ -928,7 +928,7 @@ export default function VirtualTrayInspectorModal({
                     className={`px-2 py-0.5 rounded-md text-[11px] font-bold border transition cursor-pointer ${
                       railPos.x <= 25
                         ? "bg-[#24170E] text-white border-[#24170E] dark:bg-[#C28E58] dark:text-[#170E08]"
-                        : "bg-white dark:bg-[#261910] text-[#523522] dark:text-[#DAC7B5] border-[#DECFC0] dark:border-[#38261A]"
+                        : "bg-white dark:bg-[#322D28] text-[#523522] dark:text-[#DAC7B5] border-[#DECFC0] dark:border-[#474039]"
                     }`}
                   >
                     Đầu Kệ (0%)
@@ -943,7 +943,7 @@ export default function VirtualTrayInspectorModal({
                     className={`px-2 py-0.5 rounded-md text-[11px] font-bold border transition cursor-pointer ${
                       railPos.x > 25 && railPos.x < 75
                         ? "bg-[#24170E] text-white border-[#24170E] dark:bg-[#C28E58] dark:text-[#170E08]"
-                        : "bg-white dark:bg-[#261910] text-[#523522] dark:text-[#DAC7B5] border-[#DECFC0] dark:border-[#38261A]"
+                        : "bg-white dark:bg-[#322D28] text-[#523522] dark:text-[#DAC7B5] border-[#DECFC0] dark:border-[#474039]"
                     }`}
                   >
                     Giữa Kệ (50%)
@@ -958,7 +958,7 @@ export default function VirtualTrayInspectorModal({
                     className={`px-2 py-0.5 rounded-md text-[11px] font-bold border transition cursor-pointer ${
                       railPos.x >= 75
                         ? "bg-[#24170E] text-white border-[#24170E] dark:bg-[#C28E58] dark:text-[#170E08]"
-                        : "bg-white dark:bg-[#261910] text-[#523522] dark:text-[#DAC7B5] border-[#DECFC0] dark:border-[#38261A]"
+                        : "bg-white dark:bg-[#322D28] text-[#523522] dark:text-[#DAC7B5] border-[#DECFC0] dark:border-[#474039]"
                     }`}
                   >
                     Cuối Kệ (100%)
@@ -974,7 +974,7 @@ export default function VirtualTrayInspectorModal({
               <div
                 ref={radarTrackRef}
                 onClick={handleRadarClick}
-                className="relative h-7 rounded-xl bg-[#24170E] dark:bg-[#120B07] border border-[#C28E58]/40 overflow-hidden cursor-pointer select-none flex items-center"
+                className="relative h-7 rounded-xl bg-[#24170E] dark:bg-[#1E1B18] border border-[#C28E58]/40 overflow-hidden cursor-pointer select-none flex items-center"
                 title="Nhấp vào vị trí bất kỳ trên thanh Radar để trượt ống kính camera tới khoang kệ đó"
               >
                 {/* Vạch chia 3 khoang kệ */}
@@ -1049,7 +1049,7 @@ export default function VirtualTrayInspectorModal({
                 type="button"
                 onClick={handleTriggerLocalMist}
                 disabled={isMistingLocal}
-                className="py-3 px-4 rounded-2xl bg-[#FAF5EE] dark:bg-[#24170F] hover:border-[#C28E58] text-[#3B2516] dark:text-[#E2BA78] font-bold text-xs border border-[#DECFC0] dark:border-[#3D271A] shadow-2xs transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                className="py-3 px-4 rounded-2xl bg-[#FAF5EE] dark:bg-[#322D28] hover:border-[#C28E58] text-[#3B2516] dark:text-[#E2BA78] font-bold text-xs border border-[#DECFC0] dark:border-[#474039] shadow-2xs transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
               >
                 <svg className="w-4 h-4 text-sky-600 dark:text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
@@ -1065,8 +1065,8 @@ export default function VirtualTrayInspectorModal({
           <div className="lg:col-span-5 flex flex-col justify-between space-y-4">
             <div className="space-y-4">
               {/* Khối 1: 4 Thẻ Cảm Biến Vi Khí Hậu Tại Khay */}
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#1E140D] border border-[#E3D5C3] dark:border-[#38261A] space-y-3 shadow-2xs">
-                <div className="flex items-center justify-between border-b border-[#F0E6D8] dark:border-[#2C1D13] pb-2">
+              <div className="p-4 rounded-2xl bg-white dark:bg-[#27231F] border border-[#E3D5C3] dark:border-[#474039] space-y-3 shadow-2xs">
+                <div className="flex items-center justify-between border-b border-[#F0E6D8] dark:border-[#474039] pb-2">
                   <span className="text-xs font-bold uppercase tracking-wider text-[#4A3222] dark:text-[#E2BA78]">
                     Cảm Biến Tại Kệ {rackPad} • Tầng {shelfPad}
                   </span>
@@ -1076,25 +1076,25 @@ export default function VirtualTrayInspectorModal({
                 </div>
 
                 <div className="grid grid-cols-2 gap-2.5 text-xs tabular-nums">
-                  <div className="p-3 rounded-xl bg-[#FAF6F0] dark:bg-[#261910] border border-[#EAE0D3] dark:border-[#38261A]">
+                  <div className="p-3 rounded-xl bg-[#FAF6F0] dark:bg-[#322D28] border border-[#EAE0D3] dark:border-[#474039]">
                     <span className="text-[11px] text-[#8C6D53] block">Nhiệt độ tâm phôi</span>
                     <strong className="text-base font-extrabold text-[#24170E] dark:text-white mt-0.5 block">
                       {localTemp} °C
                     </strong>
                   </div>
-                  <div className="p-3 rounded-xl bg-[#FAF6F0] dark:bg-[#261910] border border-[#EAE0D3] dark:border-[#38261A]">
+                  <div className="p-3 rounded-xl bg-[#FAF6F0] dark:bg-[#322D28] border border-[#EAE0D3] dark:border-[#474039]">
                     <span className="text-[11px] text-[#8C6D53] block">Độ ẩm không khí</span>
                     <strong className="text-base font-extrabold text-emerald-800 dark:text-emerald-400 mt-0.5 block">
                       {localHumidity} %
                     </strong>
                   </div>
-                  <div className="p-3 rounded-xl bg-[#FAF6F0] dark:bg-[#261910] border border-[#EAE0D3] dark:border-[#38261A]">
+                  <div className="p-3 rounded-xl bg-[#FAF6F0] dark:bg-[#322D28] border border-[#EAE0D3] dark:border-[#474039]">
                     <span className="text-[11px] text-[#8C6D53] block">Nồng độ khí CO₂</span>
                     <strong className="text-base font-extrabold text-[#24170E] dark:text-white mt-0.5 block">
                       {localCo2} ppm
                     </strong>
                   </div>
-                  <div className="p-3 rounded-xl bg-[#FAF6F0] dark:bg-[#261910] border border-[#EAE0D3] dark:border-[#38261A]">
+                  <div className="p-3 rounded-xl bg-[#FAF6F0] dark:bg-[#322D28] border border-[#EAE0D3] dark:border-[#474039]">
                     <span className="text-[11px] text-[#8C6D53] block">Cường độ ánh sáng</span>
                     <strong className="text-base font-extrabold text-[#8C3A16] dark:text-[#E2BA78] mt-0.5 block">
                       {localLux} Lux
@@ -1104,7 +1104,7 @@ export default function VirtualTrayInspectorModal({
               </div>
 
               {/* Khối 2: Tiến Độ Chu Kỳ Sinh Trưởng Thực Tế */}
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#1E140D] border border-[#E3D5C3] dark:border-[#38261A] space-y-3 shadow-2xs">
+              <div className="p-4 rounded-2xl bg-white dark:bg-[#27231F] border border-[#E3D5C3] dark:border-[#474039] space-y-3 shadow-2xs">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-wider text-[#4A3222] dark:text-[#E2BA78]">
                     Tiến Độ Chu Kỳ Sinh Trưởng
@@ -1138,8 +1138,8 @@ export default function VirtualTrayInspectorModal({
                           current
                             ? "border-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 font-bold text-emerald-900 dark:text-emerald-300"
                             : done
-                            ? "border-[#DECFC0] dark:border-[#38261A] bg-[#FAF6F0] dark:bg-[#25170F] font-semibold text-[#4A3222] dark:text-[#DAC7B5]"
-                            : "border-dashed border-[#DECFC0] dark:border-[#332014] text-[#8C6D53] opacity-70"
+                            ? "border-[#DECFC0] dark:border-[#474039] bg-[#FAF6F0] dark:bg-[#322D28] font-semibold text-[#4A3222] dark:text-[#DAC7B5]"
+                            : "border-dashed border-[#DECFC0] dark:border-[#474039] text-[#8C6D53] opacity-70"
                         }`}
                       >
                         <div className="truncate">{st.label}</div>
@@ -1151,25 +1151,25 @@ export default function VirtualTrayInspectorModal({
               </div>
 
               {/* Khối 3: Hồ Sơ Định Danh & Hợp Đồng FaaS */}
-              <div className="p-4 rounded-2xl bg-white dark:bg-[#1E140D] border border-[#E3D5C3] dark:border-[#38261A] space-y-2.5 text-xs shadow-2xs">
-                <div className="text-xs font-bold uppercase tracking-wider text-[#4A3222] dark:text-[#E2BA78] border-b border-[#F0E6D8] dark:border-[#2C1D13] pb-2">
+              <div className="p-4 rounded-2xl bg-white dark:bg-[#27231F] border border-[#E3D5C3] dark:border-[#474039] space-y-2.5 text-xs shadow-2xs">
+                <div className="text-xs font-bold uppercase tracking-wider text-[#4A3222] dark:text-[#E2BA78] border-b border-[#F0E6D8] dark:border-[#474039] pb-2">
                   Hồ Sơ Định Danh &amp; Hợp Đồng
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-[#8C6D53] dark:text-[#A8907E]">Mã định danh khay:</span>
+                  <span className="text-[#8C6D53] dark:text-[#B9ADA1]">Mã định danh khay:</span>
                   <strong className="font-bold tabular-nums">{tray.trayCode}</strong>
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-[#8C6D53] dark:text-[#A8907E]">Tọa độ kệ nuôi:</span>
+                  <span className="text-[#8C6D53] dark:text-[#B9ADA1]">Tọa độ kệ nuôi:</span>
                   <strong className="font-bold tabular-nums">
                     Kệ {rackPad} • Tầng {shelfPad} (Buồng {roomCode})
                   </strong>
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-[#8C6D53] dark:text-[#A8907E]">Trạng thái vận hành:</span>
+                  <span className="text-[#8C6D53] dark:text-[#B9ADA1]">Trạng thái vận hành:</span>
                   <span
                     className={`px-2.5 py-0.5 rounded-full font-bold text-[11px] ${
                       isOccupied
@@ -1190,17 +1190,17 @@ export default function VirtualTrayInspectorModal({
                 {tray.orderCode || isOccupied ? (
                   <>
                     <div className="flex items-center justify-between tabular-nums">
-                      <span className="text-[#8C6D53] dark:text-[#A8907E]">Số hợp đồng FaaS:</span>
+                      <span className="text-[#8C6D53] dark:text-[#B9ADA1]">Số hợp đồng FaaS:</span>
                       <strong className="font-bold text-[#8C3A16] dark:text-[#E2BA78]">
                         {tray.orderCode || `ORD-2026-${String(tray.trayId).padStart(3, "0")}`}
                       </strong>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-[#8C6D53] dark:text-[#A8907E]">Chủ sở hữu:</span>
+                      <span className="text-[#8C6D53] dark:text-[#B9ADA1]">Chủ sở hữu:</span>
                       <strong className="font-bold">{tray.customerName || "Phạm Minh An"}</strong>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-[#8C6D53] dark:text-[#A8907E]">Giống nấm canh tác:</span>
+                      <span className="text-[#8C6D53] dark:text-[#B9ADA1]">Giống nấm canh tác:</span>
                       <strong className="font-bold text-emerald-700 dark:text-emerald-400">
                         {tray.speciesName || "Nấm bào ngư xám"}
                       </strong>
@@ -1215,7 +1215,7 @@ export default function VirtualTrayInspectorModal({
             </div>
 
             {/* Cụm Nút Điều Phối Dưới Cùng */}
-            <div className="pt-3 border-t border-[#E3D5C3] dark:border-[#332015] flex flex-wrap items-center justify-between gap-2.5">
+            <div className="pt-3 border-t border-[#E3D5C3] dark:border-[#474039] flex flex-wrap items-center justify-between gap-2.5">
               {!isOccupied ? (
                 <button
                   type="button"
@@ -1246,7 +1246,7 @@ export default function VirtualTrayInspectorModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-3 rounded-xl bg-[#FAF5EE] dark:bg-[#2B1B12] hover:bg-[#EAE0D3] text-[#523522] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#422C1D] text-xs font-bold transition cursor-pointer"
+                className="px-5 py-3 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] hover:bg-[#EAE0D3] text-[#523522] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#474039] text-xs font-bold transition cursor-pointer"
               >
                 Đóng
               </button>

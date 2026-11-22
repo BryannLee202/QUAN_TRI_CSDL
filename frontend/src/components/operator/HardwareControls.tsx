@@ -43,10 +43,10 @@ interface Props {
 
 export default function HardwareControls({ roomId, devices, onToggle }: Props) {
   return (
-    <section className="rounded-2xl border border-[#E0D3C1] dark:border-[#38261A] bg-white dark:bg-[#20140D] p-5 shadow-sm transition-colors">
+    <section className="rounded-2xl border border-[#E0D3C1] dark:border-[#474039] bg-white dark:bg-[#27231F] p-5 shadow-sm transition-colors">
       <header className="mb-4 flex items-center justify-between pb-3 border-b border-[#F0E6D8] dark:border-[#2D1D13]">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-[#FAF5EE] dark:bg-[#2B1B12] border border-[#DECFC0] dark:border-[#4A3222] flex items-center justify-center text-[#C28E58]">
+          <div className="w-8 h-8 rounded-lg bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] flex items-center justify-center text-[#C28E58]">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="4" y="4" width="16" height="16" rx="2"/>
               <rect x="9" y="9" width="6" height="6"/>
@@ -74,10 +74,10 @@ export default function HardwareControls({ roomId, devices, onToggle }: Props) {
           return (
             <li
               key={d.type}
-              className="flex items-center justify-between gap-4 p-3 rounded-xl bg-[#FAF5EE]/70 dark:bg-[#1A1009] border border-[#E8DCCE] dark:border-[#332015] transition-colors"
+              className="flex items-center justify-between gap-4 p-3 rounded-xl bg-[#FAF5EE]/70 dark:bg-[#1E1B18] border border-[#E8DCCE] dark:border-[#474039] transition-colors"
             >
               <div className="flex items-start gap-3">
-                <div className="p-2 rounded-lg bg-white dark:bg-[#25170F] border border-[#E0D3C1] dark:border-[#422C1D] shrink-0 mt-0.5">
+                <div className="p-2 rounded-lg bg-white dark:bg-[#322D28] border border-[#E0D3C1] dark:border-[#474039] shrink-0 mt-0.5">
                   {d.icon}
                 </div>
                 <div>
@@ -87,7 +87,7 @@ export default function HardwareControls({ roomId, devices, onToggle }: Props) {
                       className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold ${
                         on
                           ? "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800"
-                          : "bg-[#EAE0D3] dark:bg-[#2B1B12] text-[#735843] dark:text-[#A8907E]"
+                          : "bg-[#EAE0D3] dark:bg-[#322D28] text-[#735843] dark:text-[#B9ADA1]"
                       }`}
                     >
                       {on ? "ĐANG BẬT" : "ĐANG TẮT"}

@@ -81,9 +81,9 @@ export default function TransactionLedgerPanel({
   };
 
   return (
-    <div className="max-w-6xl mx-auto mt-12 rounded-3xl bg-white dark:bg-[#1A110B] border border-[#DECFC0] dark:border-[#3D271A] shadow-lg overflow-hidden transition-all font-sans">
+    <div className="max-w-6xl mx-auto mt-12 rounded-3xl bg-white dark:bg-[#1A110B] border border-[#DECFC0] dark:border-[#474039] shadow-lg overflow-hidden transition-all font-sans">
       {/* Header Sổ Cái */}
-      <div className="px-6 py-4 bg-gradient-to-r from-[#FAF5EE] via-white to-[#F4ECE1] dark:from-[#23160E] dark:via-[#1C120B] dark:to-[#23160E] border-b border-[#E3D5C3] dark:border-[#332014] flex flex-wrap items-center justify-between gap-4">
+      <div className="px-6 py-4 bg-gradient-to-r from-[#FAF5EE] via-white to-[#F4ECE1] dark:from-[#23160E] dark:via-[#1C120B] dark:to-[#23160E] border-b border-[#E3D5C3] dark:border-[#474039] flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
           <div className="w-10 h-10 rounded-2xl bg-[#24170E] dark:bg-[#2E1D12] border border-[#C28E58]/50 text-[#E2BA78] flex items-center justify-center shrink-0 shadow-xs">
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -115,7 +115,7 @@ export default function TransactionLedgerPanel({
             type="button"
             onClick={loadHistory}
             disabled={loading}
-            className="px-3.5 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#160F0A] hover:border-[#C28E58] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] transition flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-white dark:bg-[#160F0A] hover:border-[#C28E58] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] transition flex items-center gap-1.5 cursor-pointer"
           >
             <svg className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
@@ -129,7 +129,7 @@ export default function TransactionLedgerPanel({
           <button
             type="button"
             onClick={() => setIsExpanded((p) => !p)}
-            className="px-3 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-[#FAF6F0] dark:bg-[#24160E] text-xs font-bold text-[#523522] dark:text-[#DAC7B5] cursor-pointer"
+            className="px-3 py-2 rounded-xl border border-[#D9C8B5] dark:border-[#474039] bg-[#FAF6F0] dark:bg-[#24160E] text-xs font-bold text-[#523522] dark:text-[#DAC7B5] cursor-pointer"
           >
             {isExpanded ? "Thu gọn" : "Mở rộng"}
           </button>
@@ -141,7 +141,7 @@ export default function TransactionLedgerPanel({
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-[#FAF6F0] dark:bg-[#22160E] text-[#5C402B] dark:text-[#D8C4B0] border-b border-[#E3D5C3] dark:border-[#332014] font-bold uppercase text-[11px] tracking-wider">
+              <tr className="bg-[#FAF6F0] dark:bg-[#27231F] text-[#5C402B] dark:text-[#D8C4B0] border-b border-[#E3D5C3] dark:border-[#474039] font-bold uppercase text-[11px] tracking-wider">
                 <th className="py-3.5 px-4">Mã Tham Chiếu / Thời Gian</th>
                 <th className="py-3.5 px-4">Số Hợp Đồng / Mã Khay Nuôi</th>
                 <th className="py-3.5 px-4">Chủ Hợp Đồng &amp; Địa Chỉ Giao Nhận</th>

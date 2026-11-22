@@ -69,10 +69,10 @@ export default function IotHexInspector({ currentRoomId, onIngestSuccess }: Prop
   };
 
   return (
-    <section className="rounded-2xl border border-[#E0D3C1] dark:border-[#38261A] bg-white dark:bg-[#20140D] p-5 shadow-sm transition-colors">
+    <section className="rounded-2xl border border-[#E0D3C1] dark:border-[#474039] bg-white dark:bg-[#27231F] p-5 shadow-sm transition-colors">
       <header className="mb-4 flex items-center justify-between pb-3 border-b border-[#F0E6D8] dark:border-[#2D1D13]">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-[#FAF5EE] dark:bg-[#2B1B12] border border-[#DECFC0] dark:border-[#4A3222] flex items-center justify-center text-[#C28E58]">
+          <div className="w-8 h-8 rounded-lg bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] flex items-center justify-center text-[#C28E58]">
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="16 18 22 12 16 6"/>
               <polyline points="8 6 2 12 8 18"/>
@@ -91,7 +91,7 @@ export default function IotHexInspector({ currentRoomId, onIngestSuccess }: Prop
         <button
           type="button"
           onClick={handleGenerateSample}
-          className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-[#FAF5EE] dark:bg-[#25170F] text-[#8A5C38] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#4A3222] hover:bg-[#F2E8DC] transition-colors"
+          className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-[#FAF5EE] dark:bg-[#322D28] text-[#8A5C38] dark:text-[#E2BA78] border border-[#DECFC0] dark:border-[#474039] hover:bg-[#F2E8DC] transition-colors"
         >
           Sinh Frame Mẫu
         </button>
@@ -121,7 +121,7 @@ export default function IotHexInspector({ currentRoomId, onIngestSuccess }: Prop
             value={hexInput}
             onChange={(e) => setHexInput(e.target.value)}
             placeholder="Ví dụ: 01030600F50375026CBDB3"
-            className="w-full px-3 py-2 rounded-xl border border-[#DECFC0] dark:border-[#4A3222] bg-[#FAF5EE] dark:bg-[#1A1009] text-[#24170E] dark:text-[#FFF5EA] font-mono text-xs focus:outline-none focus:ring-2 focus:ring-[#C28E58]"
+            className="w-full px-3 py-2 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#1E1B18] text-[#24170E] dark:text-[#FFF5EA] font-mono text-xs focus:outline-none focus:ring-2 focus:ring-[#C28E58]"
           />
         </div>
 
@@ -147,29 +147,29 @@ export default function IotHexInspector({ currentRoomId, onIngestSuccess }: Prop
         </div>
 
         {result && (
-          <div className="mt-3.5 p-3.5 rounded-xl bg-[#FAF5EE] dark:bg-[#170E08] border border-[#DECFC0] dark:border-[#38261A] text-xs space-y-2 animate-fade-in">
+          <div className="mt-3.5 p-3.5 rounded-xl bg-[#FAF5EE] dark:bg-[#1E1B18] border border-[#DECFC0] dark:border-[#474039] text-xs space-y-2 animate-fade-in">
             <div className="flex items-center justify-between pb-2 border-b border-[#E8DCCE] dark:border-[#2D1D13]">
               <span className="font-bold text-[#6B513E] dark:text-[#C5B09E]">Giao thức nhận diện:</span>
               <span className="font-mono font-bold text-[#C28E58]">{result.protocol}</span>
             </div>
 
             <div className="grid grid-cols-3 gap-2 py-1 text-center font-mono">
-              <div className="p-2 rounded-lg bg-white dark:bg-[#20140D] border border-[#E0D3C1] dark:border-[#332015]">
-                <span className="text-[10px] text-[#8C6D53] dark:text-[#A8907E] block font-sans">Nhiệt độ</span>
+              <div className="p-2 rounded-lg bg-white dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039]">
+                <span className="text-[10px] text-[#8C6D53] dark:text-[#B9ADA1] block font-sans">Nhiệt độ</span>
                 <strong className="text-sm text-[#24170E] dark:text-[#FFF5EA]">{result.temperature}°C</strong>
               </div>
-              <div className="p-2 rounded-lg bg-white dark:bg-[#20140D] border border-[#E0D3C1] dark:border-[#332015]">
-                <span className="text-[10px] text-[#8C6D53] dark:text-[#A8907E] block font-sans">Độ ẩm</span>
+              <div className="p-2 rounded-lg bg-white dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039]">
+                <span className="text-[10px] text-[#8C6D53] dark:text-[#B9ADA1] block font-sans">Độ ẩm</span>
                 <strong className="text-sm text-[#24170E] dark:text-[#FFF5EA]">{result.humidity}%</strong>
               </div>
-              <div className="p-2 rounded-lg bg-white dark:bg-[#20140D] border border-[#E0D3C1] dark:border-[#332015]">
-                <span className="text-[10px] text-[#8C6D53] dark:text-[#A8907E] block font-sans">CO₂ Level</span>
+              <div className="p-2 rounded-lg bg-white dark:bg-[#27231F] border border-[#E0D3C1] dark:border-[#474039]">
+                <span className="text-[10px] text-[#8C6D53] dark:text-[#B9ADA1] block font-sans">CO₂ Level</span>
                 <strong className="text-sm text-[#24170E] dark:text-[#FFF5EA]">{result.co2} ppm</strong>
               </div>
             </div>
 
             <div className="flex items-center justify-between pt-1">
-              <span className="text-[#8C6D53] dark:text-[#A8907E]">Tính toàn vẹn CRC16:</span>
+              <span className="text-[#8C6D53] dark:text-[#B9ADA1]">Tính toàn vẹn CRC16:</span>
               <span className={`px-2 py-0.5 rounded-md font-bold text-[10px] ${
                 result.isCrcValid
                   ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"

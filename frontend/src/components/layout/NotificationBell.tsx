@@ -70,7 +70,7 @@ export default function NotificationBell() {
       {/* Nút Chuông Thông Báo Sang Trọng Chuẩn Real - Không Emoji */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative h-9 w-9 rounded-xl bg-[#FAF5EE] hover:bg-[#F2E8DC] dark:bg-[#20140D] dark:hover:bg-[#2B1C13] border border-[#DECFC0] dark:border-[#422C1D] text-[#5C3A24] dark:text-[#E8DCCE] transition-all duration-200 flex items-center justify-center shadow-xs active:scale-95 group"
+        className="relative h-9 w-9 rounded-xl bg-[#FAF5EE] hover:bg-[#F2E8DC] dark:bg-[#27231F] dark:hover:bg-[#3C3630] border border-[#DECFC0] dark:border-[#474039] text-[#5C3A24] dark:text-[#E8DCCE] transition-all duration-200 flex items-center justify-center shadow-xs active:scale-95 group"
         title="Thông báo hệ thống"
         aria-label="Thông báo hệ thống"
       >
@@ -98,8 +98,8 @@ export default function NotificationBell() {
 
       {/* Dropdown Menu Sang Trọng Gam Màu Cafe Latte & Espresso */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-88 bg-[#FCFAF7] dark:bg-[#1C120C] border border-[#DECFC0] dark:border-[#422C1D] rounded-2xl shadow-2xl py-2 z-50 text-[#361F12] dark:text-[#F7EFE6] animate-in fade-in zoom-in-95 duration-150">
-          <div className="px-4 py-2.5 border-b border-[#EFE7DA] dark:border-[#38261A] flex items-center justify-between">
+        <div className="absolute right-0 mt-2 w-80 sm:w-88 bg-[#FCFAF7] dark:bg-[#27231F] border border-[#DECFC0] dark:border-[#474039] rounded-2xl shadow-2xl py-2 z-50 text-[#361F12] dark:text-[#F7EFE6] animate-in fade-in zoom-in-95 duration-150">
+          <div className="px-4 py-2.5 border-b border-[#EFE7DA] dark:border-[#474039] flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#C28E58]"></span>
               <span className="font-bold text-xs uppercase tracking-wider text-[#6E4F38] dark:text-[#B59D89]">
@@ -126,7 +126,7 @@ export default function NotificationBell() {
                 <div
                   key={n.id}
                   onClick={() => markItemAsRead(n.id)}
-                  className={`p-3 text-xs transition cursor-pointer hover:bg-[#F5EEE4]/60 dark:hover:bg-[#281A12]/80 ${
+                  className={`p-3 text-xs transition cursor-pointer hover:bg-[#F5EEE4]/60 dark:hover:bg-[#3C3630]/80 ${
                     !n.read ? 'bg-[#FAF5EE] dark:bg-[#23150D]' : ''
                   }`}
                 >
@@ -151,7 +151,7 @@ export default function NotificationBell() {
                         </div>
                       )}
                       {n.type === 'info' && (
-                        <div className="w-5 h-5 rounded-lg bg-[#F5EEE4] dark:bg-[#281A12] flex items-center justify-center text-[#8C6E56] dark:text-[#D4AF7A]">
+                        <div className="w-5 h-5 rounded-lg bg-[#F5EEE4] dark:bg-[#322D28] flex items-center justify-center text-[#8C6E56] dark:text-[#D4AF7A]">
                           <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="12" cy="12" r="10"/>
                             <line x1="12" y1="16" x2="12" y2="12"/>
@@ -182,7 +182,7 @@ export default function NotificationBell() {
             )}
           </div>
 
-          <div className="px-4 py-2 border-t border-[#EFE7DA] dark:border-[#38261A] text-center">
+          <div className="px-4 py-2 border-t border-[#EFE7DA] dark:border-[#474039] text-center">
             <span className="text-[10px] text-[#A88C76] flex items-center justify-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
               Đồng bộ dữ liệu thời gian thực qua Socket.io
