@@ -396,7 +396,8 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
             </div>
           </div>
 
-          {/* KHỐI 3: THÔNG BÁO IOT & NÔNG TRẠI REALTIME */}
+          {/* KHỐI 3: THÔNG BÁO IOT & NÔNG TRẠI REALTIME (Chỉ hiển thị khi đã đăng nhập) */}
+          {isAuthenticated && (
           <div className="rounded-2xl p-4 sm:p-4.5 bg-white dark:bg-[#27231F] border border-[#EAE1D3] dark:border-[#474039] shadow-xs space-y-3.5">
             <div className="flex items-center justify-between border-b border-[#F2E8DC] dark:border-[#474039] pb-2.5">
               <div className="flex items-center gap-2">
@@ -488,6 +489,7 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
               })}
             </div>
           </div>
+          )}
 
           {/* KHỐI 4: HỖ TRỢ KỸ THUẬT & TIÊU CHUẨN NÔNG NGHIỆP */}
           <div className="rounded-2xl p-4 sm:p-4.5 bg-white dark:bg-[#27231F] border border-[#EAE1D3] dark:border-[#474039] shadow-xs space-y-3.5">
