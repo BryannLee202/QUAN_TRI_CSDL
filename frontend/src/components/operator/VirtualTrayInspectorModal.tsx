@@ -814,7 +814,7 @@ export default function VirtualTrayInspectorModal({
               </div>
 
               {/* Cụm Phím Điều Hướng PTZ & Zoom Quang Học Trên Màn Hình */}
-              <div className="absolute bottom-14 right-3 flex flex-col gap-1 bg-black/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/15 text-white text-xs z-30">
+              <div className="absolute bottom-3 right-3 flex flex-col gap-1 bg-black/80 backdrop-blur-md p-1.5 rounded-2xl border border-white/15 text-white text-xs z-30">
                 <div className="grid grid-cols-3 gap-1">
                   <div />
                   <button
@@ -877,35 +877,6 @@ export default function VirtualTrayInspectorModal({
                     title="Phóng to"
                   >
                     +
-                  </button>
-                </div>
-              </div>
-
-              {/* Thanh Trạng Thái Dưới Chân Khung Hình */}
-              <div className="absolute bottom-2.5 left-2.5 right-2.5 px-3.5 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/15 text-white flex flex-wrap items-center justify-between gap-2 text-xs z-30">
-                <div className="min-w-0 flex-1">
-                  <span className="font-bold text-[#E2BA78] block truncate">{imageCaption}</span>
-                  <span className="text-[11px] text-stone-300 block truncate">{stageSubtitle}</span>
-                </div>
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => setHoverPanEnabled((p) => !p)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border transition cursor-pointer ${
-                      hoverPanEnabled
-                        ? "bg-emerald-700/80 text-white border-emerald-400/40"
-                        : "bg-white/10 text-stone-300 border-white/15"
-                    }`}
-                    title="Bật/Tắt tự động trượt ray khi rê chuột"
-                  >
-                    {hoverPanEnabled ? "Rê Chuột: Bật" : "Rê Chuột: Khóa (Kéo tay)"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowAiBoxes((p) => !p)}
-                    className="px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 text-[11px] font-bold text-emerald-300 border border-white/15 transition cursor-pointer"
-                  >
-                    {showAiBoxes ? "Ẩn Khung AI" : "Hiện Khung AI"}
                   </button>
                 </div>
               </div>
