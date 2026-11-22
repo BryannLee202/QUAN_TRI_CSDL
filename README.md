@@ -141,17 +141,26 @@ Dưới đây là kịch bản chuẩn hóa giúp bạn và các thành viên d�
 
 ---
 
-## 🔑 Danh Mục Tài Khoản Thử Nghiệm (Demo Credentials)
+## 🔑 Danh Mục Tài Khoản Demo & Hướng Dẫn Test Đa Tab (Demo Credentials)
 
-Mật khẩu chuẩn hóa cho tất cả tài khoản: **`Password123@`**
+> **Mật khẩu dùng chung cho tất cả tài khoản demo:** `Password123@`  
+> Ngoài ra, tại trang đăng nhập ([/login](http://localhost:3000/login) hoặc [/dang-nhap](http://localhost:3000/dang-nhap)), bạn có thể bấm trực tiếp các nút **Đăng nhập nhanh 1-Click** theo từng vai trò.
 
-| Vai trò (Role) | Họ và Tên | Tên đăng nhập / Email | Quyền hạn và phạm vi demo |
-| :--- | :--- | :--- | :--- |
-| **Quản trị viên (Admin)** | Nguyễn Quản Trị | `admin@mushroomcloud.test` | Toàn quyền cấu hình buồng nuôi, xem báo cáo doanh thu tài chính, quản lý người dùng |
-| **Kỹ thuật viên (Operator)** | Trần Kỹ Thuật | `operator1@mushroomcloud.test` | Điều khiển thiết bị nhà kính, quản lý khay nuôi, xử lý cảnh báo vi khí hậu tại `/operator` |
-| **Kỹ thuật viên (Operator)** | Lê Vận Hành | `operator2@mushroomcloud.test` | Giám sát trạng thái bảo trì, lập nhật ký sinh trưởng và quét mã QR |
-| **Khách hàng (Customer)** | Phạm Minh An | `customer1@mushroomcloud.test` | Đặt thuê khay nấm, giám sát telemetry, xem Giấy chứng nhận VietGAP, yêu cầu thu hoạch |
-| **Khách hàng (Customer)** | Võ Thu Hà | `customer2@mushroomcloud.test` | Theo dõi lịch sử hợp đồng và dữ liệu cảm biến thời gian thực |
+| Vai trò (Role) | Họ và Tên | Email đăng nhập | Mật khẩu | Quyền hạn và phạm vi sử dụng |
+| :--- | :--- | :--- | :--- | :--- |
+| **Quản trị viên (Admin)** | Nguyễn Quản Trị | `admin@mushroomcloud.test` | `Password123@` | Toàn quyền hệ thống: tạo thêm khay nuôi mới (`+1/+5/+10`), quản lý buồng nuôi, điều khiển thiết bị IoT, xem doanh thu & lịch sử giao dịch |
+| **Kỹ thuật viên (Operator)** | Trần Kỹ Thuật | `operator1@mushroomcloud.test` | `Password123@` | Truy cập `/operator`: điều khiển rơ-le buồng sạch, xử lý cảnh báo vi khí hậu, quan sát Camera PTZ đường ray kệ nấm & chuyển trạng thái bảo trì khay |
+| **Kỹ thuật viên (Operator)** | Lê Vận Hành | `operator2@mushroomcloud.test` | `Password123@` | Tài khoản kỹ thuật viên dự phòng để test điều phối ca trực và quét kiểm định khay |
+| **Khách hàng (Customer)** | Phạm Minh An | `customer1@mushroomcloud.test` | `Password123@` | Thuê khay nấm FaaS, thanh toán qua cổng Sandbox (VietQR/VNPAY/Visa/COD), xem hồ sơ chứng từ `/ho-so`, theo dõi telemetry & gửi lệnh thu hoạch |
+| **Khách hàng (Customer)** | Võ Thu Hà | `customer2@mushroomcloud.test` | `Password123@` | Test luồng khách hàng đặt thuê khay song song và ký gửi nông sản trên `/san-nong-san` |
+| **Khách hàng (Customer)** | Đặng Quốc Bảo | `customer3@mushroomcloud.test` | `Password123@` | Tài khoản khách hàng bổ sung phục vụ kiểm thử đa người dùng |
+
+### 💡 Mẹo Test Chéo Nhiều Vai Trò Cùng Lúc Trên Nhiều Tab Trình Duyệt
+Hệ thống hỗ trợ **cô lập phiên đăng nhập độc lập cho từng Tab** (`sessionStorage` + `Authorization: Bearer`) và **đồng bộ dữ liệu tức thì qua `BroadcastChannel`**:
+1. **Tab 1**: Mở `http://localhost:3000/operator` và đăng nhập **`admin@mushroomcloud.test`** (Admin).
+2. **Tab 2**: Mở tab mới (hoặc *Duplicate Tab*), đăng nhập **`operator1@mushroomcloud.test`** (Kỹ thuật viên).
+3. **Tab 3**: Mở tab mới, đăng nhập **`customer1@mushroomcloud.test`** (Khách hàng) hoặc giữ nguyên chế độ Khách chưa đăng nhập.
+4. Cả 3 tab hoạt động **độc lập hoàn toàn** (không bị đá phiên hay ghi đè quyền lẫn nhau). Khi một tab thay đổi dữ liệu (đặt thuê khay, tạo khay mới, bật/tắt rơ-le, thanh toán), các tab còn lại tự động cập nhật hoặc chỉ cần bấm **F5** là hiển thị dữ liệu mới nhất tức thì.
 
 ---
 
