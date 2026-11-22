@@ -61,10 +61,31 @@ export default function LoginPage() {
     }
   };
 
-  const handleFillDemo = (demoEmail: string, demoPass: string) => {
+  const handleQuickLogin = async (demoEmail: string, demoPass: string) => {
     setEmail(demoEmail);
     setPassword(demoPass);
     setErrorMsg("");
+    setSuccessMsg("");
+    setIsLoading(true);
+    try {
+      const res = await login(demoEmail, demoPass);
+      if (res.success) {
+        setSuccessMsg("Đăng nhập thành công! Đang chuyển hướng...");
+        setTimeout(() => {
+          if (res.user?.role === "Admin" || res.user?.role === "Operator") {
+            router.push("/operator");
+          } else {
+            router.push("/");
+          }
+        }, 600);
+      } else {
+        setErrorMsg(res.message || "Tài khoản hoặc mật khẩu không chính xác.");
+      }
+    } catch (err: any) {
+      setErrorMsg(err.message || "Lỗi kết nối máy chủ. Vui lòng thử lại sau.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -353,8 +374,9 @@ export default function LoginPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   <button
                     type="button"
-                    onClick={() => handleFillDemo("admin@mushroomcloud.test", "Password123@")}
-                    className="p-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#27231F] hover:border-[#C28E58] transition text-left group"
+                    disabled={isLoading}
+                    onClick={() => handleQuickLogin("admin@mushroomcloud.test", "Password123@")}
+                    className="p-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#27231F] hover:border-[#C28E58] transition text-left group disabled:opacity-50 cursor-pointer"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold text-[#24170E] dark:text-[#FFF5EA]">Quản Trị Viên</span>
@@ -365,8 +387,9 @@ export default function LoginPage() {
 
                   <button
                     type="button"
-                    onClick={() => handleFillDemo("operator1@mushroomcloud.test", "Password123@")}
-                    className="p-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#27231F] hover:border-[#C28E58] transition text-left group"
+                    disabled={isLoading}
+                    onClick={() => handleQuickLogin("operator1@mushroomcloud.test", "Password123@")}
+                    className="p-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#27231F] hover:border-[#C28E58] transition text-left group disabled:opacity-50 cursor-pointer"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold text-[#24170E] dark:text-[#FFF5EA]">Kỹ Thuật Viên</span>
@@ -377,8 +400,9 @@ export default function LoginPage() {
 
                   <button
                     type="button"
-                    onClick={() => handleFillDemo("customer1@mushroomcloud.test", "Password123@")}
-                    className="p-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#27231F] hover:border-[#C28E58] transition text-left group"
+                    disabled={isLoading}
+                    onClick={() => handleQuickLogin("customer1@mushroomcloud.test", "Password123@")}
+                    className="p-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#27231F] hover:border-[#C28E58] transition text-left group disabled:opacity-50 cursor-pointer"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold text-[#24170E] dark:text-[#FFF5EA]">Khách Hàng</span>
