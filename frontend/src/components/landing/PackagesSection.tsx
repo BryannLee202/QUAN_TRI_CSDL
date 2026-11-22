@@ -119,6 +119,9 @@ export default function PackagesSection() {
                   <img
                     src={mushroom.imageUrl}
                     alt={mushroom.name}
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = "/images/real-farm/real-cleanroom-cultivation.jpg";
+                    }}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   {/* Badge danh mục */}

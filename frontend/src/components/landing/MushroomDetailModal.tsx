@@ -85,6 +85,9 @@ export default function MushroomDetailModal({
                 <img
                   src={mushroom.imageUrl}
                   alt={mushroom.name}
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = "/images/real-farm/real-cleanroom-cultivation.jpg";
+                  }}
                   className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                 />
                 <div className="absolute top-3 left-3 px-2.5 py-1 rounded-xl bg-[#24170E]/80 backdrop-blur-md text-white text-[11px] font-bold border border-white/20">
