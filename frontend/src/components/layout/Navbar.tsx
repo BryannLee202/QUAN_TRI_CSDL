@@ -55,6 +55,7 @@ export default function Navbar() {
   const isRoiActive = pathname?.startsWith("/tinh-loi-nhuan");
   const isMarketActive = pathname?.startsWith("/san-nong-san");
   const isNetworkActive = pathname?.startsWith("/mang-luoi-farm");
+  const isMyTraysActive = pathname?.startsWith("/khay-cua-toi");
   const isOperatorActive = pathname?.startsWith("/operator");
   const isProfileActive = pathname?.startsWith("/ho-so") || pathname?.startsWith("/profile");
 
@@ -181,6 +182,17 @@ export default function Navbar() {
               <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-[#C28E58]/40 via-[#C28E58] to-[#C28E58]/40" />
             )}
           </Link>
+          {isAuthenticated && (
+            <Link
+              href="/khay-cua-toi"
+              className={navLinkClass(isMyTraysActive)}
+            >
+              <span>Khay Của Tôi</span>
+              {isMyTraysActive && (
+                <span className="absolute -bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-gradient-to-r from-emerald-500/40 via-emerald-500 to-emerald-500/40" />
+              )}
+            </Link>
+          )}
           {(isAdmin || isOperator) && (
             <Link
               href="/operator"

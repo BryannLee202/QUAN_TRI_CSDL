@@ -1121,10 +1121,15 @@ export default function CheckoutGatewayModal({
                 </button>
 
                 <Link
-                  href="/operator"
+                  href={
+                    receiptRecord?.trayCode
+                      ? `/khay-cua-toi?tray=${encodeURIComponent(receiptRecord.trayCode)}`
+                      : "/khay-cua-toi"
+                  }
+                  onClick={onClose}
                   className="px-5 py-3 rounded-xl bg-[#24170E] hover:bg-[#382417] text-white text-xs font-bold border border-[#C28E58]/40 transition flex items-center gap-2"
                 >
-                  <span>Xem Khay Trên Ma Trận Điều Hành</span>
+                  <span>Theo Dõi Khay Nấm Của Tôi</span>
                   <svg className="w-4 h-4 text-[#E2BA78]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <line x1="5" y1="12" x2="19" y2="12" />
                     <polyline points="12 5 19 12 12 19" />

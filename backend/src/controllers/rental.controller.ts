@@ -150,3 +150,91 @@ export const completeHarvest = async (req: Request, res: Response): Promise<void
     res.status(400).json({ success: false, message: error.message || "Lỗi hoàn tất thu hoạch", error: error.message });
   }
 };
+
+// 5. GET /api/rentals/my-trays (Lấy danh sách khay nấm & tình trạng sinh trưởng của riêng khách hàng đang đăng nhập)
+export const getMyTrays = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const authUser = (req as any).user;
+    if (!authUser || !authUser.userId) {
+      res.status(401).json({ success: false, message: "Vui lòng đăng nhập để xem khay nấm của bạn." });
+      return;
+    }
+
+    const pool = getPool();
+    const result = await pool
+      .request()
+      .input("UserID", sql.Int, Number(authUser.userId))
+      .query(`
+        SELECT
+          o.OrderID AS orderId,
+          o.OrderCode AS orderCode,
+          o.StartDate AS startDate,
+          o.EndDate AS endDate,
+          o.TotalAmount AS totalAmount,
+          o.PaymentStatus AS paymentStatus,
+          o.DeliveryAddress AS deliveryAddress,
+          o.CreatedAt AS createdAt,
+          p.PackageID AS packageId,
+          p.PackageName AS packageName,
+          p.DurationDays AS durationDays,
+          p.ExpectedYieldKg AS expectedYieldKg,
+          sp.SpeciesID AS speciesId,
+          sp.SpeciesName AS speciesName,
+          sp.ScientificName AS scientificName,
+          sp.OptimalTempMin AS optimalTempMin,
+          sp.OptimalTempMax AS optimalTempMax,
+          sp.OptimalHumidityMin AS optimalHumidityMin,
+          sp.OptimalHumidityMax AS optimalHumidityMax,
+          sp.OptimalCO2Max AS optimalCO2Max,
+          t.TrayID AS trayId,
+          t.TrayCode AS trayCode,
+          t.RackNumber AS rackNumber,
+          t.ShelfLevel AS shelfLevel,
+          t.PositionNumber AS positionNumber,
+          t.Status AS trayStatus,
+          t.InoculationDate AS inoculationDate,
+          t.ExpectedHarvestDate AS expectedHarvestDate,
+          r.RoomID AS roomId,
+          r.RoomCode AS roomCode,
+          r.RoomName AS roomName,
+          ISNULL(s.Temperature, 23.8) AS temperature,
+          ISNULL(s.Humidity, 89.5) AS humidity,
+          ISNULL(s.CO2Level, 610) AS co2Level,
+          ISNULL(s.LightLux, 480) AS lightLux,
+          s.RecordedAt AS sensorRecordedAt,
+          h.HarvestID AS harvestId,
+          h.Status AS harvestStatus,
+          h.RequestDate AS harvestRequestDate
+        FROM dbo.RentalOrders o
+        INNER JOIN dbo.RentalPackages p ON o.PackageID = p.PackageID
+        INNER JOIN dbo.MushroomSpecies sp ON p.SpeciesID = sp.SpeciesID
+        LEFT JOIN dbo.CultivationTrays t ON t.CurrentOrderID = o.OrderID
+        LEFT JOIN dbo.Rooms r ON t.RoomID = r.RoomID
+        OUTER APPLY (
+          SELECT TOP 1 sd.Temperature, sd.Humidity, sd.CO2Level, sd.LightLux, sd.RecordedAt
+          FROM dbo.SensorData sd
+          WHERE sd.RoomID = r.RoomID
+          ORDER BY sd.RecordedAt DESC
+        ) s
+        OUTER APPLY (
+          SELECT TOP 1 hr.HarvestID, hr.Status, hr.RequestDate
+          FROM dbo.HarvestRequests hr
+          WHERE hr.OrderID = o.OrderID
+          ORDER BY hr.RequestDate DESC
+        ) h
+        WHERE o.UserID = @UserID
+          AND o.PaymentStatus <> 'CANCELLED'
+        ORDER BY o.CreatedAt DESC;
+      `);
+
+    res.status(200).json({
+      success: true,
+      data: result.recordset,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Không thể tải danh sách khay nấm của bạn.",
+    });
+  }
+};

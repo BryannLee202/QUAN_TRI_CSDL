@@ -219,6 +219,13 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
 
                 <div className="grid grid-cols-2 gap-2 pt-1">
                   <Link
+                    href="/khay-cua-toi"
+                    onClick={onClose}
+                    className="col-span-2 py-2.5 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs text-center transition flex items-center justify-center gap-1.5 shadow-sm"
+                  >
+                    <span>Khay Nấm Của Tôi</span>
+                  </Link>
+                  <Link
                     href="/ho-so"
                     onClick={onClose}
                     className="col-span-2 py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#24170E] to-[#3B2415] hover:from-[#382417] hover:to-[#523522] text-white font-bold text-xs text-center border border-[#C28E58]/40 transition flex items-center justify-center gap-1.5 shadow-sm"

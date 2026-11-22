@@ -497,3 +497,74 @@ export async function resetUserPasswordApi(userId: number) {
   return json;
 }
 
+// ============================================================================
+// Theo dõi Khay Nấm Của Tôi (Khu vực riêng dành cho Khách hàng)
+// ============================================================================
+export interface MyTrayRecord {
+  orderId: number;
+  orderCode: string;
+  startDate: string;
+  endDate: string;
+  totalAmount: number;
+  paymentStatus: string;
+  deliveryAddress: string;
+  createdAt: string;
+  packageId: number;
+  packageName: string;
+  durationDays: number;
+  expectedYieldKg: number;
+  speciesId: number;
+  speciesName: string;
+  scientificName?: string;
+  optimalTempMin: number;
+  optimalTempMax: number;
+  optimalHumidityMin: number;
+  optimalHumidityMax: number;
+  optimalCO2Max: number;
+  trayId?: number | null;
+  trayCode?: string | null;
+  rackNumber?: number | null;
+  shelfLevel?: number | null;
+  positionNumber?: number | null;
+  trayStatus?: string | null;
+  inoculationDate?: string | null;
+  expectedHarvestDate?: string | null;
+  roomId?: number | null;
+  roomCode?: string | null;
+  roomName?: string | null;
+  temperature: number;
+  humidity: number;
+  co2Level: number;
+  lightLux?: number | null;
+  sensorRecordedAt?: string | null;
+  harvestId?: number | null;
+  harvestStatus?: string | null;
+  harvestRequestDate?: string | null;
+}
+
+export async function getMyTraysApi(): Promise<MyTrayRecord[]> {
+  const res = await fetch(`${API_BASE}/rentals/my-trays`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || "Không thể tải danh sách khay nấm của bạn");
+  return json.data || [];
+}
+
+export async function requestCustomerHarvestApi(payload: {
+  orderId: number;
+  deliveryType?: "HOME_DELIVERY" | "PICKUP_AT_FARM";
+  deliveryAddress?: string;
+  notes?: string;
+}) {
+  const res = await fetch(`${API_BASE}/harvest`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(payload),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || "Không thể gửi yêu cầu thu hoạch");
+  return json;
+}
+
