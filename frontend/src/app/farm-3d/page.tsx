@@ -11,6 +11,7 @@ import {
   getMyTraysApi,
 } from "@/services/api";
 import Farm3DScene from "@/components/farm3d/Farm3DScene";
+import SolenneScrollTour from "@/components/farm3d/SolenneScrollTour";
 import type {
   Farm3DRoom,
   Farm3DTray,
@@ -141,6 +142,9 @@ export default function Farm3DPage() {
               setSelectedTray(found);
               setSelectedRoomId(found.roomId);
               setCameraMode("tray");
+              setTimeout(() => {
+                document.getElementById("interactive-farm-3d")?.scrollIntoView({ behavior: "smooth" });
+              }, 120);
             }
           }
         }
@@ -201,7 +205,16 @@ export default function Farm3DPage() {
       <div>
         <Navbar />
 
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-6 space-y-4">
+        {/* Phần 1: Trải nghiệm cuộn chuyển cảnh liên tục chuẩn THE SOLENNE (Reel 3) */}
+        <SolenneScrollTour
+          onJumpToInteractive={() => {
+            document
+              .getElementById("interactive-farm-3d")
+              ?.scrollIntoView({ behavior: "smooth" });
+          }}
+        />
+
+        <div id="interactive-farm-3d" className="max-w-[1440px] mx-auto px-4 sm:px-6 py-8 space-y-4">
           {/* Thanh điều khiển nổi phía trên (Phong cách Dormer + MyFarm3D) */}
           <div className="rounded-2xl p-3 sm:p-4 bg-white/90 dark:bg-[#27231F]/90 backdrop-blur-md border border-[#EAE1D3] dark:border-[#474039] shadow-sm flex flex-wrap items-center justify-between gap-3">
             <div>
