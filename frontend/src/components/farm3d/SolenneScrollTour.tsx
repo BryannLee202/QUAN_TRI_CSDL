@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
-import type { Farm3DRoom, Farm3DTray } from "./Farm3DCanvas";
+import type { Farm3DRoom, Farm3DTray, LightingMode } from "./Farm3DCanvas";
 
 const ExplodedFarm3D = dynamic(() => import("./ExplodedFarm3D"), {
   ssr: false,
@@ -34,6 +34,19 @@ export default function SolenneScrollTour({
   const [progress, setProgress] = useState(0);
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
   const [engineMode, setEngineMode] = useState<"3d" | "video">("3d");
+  const [lightingMode, setLightingMode] = useState<LightingMode>("day");
+  const [mistEnabled, setMistEnabled] = useState<boolean>(true);
+
+  const jumpToPhase = (targetPct: number) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const docTop = window.scrollY + rect.top;
+    const scrollable = Math.max(1, containerRef.current.offsetHeight - window.innerHeight);
+    window.scrollTo({
+      top: docTop + scrollable * targetPct,
+      behavior: "smooth",
+    });
+  };
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -100,6 +113,8 @@ export default function SolenneScrollTour({
             rooms={rooms}
             trays={trays}
             ownedTrayCodes={ownedTrayCodes}
+            lightingMode={lightingMode}
+            mistEnabled={mistEnabled}
           />
         )}
 
@@ -114,7 +129,36 @@ export default function SolenneScrollTour({
             </span>
           </div>
 
-          <div className="flex items-center gap-2 pointer-events-auto">
+          <div className="flex flex-wrap items-center gap-1.5 pointer-events-auto">
+            {/* Bộ điều khiển vi khí hậu 3D trực tiếp (phong cách Dormer) */}
+            <div className="hidden md:flex items-center gap-1 px-2 py-1 rounded-full bg-white/85 backdrop-blur-md border border-[#DECFC0] shadow-xs">
+              {(["day", "night", "uvc"] as LightingMode[]).map((lm) => (
+                <button
+                  key={lm}
+                  type="button"
+                  onClick={() => setLightingMode(lm)}
+                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold transition cursor-pointer ${
+                    lightingMode === lm
+                      ? "bg-[#24170E] text-[#E2BA78]"
+                      : "text-[#5E4A3A] hover:bg-[#FAF5EE]"
+                  }`}
+                >
+                  {lm === "day" ? "Ngày 5000K" : lm === "night" ? "Đêm Ấm" : "UV-C"}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => setMistEnabled((m) => !m)}
+                className={`px-2.5 py-1 rounded-full text-[10px] font-bold transition cursor-pointer ${
+                  mistEnabled
+                    ? "bg-emerald-700 text-white"
+                    : "text-[#5E4A3A] hover:bg-[#FAF5EE]"
+                }`}
+              >
+                {mistEnabled ? "Phun Sương: Bật" : "Phun Sương: Tắt"}
+              </button>
+            </div>
+
             <input
               ref={fileInputRef}
               type="file"
@@ -212,6 +256,25 @@ export default function SolenneScrollTour({
               Tách rời từng linh kiện của khay nấm. Cuộn tiếp xuống dưới để chọn thuê khay thật!
             </p>
           </motion.div>
+        </div>
+
+        {/* Nút chuyển nhanh 4 giai đoạn bóc tách ở góc dưới phải */}
+        <div className="hidden sm:flex items-center gap-1.5 absolute bottom-8 right-14 z-20 px-2 py-1.5 rounded-full bg-white/88 backdrop-blur-md border border-[#DECFC0] shadow-lg">
+          {[
+            { label: "01 Ngoại thất", pct: 0.02 },
+            { label: "02 Bóc mái", pct: 0.38 },
+            { label: "03 Kéo khay", pct: 0.65 },
+            { label: "04 Tách 3 lớp", pct: 0.94 },
+          ].map((item) => (
+            <button
+              key={item.label}
+              type="button"
+              onClick={() => jumpToPhase(item.pct)}
+              className="px-2.5 py-1 rounded-full text-[11px] font-bold text-[#4A3222] hover:bg-[#24170E] hover:text-[#E2BA78] transition cursor-pointer"
+            >
+              {item.label}
+            </button>
+          ))}
         </div>
 
         {/* Thanh tiến trình dọc bên phải */}
