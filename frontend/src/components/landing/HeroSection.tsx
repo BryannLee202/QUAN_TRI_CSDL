@@ -356,16 +356,6 @@ export default function HeroSection() {
                 </div>
               </div>
             </div>
-
-            {/* Ghi chú gợi ý bấm chọn */}
-            <p className="text-[11px] text-[#8C6D53] dark:text-[#B59D89] mt-2.5 text-center font-medium flex items-center justify-center gap-1.5">
-              <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="12" y1="16" x2="12" y2="12"/>
-                <line x1="12" y1="8" x2="12.01" y2="8"/>
-              </svg>
-              <span>Bấm chọn các tab phía trên để chuyển đổi góc nhìn buồng nuôi và cơ sở công nghệ cao thực tế</span>
-            </p>
           </div>
 
         </div>
