@@ -958,6 +958,16 @@ export const VI_TO_EN_EXACT: Array<[string, string]> = [
   ["Mật khẩu phải có độ dài tối thiểu 8 ký tự.", "Password must be at least 8 characters."],
   ["Mật khẩu xác nhận không trùng khớp.", "Confirmation password does not match."],
   ["Tên tài khoản hoặc Email", "Username or Email"],
+  ["Bào Ngư Xám", "Grey Oyster"],
+  ["Giao Hỏa Tốc", "Express Delivery"],
+  ["Giao hỏa tốc", "Express"],
+  ["Dược Điển VN", "VN Pharmacopoeia"],
+  ["Giá TT:", "Market:"],
+  ["Bạn muốn chọn khay nuôi cấy tại", "Want to book cultivation trays in"],
+  ["Bạn muốn chọn trays nuôi cấy tại", "Want to book cultivation trays in"],
+  ["Khay Ngay Nhận Ưu Đãi", "Trays & Claim Discount"],
+  ["Ngay Nhận Ưu Đãi", "& Claim Discount"],
+  ["Tiết kiệm", "Save"],
   ["HotLine Kỹ Thuật 24/7", "24/7 Technical Hotline"],
   ["Hotline Kỹ Thuật 24/7", "24/7 Technical Hotline"],
   ["Lãi ròng", "Net Profit"],
@@ -1004,6 +1014,9 @@ export function translateTextViToEn(input: string): string {
   // 2. Mẫu động có số lượng / đơn vị đo lường / mã định danh còn lại
   out = out
     .replace(/Thuê\s+(\d+)\s+Khay Ngay Nhận Ưu Đãi/gi, "Rent $1 Trays & Claim Discount")
+    .replace(/^Thuê$/gi, "Rent")
+    .replace(/^Thuê\s+(?=\d|$)/gi, "Rent ")
+    .replace(/Tiết kiệm\s+(\d+)%/gi, "Save $1%")
     .replace(/\b(\d+)\s+đợt\s+(?:thu hoạch|Harvest)\b/gi, "$1 harvest cycles")
     .replace(/\b(\d+)\s+ngày\/lứa\b/gi, "$1 days/cycle")
     .replace(/kg\/khay\b/gi, "kg/tray")
@@ -1021,6 +1034,7 @@ export function translateTextViToEn(input: string): string {
     .replace(/\b(\d+)\s+Tháng\b/gi, "$1 Months")
     .replace(/\b(\d+)\s+Khay\b/gi, "$1 Trays")
     .replace(/\b(\d+)\s+Buồng\b/gi, "$1 Chambers")
+    .replace(/(?<![A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF])buồng(?![A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF])/gi, "chambers")
     .replace(/(?<![A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF])khay(?![A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF])/gi, "trays")
     .replace(/(?<![A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF])tháng(?![A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF])/gi, "months")
     .replace(/\bĐạt\s+(\d+)%\s+chu kỳ\b/gi, "$1% Cycle Progress")
