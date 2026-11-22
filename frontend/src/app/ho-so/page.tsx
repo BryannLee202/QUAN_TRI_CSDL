@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getPaymentHistoryApi, PaymentTransactionRecord } from "@/services/api";
 
 export default function UserProfileAndHistoryPage() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isAdmin, isOperator, logout } = useAuth();
 
   const [records, setRecords] = useState<PaymentTransactionRecord[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -169,10 +169,10 @@ export default function UserProfileAndHistoryPage() {
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2.5">
                 <Link
                   href="/#packages"
-                  className="px-4 py-2.5 rounded-xl bg-[#24170E] hover:bg-[#382417] text-white text-xs font-bold border border-[#C28E58]/40 transition shadow-xs"
+                  className="px-4 py-2.5 rounded-xl bg-[#24170E] hover:bg-[#382417] dark:bg-gradient-to-r dark:from-[#C8955E] dark:to-[#DFB27D] dark:text-[#1E1B18] text-white text-xs font-bold border border-[#C28E58]/40 transition shadow-xs"
                 >
                   Đăng Ký Thuê Khay Mới
                 </Link>
@@ -182,6 +182,28 @@ export default function UserProfileAndHistoryPage() {
                 >
                   Sàn Nông Sản FaaS
                 </Link>
+                {(isAdmin || isOperator) && (
+                  <Link
+                    href="/operator"
+                    className="px-4 py-2.5 rounded-xl border border-emerald-500/40 bg-emerald-50 dark:bg-emerald-950/50 hover:border-emerald-500 text-xs font-bold text-emerald-800 dark:text-emerald-300 transition"
+                  >
+                    Trung Tâm Điều Hành
+                  </Link>
+                )}
+                {isAuthenticated && (
+                  <button
+                    type="button"
+                    onClick={logout}
+                    className="px-4 py-2.5 rounded-xl border border-rose-200 dark:border-rose-900/60 bg-rose-50/70 dark:bg-rose-950/30 hover:bg-rose-100 dark:hover:bg-rose-950/60 text-xs font-bold text-rose-700 dark:text-rose-300 transition cursor-pointer flex items-center gap-1.5"
+                  >
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                      <polyline points="16 17 21 12 16 7" />
+                      <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                    <span>Đăng Xuất</span>
+                  </button>
+                )}
               </div>
             </div>
 
