@@ -11,6 +11,7 @@ import IotHexInspector from "@/components/operator/IotHexInspector";
 import VirtualTrayInspectorModal from "@/components/operator/VirtualTrayInspectorModal";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 import CheatsheetDrawer from "@/components/operator/CheatsheetDrawer";
+import UserManagementModal from "@/components/operator/UserManagementModal";
 import { isDeviceOn } from "@/components/operator/deviceState";
 import { MOCK_ALERTS, MOCK_DEVICES, MOCK_ROOMS, MOCK_TRAYS } from "@/components/operator/mockData";
 import type { AlertItem, DeviceState, RoomOption, TrayCell, TrayUiStatus } from "@/components/operator/types";
@@ -47,6 +48,9 @@ export default function OperatorPage() {
   const [customRack, setCustomRack] = useState<string>("");
   const [customShelf, setCustomShelf] = useState<string>("");
   const [isCreatingTrays, setIsCreatingTrays] = useState(false);
+
+  // State cho Modal Quản lý Người dùng & Phân quyền RBAC (Chức năng A3 - Dành cho Admin)
+  const [isUserManagementOpen, setIsUserManagementOpen] = useState(false);
 
   // 1. Tải dữ liệu ban đầu từ Backend SQL Server
   useEffect(() => {
@@ -335,6 +339,24 @@ export default function OperatorPage() {
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap shrink-0">
+          {/* Nút Quản Lý Người Dùng & Phân Quyền (Chỉ Admin mới thấy - Chức năng A3) */}
+          {isAdmin && (
+            <button
+              type="button"
+              onClick={() => setIsUserManagementOpen(true)}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white font-bold text-xs flex items-center gap-2 transition-all shadow-xs cursor-pointer animate-pulse"
+              title="Mở bảng quản trị người dùng & phân quyền"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+              <span>Quản Lý Người Dùng (A3)</span>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={() => setIsCheatsheetOpen(true)}
@@ -660,6 +682,12 @@ export default function OperatorPage() {
       <CheatsheetDrawer
         isOpen={isCheatsheetOpen}
         onClose={() => setIsCheatsheetOpen(false)}
+      />
+
+      {/* Modal Quản trị Người Dùng & Phân Quyền (Chức năng A3 - Chỉ dành cho Admin) */}
+      <UserManagementModal
+        isOpen={isUserManagementOpen}
+        onClose={() => setIsUserManagementOpen(false)}
       />
     </main>
   );
