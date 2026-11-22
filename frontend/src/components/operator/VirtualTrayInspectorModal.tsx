@@ -478,9 +478,6 @@ export default function VirtualTrayInspectorModal({
                   <span>3-BAY PANORAMA RAIL • 60FPS ZERO-BORDER</span>
                 </span>
               </div>
-              <p className="text-xs text-[#D8C4B0] mt-0.5 tabular-nums">
-                Buồng {roomCode} • Kệ số {rackPad} • Tầng số {shelfPad} • Rê chuột ngang từ trái sang phải để trượt dọc qua 3 khoang kệ
-              </p>
             </div>
           </div>
 
