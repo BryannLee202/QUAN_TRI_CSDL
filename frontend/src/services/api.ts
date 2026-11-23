@@ -273,6 +273,67 @@ export async function getOperatorRoomsApi() {
   return json.data;
 }
 
+export interface CreateRoomParams {
+  roomCode: string;
+  roomName: string;
+  maxTrays?: number;
+  tempMin: number;
+  tempMax: number;
+  humidityMin: number;
+  humidityMax: number;
+  co2Max: number;
+  description?: string;
+  cameraStreamUrl?: string;
+  initialTraysCount?: number;
+}
+
+export interface UpdateRoomParams {
+  roomName?: string;
+  maxTrays?: number;
+  tempMin?: number;
+  tempMax?: number;
+  humidityMin?: number;
+  humidityMax?: number;
+  co2Max?: number;
+  description?: string;
+  cameraStreamUrl?: string;
+}
+
+export async function createOperatorRoomApi(params: CreateRoomParams) {
+  const res = await fetch(`${API_BASE}/operator/rooms`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(params),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || json.error?.message || "Lỗi tạo buồng nuôi");
+  broadcastTabSync("operator");
+  return json;
+}
+
+export async function updateOperatorRoomApi(roomId: number, params: UpdateRoomParams) {
+  const res = await fetch(`${API_BASE}/operator/rooms/${roomId}`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(params),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || json.error?.message || "Lỗi cập nhật buồng nuôi");
+  broadcastTabSync("operator");
+  return json;
+}
+
+export async function deleteOperatorRoomApi(roomId: number) {
+  const res = await fetch(`${API_BASE}/operator/rooms/${roomId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || json.error?.message || "Lỗi xóa buồng nuôi");
+  broadcastTabSync("operator");
+  return json;
+}
+
 export async function getOperatorTraysApi(roomId?: number) {
   const url = roomId ? `${API_BASE}/operator/trays?roomId=${roomId}` : `${API_BASE}/operator/trays`;
   const res = await fetch(url, {
