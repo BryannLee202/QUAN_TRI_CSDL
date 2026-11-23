@@ -1,6 +1,9 @@
 import { Router } from "express";
 import {
   getRooms,
+  createRoom,
+  updateRoom,
+  deleteRoom,
   getTrays,
   getAlerts,
   resolveAlert,
@@ -20,6 +23,10 @@ const router = Router();
 
 // Xem danh sách buồng nuôi và ma trận khay nuôi công khai (Phục vụ Mô hình Trang trại 3D và Trung tâm điều hành)
 router.get("/operator/rooms", getRooms);
+router.post("/operator/rooms", requireAuth, requireRole(["Admin"]), createRoom);
+router.put("/operator/rooms/:roomId", requireAuth, requireRole(["Admin"]), updateRoom);
+router.delete("/operator/rooms/:roomId", requireAuth, requireRole(["Admin"]), deleteRoom);
+
 router.get("/operator/trays", getTrays);
 router.get("/operator/alerts", requireAuth, requireRole(["Admin", "Operator"]), getAlerts);
 
