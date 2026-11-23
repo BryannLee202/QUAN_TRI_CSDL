@@ -8,13 +8,104 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getPaymentHistoryApi, PaymentTransactionRecord } from "@/services/api";
 
 export default function UserProfileAndHistoryPage() {
-  const { user, isAuthenticated, isAdmin, isOperator, logout } = useAuth();
+  const { user, isAuthenticated, isAdmin, isOperator, logout, updateProfile, changePassword } = useAuth();
 
   const [records, setRecords] = useState<PaymentTransactionRecord[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [filterType, setFilterType] = useState<"ALL" | "FAAS_RENTAL" | "MARKET_BATCH">("ALL");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedReceipt, setSelectedReceipt] = useState<PaymentTransactionRecord | null>(null);
+
+  // State Modal Chỉnh Sửa Hồ Sơ
+  const [profileModalOpen, setProfileModalOpen] = useState<boolean>(false);
+  const [editFullName, setEditFullName] = useState<string>("");
+  const [editPhone, setEditPhone] = useState<string>("");
+  const [editAddress, setEditAddress] = useState<string>("");
+  const [profileLoading, setProfileLoading] = useState<boolean>(false);
+  const [profileMsg, setProfileMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  // State Modal Đổi Mật Khẩu
+  const [passwordModalOpen, setPasswordModalOpen] = useState<boolean>(false);
+  const [currentPassword, setCurrentPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [showCurrentPw, setShowCurrentPw] = useState<boolean>(false);
+  const [showNewPw, setShowNewPw] = useState<boolean>(false);
+  const [showConfirmPw, setShowConfirmPw] = useState<boolean>(false);
+  const [passwordLoading, setPasswordLoading] = useState<boolean>(false);
+  const [passwordMsg, setPasswordMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  // Xử lý lưu thông tin cá nhân
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editFullName.trim()) {
+      setProfileMsg({ type: "error", text: "Họ và tên không được để trống." });
+      return;
+    }
+    setProfileLoading(true);
+    setProfileMsg(null);
+    try {
+      const res = await updateProfile({
+        fullName: editFullName.trim(),
+        phoneNumber: editPhone.trim(),
+        address: editAddress.trim(),
+      });
+      if (res.success) {
+        setProfileMsg({ type: "success", text: "Cập nhật hồ sơ cá nhân thành công!" });
+        setTimeout(() => {
+          setProfileModalOpen(false);
+          setProfileMsg(null);
+        }, 1200);
+      } else {
+        setProfileMsg({ type: "error", text: res.message || "Cập nhật thất bại." });
+      }
+    } catch (err: any) {
+      setProfileMsg({ type: "error", text: err?.message || "Lỗi hệ thống khi cập nhật." });
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  // Xử lý đổi mật khẩu
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setPasswordMsg({ type: "error", text: "Vui lòng điền đầy đủ các trường mật khẩu." });
+      return;
+    }
+    if (newPassword.length < 8) {
+      setPasswordMsg({ type: "error", text: "Mật khẩu mới phải có ít nhất 8 ký tự." });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordMsg({ type: "error", text: "Xác nhận mật khẩu mới không trùng khớp." });
+      return;
+    }
+    setPasswordLoading(true);
+    setPasswordMsg(null);
+    try {
+      const res = await changePassword({
+        currentPassword,
+        newPassword,
+      });
+      if (res.success) {
+        setPasswordMsg({ type: "success", text: "Đổi mật khẩu thành công!" });
+        setTimeout(() => {
+          setPasswordModalOpen(false);
+          setPasswordMsg(null);
+          setCurrentPassword("");
+          setNewPassword("");
+          setConfirmPassword("");
+        }, 1200);
+      } else {
+        setPasswordMsg({ type: "error", text: res.message || "Đổi mật khẩu thất bại." });
+      }
+    } catch (err: any) {
+      setPasswordMsg({ type: "error", text: err?.message || "Lỗi hệ thống khi đổi mật khẩu." });
+    } finally {
+      setPasswordLoading(false);
+    }
+  };
 
   const loadTransactions = useCallback(async () => {
     setLoading(true);
@@ -229,6 +320,44 @@ export default function UserProfileAndHistoryPage() {
               </div>
 
               <div className="flex flex-wrap items-center gap-2.5">
+                {/* Nút Chỉnh Sửa Hồ Sơ */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditFullName(displayUser.fullName);
+                    setEditPhone(displayUser.phone !== "Chưa cập nhật" ? displayUser.phone : "");
+                    setEditAddress(displayUser.address !== "Chưa cập nhật địa chỉ nhận nấm" ? displayUser.address : "");
+                    setProfileModalOpen(true);
+                    setProfileMsg(null);
+                  }}
+                  className="px-4 py-2.5 rounded-xl border border-[#C28E58]/50 hover:border-[#C28E58] bg-[#FAF5EE] dark:bg-[#27231F] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] transition flex items-center gap-1.5 cursor-pointer shadow-2xs hover:shadow-xs"
+                >
+                  <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 20h9" />
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                  </svg>
+                  <span>Chỉnh Sửa Hồ Sơ</span>
+                </button>
+
+                {/* Nút Đổi Mật Khẩu */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentPassword("");
+                    setNewPassword("");
+                    setConfirmPassword("");
+                    setPasswordModalOpen(true);
+                    setPasswordMsg(null);
+                  }}
+                  className="px-4 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-white dark:bg-[#1E1B18] hover:border-[#C28E58] text-xs font-bold text-[#6E533E] dark:text-[#D5C2B2] transition flex items-center gap-1.5 cursor-pointer shadow-2xs hover:shadow-xs"
+                >
+                  <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                  <span>Đổi Mật Khẩu</span>
+                </button>
+
                 {(isAdmin || isOperator) ? (
                   <Link
                     href="/operator"
@@ -686,6 +815,285 @@ export default function UserProfileAndHistoryPage() {
                   Đóng
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modal 1: Cập Nhật Thông Tin Cá Nhân */}
+        {profileModalOpen && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-fade-in"
+            role="dialog"
+            aria-modal="true"
+          >
+            <div className="w-full max-w-lg rounded-3xl bg-white dark:bg-[#1E1B18] border border-[#DECFC0] dark:border-[#474039] shadow-2xl p-6 sm:p-7 space-y-5 text-[#24170E] dark:text-[#F7EFE6]">
+              {/* Header Modal */}
+              <div className="flex items-start justify-between gap-4 pb-4 border-b border-[#EAE0D3] dark:border-[#38332E]">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#3B2213] via-[#6B442C] to-[#C28E58] text-white flex items-center justify-center shadow-md border border-[#E2BA78]/30 shrink-0">
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 20h9" />
+                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-extrabold text-[#24170E] dark:text-white">
+                      Cập Nhật Hồ Sơ Thành Viên
+                    </h3>
+                    <p className="text-xs text-[#735843] dark:text-[#BFA895] mt-0.5">
+                      Chỉnh sửa thông tin cá nhân và địa chỉ giao nhận nấm tận nhà
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setProfileModalOpen(false)}
+                  className="w-8 h-8 rounded-xl bg-[#FAF5EE] dark:bg-[#2A2622] text-[#735843] hover:text-[#24170E] dark:hover:text-white flex items-center justify-center border border-[#DECFC0] dark:border-[#474039] cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Thông báo Alert */}
+              {profileMsg && (
+                <div
+                  className={`p-3.5 rounded-2xl text-xs font-semibold flex items-center gap-2 ${
+                    profileMsg.type === "success"
+                      ? "bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700"
+                      : "bg-rose-50 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-300 dark:border-rose-700"
+                  }`}
+                >
+                  <span>{profileMsg.type === "success" ? "✓" : "⚠"}</span>
+                  <span>{profileMsg.text}</span>
+                </div>
+              )}
+
+              {/* Form Nội Dung */}
+              <form onSubmit={handleSaveProfile} className="space-y-4 text-xs">
+                <div>
+                  <label className="block font-bold text-[#4A3222] dark:text-[#E2BA78] mb-1">
+                    Email Định Danh (Cố định theo tài khoản)
+                  </label>
+                  <div className="w-full px-3.5 py-2.5 rounded-xl bg-[#F5EEE4]/60 dark:bg-[#27231F] border border-[#DECFC0]/80 dark:border-[#474039] text-[#735843] dark:text-[#A8927F] font-medium flex items-center gap-2 cursor-not-allowed">
+                    <svg className="w-3.5 h-3.5 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect width="20" height="16" x="2" y="4" rx="2" />
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                    </svg>
+                    <span>{displayUser.email}</span>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#4A3222] dark:text-[#E2BA78] mb-1">
+                    Họ và Tên Khách Hàng <span className="text-rose-600">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editFullName}
+                    onChange={(e) => setEditFullName(e.target.value)}
+                    placeholder="Ví dụ: Lê Minh Tài"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#151210] border border-[#DECFC0] dark:border-[#474039] focus:outline-hidden focus:border-[#C28E58] text-[#24170E] dark:text-white font-semibold transition"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#4A3222] dark:text-[#E2BA78] mb-1">
+                    Số Điện Thoại Liên Hệ <span className="text-rose-600">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    value={editPhone}
+                    onChange={(e) => setEditPhone(e.target.value)}
+                    placeholder="Ví dụ: 0908 222 005"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#151210] border border-[#DECFC0] dark:border-[#474039] focus:outline-hidden focus:border-[#C28E58] text-[#24170E] dark:text-white font-medium transition"
+                  />
+                  <span className="text-[11px] text-[#8C6D53] dark:text-[#9E8A79] mt-1 block">
+                    Kỹ thuật viên sẽ liên lạc số này khi có biến động vi khí hậu hoặc hẹn giờ thu hoạch.
+                  </span>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#4A3222] dark:text-[#E2BA78] mb-1">
+                    Địa Chỉ Giao Nhận Nấm Tận Nhà
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={editAddress}
+                    onChange={(e) => setEditAddress(e.target.value)}
+                    placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành..."
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#151210] border border-[#DECFC0] dark:border-[#474039] focus:outline-hidden focus:border-[#C28E58] text-[#24170E] dark:text-white font-medium transition resize-none"
+                  />
+                  <span className="text-[11px] text-[#8C6D53] dark:text-[#9E8A79] mt-1 block">
+                    Địa chỉ mặc định chuyển phát nhanh nấm tươi bảo quản lạnh trong vòng 60 phút.
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#EAE0D3] dark:border-[#38332E]">
+                  <button
+                    type="button"
+                    onClick={() => setProfileModalOpen(false)}
+                    className="px-4 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#27231F] text-xs font-bold text-[#6E533E] dark:text-[#BFA895] hover:text-[#24170E] dark:hover:text-white cursor-pointer transition"
+                  >
+                    Hủy Bỏ
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={profileLoading}
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#24170E] to-[#452B1A] dark:from-[#C8955E] dark:to-[#DFB27D] text-white dark:text-[#1E1B18] text-xs font-extrabold shadow-sm hover:opacity-90 transition cursor-pointer flex items-center gap-2"
+                  >
+                    {profileLoading && (
+                      <div className="w-3.5 h-3.5 border-2 border-white dark:border-[#1E1B18] border-t-transparent rounded-full animate-spin" />
+                    )}
+                    <span>{profileLoading ? "Đang Lưu..." : "Lưu Thông Tin"}</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Modal 2: Đổi Mật Khẩu */}
+        {passwordModalOpen && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-fade-in"
+            role="dialog"
+            aria-modal="true"
+          >
+            <div className="w-full max-w-md rounded-3xl bg-white dark:bg-[#1E1B18] border border-[#DECFC0] dark:border-[#474039] shadow-2xl p-6 sm:p-7 space-y-5 text-[#24170E] dark:text-[#F7EFE6]">
+              {/* Header Modal */}
+              <div className="flex items-start justify-between gap-4 pb-4 border-b border-[#EAE0D3] dark:border-[#38332E]">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#3B2213] via-[#6B442C] to-[#C28E58] text-white flex items-center justify-center shadow-md border border-[#E2BA78]/30 shrink-0">
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-extrabold text-[#24170E] dark:text-white">
+                      Đổi Mật Khẩu Tài Khoản
+                    </h3>
+                    <p className="text-xs text-[#735843] dark:text-[#BFA895] mt-0.5">
+                      Bảo vệ phiên làm việc và bảo mật tài sản khay nấm FaaS
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setPasswordModalOpen(false)}
+                  className="w-8 h-8 rounded-xl bg-[#FAF5EE] dark:bg-[#2A2622] text-[#735843] hover:text-[#24170E] dark:hover:text-white flex items-center justify-center border border-[#DECFC0] dark:border-[#474039] cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Thông báo Alert */}
+              {passwordMsg && (
+                <div
+                  className={`p-3.5 rounded-2xl text-xs font-semibold flex items-center gap-2 ${
+                    passwordMsg.type === "success"
+                      ? "bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700"
+                      : "bg-rose-50 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-300 dark:border-rose-700"
+                  }`}
+                >
+                  <span>{passwordMsg.type === "success" ? "✓" : "⚠"}</span>
+                  <span>{passwordMsg.text}</span>
+                </div>
+              )}
+
+              {/* Form Nội Dung */}
+              <form onSubmit={handleChangePassword} className="space-y-4 text-xs">
+                <div>
+                  <label className="block font-bold text-[#4A3222] dark:text-[#E2BA78] mb-1">
+                    Mật Khẩu Hiện Tại <span className="text-rose-600">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showCurrentPw ? "text" : "password"}
+                      required
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      placeholder="Nhập mật khẩu hiện tại..."
+                      className="w-full px-3.5 py-2.5 pr-10 rounded-xl bg-white dark:bg-[#151210] border border-[#DECFC0] dark:border-[#474039] focus:outline-hidden focus:border-[#C28E58] text-[#24170E] dark:text-white font-medium transition"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowCurrentPw(!showCurrentPw)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C6D53] hover:text-[#24170E] dark:hover:text-white cursor-pointer"
+                    >
+                      {showCurrentPw ? "🙈" : "👁"}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#4A3222] dark:text-[#E2BA78] mb-1">
+                    Mật Khẩu Mới (Tối thiểu 8 ký tự) <span className="text-rose-600">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showNewPw ? "text" : "password"}
+                      required
+                      minLength={8}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Nhập ít nhất 8 ký tự..."
+                      className="w-full px-3.5 py-2.5 pr-10 rounded-xl bg-white dark:bg-[#151210] border border-[#DECFC0] dark:border-[#474039] focus:outline-hidden focus:border-[#C28E58] text-[#24170E] dark:text-white font-medium transition"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPw(!showNewPw)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C6D53] hover:text-[#24170E] dark:hover:text-white cursor-pointer"
+                    >
+                      {showNewPw ? "🙈" : "👁"}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#4A3222] dark:text-[#E2BA78] mb-1">
+                    Xác Nhận Mật Khẩu Mới <span className="text-rose-600">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showConfirmPw ? "text" : "password"}
+                      required
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Nhập lại mật khẩu mới..."
+                      className="w-full px-3.5 py-2.5 pr-10 rounded-xl bg-white dark:bg-[#151210] border border-[#DECFC0] dark:border-[#474039] focus:outline-hidden focus:border-[#C28E58] text-[#24170E] dark:text-white font-medium transition"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPw(!showConfirmPw)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C6D53] hover:text-[#24170E] dark:hover:text-white cursor-pointer"
+                    >
+                      {showConfirmPw ? "🙈" : "👁"}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#EAE0D3] dark:border-[#38332E]">
+                  <button
+                    type="button"
+                    onClick={() => setPasswordModalOpen(false)}
+                    className="px-4 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] bg-[#FAF5EE] dark:bg-[#27231F] text-xs font-bold text-[#6E533E] dark:text-[#BFA895] hover:text-[#24170E] dark:hover:text-white cursor-pointer transition"
+                  >
+                    Hủy Bỏ
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={passwordLoading}
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#24170E] to-[#452B1A] dark:from-[#C8955E] dark:to-[#DFB27D] text-white dark:text-[#1E1B18] text-xs font-extrabold shadow-sm hover:opacity-90 transition cursor-pointer flex items-center gap-2"
+                  >
+                    {passwordLoading && (
+                      <div className="w-3.5 h-3.5 border-2 border-white dark:border-[#1E1B18] border-t-transparent rounded-full animate-spin" />
+                    )}
+                    <span>{passwordLoading ? "Đang Xử Lý..." : "Cập Nhật Mật Khẩu"}</span>
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}

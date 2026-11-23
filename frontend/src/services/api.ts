@@ -410,6 +410,37 @@ export async function getMeApi() {
   return json;
 }
 
+export async function updateProfileApi(params: {
+  fullName: string;
+  phoneNumber?: string;
+  address?: string;
+}) {
+  const res = await fetch(`${API_BASE}/auth/profile`, {
+    method: "PUT",
+    headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(params),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || "Cập nhật hồ sơ thất bại");
+  return json;
+}
+
+export async function changePasswordApi(params: {
+  currentPassword: string;
+  newPassword: string;
+}) {
+  const res = await fetch(`${API_BASE}/auth/change-password`, {
+    method: "POST",
+    headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(params),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || "Đổi mật khẩu thất bại");
+  return json;
+}
+
 // -------------------------------------------------------------
 // IoT Binary Protocol & Telemetry Parser APIs
 // -------------------------------------------------------------

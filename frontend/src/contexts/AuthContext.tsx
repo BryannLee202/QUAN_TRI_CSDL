@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getMeApi, loginApi, logoutApi, registerApi } from "@/services/api";
+import { getMeApi, loginApi, logoutApi, registerApi, updateProfileApi, changePasswordApi } from "@/services/api";
 
 export interface User {
   id: number;
@@ -32,6 +32,15 @@ interface AuthContextType {
     phoneNumber?: string;
     address?: string;
   }) => Promise<{ success: boolean; message: string; user?: User }>;
+  updateProfile: (params: {
+    fullName: string;
+    phoneNumber?: string;
+    address?: string;
+  }) => Promise<{ success: boolean; message: string; user?: User }>;
+  changePassword: (params: {
+    currentPassword: string;
+    newPassword: string;
+  }) => Promise<{ success: boolean; message: string }>;
   logout: () => Promise<void>;
   openAuthModal: (tab?: "login" | "register") => void;
   closeAuthModal: () => void;
@@ -144,6 +153,47 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { success: false, message: res.message || "Đăng ký thất bại" };
   };
 
+  const updateProfile = async (params: {
+    fullName: string;
+    phoneNumber?: string;
+    address?: string;
+  }) => {
+    try {
+      const res = await updateProfileApi(params);
+      if (res.success && res.data) {
+        const updated: User = {
+          ...(user || {}),
+          id: res.data.id || user?.id || 0,
+          fullName: res.data.fullName,
+          email: res.data.email || user?.email || "",
+          role: res.data.role || user?.role || "Customer",
+          phoneNumber: res.data.phoneNumber,
+          address: res.data.address,
+          avatarUrl: res.data.avatarUrl || user?.avatarUrl,
+        };
+
+        setUser(updated);
+        sessionStorage.setItem("mc_user", JSON.stringify(updated));
+        return { success: true, message: res.message || "Cập nhật thành công!", user: updated };
+      }
+      return { success: false, message: res.message || "Cập nhật hồ sơ thất bại" };
+    } catch (err: any) {
+      return { success: false, message: err?.message || "Lỗi khi cập nhật hồ sơ" };
+    }
+  };
+
+  const changePassword = async (params: {
+    currentPassword: string;
+    newPassword: string;
+  }) => {
+    try {
+      const res = await changePasswordApi(params);
+      return { success: !!res.success, message: res.message || "Đổi mật khẩu thành công!" };
+    } catch (err: any) {
+      return { success: false, message: err?.message || "Lỗi khi đổi mật khẩu" };
+    }
+  };
+
   const logout = async () => {
     try {
       await logoutApi();
@@ -190,6 +240,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         authModalTab,
         login,
         register,
+        updateProfile,
+        changePassword,
         logout,
         openAuthModal,
         closeAuthModal,
