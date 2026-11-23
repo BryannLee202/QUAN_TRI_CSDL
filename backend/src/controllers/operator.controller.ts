@@ -13,6 +13,18 @@ import { broadcastEvent } from "../sockets/sensor.socket.js";
 export const getRooms = async (_req: Request, res: Response): Promise<void> => {
   try {
     const pool = getPool();
+    if (!pool) {
+      res.status(200).json({
+        success: true,
+        data: [
+          { roomId: 1, roomCode: "RM01", roomName: "Buồng Bào Ngư Xám", maxTrays: 28, tempMin: 22, tempMax: 28, humidityMin: 85, humidityMax: 95, co2Max: 1000, description: "Buồng nuôi nấm Bào Ngư Xám hữu cơ", totalTrays: 28, occupiedTrays: 12, availableTrays: 14, maintenanceTrays: 2 },
+          { roomId: 2, roomCode: "RM02", roomName: "Buồng Đông Trùng Hạ Thảo", maxTrays: 28, tempMin: 18, tempMax: 22, humidityMin: 80, humidityMax: 88, co2Max: 900, description: "Buồng vi khí hậu sạch vô trùng", totalTrays: 28, occupiedTrays: 18, availableTrays: 8, maintenanceTrays: 2 },
+          { roomId: 3, roomCode: "RM03", roomName: "Buồng Linh Chi Đỏ", maxTrays: 28, tempMin: 24, tempMax: 30, humidityMin: 80, humidityMax: 90, co2Max: 1200, description: "Buồng dược liệu cao cấp", totalTrays: 28, occupiedTrays: 10, availableTrays: 15, maintenanceTrays: 3 },
+        ],
+      });
+      return;
+    }
+
     const result = await pool.request().query(`
       SELECT 
         r.RoomID as roomId,
@@ -24,6 +36,8 @@ export const getRooms = async (_req: Request, res: Response): Promise<void> => {
         r.HumidityMin as humidityMin,
         r.HumidityMax as humidityMax,
         r.CO2Max as co2Max,
+        r.Description as description,
+        r.CameraStreamUrl as cameraStreamUrl,
         COUNT(t.TrayID) as totalTrays,
         SUM(CASE WHEN t.Status = 'OCCUPIED' THEN 1 ELSE 0 END) as occupiedTrays,
         SUM(CASE WHEN t.Status = 'AVAILABLE' THEN 1 ELSE 0 END) as availableTrays,
@@ -31,7 +45,7 @@ export const getRooms = async (_req: Request, res: Response): Promise<void> => {
       FROM Rooms r
       LEFT JOIN CultivationTrays t ON r.RoomID = t.RoomID
       WHERE r.IsActive = 1
-      GROUP BY r.RoomID, r.RoomCode, r.RoomName, r.MaxTrays, r.TempMin, r.TempMax, r.HumidityMin, r.HumidityMax, r.CO2Max
+      GROUP BY r.RoomID, r.RoomCode, r.RoomName, r.MaxTrays, r.TempMin, r.TempMax, r.HumidityMin, r.HumidityMax, r.CO2Max, r.Description, r.CameraStreamUrl
       ORDER BY r.RoomID ASC
     `);
 
@@ -43,6 +57,364 @@ export const getRooms = async (_req: Request, res: Response): Promise<void> => {
     res.status(500).json({
       success: false,
       error: { code: "GET_ROOMS_ERROR", message: error.message || "Lỗi truy vấn buồng nuôi CSDL" },
+    });
+  }
+};
+
+// 1b. POST /api/operator/rooms - Tạo buồng nuôi mới (Dành cho Quản trị viên)
+export const createRoom = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {
+      roomCode,
+      roomName,
+      maxTrays,
+      tempMin,
+      tempMax,
+      humidityMin,
+      humidityMax,
+      co2Max,
+      description,
+      cameraStreamUrl,
+      initialTraysCount,
+    } = req.body;
+
+    if (!roomCode || !String(roomCode).trim() || !roomName || !String(roomName).trim()) {
+      res.status(400).json({ success: false, message: "Mã buồng và tên buồng không được để trống." });
+      return;
+    }
+
+    const tMin = tempMin != null ? Number(tempMin) : 20.0;
+    const tMax = tempMax != null ? Number(tempMax) : 28.0;
+    const hMin = humidityMin != null ? Number(humidityMin) : 80.0;
+    const hMax = humidityMax != null ? Number(humidityMax) : 95.0;
+    const cMax = co2Max != null ? Number(co2Max) : 1000.0;
+    const maxT = maxTrays != null && Number(maxTrays) > 0 ? Number(maxTrays) : 28;
+
+    // Ràng buộc CK_Rooms_Temperature
+    if (tMin < 0 || tMax > 50 || tMin >= tMax) {
+      res.status(400).json({
+        success: false,
+        message: "Nhiệt độ không hợp lệ: Yêu cầu 0 <= TempMin < TempMax <= 50°C theo ràng buộc CK_Rooms_Temperature.",
+      });
+      return;
+    }
+
+    // Ràng buộc CK_Rooms_Humidity
+    if (hMin < 0 || hMax > 100 || hMin >= hMax) {
+      res.status(400).json({
+        success: false,
+        message: "Độ ẩm không hợp lệ: Yêu cầu 0 <= HumidityMin < HumidityMax <= 100% theo ràng buộc CK_Rooms_Humidity.",
+      });
+      return;
+    }
+
+    // Ràng buộc CK_Rooms_CO2
+    if (cMax <= 0 || cMax > 5000) {
+      res.status(400).json({
+        success: false,
+        message: "Nồng độ CO2 không hợp lệ: Yêu cầu 0 < CO2Max <= 5000 ppm theo ràng buộc CK_Rooms_CO2.",
+      });
+      return;
+    }
+
+    const cleanCode = String(roomCode).trim().toUpperCase();
+    const cleanName = String(roomName).trim();
+    const cleanDesc = description ? String(description).trim() : null;
+    const cleanCam = cameraStreamUrl ? String(cameraStreamUrl).trim() : null;
+
+    const pool = getPool();
+    if (!pool) {
+      const mockNewRoom = {
+        roomId: Date.now(),
+        roomCode: cleanCode,
+        roomName: cleanName,
+        maxTrays: maxT,
+        tempMin: tMin,
+        tempMax: tMax,
+        humidityMin: hMin,
+        humidityMax: hMax,
+        co2Max: cMax,
+        description: cleanDesc,
+        cameraStreamUrl: cleanCam,
+        totalTrays: Number(initialTraysCount) || 10,
+        occupiedTrays: 0,
+        availableTrays: Number(initialTraysCount) || 10,
+        maintenanceTrays: 0,
+      };
+      res.status(201).json({
+        success: true,
+        message: `Đã tạo buồng nuôi [${cleanCode}] thành công (demo offline)!`,
+        data: mockNewRoom,
+      });
+      return;
+    }
+
+    // Kiểm tra trùng mã buồng
+    const checkDup = await pool
+      .request()
+      .input("RoomCode", sql.VarChar(20), cleanCode)
+      .query(`SELECT RoomID FROM dbo.Rooms WHERE RoomCode = @RoomCode`);
+
+    if (checkDup.recordset.length > 0) {
+      res.status(409).json({ success: false, message: `Mã buồng nuôi [${cleanCode}] đã tồn tại trong CSDL.` });
+      return;
+    }
+
+    const insertRes = await pool
+      .request()
+      .input("RoomCode", sql.VarChar(20), cleanCode)
+      .input("RoomName", sql.NVarChar(100), cleanName)
+      .input("MaxTrays", sql.Int, maxT)
+      .input("TempMin", sql.Decimal(5, 2), tMin)
+      .input("TempMax", sql.Decimal(5, 2), tMax)
+      .input("HumidityMin", sql.Decimal(5, 2), hMin)
+      .input("HumidityMax", sql.Decimal(5, 2), hMax)
+      .input("CO2Max", sql.Decimal(7, 2), cMax)
+      .input("Description", sql.NVarChar(500), cleanDesc)
+      .input("CameraStreamUrl", sql.NVarChar(500), cleanCam)
+      .query(`
+        INSERT INTO dbo.Rooms (
+          RoomCode, RoomName, MaxTrays, TempMin, TempMax, HumidityMin, HumidityMax, CO2Max, Description, CameraStreamUrl, IsActive
+        )
+        OUTPUT
+          INSERTED.RoomID as roomId,
+          INSERTED.RoomCode as roomCode,
+          INSERTED.RoomName as roomName,
+          INSERTED.MaxTrays as maxTrays,
+          INSERTED.TempMin as tempMin,
+          INSERTED.TempMax as tempMax,
+          INSERTED.HumidityMin as humidityMin,
+          INSERTED.HumidityMax as humidityMax,
+          INSERTED.CO2Max as co2Max,
+          INSERTED.Description as description,
+          INSERTED.CameraStreamUrl as cameraStreamUrl
+        VALUES (
+          @RoomCode, @RoomName, @MaxTrays, @TempMin, @TempMax, @HumidityMin, @HumidityMax, @CO2Max, @Description, @CameraStreamUrl, 1
+        );
+      `);
+
+    const newRoom = insertRes.recordset[0];
+    const initTrays = Math.min(maxT, Math.max(0, Number(initialTraysCount) || 10));
+
+    // Khởi tạo khay nuôi sẵn sàng cho buồng mới nếu có chỉ định
+    if (initTrays > 0) {
+      const roomPrefix = cleanCode.replace(/[^A-Z0-9]/gi, "").toUpperCase();
+      for (let i = 1; i <= initTrays; i++) {
+        const rackNum = Math.floor((i - 1) / 10) + 1;
+        const shelfNum = Math.floor(((i - 1) % 10) / 2) + 1;
+        const posNum = ((i - 1) % 2) + 1;
+        const rackStr = String(rackNum).padStart(2, "0");
+        const seqStr = String(i).padStart(3, "0");
+        const trayCode = `TRAY-${roomPrefix}-R${rackStr}-${seqStr}`;
+
+        await pool
+          .request()
+          .input("TrayCode", sql.VarChar(50), trayCode)
+          .input("RoomID", sql.Int, newRoom.roomId)
+          .input("RackNumber", sql.Int, rackNum)
+          .input("ShelfLevel", sql.Int, shelfNum)
+          .input("PositionNumber", sql.Int, posNum)
+          .query(`
+            INSERT INTO dbo.CultivationTrays (
+              TrayCode, RoomID, RackNumber, ShelfLevel, PositionNumber, Status, LastCleanedAt
+            )
+            VALUES (
+              @TrayCode, @RoomID, @RackNumber, @ShelfLevel, @PositionNumber, 'AVAILABLE', SYSDATETIME()
+            );
+          `);
+      }
+    }
+
+    broadcastEvent("room:created", { room: newRoom, initialTraysCount: initTrays, timestamp: new Date().toISOString() });
+
+    res.status(201).json({
+      success: true,
+      message: `Đã khởi tạo buồng nuôi [${newRoom.roomName}] (${newRoom.roomCode}) kèm ${initTrays} khay sẵn sàng!`,
+      data: {
+        ...newRoom,
+        totalTrays: initTrays,
+        availableTrays: initTrays,
+        occupiedTrays: 0,
+        maintenanceTrays: 0,
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: { code: "CREATE_ROOM_ERROR", message: error.message || "Lỗi tạo buồng nuôi CSDL" },
+    });
+  }
+};
+
+// 1c. PUT /api/operator/rooms/:roomId - Chỉnh sửa thông số buồng nuôi (Dành cho Quản trị viên)
+export const updateRoom = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const roomId = Number(req.params.roomId);
+    const {
+      roomName,
+      maxTrays,
+      tempMin,
+      tempMax,
+      humidityMin,
+      humidityMax,
+      co2Max,
+      description,
+      cameraStreamUrl,
+    } = req.body;
+
+    if (isNaN(roomId) || roomId <= 0) {
+      res.status(400).json({ success: false, message: "ID buồng nuôi không hợp lệ." });
+      return;
+    }
+
+    const tMin = tempMin != null ? Number(tempMin) : undefined;
+    const tMax = tempMax != null ? Number(tempMax) : undefined;
+    const hMin = humidityMin != null ? Number(humidityMin) : undefined;
+    const hMax = humidityMax != null ? Number(humidityMax) : undefined;
+    const cMax = co2Max != null ? Number(co2Max) : undefined;
+
+    if (tMin != null && tMax != null) {
+      if (tMin < 0 || tMax > 50 || tMin >= tMax) {
+        res.status(400).json({ success: false, message: "Nhiệt độ không hợp lệ: Yêu cầu 0 <= TempMin < TempMax <= 50°C." });
+        return;
+      }
+    }
+    if (hMin != null && hMax != null) {
+      if (hMin < 0 || hMax > 100 || hMin >= hMax) {
+        res.status(400).json({ success: false, message: "Độ ẩm không hợp lệ: Yêu cầu 0 <= HumidityMin < HumidityMax <= 100%." });
+        return;
+      }
+    }
+    if (cMax != null && (cMax <= 0 || cMax > 5000)) {
+      res.status(400).json({ success: false, message: "Nồng độ CO2 không hợp lệ: Yêu cầu 0 < CO2Max <= 5000 ppm." });
+      return;
+    }
+
+    const pool = getPool();
+    if (!pool) {
+      res.json({
+        success: true,
+        message: `Đã cập nhật thông tin buồng #${roomId} thành công (demo offline)!`,
+      });
+      return;
+    }
+
+    const updateRes = await pool
+      .request()
+      .input("RoomID", sql.Int, roomId)
+      .input("RoomName", sql.NVarChar(100), roomName ? String(roomName).trim() : null)
+      .input("MaxTrays", sql.Int, maxTrays ? Number(maxTrays) : null)
+      .input("TempMin", sql.Decimal(5, 2), tMin != null ? tMin : null)
+      .input("TempMax", sql.Decimal(5, 2), tMax != null ? tMax : null)
+      .input("HumidityMin", sql.Decimal(5, 2), hMin != null ? hMin : null)
+      .input("HumidityMax", sql.Decimal(5, 2), hMax != null ? hMax : null)
+      .input("CO2Max", sql.Decimal(7, 2), cMax != null ? cMax : null)
+      .input("Description", sql.NVarChar(500), description != null ? String(description).trim() : null)
+      .input("CameraStreamUrl", sql.NVarChar(500), cameraStreamUrl != null ? String(cameraStreamUrl).trim() : null)
+      .query(`
+        UPDATE dbo.Rooms
+        SET RoomName = COALESCE(@RoomName, RoomName),
+            MaxTrays = COALESCE(@MaxTrays, MaxTrays),
+            TempMin = COALESCE(@TempMin, TempMin),
+            TempMax = COALESCE(@TempMax, TempMax),
+            HumidityMin = COALESCE(@HumidityMin, HumidityMin),
+            HumidityMax = COALESCE(@HumidityMax, HumidityMax),
+            CO2Max = COALESCE(@CO2Max, CO2Max),
+            Description = COALESCE(@Description, Description),
+            CameraStreamUrl = COALESCE(@CameraStreamUrl, CameraStreamUrl)
+        OUTPUT
+          INSERTED.RoomID as roomId,
+          INSERTED.RoomCode as roomCode,
+          INSERTED.RoomName as roomName,
+          INSERTED.MaxTrays as maxTrays,
+          INSERTED.TempMin as tempMin,
+          INSERTED.TempMax as tempMax,
+          INSERTED.HumidityMin as humidityMin,
+          INSERTED.HumidityMax as humidityMax,
+          INSERTED.CO2Max as co2Max,
+          INSERTED.Description as description,
+          INSERTED.CameraStreamUrl as cameraStreamUrl
+        WHERE RoomID = @RoomID AND IsActive = 1;
+      `);
+
+    if (updateRes.recordset.length === 0) {
+      res.status(404).json({ success: false, message: `Không tìm thấy buồng nuôi #${roomId}.` });
+      return;
+    }
+
+    const updated = updateRes.recordset[0];
+    broadcastEvent("room:updated", { room: updated, timestamp: new Date().toISOString() });
+
+    res.json({
+      success: true,
+      message: `Đã cập nhật thông số buồng nuôi [${updated.roomName}] thành công!`,
+      data: updated,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: { code: "UPDATE_ROOM_ERROR", message: error.message || "Lỗi cập nhật buồng nuôi CSDL" },
+    });
+  }
+};
+
+// 1d. DELETE /api/operator/rooms/:roomId - Xóa hoặc đóng buồng nuôi (Dành cho Quản trị viên)
+export const deleteRoom = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const roomId = Number(req.params.roomId);
+
+    if (isNaN(roomId) || roomId <= 0) {
+      res.status(400).json({ success: false, message: "ID buồng nuôi không hợp lệ." });
+      return;
+    }
+
+    const pool = getPool();
+    if (!pool) {
+      res.json({
+        success: true,
+        message: `Đã xóa buồng nuôi #${roomId} thành công (demo offline)!`,
+      });
+      return;
+    }
+
+    // Kiểm tra xem buồng có khay đang được khách hàng thuê nuôi không (Status = 'OCCUPIED')
+    const checkOccupied = await pool
+      .request()
+      .input("RoomID", sql.Int, roomId)
+      .query(`
+        SELECT COUNT(TrayID) AS occupiedCount
+        FROM dbo.CultivationTrays
+        WHERE RoomID = @RoomID AND Status = 'OCCUPIED'
+      `);
+
+    const occupiedCount = checkOccupied.recordset[0]?.occupiedCount || 0;
+    if (occupiedCount > 0) {
+      res.status(400).json({
+        success: false,
+        message: `Không thể xóa buồng nuôi này vì đang có ${occupiedCount} khay nấm của khách hàng đang phát triển! Vui lòng chờ thu hoạch hết trước khi giải tỏa buồng.`,
+      });
+      return;
+    }
+
+    // Vô hiệu hóa buồng nuôi (Soft delete an toàn toàn vẹn dữ liệu)
+    await pool
+      .request()
+      .input("RoomID", sql.Int, roomId)
+      .query(`
+        UPDATE dbo.Rooms SET IsActive = 0 WHERE RoomID = @RoomID;
+        UPDATE dbo.CultivationTrays SET Status = 'MAINTENANCE' WHERE RoomID = @RoomID;
+      `);
+
+    broadcastEvent("room:deleted", { roomId, timestamp: new Date().toISOString() });
+
+    res.json({
+      success: true,
+      message: `Đã đóng buồng nuôi #${roomId} và chuyển các khay trống sang trạng thái bảo dưỡng thành công!`,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: { code: "DELETE_ROOM_ERROR", message: error.message || "Lỗi xóa buồng nuôi CSDL" },
     });
   }
 };
