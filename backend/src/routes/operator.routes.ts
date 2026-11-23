@@ -8,6 +8,8 @@ import {
   updateTrayStatus,
   createNewTrays,
   getUsersList,
+  createManagedUser,
+  updateManagedUser,
   updateUserStatus,
   updateUserRole,
   resetUserPassword,
@@ -27,8 +29,10 @@ router.post("/operator/devices/toggle", requireAuth, requireRole(["Admin", "Oper
 router.post("/operator/trays/create", requireAuth, requireRole(["Admin", "Operator"]), createNewTrays);
 router.post("/operator/trays/:trayId/status", requireAuth, requireRole(["Admin", "Operator"]), updateTrayStatus);
 
-// Quản lý người dùng và phân quyền RBAC (Chỉ dành cho Quản trị viên Admin - Chức năng A3)
+// Quản lý người dùng và phân quyền RBAC (Chỉ dành cho Quản trị viên Admin)
 router.get("/operator/users", requireAuth, requireRole(["Admin"]), getUsersList);
+router.post("/operator/users", requireAuth, requireRole(["Admin"]), createManagedUser);
+router.put("/operator/users/:userId", requireAuth, requireRole(["Admin"]), updateManagedUser);
 router.put("/operator/users/:userId/status", requireAuth, requireRole(["Admin"]), updateUserStatus);
 router.put("/operator/users/:userId/role", requireAuth, requireRole(["Admin"]), updateUserRole);
 router.post("/operator/users/:userId/reset-password", requireAuth, requireRole(["Admin"]), resetUserPassword);
