@@ -222,8 +222,9 @@ export default function RightControlHub({ isOpen, onClose }: RightControlHubProp
                   </Link>
                   <button
                     onClick={() => {
-                      logout();
                       onClose();
+                      logout();
+                      router.push("/login");
                     }}
                     className="col-span-2 py-2 px-3 rounded-xl bg-[#FAF5EE] hover:bg-rose-50 dark:bg-[#27231F] dark:hover:bg-rose-950/30 text-rose-700 dark:text-rose-400 border border-[#DECFC0] dark:border-[#474039] font-bold text-xs transition flex items-center justify-center gap-1.5"
                   >

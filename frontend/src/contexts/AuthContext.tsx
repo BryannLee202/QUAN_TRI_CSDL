@@ -204,6 +204,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       sessionStorage.removeItem("mc_user");
       setUser(null);
       setToken(null);
+      router.push("/login");
     }
   };
 

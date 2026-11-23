@@ -2,13 +2,15 @@
 
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { getPaymentHistoryApi, PaymentTransactionRecord } from "@/services/api";
 
 export default function UserProfileAndHistoryPage() {
-  const { user, isAuthenticated, isAdmin, isOperator, logout, updateProfile, changePassword } = useAuth();
+  const router = useRouter();
+  const { user, isAuthenticated, isLoading, isAdmin, isOperator, logout, updateProfile, changePassword } = useAuth();
 
   const [records, setRecords] = useState<PaymentTransactionRecord[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -108,6 +110,11 @@ export default function UserProfileAndHistoryPage() {
   };
 
   const loadTransactions = useCallback(async () => {
+    if (!isAuthenticated) {
+      setRecords([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const data = await getPaymentHistoryApi(30);
@@ -166,11 +173,18 @@ export default function UserProfileAndHistoryPage() {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [isAuthenticated, user]);
 
   useEffect(() => {
     loadTransactions();
   }, [loadTransactions]);
+
+  // Route Guard: Nếu chưa đăng nhập và đã hoàn tất kiểm tra phiên -> Tự động chuyển hướng về /login
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isLoading, isAuthenticated, router]);
 
   const formatVnd = (amount: number) => {
     return new Intl.NumberFormat("vi-VN").format(Math.max(0, Math.round(amount))) + " VNĐ";
@@ -244,10 +258,10 @@ export default function UserProfileAndHistoryPage() {
   }, [records, filterType, searchQuery]);
 
   const displayUser = {
-    fullName: user?.fullName || "Lê Minh Tài",
-    email: user?.email || "customer1@mushroomcloud.test",
-    phone: user?.phoneNumber || "0908 222 005",
-    address: user?.address || "Khu Công Nghệ Cao, Phường Tân Phú, TP. Thủ Đức, TP. Hồ Chí Minh",
+    fullName: user?.fullName || (isAuthenticated ? "Thành Viên MushroomCloud" : "Chưa đăng nhập"),
+    email: user?.email || "Chưa đăng nhập",
+    phone: user?.phoneNumber || "Chưa cập nhật",
+    address: user?.address || "Chưa cập nhật địa chỉ nhận nấm",
     role: user?.role || "Customer",
   };
 
@@ -256,7 +270,40 @@ export default function UserProfileAndHistoryPage() {
       <div>
         <Navbar />
 
-        {/* Header Trang Hồ Sơ & Lịch Sử Giao Dịch */}
+        {!isAuthenticated && !isLoading ? (
+          <div className="max-w-md mx-auto my-24 p-8 sm:p-10 rounded-3xl bg-white dark:bg-[#1E1B18] border border-[#DECFC0] dark:border-[#474039] shadow-xl text-center space-y-5 animate-in fade-in zoom-in-95 duration-200">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+              <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            </div>
+            <div className="space-y-2">
+              <h2 className="text-xl font-extrabold text-[#24170E] dark:text-white">
+                Phiên Làm Việc Đã Kết Thúc
+              </h2>
+              <p className="text-xs text-[#735843] dark:text-[#BFA895] max-w-sm mx-auto">
+                Bạn đã đăng xuất hoặc chưa đăng nhập vào hệ thống. Đang tự động chuyển hướng về trang đăng nhập...
+              </p>
+            </div>
+            <div className="pt-2 flex items-center justify-center gap-3">
+              <Link
+                href="/login"
+                className="px-6 py-2.5 rounded-xl bg-[#24170E] dark:bg-gradient-to-r dark:from-[#C8955E] dark:to-[#DFB27D] text-white dark:text-[#1E1B18] text-xs font-bold transition shadow-xs"
+              >
+                Đăng Nhập Lại →
+              </Link>
+              <Link
+                href="/"
+                className="px-5 py-2.5 rounded-xl border border-[#DECFC0] dark:border-[#474039] text-xs font-bold text-[#6E533E] dark:text-[#BFA895] hover:text-[#24170E] dark:hover:text-white transition"
+              >
+                Về Trang Chủ
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Header Trang Hồ Sơ & Lịch Sử Giao Dịch */}
         <div className="bg-gradient-to-b from-[#F5EEE4] via-[#FBF7F0] to-[#FDFBF8] dark:from-[#20140D] dark:via-[#19100A] dark:to-[#140D08] border-b border-[#EAE1D3] dark:border-[#474039] py-10 px-6">
           <div className="max-w-7xl mx-auto space-y-6">
             <div className="flex items-center gap-2 text-xs font-semibold text-[#8A5C38] dark:text-[#C28E58]">
@@ -817,6 +864,8 @@ export default function UserProfileAndHistoryPage() {
               </div>
             </div>
           </div>
+        )}
+          </>
         )}
 
         {/* Modal 1: Cập Nhật Thông Tin Cá Nhân */}
