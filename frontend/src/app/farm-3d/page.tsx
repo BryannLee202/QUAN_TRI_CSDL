@@ -144,10 +144,82 @@ const RENTAL_PACKAGES = [
   { id: 3, name: "Gói Đông Trùng Hạ Thảo", price: 1899000, duration: "60 Ngày", yieldText: "~0.8 kg sinh khối" },
 ];
 
+const DEFAULT_FARM_ROOMS: FarmRoom[] = [
+  {
+    roomId: 1,
+    roomCode: "RM01",
+    roomName: "Buồng Bào Ngư Xám Nhật (CNC)",
+    totalTrays: 50,
+    occupiedTrays: 38,
+    availableTrays: 10,
+    tempMin: 20,
+    tempMax: 25,
+    humidityMin: 85,
+    humidityMax: 95,
+  },
+  {
+    roomId: 2,
+    roomCode: "RM02",
+    roomName: "Buồng Nấm Hầu Thủ Vi Khí Hậu",
+    totalTrays: 50,
+    occupiedTrays: 35,
+    availableTrays: 12,
+    tempMin: 18,
+    tempMax: 22,
+    humidityMin: 88,
+    humidityMax: 95,
+  },
+  {
+    roomId: 3,
+    roomCode: "RM03",
+    roomName: "Buồng Đông Trùng & Linh Chi Dược Liệu",
+    totalTrays: 50,
+    occupiedTrays: 42,
+    availableTrays: 6,
+    tempMin: 18,
+    tempMax: 22,
+    humidityMin: 80,
+    humidityMax: 85,
+  },
+];
+
+const DEFAULT_FARM_TRAYS: FarmTray[] = [
+  ...Array.from({ length: 50 }, (_, i) => ({
+    trayId: i + 1,
+    trayCode: `TRAY-RM01-R${String((i % 10) + 1).padStart(2, "0")}-${String(i + 1).padStart(3, "0")}`,
+    roomId: 1,
+    rackNumber: (i % 10) + 1,
+    shelfLevel: Math.floor(i / 10) + 1,
+    positionNumber: 1,
+    status: i % 17 === 0 ? "MAINTENANCE" : i % 5 === 0 ? "AVAILABLE" : "OCCUPIED",
+    speciesName: "Nấm bào ngư xám",
+  })),
+  ...Array.from({ length: 50 }, (_, i) => ({
+    trayId: 100 + i + 1,
+    trayCode: `TRAY-RM02-R${String((i % 10) + 1).padStart(2, "0")}-${String(i + 1).padStart(3, "0")}`,
+    roomId: 2,
+    rackNumber: (i % 10) + 1,
+    shelfLevel: Math.floor(i / 10) + 1,
+    positionNumber: 1,
+    status: i % 17 === 0 ? "MAINTENANCE" : i % 4 === 0 ? "AVAILABLE" : "OCCUPIED",
+    speciesName: "Nấm hầu thủ (Lion's Mane)",
+  })),
+  ...Array.from({ length: 50 }, (_, i) => ({
+    trayId: 200 + i + 1,
+    trayCode: `TRAY-RM03-R${String((i % 10) + 1).padStart(2, "0")}-${String(i + 1).padStart(3, "0")}`,
+    roomId: 3,
+    rackNumber: (i % 10) + 1,
+    shelfLevel: Math.floor(i / 10) + 1,
+    positionNumber: 1,
+    status: i % 17 === 0 ? "MAINTENANCE" : i % 6 === 0 ? "AVAILABLE" : "OCCUPIED",
+    speciesName: i % 2 === 0 ? "Đông trùng hạ thảo" : "Nấm linh chi đỏ",
+  })),
+];
+
 export default function Farm3DPage() {
   const { isAuthenticated } = useAuth();
-  const [rooms, setRooms] = useState<FarmRoom[]>([]);
-  const [trays, setTrays] = useState<FarmTray[]>([]);
+  const [rooms, setRooms] = useState<FarmRoom[]>(DEFAULT_FARM_ROOMS);
+  const [trays, setTrays] = useState<FarmTray[]>(DEFAULT_FARM_TRAYS);
   const [ownedTrayCodes, setOwnedTrayCodes] = useState<Set<string>>(new Set());
 
   const [viewMode, setViewMode] = useState<"3d" | "2d">("3d");
@@ -165,18 +237,16 @@ export default function Farm3DPage() {
         getOperatorTraysApi(),
       ]);
 
-      if (roomsRes.status === "fulfilled" && Array.isArray(roomsRes.value)) {
+      if (roomsRes.status === "fulfilled" && Array.isArray(roomsRes.value) && roomsRes.value.length > 0) {
         setRooms(roomsRes.value);
-        if (roomsRes.value.length > 0) {
-          setSelectedRoomId((prev) =>
-            roomsRes.value.some((r: FarmRoom) => r.roomId === prev)
-              ? prev
-              : roomsRes.value[0].roomId
-          );
-        }
+        setSelectedRoomId((prev) =>
+          roomsRes.value.some((r: FarmRoom) => r.roomId === prev)
+            ? prev
+            : roomsRes.value[0].roomId
+        );
       }
 
-      if (traysRes.status === "fulfilled" && Array.isArray(traysRes.value)) {
+      if (traysRes.status === "fulfilled" && Array.isArray(traysRes.value) && traysRes.value.length > 0) {
         const list: FarmTray[] = traysRes.value;
         setTrays(list);
         if (typeof window !== "undefined") {
@@ -317,7 +387,7 @@ export default function Farm3DPage() {
                     : "bg-white dark:bg-[#27231F] text-[#5E4A3A] dark:text-[#DAC7B5] border-[#DECFC0] dark:border-[#474039]"
                 }`}
               >
-                Sơ Đồ Khay ({trays.length})
+                Sơ Đồ Khay ({roomTrays.length})
               </button>
             </div>
           </div>
@@ -602,12 +672,22 @@ export default function Farm3DPage() {
                 {selectedTray ? (
                   <div className="p-4 rounded-2xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs font-black text-[#6B442C] dark:text-[#E2BA78]">
-                        {selectedTray.trayCode}
-                      </span>
-                      <span className="text-[11px] font-bold">
-                        Kệ {selectedTray.rackNumber} • Tầng {selectedTray.shelfLevel}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs font-black text-[#6B442C] dark:text-[#E2BA78]">
+                          {selectedTray.trayCode}
+                        </span>
+                        <span className="text-[11px] font-bold text-[#8A5C38] dark:text-[#BFA895]">
+                          Kệ {selectedTray.rackNumber} • Tầng {selectedTray.shelfLevel}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedTray(null)}
+                        className="text-[10px] font-bold text-[#8C6D53] hover:text-rose-600 transition underline cursor-pointer"
+                        title="Bỏ chọn khay"
+                      >
+                        Bỏ chọn
+                      </button>
                     </div>
                     <p className="text-sm font-bold">
                       {selectedTray.speciesName || "Khay trống sẵn sàng cho thuê"}
@@ -666,10 +746,18 @@ export default function Farm3DPage() {
                 ) : (
                   <button
                     type="button"
-                    onClick={() => setViewMode("2d")}
-                    className="w-full py-2.5 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] transition cursor-pointer"
+                    onClick={() => {
+                      setViewMode("2d");
+                      const firstAvailable =
+                        roomTrays.find((t) => t.status === "AVAILABLE") || roomTrays[0];
+                      if (firstAvailable) {
+                        setSelectedTray(firstAvailable);
+                      }
+                    }}
+                    className="w-full py-2.5 rounded-xl bg-[#FAF5EE] dark:bg-[#322D28] border border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58] text-xs font-bold text-[#4A3222] dark:text-[#E2BA78] transition cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs hover:shadow-xs"
                   >
-                    Xem &amp; Chọn Từng Khay Trong {selectedRoom?.roomCode || "RM01"} →
+                    <span>Xem &amp; Chọn Từng Khay Trong {selectedRoom?.roomCode || "RM01"}</span>
+                    <span>→</span>
                   </button>
                 )}
 

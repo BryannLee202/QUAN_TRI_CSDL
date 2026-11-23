@@ -16,9 +16,9 @@ import { requireAuth, requireRole } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
-// Các endpoint nghiệp vụ cho Trung Tâm Điều Hành - Bắt buộc vai trò Quản Trị Viên hoặc Kỹ Thuật Viên
-router.get("/operator/rooms", requireAuth, requireRole(["Admin", "Operator"]), getRooms);
-router.get("/operator/trays", requireAuth, requireRole(["Admin", "Operator"]), getTrays);
+// Xem danh sách buồng nuôi và ma trận khay nuôi công khai (Phục vụ Mô hình Trang trại 3D và Trung tâm điều hành)
+router.get("/operator/rooms", getRooms);
+router.get("/operator/trays", getTrays);
 router.get("/operator/alerts", requireAuth, requireRole(["Admin", "Operator"]), getAlerts);
 
 // Các thao tác can thiệp phần cứng và CSDL bắt buộc quyền Admin hoặc Operator

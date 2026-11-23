@@ -264,7 +264,10 @@ export async function checkSystemHealth() {
  * 5. Các API Quản trị dành cho Trung Tâm Điều Hành Kỹ Thuật Viên (Operator Hub)
  */
 export async function getOperatorRoomsApi() {
-  const res = await fetch(`${API_BASE}/operator/rooms`, { cache: "no-store" });
+  const res = await fetch(`${API_BASE}/operator/rooms`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
   const json = await res.json();
   if (!res.ok) throw new Error(json.error?.message || "Lỗi tải danh sách buồng");
   return json.data;
@@ -272,7 +275,10 @@ export async function getOperatorRoomsApi() {
 
 export async function getOperatorTraysApi(roomId?: number) {
   const url = roomId ? `${API_BASE}/operator/trays?roomId=${roomId}` : `${API_BASE}/operator/trays`;
-  const res = await fetch(url, { cache: "no-store" });
+  const res = await fetch(url, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
   const json = await res.json();
   if (!res.ok) throw new Error(json.error?.message || "Lỗi tải ma trận khay");
   return json.data;
