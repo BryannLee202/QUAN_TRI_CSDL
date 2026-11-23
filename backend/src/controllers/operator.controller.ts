@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import sql from "mssql";
+import bcrypt from "bcrypt";
 import { getPool } from "../config/db.js";
 import { broadcastEvent } from "../sockets/sensor.socket.js";
 
@@ -439,11 +440,11 @@ export const getUsersList = async (_req: Request, res: Response): Promise<void> 
       res.json({
         success: true,
         data: [
-          { userId: 1, fullName: "Nguyễn Quản Trị", email: "admin@mushroomcloud.test", phoneNumber: "0900000001", roleId: 1, roleName: "Admin", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
-          { userId: 2, fullName: "Trần Kỹ Thuật", email: "operator1@mushroomcloud.test", phoneNumber: "0900000002", roleId: 2, roleName: "Operator", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
-          { userId: 3, fullName: "Lê Vận Hành", email: "operator2@mushroomcloud.test", phoneNumber: "0900000003", roleId: 2, roleName: "Operator", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
-          { userId: 4, fullName: "Phạm Minh An", email: "customer1@mushroomcloud.test", phoneNumber: "0900000011", roleId: 3, roleName: "Customer", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
-          { userId: 5, fullName: "Võ Thu Hà", email: "customer2@mushroomcloud.test", phoneNumber: "0900000012", roleId: 3, roleName: "Customer", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
+          { userId: 1, fullName: "Nguyễn Quản Trị", email: "admin@mushroomcloud.test", phoneNumber: "0900000001", address: "Khu Công Nghệ Cao, TP. Thủ Đức", roleId: 1, roleName: "Admin", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
+          { userId: 2, fullName: "Trần Kỹ Thuật", email: "operator1@mushroomcloud.test", phoneNumber: "0900000002", address: "Trang Trại Thông Minh Khu A", roleId: 2, roleName: "Operator", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
+          { userId: 3, fullName: "Lê Vận Hành", email: "operator2@mushroomcloud.test", phoneNumber: "0900000003", address: "Trang Trại Thông Minh Khu B", roleId: 2, roleName: "Operator", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
+          { userId: 4, fullName: "Phạm Minh An", email: "customer1@mushroomcloud.test", phoneNumber: "0900000011", address: "123 Đường Nấm Sạch, TP.HCM", roleId: 3, roleName: "Customer", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
+          { userId: 5, fullName: "Võ Thu Hà", email: "customer2@mushroomcloud.test", phoneNumber: "0900000012", address: "456 Đại Lộ Bình Dương", roleId: 3, roleName: "Customer", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
         ],
       });
       return;
@@ -455,6 +456,7 @@ export const getUsersList = async (_req: Request, res: Response): Promise<void> 
         u.FullName AS fullName,
         u.Email AS email,
         u.PhoneNumber AS phoneNumber,
+        u.Address AS address,
         u.RoleID AS roleId,
         r.RoleName AS roleName,
         u.IsActive AS isActive,
@@ -576,6 +578,148 @@ export const resetUserPassword = async (req: Request, res: Response): Promise<vo
     res.status(500).json({
       success: false,
       error: { code: "RESET_PASSWORD_ERROR", message: error.message },
+    });
+  }
+};
+
+// 11. POST /api/operator/users - Tạo tài khoản người dùng mới (Dành cho Quản trị viên)
+export const createManagedUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { fullName, email, phoneNumber, roleId, password, address } = req.body;
+
+    if (!fullName || !email) {
+      res.status(400).json({ success: false, message: "Họ tên và email là bắt buộc." });
+      return;
+    }
+
+    const validRoleId = [1, 2, 3].includes(Number(roleId)) ? Number(roleId) : 3;
+    const rawPassword = password && String(password).trim().length >= 6 ? String(password).trim() : "Password123@";
+    const passwordHash = await bcrypt.hash(rawPassword, 10);
+
+    const pool = getPool();
+    if (!pool) {
+      const mockNewUser = {
+        userId: Date.now(),
+        fullName: fullName.trim(),
+        email: email.trim().toLowerCase(),
+        phoneNumber: phoneNumber?.trim() || "",
+        address: address?.trim() || "",
+        roleId: validRoleId,
+        roleName: validRoleId === 1 ? "Admin" : validRoleId === 2 ? "Operator" : "Customer",
+        isActive: true,
+        createdAt: new Date().toISOString(),
+      };
+      res.status(201).json({
+        success: true,
+        message: "Tạo tài khoản người dùng thành công (demo offline)!",
+        data: mockNewUser,
+      });
+      return;
+    }
+
+    // Kiểm tra trùng email
+    const checkEmail = await pool
+      .request()
+      .input("Email", sql.NVarChar(120), email.trim().toLowerCase())
+      .query("SELECT UserID FROM dbo.Users WHERE Email = @Email");
+
+    if (checkEmail.recordset.length > 0) {
+      res.status(409).json({ success: false, message: "Email này đã tồn tại trong hệ thống." });
+      return;
+    }
+
+    const insertRes = await pool
+      .request()
+      .input("RoleID", sql.Int, validRoleId)
+      .input("FullName", sql.NVarChar(100), fullName.trim())
+      .input("Email", sql.NVarChar(120), email.trim().toLowerCase())
+      .input("PhoneNumber", sql.VarChar(20), phoneNumber?.trim() || null)
+      .input("PasswordHash", sql.NVarChar(255), passwordHash)
+      .input("Address", sql.NVarChar(255), address?.trim() || null)
+      .query(`
+        INSERT INTO dbo.Users (RoleID, FullName, Email, PhoneNumber, PasswordHash, Address, IsActive)
+        OUTPUT INSERTED.UserID AS userId, INSERTED.RoleID AS roleId, INSERTED.FullName AS fullName,
+               INSERTED.Email AS email, INSERTED.PhoneNumber AS phoneNumber, INSERTED.Address AS address,
+               INSERTED.IsActive AS isActive, INSERTED.CreatedAt AS createdAt
+        VALUES (@RoleID, @FullName, @Email, @PhoneNumber, @PasswordHash, @Address, 1);
+      `);
+
+    const insertedUser = insertRes.recordset[0];
+    const roleName = validRoleId === 1 ? "Admin" : validRoleId === 2 ? "Operator" : "Customer";
+
+    res.status(201).json({
+      success: true,
+      message: `Đã tạo tài khoản [${roleName}] cho ${insertedUser.fullName} thành công!`,
+      data: { ...insertedUser, roleName },
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: { code: "CREATE_USER_ERROR", message: error.message || "Lỗi tạo tài khoản người dùng" },
+    });
+  }
+};
+
+// 12. PUT /api/operator/users/:userId - Cập nhật thông tin người dùng (Họ tên, SĐT, Địa chỉ, Email)
+export const updateManagedUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { userId } = req.params;
+    const { fullName, phoneNumber, address, email } = req.body;
+
+    if (!fullName || !String(fullName).trim()) {
+      res.status(400).json({ success: false, message: "Họ và tên không được để trống." });
+      return;
+    }
+
+    const pool = getPool();
+    if (!pool) {
+      res.json({
+        success: true,
+        message: "Cập nhật thông tin người dùng thành công (demo offline)!",
+        data: { userId: Number(userId), fullName, phoneNumber, address, email },
+      });
+      return;
+    }
+
+    // Nếu cập nhật email, kiểm tra trùng lặp với tài khoản khác
+    if (email) {
+      const checkEmail = await pool
+        .request()
+        .input("Email", sql.NVarChar(120), email.trim().toLowerCase())
+        .input("UserID", sql.Int, Number(userId))
+        .query("SELECT UserID FROM dbo.Users WHERE Email = @Email AND UserID != @UserID");
+
+      if (checkEmail.recordset.length > 0) {
+        res.status(409).json({ success: false, message: "Email này đã được sử dụng bởi tài khoản khác." });
+        return;
+      }
+    }
+
+    await pool
+      .request()
+      .input("UserID", sql.Int, Number(userId))
+      .input("FullName", sql.NVarChar(100), fullName.trim())
+      .input("PhoneNumber", sql.VarChar(20), phoneNumber?.trim() || null)
+      .input("Address", sql.NVarChar(255), address?.trim() || null)
+      .input("Email", sql.NVarChar(120), email?.trim().toLowerCase() || null)
+      .query(`
+        UPDATE dbo.Users
+        SET FullName = @FullName,
+            PhoneNumber = COALESCE(@PhoneNumber, PhoneNumber),
+            Address = COALESCE(@Address, Address),
+            Email = COALESCE(@Email, Email),
+            UpdatedAt = SYSDATETIME()
+        WHERE UserID = @UserID;
+      `);
+
+    res.json({
+      success: true,
+      message: `Đã cập nhật thông tin tài khoản #${userId} thành công!`,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: { code: "UPDATE_USER_ERROR", message: error.message || "Lỗi cập nhật người dùng" },
     });
   }
 };
