@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import GoogleSignInSection from "@/components/auth/GoogleSignInSection";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -361,6 +362,20 @@ export default function LoginPage() {
                   )}
                 </button>
               </form>
+
+              {/* Hoặc Đăng Nhập Bằng Google */}
+              <div className="relative my-4">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-[#DECFC0] dark:border-[#3D2517]"></div>
+                </div>
+                <div className="relative flex justify-center text-[10px] uppercase">
+                  <span className="bg-white dark:bg-[#1C120B] px-3 font-bold text-[#8C6D53] dark:text-[#A89280]">
+                    Hoặc đăng nhập nhanh bằng
+                  </span>
+                </div>
+              </div>
+
+              <GoogleSignInSection label="Tiếp tục với tài khoản Google (Gmail)" />
 
               {/* 1-Click Demo Accounts (Dành cho Giảng Viên & Chấm Thi Đồ Án) */}
               <div className="mt-6 pt-5 border-t border-[#F0E6D8] dark:border-[#2D1D13]">

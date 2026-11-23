@@ -517,3 +517,163 @@ export const changePassword = async (req: Request, res: Response) => {
     });
   }
 };
+
+// POST /api/auth/google
+export const googleLogin = async (req: Request, res: Response) => {
+  try {
+    const { credential, email, fullName, avatarUrl } = req.body;
+
+    let userEmail = email ? String(email).trim().toLowerCase() : "";
+    let userName = fullName ? String(fullName).trim() : "";
+    let userAvatar = avatarUrl || null;
+
+    // Nếu frontend gửi credential dạng JWT từ Google Identity Services (GIS), giải mã nó
+    if (credential && typeof credential === "string") {
+      try {
+        const parts = credential.split(".");
+        if (parts.length === 3) {
+          const payloadJson = Buffer.from(parts[1], "base64").toString("utf-8");
+          const payload = JSON.parse(payloadJson);
+          if (payload.email) userEmail = String(payload.email).trim().toLowerCase();
+          if (payload.name) userName = String(payload.name).trim();
+          if (payload.picture) userAvatar = payload.picture;
+        }
+      } catch (err: any) {
+        console.warn("[Google Token Decode Warning]:", err?.message);
+      }
+    }
+
+    if (!userEmail) {
+      return res.status(400).json({
+        success: false,
+        message: "Email Google không hợp lệ hoặc không tìm thấy.",
+      });
+    }
+
+    if (!userName) {
+      userName = userEmail.split("@")[0];
+    }
+
+    let user: any = null;
+
+    try {
+      const pool = getPool();
+      // 1. Tìm kiếm trong bảng Users theo Email
+      const findRes = await pool
+        .request()
+        .input("Email", sql.NVarChar(120), userEmail)
+        .query(`
+          SELECT u.UserID, u.RoleID, r.RoleName, u.FullName, u.Email, 
+                 u.PhoneNumber, u.Address, u.AvatarUrl, u.IsActive, u.CreatedAt
+          FROM Users u
+          JOIN Roles r ON u.RoleID = r.RoleID
+          WHERE u.Email = @Email
+        `);
+
+      if (findRes.recordset.length > 0) {
+        user = findRes.recordset[0];
+        // Cập nhật AvatarUrl từ Google nếu chưa có
+        if (!user.AvatarUrl && userAvatar) {
+          await pool
+            .request()
+            .input("UserID", sql.Int, user.UserID)
+            .input("AvatarUrl", sql.NVarChar(500), userAvatar)
+            .query("UPDATE Users SET AvatarUrl = @AvatarUrl WHERE UserID = @UserID");
+          user.AvatarUrl = userAvatar;
+        }
+      } else {
+        // 2. Tự động khởi tạo tài khoản mới với vai trò CUSTOMER
+        const roleQuery = await pool
+          .request()
+          .query("SELECT RoleID FROM Roles WHERE RoleName = 'CUSTOMER'");
+
+        const customerRoleId =
+          roleQuery.recordset.length > 0 ? roleQuery.recordset[0].RoleID : 3;
+
+        const saltRounds = 10;
+        const randomPassword = `GAuth_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+        const passwordHash = await bcrypt.hash(randomPassword, saltRounds);
+
+        const insertRes = await pool
+          .request()
+          .input("RoleID", sql.Int, customerRoleId)
+          .input("FullName", sql.NVarChar(100), userName)
+          .input("Email", sql.NVarChar(120), userEmail)
+          .input("PhoneNumber", sql.VarChar(20), null)
+          .input("PasswordHash", sql.NVarChar(255), passwordHash)
+          .input("Address", sql.NVarChar(255), null)
+          .input("AvatarUrl", sql.NVarChar(500), userAvatar)
+          .query(`
+            INSERT INTO Users (RoleID, FullName, Email, PhoneNumber, PasswordHash, Address, AvatarUrl, IsActive)
+            OUTPUT INSERTED.UserID, INSERTED.RoleID, INSERTED.FullName, INSERTED.Email, 
+                   INSERTED.PhoneNumber, INSERTED.Address, INSERTED.AvatarUrl, INSERTED.CreatedAt
+            VALUES (@RoleID, @FullName, @Email, @PhoneNumber, @PasswordHash, @Address, @AvatarUrl, 1);
+          `);
+
+        if (insertRes.recordset.length > 0) {
+          const newUser = insertRes.recordset[0];
+          user = {
+            ...newUser,
+            RoleName: "Customer",
+          };
+        }
+      }
+    } catch (dbErr: any) {
+      console.warn("[Google Login DB Warning]:", dbErr?.message);
+    }
+
+    // Fallback in-memory
+    if (!user) {
+      user = {
+        UserID: Math.floor(Math.random() * 8000) + 1000,
+        RoleID: 3,
+        RoleName: "Customer",
+        FullName: userName,
+        Email: userEmail,
+        PhoneNumber: "",
+        Address: "",
+        AvatarUrl: userAvatar,
+        CreatedAt: new Date(),
+      };
+    }
+
+    // Tạo JWT token
+    const token = generateToken({
+      userId: user.UserID,
+      email: user.Email,
+      roleId: user.RoleID,
+      roleName: user.RoleName || "Customer",
+    });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Đăng nhập bằng tài khoản Google thành công!",
+      data: {
+        user: {
+          id: user.UserID,
+          fullName: user.FullName,
+          email: user.Email,
+          phoneNumber: user.PhoneNumber,
+          address: user.Address,
+          avatarUrl: user.AvatarUrl,
+          role: user.RoleName || "Customer",
+          createdAt: user.CreatedAt,
+        },
+        token,
+      },
+    });
+  } catch (error) {
+    console.error("[Google Login Error]:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Lỗi máy chủ khi đăng nhập bằng Google.",
+    });
+  }
+};

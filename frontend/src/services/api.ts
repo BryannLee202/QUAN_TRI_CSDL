@@ -441,6 +441,23 @@ export async function changePasswordApi(params: {
   return json;
 }
 
+export async function loginWithGoogleApi(params: {
+  credential?: string;
+  email?: string;
+  fullName?: string;
+  avatarUrl?: string;
+}) {
+  const res = await fetch(`${API_BASE}/auth/google`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(params),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || "Đăng nhập Google thất bại");
+  return json;
+}
+
 // -------------------------------------------------------------
 // IoT Binary Protocol & Telemetry Parser APIs
 // -------------------------------------------------------------

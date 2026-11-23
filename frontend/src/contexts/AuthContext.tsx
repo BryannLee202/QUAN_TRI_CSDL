@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getMeApi, loginApi, logoutApi, registerApi, updateProfileApi, changePasswordApi } from "@/services/api";
+import { getMeApi, loginApi, logoutApi, registerApi, updateProfileApi, changePasswordApi, loginWithGoogleApi } from "@/services/api";
 
 export interface User {
   id: number;
@@ -31,6 +31,12 @@ interface AuthContextType {
     password: string;
     phoneNumber?: string;
     address?: string;
+  }) => Promise<{ success: boolean; message: string; user?: User }>;
+  loginWithGoogle: (params: {
+    credential?: string;
+    email?: string;
+    fullName?: string;
+    avatarUrl?: string;
   }) => Promise<{ success: boolean; message: string; user?: User }>;
   updateProfile: (params: {
     fullName: string;
@@ -153,6 +159,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { success: false, message: res.message || "Đăng ký thất bại" };
   };
 
+  const loginWithGoogle = async (params: {
+    credential?: string;
+    email?: string;
+    fullName?: string;
+    avatarUrl?: string;
+  }) => {
+    try {
+      const res = await loginWithGoogleApi(params);
+      if (res.success && res.data) {
+        const u: User = {
+          id: res.data.user.id,
+          fullName: res.data.user.fullName,
+          email: res.data.user.email,
+          role: res.data.user.role || "Customer",
+          phoneNumber: res.data.user.phoneNumber,
+          address: res.data.user.address,
+          avatarUrl: res.data.user.avatarUrl,
+        };
+
+        setUser(u);
+        setToken(res.data.token);
+        sessionStorage.setItem("mc_token", res.data.token);
+        sessionStorage.setItem("mc_user", JSON.stringify(u));
+        setIsAuthModalOpen(false);
+        return { success: true, message: res.message, user: u };
+      }
+      return { success: false, message: res.message || "Đăng nhập Google thất bại" };
+    } catch (err: any) {
+      return { success: false, message: err?.message || "Lỗi kết nối khi đăng nhập bằng Google." };
+    }
+  };
+
   const updateProfile = async (params: {
     fullName: string;
     phoneNumber?: string;
@@ -241,6 +279,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         authModalTab,
         login,
         register,
+        loginWithGoogle,
         updateProfile,
         changePassword,
         logout,
