@@ -76,13 +76,26 @@ export default function OperatorPage() {
       if (roomsRes.status === "fulfilled") {
         const rList = Array.isArray(roomsRes.value) ? roomsRes.value : roomsRes.value?.data;
         if (Array.isArray(rList) && rList.length > 0) {
-          setRooms(rList);
+          const enrichedRooms: RoomOption[] = rList.map((r) => {
+            const code = (r.roomCode || "").toUpperCase();
+            let sp = r.speciesName;
+            if (!sp) {
+              if (code.includes("02")) sp = "Nấm Hầu Thủ";
+              else if (code.includes("03")) sp = "Đông Trùng Hạ Thảo";
+              else sp = "Nấm Bào Ngư Xám Nhật";
+            }
+            return {
+              ...r,
+              speciesName: sp,
+            };
+          });
+          setRooms(enrichedRooms);
           if (isFirstLoad) {
             const urlParam = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("room") : null;
             const matchedRoom = urlParam
-              ? rList.find((r) => r.roomCode?.toUpperCase() === urlParam.toUpperCase() || String(r.roomId) === urlParam)
+              ? enrichedRooms.find((r) => r.roomCode?.toUpperCase() === urlParam.toUpperCase() || String(r.roomId) === urlParam)
               : null;
-            setRoomId(matchedRoom ? matchedRoom.roomId : rList[0].roomId);
+            setRoomId(matchedRoom ? matchedRoom.roomId : enrichedRooms[0].roomId);
           }
         }
       }
@@ -90,7 +103,19 @@ export default function OperatorPage() {
       if (traysRes.status === "fulfilled") {
         const tList = Array.isArray(traysRes.value) ? traysRes.value : traysRes.value?.data;
         if (Array.isArray(tList) && tList.length > 0) {
-          setTrays(tList);
+          const enrichedTrays: TrayCell[] = tList.map((t) => {
+            let sp = t.speciesName;
+            if (!sp) {
+              if (t.roomId === 2) sp = "Nấm Hầu Thủ (Lion's Mane)";
+              else if (t.roomId === 3) sp = "Đông Trùng Hạ Thảo";
+              else sp = "Nấm Bào Ngư Xám Nhật";
+            }
+            return {
+              ...t,
+              speciesName: sp,
+            };
+          });
+          setTrays(enrichedTrays);
         }
       }
 

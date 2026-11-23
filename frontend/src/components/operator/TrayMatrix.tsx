@@ -85,16 +85,19 @@ export default function TrayMatrix({
           const rackPad = String(tray.rackNumber).padStart(2, "0");
           const shelfPad = String(tray.shelfLevel).padStart(2, "0");
 
+          const defaultSpeciesByRoom =
+            tray.roomId === 2
+              ? "Nấm hầu thủ"
+              : tray.roomId === 3
+              ? "Đông trùng hạ thảo"
+              : "Nấm bào ngư xám";
+
           const subInfo =
             ui === "empty"
               ? "Khay trống • Sẵn sàng"
               : ui === "maintenance"
               ? "Khử khuẩn & Bảo dưỡng"
-              : tray.speciesName
-              ? tray.speciesName
-              : tray.orderCode
-              ? `HĐ: ${tray.orderCode}`
-              : "Nấm bào ngư xám";
+              : tray.speciesName || defaultSpeciesByRoom;
 
           return (
             <button

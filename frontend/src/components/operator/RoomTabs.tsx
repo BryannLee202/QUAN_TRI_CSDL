@@ -28,6 +28,11 @@ export default function RoomTabs({ rooms, selectedRoomId, alertRoomIds, onSelect
             }`}
           >
             <span>{r.roomCode}</span>
+            {r.speciesName && (
+              <span className={`text-[10px] font-semibold hidden sm:inline ${active ? "text-[#E8C89B]" : "text-[#8A5C38] dark:text-[#C28E58]"}`}>
+                • {r.speciesName.replace("Nấm ", "")}
+              </span>
+            )}
             {hasAlert && (
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>

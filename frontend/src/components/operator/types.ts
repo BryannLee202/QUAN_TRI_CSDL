@@ -19,6 +19,8 @@ export interface TrayCell {
 export interface RoomOption {
   roomId: number;
   roomCode: string;
+  roomName?: string;
+  speciesName?: string;
 }
 
 export interface AlertItem {

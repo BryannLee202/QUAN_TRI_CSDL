@@ -91,12 +91,6 @@ export default function VirtualTrayInspectorModal({
     });
   }, [traysInRoom]);
 
-  // Danh sách các số Kệ (Rack) hiện có trong buồng
-  const availableRacks = useMemo(() => {
-    const rSet = new Set<number>();
-    for (const t of sortedRoomTrays) rSet.add(t.rackNumber);
-    return Array.from(rSet).sort((a, b) => a - b);
-  }, [sortedRoomTrays]);
 
   // Các khay nằm trên cùng Kệ (Rack) với khay đang chọn
   const traysOnCurrentRack = useMemo(() => {
@@ -199,6 +193,15 @@ export default function VirtualTrayInspectorModal({
   const shelfPad = String(tray.shelfLevel || 1).padStart(2, "0");
   const shortCode = formatShortCode(tray);
 
+  // Xác định chuẩn loại nấm của khay và buồng nuôi
+  const resolvedSpeciesName =
+    tray.speciesName ||
+    (tray.roomId === 2
+      ? "Nấm Hầu Thủ (Lion's Mane)"
+      : tray.roomId === 3
+      ? "Đông Trùng Hạ Thảo"
+      : "Nấm Bào Ngư Xám Nhật");
+
   // Thông số vi khí hậu thực tế tại vị trí khay
   const seed = (tray.trayId || 1) % 9;
   const localTemp = (23.4 + seed * 0.2).toFixed(1);
@@ -207,92 +210,86 @@ export default function VirtualTrayInspectorModal({
   const localLux = spectrum === "NATURAL_LIGHT" ? 850 : spectrum === "HUMID_MIST" ? 320 : 150;
   const growthProgress = isOccupied ? 68 + seed * 3 : isMaintenance ? 100 : 0;
 
-  // Chọn bộ 3 hình ảnh thực tế cho 3 Khoang Kệ Liên Tiếp (Khoang Đầu 0-33% • Khoang Giữa 33-66% • Khoang Cuối 66-100%)
+  // Chọn bộ 3 hình ảnh thực tế chất lượng cao theo đúng chủng loại nấm của từng buồng nuôi
   const { bay1ImageUrl, bay2ImageUrl, bay3ImageUrl, imageCaption, stageSubtitle } = (() => {
+    const sp = resolvedSpeciesName.toLowerCase();
+
     if (viewAngle === "CLEANROOM_RACKS") {
       return {
-        bay1ImageUrl: "/images/real-farm/real-cleanroom-cultivation.jpg",
+        bay1ImageUrl: "/images/real-farm/real-cleanroom-16x9.jpg",
         bay2ImageUrl: "/images/real-farm/real-mushroom-shelves.jpg",
-        bay3ImageUrl: "/images/real-farm/real-farm-racks-2.jpg",
-        imageCaption: `Dàn kệ sắt đa tầng & khay nấm thực tế trong phòng nuôi (${roomCode} • Kệ ${rackPad})`,
-        stageSubtitle: "Rê chuột từ trái sang phải để lướt dọc qua 3 khoang kệ: Đầu kệ -> Giữa kệ -> Cuối kệ",
+        bay3ImageUrl: "/images/real-farm/real-cleanroom-16x9.jpg",
+        imageCaption: `Dàn kệ thép phòng sạch vi khí hậu (${roomCode} • Kệ ${rackPad})`,
+        stageSubtitle: "Góc nhìn bao quát dàn kệ nuôi chuẩn vô trùng ISO Class 5",
       };
     }
     if (viewAngle === "FARM_AISLE_PANORAMA") {
       return {
-        bay1ImageUrl: "/images/real-farm/real-farm-racks-1.jpg",
-        bay2ImageUrl: "/images/real-farm/real-farm-racks-2.jpg",
-        bay3ImageUrl: "/images/real-farm/real-farm-racks-3.jpg",
-        imageCaption: `Hành lang kệ phôi nấm đa tầng thực tế kéo dài tại khu vực Kệ ${rackPad}`,
-        stageSubtitle: "Lướt chuột ngang hết khung hình để kiểm tra từ đầu dãy kệ tới kịch cuối dãy kệ (0% -> 100%)",
+        bay1ImageUrl: "/images/farm3d/iot-spectrum-cleanroom.jpg",
+        bay2ImageUrl: "/images/real-farm/real-cleanroom-16x9.jpg",
+        bay3ImageUrl: "/images/farm3d/iot-spectrum-cleanroom.jpg",
+        imageCaption: `Hành lang quang phổ LED vi khí hậu tại khu vực Kệ ${rackPad}`,
+        stageSubtitle: "Dải quang phổ LED 5000K & UV-C kích thích sinh trưởng nấm",
       };
     }
 
-    // Góc nhìn 1: Cận cảnh khay & phôi nấm thực tế dọc 3 khoang kệ
+    // Góc nhìn 1: Cận cảnh khay & quả thể nấm thực tế
     if (isMaintenance) {
       return {
-        bay1ImageUrl: "/images/real-farm/real-farm-racks-3.jpg",
-        bay2ImageUrl: "/images/real-farm/real-farm-racks-2.jpg",
-        bay3ImageUrl: "/images/real-farm/real-farm-racks-1.jpg",
-        imageCaption: `Kệ phôi ${tray.trayCode} đang trong quy trình kiểm tra & khử trùng định kỳ`,
-        stageSubtitle: "Trạng thái: Đang bảo trì kỹ thuật & kiểm định nắp lọc khuẩn dọc dãy kệ",
+        bay1ImageUrl: "/images/real-farm/real-cleanroom-16x9.jpg",
+        bay2ImageUrl: "/images/real-farm/real-mushroom-shelves.jpg",
+        bay3ImageUrl: "/images/real-farm/real-cleanroom-16x9.jpg",
+        imageCaption: `Khu vực khay ${tray.trayCode} đang khử trùng & bảo dưỡng định kỳ`,
+        stageSubtitle: "Trạng thái: Khử khuẩn buồng vô trùng & kiểm tra màng lọc khí vi sinh",
       };
     }
+
     if (!isOccupied) {
       return {
-        bay1ImageUrl: "/images/real-farm/real-farm-racks-2.jpg",
-        bay2ImageUrl: "/images/real-farm/real-farm-racks-3.jpg",
-        bay3ImageUrl: "/images/real-farm/real-farm-racks-1.jpg",
-        imageCaption: `Bịch phôi nấm vô trùng đậy nắp lọc khuẩn tại Khay ${shortCode} (Sẵn sàng cấy giống)`,
-        stageSubtitle: "Trạng thái: Phôi cơ chất đã hấp tiệt trùng, sẵn sàng cấp phát cho đơn thuê mới",
-      };
-    }
-
-    const sp = (tray.speciesName || "").toLowerCase();
-    if (sp.includes("linh chi")) {
-      return {
-        bay1ImageUrl: "/images/real-farm/real-reishi-macro.jpg",
-        bay2ImageUrl: "/images/real-farm/real-farm-racks-1.jpg",
-        bay3ImageUrl: "/images/real-farm/real-reishi-macro.jpg",
-        imageCaption: `Ảnh thực tế quả thể Nấm Linh Chi Đỏ (Ganoderma lucidum) tại Khay ${shortCode}`,
-        stageSubtitle: "Quả thể đang hóa gỗ vành vàng, hàm lượng Polysaccharide đạt chuẩn dược liệu",
-      };
-    }
-    if (sp.includes("hầu thủ") || sp.includes("hương")) {
-      return {
-        bay1ImageUrl: "/images/real-farm/real-lionsmane-macro.jpg",
-        bay2ImageUrl: "/images/real-farm/real-cleanroom-cultivation.jpg",
-        bay3ImageUrl: "/images/real-farm/real-lionsmane-macro.jpg",
-        imageCaption: `Ảnh thực tế quả thể nấm dược liệu đang phát triển tại Khay ${shortCode}`,
-        stageSubtitle: "Cấu trúc gai nấm trắng đồng đều, độ ẩm bề mặt tối ưu",
-      };
-    }
-
-    const variant = (tray.trayId + tray.shelfLevel) % 3;
-    if (variant === 0) {
-      return {
-        bay1ImageUrl: "/images/real-farm/real-mushroom-shelves.jpg",
-        bay2ImageUrl: "/images/real-farm/real-cleanroom-cultivation.jpg",
-        bay3ImageUrl: "/images/real-farm/real-oyster-macro.jpg",
-        imageCaption: `Ảnh thực tế cụm Nấm Bào Ngư Xám bung tán từ bịch phôi tại Khay ${shortCode}`,
-        stageSubtitle: "Giai đoạn 4: Cụm tai nấm bung đều, rê chuột sang phải để xem tiếp các khay cuối kệ",
-      };
-    }
-    if (variant === 1) {
-      return {
-        bay1ImageUrl: "/images/real-farm/real-oyster-macro.jpg",
+        bay1ImageUrl: "/images/real-farm/real-cleanroom-16x9.jpg",
         bay2ImageUrl: "/images/real-farm/real-mushroom-shelves.jpg",
-        bay3ImageUrl: "/images/real-farm/real-cleanroom-cultivation.jpg",
-        imageCaption: `Ảnh thực tế hệ sợi tơ trắng & nụ mầm Nấm Bào Ngư Xám tại Khay ${shortCode}`,
-        stageSubtitle: "Giai đoạn 3: Hệ sợi tơ ăn kín bề mặt giá thể, nụ nấm non kết cụm dày đặc",
+        bay3ImageUrl: "/images/real-farm/real-cleanroom-16x9.jpg",
+        imageCaption: `Khay phôi cơ chất vô trùng sẵn sàng tại ${shortCode}`,
+        stageSubtitle: "Trạng thái: Cơ chất đã hấp tiệt trùng, sẵn sàng kích hoạt hợp đồng thuê mới",
       };
     }
+
+    if (sp.includes("đông trùng") || sp.includes("cordyceps")) {
+      return {
+        bay1ImageUrl: "/images/real-farm/real-cordyceps-16x9.jpg",
+        bay2ImageUrl: "/images/farm3d/iot-spectrum-cleanroom.jpg",
+        bay3ImageUrl: "/images/real-farm/real-cordyceps-16x9.jpg",
+        imageCaption: `Ảnh thực tế sinh khối Nấm Đông Trùng Hạ Thảo vô trùng tại Khay ${shortCode}`,
+        stageSubtitle: "Quang phổ LED 5000K & UV-C chuẩn ISO Class 5 • Hàm lượng Cordycepin > 0.8%",
+      };
+    }
+
+    if (sp.includes("hầu thủ") || sp.includes("lion")) {
+      return {
+        bay1ImageUrl: "/images/real-farm/real-lionsmane-16x9.jpg",
+        bay2ImageUrl: "/images/real-farm/real-cleanroom-16x9.jpg",
+        bay3ImageUrl: "/images/real-farm/real-lionsmane-16x9.jpg",
+        imageCaption: `Ảnh thực tế quả thể Nấm Hầu Thủ (Lion's Mane) tại Khay ${shortCode}`,
+        stageSubtitle: "Hệ thống phun sương siêu âm 88-95% RH • Tai nấm trắng muốt phát triển gai bờm dày",
+      };
+    }
+
+    if (sp.includes("linh chi") || sp.includes("reishi")) {
+      return {
+        bay1ImageUrl: "/images/real-farm/real-reishi-16x9.jpg",
+        bay2ImageUrl: "/images/real-farm/real-cleanroom-16x9.jpg",
+        bay3ImageUrl: "/images/real-farm/real-reishi-16x9.jpg",
+        imageCaption: `Ảnh thực tế quả thể Nấm Linh Chi Đỏ tại Khay ${shortCode}`,
+        stageSubtitle: "Quả thể hóa gỗ vành vàng dược liệu • Nồng độ CO2 kiểm soát < 800 ppm",
+      };
+    }
+
     return {
-      bay1ImageUrl: "/images/real-farm/real-cleanroom-cultivation.jpg",
-      bay2ImageUrl: "/images/real-farm/real-mushroom-shelves.jpg",
-      bay3ImageUrl: "/images/real-farm/real-oyster-macro.jpg",
-      imageCaption: `Ảnh thực tế khay nấm canh tác trên kệ phòng sạch tại Khay ${shortCode}`,
-      stageSubtitle: "Giai đoạn 4: Thân nấm vươn thẳng đồng đều trên khay tiêu chuẩn",
+      bay1ImageUrl: "/images/real-farm/real-oyster-16x9.jpg",
+      bay2ImageUrl: "/images/real-farm/real-cleanroom-16x9.jpg",
+      bay3ImageUrl: "/images/real-farm/real-oyster-16x9.jpg",
+      imageCaption: `Ảnh thực tế cụm Nấm Bào Ngư Xám Nhật tại Khay ${shortCode}`,
+      stageSubtitle: "Canh tác trên giàn thép vi khí hậu 20-25°C • Cụm tai nấm bung đều dày múp",
     };
   })();
 
@@ -475,9 +472,18 @@ export default function VirtualTrayInspectorModal({
                 </h3>
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span>3-BAY PANORAMA RAIL • 60FPS ZERO-BORDER</span>
+                  <span>LIVE 60FPS ZERO-BORDER</span>
                 </span>
               </div>
+              <p className="text-xs text-[#E8C89B] mt-1 tabular-nums flex items-center gap-2 flex-wrap font-medium">
+                <span className="font-bold text-white">Buồng {roomCode}</span>
+                <span className="opacity-60">•</span>
+                <span>Kệ {rackPad}</span>
+                <span className="opacity-60">•</span>
+                <span>Tầng {shelfPad}</span>
+                <span className="opacity-60">•</span>
+                <span className="text-emerald-300 font-bold">{resolvedSpeciesName}</span>
+              </p>
             </div>
           </div>
 
@@ -520,70 +526,7 @@ export default function VirtualTrayInspectorModal({
           </div>
         </div>
 
-        {/* 2. Thanh Điều Hướng Di Chuyển Từng Kệ (Rack Selector) & Từng Khay Trên Kệ */}
-        <div className="px-5 sm:px-6 py-2.5 bg-[#F4ECE1] dark:bg-[#27231F] border-b border-[#E3D5C3] dark:border-[#474039] flex flex-wrap items-center justify-between gap-3 text-xs">
-          {/* Chọn Kệ (Rack) để trượt camera đến kệ đó */}
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="font-bold text-[#523522] dark:text-[#C28E58] mr-1">
-              Di chuyển đến Kệ:
-            </span>
-            {availableRacks.map((rNum) => {
-              const isCurrentRack = rNum === tray.rackNumber;
-              return (
-                <button
-                  key={rNum}
-                  type="button"
-                  onClick={() => {
-                    const firstInRack = sortedRoomTrays.find((t) => t.rackNumber === rNum);
-                    if (firstInRack) onSelectTray(firstInRack);
-                  }}
-                  className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer tabular-nums ${
-                    isCurrentRack
-                      ? "bg-[#24170E] text-white dark:bg-[#C28E58] dark:text-[#170E08] shadow-2xs"
-                      : "bg-white dark:bg-[#322D28] text-[#523522] dark:text-[#DAC7B5] border border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58]"
-                  }`}
-                >
-                  Kệ {String(rNum).padStart(2, "0")}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Các khay nằm trên Kệ hiện tại để nhảy nhanh từ đầu kệ đến cuối kệ */}
-          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5 max-w-full">
-            <span className="text-[11px] font-semibold text-[#735843] dark:text-[#BFA895] mr-1 shrink-0">
-              Khay trên Kệ {rackPad}:
-            </span>
-            {traysOnCurrentRack.map((t) => {
-              const active = t.trayId === tray.trayId;
-              const sCode = formatShortCode(t).split("-")[1] || String(t.trayId);
-              const dotCls =
-                t.status === "OCCUPIED"
-                  ? "bg-emerald-500"
-                  : t.status === "MAINTENANCE"
-                  ? "bg-amber-600"
-                  : "bg-stone-400";
-              return (
-                <button
-                  key={t.trayId}
-                  type="button"
-                  onClick={() => onSelectTray(t)}
-                  className={`px-2 py-1 rounded-lg text-[11px] font-bold transition flex items-center gap-1 shrink-0 cursor-pointer tabular-nums ${
-                    active
-                      ? "bg-emerald-800 text-white ring-2 ring-emerald-500/30"
-                      : "bg-white dark:bg-[#322D28] text-[#4A3222] dark:text-[#DAC7B5] border border-[#DECFC0] dark:border-[#474039] hover:border-[#C28E58]"
-                  }`}
-                  title={`Trượt camera tới Khay ${t.trayCode} (Tầng ${t.shelfLevel})`}
-                >
-                  <span className={`w-1.5 h-1.5 rounded-full ${dotCls}`} />
-                  <span>#{sCode}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* 3. Nội Dung Chính 2 Cột */}
+        {/* 2. Nội Dung Chính 2 Cột */}
         <div className="p-5 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 max-h-[80vh] overflow-y-auto custom-scrollbar">
           {/* ==========================================================
               CỘT TRÁI (7 CỘT): MÀN HÌNH CAMERA PANORAMA 3 KHOANG & RADAR MINIMAP
@@ -640,7 +583,7 @@ export default function VirtualTrayInspectorModal({
               onMouseDown={handleMouseDown}
               onMouseUp={handleMouseUpOrLeave}
               onMouseLeave={handleMouseUpOrLeave}
-              className="relative rounded-3xl overflow-hidden border-2 border-[#DECFC0] dark:border-[#474039] bg-[#1A130E] shadow-xl aspect-[16/10] select-none cursor-grab active:cursor-grabbing group"
+              className="relative rounded-3xl overflow-hidden border-2 border-[#DECFC0] dark:border-[#474039] bg-[#1A130E] shadow-xl aspect-[16/9] max-h-[380px] select-none cursor-grab active:cursor-grabbing group"
             >
               {/* DẢI KỆ PANORAMA 3 KHOANG RỘNG 260% * ZOOM (TẮT TRANSITION KHI ĐANG RÊ CHUỘT TRỰC TIẾP ĐỂ ĐẠT 60FPS TỨC THÌ) */}
               <div
@@ -786,14 +729,16 @@ export default function VirtualTrayInspectorModal({
               </div>
 
               {/* HUD Góc Trên Trái: Vị Trí Đường Ray (0% -> 100%) & Zoom */}
-              <div className="absolute top-3 left-3 flex flex-wrap items-center gap-1.5 pointer-events-none tabular-nums">
+              <div className="absolute top-3 left-3 flex flex-wrap items-center gap-1.5 pointer-events-none tabular-nums z-30">
                 <div className="px-2.5 py-1 rounded-xl bg-black/75 backdrop-blur-md border border-white/15 text-white text-[11px] font-bold flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
-                  <span>LIVE • {roomCode}-KỆ {rackPad}</span>
+                  <span>LIVE • {roomCode} • KỆ {rackPad} • TẦNG {shelfPad}</span>
+                </div>
+                <div className="px-2.5 py-1 rounded-xl bg-black/75 backdrop-blur-md border border-emerald-500/40 text-emerald-300 text-[11px] font-bold">
+                  {resolvedSpeciesName}
                 </div>
                 <div className="px-2.5 py-1 rounded-xl bg-black/75 backdrop-blur-md border border-white/15 text-[#E2BA78] text-[11px] font-bold">
-                  Zoom: {zoom.toFixed(1)}x • Ray kệ: {Math.round(railPos.x)}% (
-                  {railPos.x >= 66 ? "Khoang Cuối Kệ" : railPos.x <= 33 ? "Khoang Đầu Kệ" : "Khoang Giữa Kệ"})
+                  Zoom: {zoom.toFixed(1)}x • Ray: {Math.round(railPos.x)}%
                 </div>
               </div>
 
