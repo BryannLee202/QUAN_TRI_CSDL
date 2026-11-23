@@ -500,7 +500,7 @@ export default function OperatorPage() {
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap shrink-0">
-          {/* Nút Quản Lý Người Dùng & Phân Quyền (Chỉ Admin mới thấy - Chức năng A3) */}
+          {/* Nút Quản Lý Người Dùng & Phân Quyền (Chỉ Admin mới thấy) */}
           {isAdmin && (
             <button
               type="button"
@@ -514,7 +514,7 @@ export default function OperatorPage() {
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
                 <path d="M16 3.13a4 4 0 0 1 0 7.75" />
               </svg>
-              <span>Quản Lý Người Dùng (A3)</span>
+              <span>Quản Lý Người Dùng</span>
             </button>
           )}
 

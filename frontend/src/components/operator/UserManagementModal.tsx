@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import {
   getManagedUsersApi,
+  createManagedUserApi,
+  updateManagedUserApi,
   updateUserStatusApi,
   updateUserRoleApi,
   resetUserPasswordApi,
@@ -22,6 +24,24 @@ export default function UserManagementModal({ isOpen, onClose }: UserManagementM
   const [notice, setNotice] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const [processingId, setProcessingId] = useState<number | null>(null);
 
+  // State Modal Tạo Mới Người Dùng
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [newFullName, setNewFullName] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newPhone, setNewPhone] = useState("");
+  const [newAddress, setNewAddress] = useState("");
+  const [newRole, setNewRole] = useState<number>(3);
+  const [newPassword, setNewPassword] = useState("Password123@");
+  const [isSubmittingCreate, setIsSubmittingCreate] = useState(false);
+
+  // State Modal Chỉnh Sửa Thông Tin Người Dùng
+  const [editingUser, setEditingUser] = useState<ManagedUser | null>(null);
+  const [editFullName, setEditFullName] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [editPhone, setEditPhone] = useState("");
+  const [editAddress, setEditAddress] = useState("");
+  const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
+
   useEffect(() => {
     if (isOpen) {
       loadUsers();
@@ -36,11 +56,11 @@ export default function UserManagementModal({ isOpen, onClose }: UserManagementM
     } catch (err: any) {
       // Fallback demo data nếu lỗi kết nối
       setUsers([
-        { userId: 1, fullName: "Nguyễn Quản Trị", email: "admin@mushroomcloud.test", phoneNumber: "0900000001", roleId: 1, roleName: "Admin", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
-        { userId: 2, fullName: "Trần Kỹ Thuật", email: "operator1@mushroomcloud.test", phoneNumber: "0900000002", roleId: 2, roleName: "Operator", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
-        { userId: 3, fullName: "Lê Vận Hành", email: "operator2@mushroomcloud.test", phoneNumber: "0900000003", roleId: 2, roleName: "Operator", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
-        { userId: 4, fullName: "Phạm Minh An", email: "customer1@mushroomcloud.test", phoneNumber: "0900000011", roleId: 3, roleName: "Customer", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
-        { userId: 5, fullName: "Võ Thu Hà", email: "customer2@mushroomcloud.test", phoneNumber: "0900000012", roleId: 3, roleName: "Customer", isActive: false, createdAt: "2026-11-20T00:00:00Z" },
+        { userId: 1, fullName: "Nguyễn Quản Trị", email: "admin@mushroomcloud.test", phoneNumber: "0900000001", address: "Khu Công Nghệ Cao, TP. Thủ Đức", roleId: 1, roleName: "Admin", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
+        { userId: 2, fullName: "Trần Kỹ Thuật", email: "operator1@mushroomcloud.test", phoneNumber: "0900000002", address: "Trang Trại Thông Minh Khu A", roleId: 2, roleName: "Operator", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
+        { userId: 3, fullName: "Lê Vận Hành", email: "operator2@mushroomcloud.test", phoneNumber: "0900000003", address: "Trang Trại Thông Minh Khu B", roleId: 2, roleName: "Operator", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
+        { userId: 4, fullName: "Phạm Minh An", email: "customer1@mushroomcloud.test", phoneNumber: "0900000011", address: "123 Đường Nấm Sạch, TP.HCM", roleId: 3, roleName: "Customer", isActive: true, createdAt: "2026-11-20T00:00:00Z" },
+        { userId: 5, fullName: "Võ Thu Hà", email: "customer2@mushroomcloud.test", phoneNumber: "0900000012", address: "456 Đại Lộ Bình Dương", roleId: 3, roleName: "Customer", isActive: false, createdAt: "2026-11-20T00:00:00Z" },
       ]);
     } finally {
       setLoading(false);
@@ -96,6 +116,96 @@ export default function UserManagementModal({ isOpen, onClose }: UserManagementM
     }
   };
 
+  // Mở Form Sửa Thông Tin
+  const handleOpenEdit = (user: ManagedUser) => {
+    setEditingUser(user);
+    setEditFullName(user.fullName);
+    setEditEmail(user.email);
+    setEditPhone(user.phoneNumber || "");
+    setEditAddress(user.address || "");
+  };
+
+  // Lưu Chỉnh Sửa Thông Tin
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingUser) return;
+    if (!editFullName.trim()) {
+      showNotice("Họ và tên không được để trống.", "error");
+      return;
+    }
+
+    try {
+      setIsSubmittingEdit(true);
+      await updateManagedUserApi(editingUser.userId, {
+        fullName: editFullName.trim(),
+        email: editEmail.trim(),
+        phoneNumber: editPhone.trim(),
+        address: editAddress.trim(),
+      });
+
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.userId === editingUser.userId
+            ? {
+                ...u,
+                fullName: editFullName.trim(),
+                email: editEmail.trim(),
+                phoneNumber: editPhone.trim(),
+                address: editAddress.trim(),
+              }
+            : u
+        )
+      );
+
+      showNotice(`Đã cập nhật thông tin tài khoản #${editingUser.userId} thành công!`, "success");
+      setEditingUser(null);
+    } catch (err: any) {
+      showNotice(err.message || "Lỗi cập nhật người dùng", "error");
+    } finally {
+      setIsSubmittingEdit(false);
+    }
+  };
+
+  // Xử lý Tạo Người Dùng Mới
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newFullName.trim() || !newEmail.trim()) {
+      showNotice("Vui lòng nhập đầy đủ họ tên và email.", "error");
+      return;
+    }
+
+    try {
+      setIsSubmittingCreate(true);
+      const res = await createManagedUserApi({
+        fullName: newFullName.trim(),
+        email: newEmail.trim().toLowerCase(),
+        phoneNumber: newPhone.trim(),
+        address: newAddress.trim(),
+        roleId: newRole,
+        password: newPassword.trim(),
+      });
+
+      if (res.data) {
+        setUsers((prev) => [res.data, ...prev]);
+      } else {
+        await loadUsers();
+      }
+
+      showNotice(`Đã tạo mới tài khoản [${res.data?.roleName || "Người dùng"}] ${newFullName} thành công!`, "success");
+      setIsCreateOpen(false);
+      setNewFullName("");
+      setNewEmail("");
+      setNewPhone("");
+      setNewAddress("");
+      setNewRole(3);
+      setNewPassword("Password123@");
+    } catch (err: any) {
+      showNotice(err.message || "Lỗi tạo tài khoản mới", "error");
+    } finally {
+      setIsSubmittingCreate(false);
+    }
+  };
+
   const showNotice = (message: string, type: "success" | "error") => {
     setNotice({ message, type });
     setTimeout(() => setNotice(null), 4000);
@@ -107,7 +217,8 @@ export default function UserManagementModal({ isOpen, onClose }: UserManagementM
     const matchesSearch =
       u.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      u.phoneNumber?.includes(searchQuery);
+      u.phoneNumber?.includes(searchQuery) ||
+      u.address?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesRole = roleFilter === "ALL" || u.roleName.toUpperCase() === roleFilter;
     return matchesSearch && matchesRole;
   });
@@ -132,22 +243,33 @@ export default function UserManagementModal({ isOpen, onClose }: UserManagementM
                 <h2 className="text-xl font-black text-[#382314] dark:text-[#F3EAD8] tracking-tight">
                   Quản Trị Người Dùng & Phân Quyền (RBAC)
                 </h2>
-                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-300 dark:border-rose-800">
-                  Chức Năng A3
-                </span>
               </div>
               <p className="text-xs text-[#735843] dark:text-[#BFA895] mt-0.5">
-                Xem danh sách, phân công vai trò (Admin/Operator/Customer), kích hoạt hoặc vô hiệu hóa tài khoản và đặt lại mật khẩu.
+                Xem danh sách, thêm tài khoản mới, phân công vai trò, chỉnh sửa thông tin, kích hoạt hoặc vô hiệu hóa tài khoản và đặt lại mật khẩu.
               </p>
             </div>
           </div>
 
-          <button
-            onClick={onClose}
-            className="w-10 h-10 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 flex items-center justify-center text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
-          >
-            ✕
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setIsCreateOpen(true)}
+              className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-bold text-xs flex items-center gap-1.5 shadow-md transition-all cursor-pointer"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              <span>Thêm Người Dùng</span>
+            </button>
+
+            <button
+              onClick={onClose}
+              className="w-10 h-10 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 flex items-center justify-center text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
         {/* Thông báo Toast thông tin */}
@@ -160,7 +282,7 @@ export default function UserManagementModal({ isOpen, onClose }: UserManagementM
             }`}
           >
             <span>{notice.message}</span>
-            <button onClick={() => setNotice(null)} className="text-sm font-black opacity-60 hover:opacity-100">✕</button>
+            <button onClick={() => setNotice(null)} className="text-sm font-black opacity-60 hover:opacity-100 cursor-pointer">✕</button>
           </div>
         )}
 
@@ -169,7 +291,7 @@ export default function UserManagementModal({ isOpen, onClose }: UserManagementM
           <div className="relative flex-1 min-w-[280px]">
             <input
               type="text"
-              placeholder="Tìm kiếm theo Tên, Email hoặc Số điện thoại..."
+              placeholder="Tìm kiếm theo Tên, Email, SĐT hoặc Địa chỉ..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#24160E] text-xs font-semibold text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-[#C28E58]"
@@ -215,10 +337,10 @@ export default function UserManagementModal({ isOpen, onClose }: UserManagementM
                 <thead>
                   <tr className="bg-[#FAF5EE] dark:bg-[#24160E] border-b border-[#D9C8B5] dark:border-[#4A3222] text-[#523522] dark:text-[#E2BA78] font-black uppercase text-[10px] tracking-wider">
                     <th className="p-3.5">ID</th>
-                    <th className="p-3.5">Họ và Tên / Email</th>
+                    <th className="p-3.5">Họ và Tên / Email / Địa Chỉ</th>
                     <th className="p-3.5">Số Điện Thoại</th>
                     <th className="p-3.5">Vai Trò (Role)</th>
-                    <th className="p-3.5">Trạng Thái (IsActive)</th>
+                    <th className="p-3.5">Trạng Thái</th>
                     <th className="p-3.5 text-right">Thao Tác Quản Trị</th>
                   </tr>
                 </thead>
@@ -238,6 +360,11 @@ export default function UserManagementModal({ isOpen, onClose }: UserManagementM
                           <div className="text-slate-500 dark:text-slate-400 text-[11px] font-mono">
                             {u.email}
                           </div>
+                          {u.address && (
+                            <div className="text-[10px] text-[#A66C38] dark:text-[#E2BA78] truncate max-w-[260px] mt-0.5" title={u.address}>
+                              📍 {u.address}
+                            </div>
+                          )}
                         </td>
                         <td className="p-3.5 text-slate-600 dark:text-slate-300 font-mono">
                           {u.phoneNumber || "---"}
@@ -277,7 +404,23 @@ export default function UserManagementModal({ isOpen, onClose }: UserManagementM
                           </button>
                         </td>
                         <td className="p-3.5 text-right">
-                          <div className="flex items-center justify-end gap-2">
+                          <div className="flex items-center justify-end gap-1.5">
+                            {/* Nút Sửa Thông Tin */}
+                            <button
+                              type="button"
+                              disabled={processingId === u.userId}
+                              onClick={() => handleOpenEdit(u)}
+                              className="px-2.5 py-1.5 rounded-xl border border-sky-300 dark:border-sky-700 bg-sky-50 dark:bg-sky-950/40 text-sky-800 dark:text-sky-300 hover:bg-sky-100 font-bold text-[11px] flex items-center gap-1 transition-all cursor-pointer"
+                              title="Chỉnh sửa thông tin tài khoản"
+                            >
+                              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M12 20h9" />
+                                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                              </svg>
+                              <span>Sửa</span>
+                            </button>
+
+                            {/* Nút Reset Mật Khẩu */}
                             <button
                               type="button"
                               disabled={processingId === u.userId}
@@ -320,13 +463,248 @@ export default function UserManagementModal({ isOpen, onClose }: UserManagementM
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-[#523522] dark:bg-[#E2BA78] text-white dark:text-[#1A120B] font-bold hover:opacity-90 transition-opacity cursor-pointer"
+            className="px-5 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs transition-colors cursor-pointer"
           >
-            Đóng bảng
+            Đóng Bảng Quản Trị
           </button>
         </div>
-
       </div>
+
+      {/* Submodal 1: Form Thêm Người Dùng Mới */}
+      {isCreateOpen && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-fade-in">
+          <div className="bg-white dark:bg-[#1E1610] rounded-3xl border border-[#D9C8B5] dark:border-[#4A3222] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col animate-scale-up">
+            <div className="p-5 border-b border-[#D9C8B5] dark:border-[#4A3222] bg-[#FAF5EE] dark:bg-[#2A1C14] flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold">
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-[#382314] dark:text-[#F3EAD8]">Tạo Tài Khoản Mới</h3>
+                  <p className="text-[11px] text-[#735843] dark:text-[#BFA895]">Khởi tạo tài khoản Quản trị, Kỹ thuật hoặc Khách hàng</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsCreateOpen(false)}
+                className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 hover:bg-black/10 flex items-center justify-center text-slate-500 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateUser} className="p-5 space-y-3.5 text-xs">
+              <div>
+                <label className="block font-bold text-[#523522] dark:text-[#DAC7B5] mb-1">
+                  Họ và Tên <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Ví dụ: Hoàng Văn An"
+                  value={newFullName}
+                  onChange={(e) => setNewFullName(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#24160E] text-slate-800 dark:text-slate-100 font-semibold focus:outline-hidden focus:ring-2 focus:ring-[#C28E58]"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-[#523522] dark:text-[#DAC7B5] mb-1">
+                    Email đăng nhập <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="ten@mushroomcloud.test"
+                    value={newEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#24160E] text-slate-800 dark:text-slate-100 font-semibold focus:outline-hidden focus:ring-2 focus:ring-[#C28E58]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#523522] dark:text-[#DAC7B5] mb-1">
+                    Số điện thoại
+                  </label>
+                  <input
+                    type="tel"
+                    placeholder="0901234567"
+                    value={newPhone}
+                    onChange={(e) => setNewPhone(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#24160E] text-slate-800 dark:text-slate-100 font-semibold focus:outline-hidden focus:ring-2 focus:ring-[#C28E58]"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-[#523522] dark:text-[#DAC7B5] mb-1">
+                    Vai trò hệ thống
+                  </label>
+                  <select
+                    value={newRole}
+                    onChange={(e) => setNewRole(Number(e.target.value))}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#24160E] text-slate-800 dark:text-slate-100 font-bold focus:outline-hidden focus:ring-2 focus:ring-[#C28E58]"
+                  >
+                    <option value={1}>Admin (Quản trị viên)</option>
+                    <option value={2}>Operator (Kỹ thuật viên)</option>
+                    <option value={3}>Customer (Khách hàng)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#523522] dark:text-[#DAC7B5] mb-1">
+                    Mật khẩu ban đầu
+                  </label>
+                  <input
+                    type="text"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#24160E] text-slate-800 dark:text-slate-100 font-mono font-semibold focus:outline-hidden focus:ring-2 focus:ring-[#C28E58]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-[#523522] dark:text-[#DAC7B5] mb-1">
+                  Địa chỉ giao nhận nấm (nếu có)
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ví dụ: 123 Đường Nấm Sạch, P. Bến Nghé, Quận 1, TP.HCM"
+                  value={newAddress}
+                  onChange={(e) => setNewAddress(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#24160E] text-slate-800 dark:text-slate-100 font-semibold focus:outline-hidden focus:ring-2 focus:ring-[#C28E58]"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-[#D9C8B5]/50 dark:border-[#4A3222]/50 flex items-center justify-end gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setIsCreateOpen(false)}
+                  className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-600 dark:text-slate-300 font-bold transition-colors cursor-pointer"
+                >
+                  Hủy
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmittingCreate}
+                  className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex items-center gap-1.5 shadow-md transition-all cursor-pointer disabled:opacity-50"
+                >
+                  {isSubmittingCreate ? "Đang tạo tài khoản..." : "Xác Nhận Tạo"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Submodal 2: Form Chỉnh Sửa Thông Tin Người Dùng */}
+      {editingUser && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-fade-in">
+          <div className="bg-white dark:bg-[#1E1610] rounded-3xl border border-[#D9C8B5] dark:border-[#4A3222] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col animate-scale-up">
+            <div className="p-5 border-b border-[#D9C8B5] dark:border-[#4A3222] bg-[#FAF5EE] dark:bg-[#2A1C14] flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-sky-600 text-white flex items-center justify-center font-bold">
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 20h9" />
+                    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-[#382314] dark:text-[#F3EAD8]">
+                    Chỉnh Sửa Thông Tin #{editingUser.userId}
+                  </h3>
+                  <p className="text-[11px] text-[#735843] dark:text-[#BFA895]">{editingUser.fullName} ({editingUser.roleName})</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEditingUser(null)}
+                className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 hover:bg-black/10 flex items-center justify-center text-slate-500 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveEdit} className="p-5 space-y-3.5 text-xs">
+              <div>
+                <label className="block font-bold text-[#523522] dark:text-[#DAC7B5] mb-1">
+                  Họ và Tên <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={editFullName}
+                  onChange={(e) => setEditFullName(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#24160E] text-slate-800 dark:text-slate-100 font-semibold focus:outline-hidden focus:ring-2 focus:ring-[#C28E58]"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-[#523522] dark:text-[#DAC7B5] mb-1">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={editEmail}
+                    onChange={(e) => setEditEmail(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#24160E] text-slate-800 dark:text-slate-100 font-semibold focus:outline-hidden focus:ring-2 focus:ring-[#C28E58]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#523522] dark:text-[#DAC7B5] mb-1">
+                    Số điện thoại
+                  </label>
+                  <input
+                    type="tel"
+                    value={editPhone}
+                    onChange={(e) => setEditPhone(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#24160E] text-slate-800 dark:text-slate-100 font-semibold focus:outline-hidden focus:ring-2 focus:ring-[#C28E58]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-[#523522] dark:text-[#DAC7B5] mb-1">
+                  Địa chỉ giao nhận nấm
+                </label>
+                <input
+                  type="text"
+                  placeholder="Địa chỉ giao hàng nhận nấm"
+                  value={editAddress}
+                  onChange={(e) => setEditAddress(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#D9C8B5] dark:border-[#4A3222] bg-white dark:bg-[#24160E] text-slate-800 dark:text-slate-100 font-semibold focus:outline-hidden focus:ring-2 focus:ring-[#C28E58]"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-[#D9C8B5]/50 dark:border-[#4A3222]/50 flex items-center justify-end gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setEditingUser(null)}
+                  className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-600 dark:text-slate-300 font-bold transition-colors cursor-pointer"
+                >
+                  Hủy
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmittingEdit}
+                  className="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold flex items-center gap-1.5 shadow-md transition-all cursor-pointer disabled:opacity-50"
+                >
+                  {isSubmittingEdit ? "Đang lưu..." : "Lưu Thay Đổi"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
