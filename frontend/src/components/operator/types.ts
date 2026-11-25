@@ -21,6 +21,18 @@ export interface RoomOption {
   roomCode: string;
   roomName?: string;
   speciesName?: string;
+  maxTrays?: number;
+  tempMin?: number;
+  tempMax?: number;
+  humidityMin?: number;
+  humidityMax?: number;
+  co2Max?: number;
+  description?: string;
+  cameraStreamUrl?: string;
+  totalTrays?: number;
+  occupiedTrays?: number;
+  availableTrays?: number;
+  maintenanceTrays?: number;
 }
 
 export interface AlertItem {

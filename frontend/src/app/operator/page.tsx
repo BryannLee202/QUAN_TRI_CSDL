@@ -14,6 +14,7 @@ import VirtualTrayInspectorModal from "@/components/operator/VirtualTrayInspecto
 import ThemeToggle from "@/components/layout/ThemeToggle";
 import CheatsheetDrawer from "@/components/operator/CheatsheetDrawer";
 import UserManagementModal from "@/components/operator/UserManagementModal";
+import RoomManagementModal from "@/components/operator/RoomManagementModal";
 import { isDeviceOn } from "@/components/operator/deviceState";
 import { MOCK_ALERTS, MOCK_DEVICES, MOCK_ROOMS, MOCK_TRAYS } from "@/components/operator/mockData";
 import type { AlertItem, DeviceState, RoomOption, TrayCell, TrayUiStatus } from "@/components/operator/types";
@@ -53,8 +54,11 @@ export default function OperatorPage() {
   const [customShelf, setCustomShelf] = useState<string>("");
   const [isCreatingTrays, setIsCreatingTrays] = useState(false);
 
-  // State cho Modal Quản lý Người dùng & Phân quyền RBAC (Chức năng A3 - Dành cho Admin)
+  // State cho Modal Quản lý Người dùng & Phân quyền RBAC (Dành cho Admin)
   const [isUserManagementOpen, setIsUserManagementOpen] = useState(false);
+
+  // State cho Modal Quản lý Buồng nuôi & Ngưỡng vi khí hậu (Dành cho Admin)
+  const [isRoomManagementOpen, setIsRoomManagementOpen] = useState(false);
 
   // Ref và hiệu ứng làm nổi bật Cảnh báo Vi khí hậu khi người dùng click từ thông báo
   const alertFeedRef = useRef<HTMLDivElement>(null);
@@ -500,7 +504,23 @@ export default function OperatorPage() {
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap shrink-0">
-          {/* Nút Quản Lý Người Dùng & Phân Quyền (Chỉ Admin mới thấy - Chức năng A3) */}
+          {/* Nút Quản Lý Buồng Nuôi (Chỉ Admin mới thấy) */}
+          {isAdmin && (
+            <button
+              type="button"
+              onClick={() => setIsRoomManagementOpen(true)}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-700 to-amber-800 hover:from-amber-800 hover:to-amber-900 text-white font-bold text-xs flex items-center gap-2 transition-all shadow-xs cursor-pointer"
+              title="Mở bảng quản trị buồng nuôi & cấu hình ngưỡng"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+              <span>Quản Lý Buồng Nuôi</span>
+            </button>
+          )}
+
+          {/* Nút Quản Lý Người Dùng & Phân Quyền (Chỉ Admin mới thấy) */}
           {isAdmin && (
             <button
               type="button"
@@ -514,7 +534,7 @@ export default function OperatorPage() {
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
                 <path d="M16 3.13a4 4 0 0 1 0 7.75" />
               </svg>
-              <span>Quản Lý Người Dùng (A3)</span>
+              <span>Quản Lý Người Dùng</span>
             </button>
           )}
 
@@ -843,10 +863,24 @@ export default function OperatorPage() {
         onClose={() => setIsCheatsheetOpen(false)}
       />
 
-      {/* Modal Quản trị Người Dùng & Phân Quyền (Chức năng A3 - Chỉ dành cho Admin) */}
+      {/* Modal Quản trị Người Dùng & Phân Quyền (Chỉ dành cho Admin) */}
       <UserManagementModal
         isOpen={isUserManagementOpen}
         onClose={() => setIsUserManagementOpen(false)}
+      />
+
+      {/* Modal Quản trị Buồng Nuôi & Ngưỡng Vi Khí Hậu (Chỉ dành cho Admin) */}
+      <RoomManagementModal
+        isOpen={isRoomManagementOpen}
+        onClose={() => setIsRoomManagementOpen(false)}
+        rooms={rooms}
+        onRoomsUpdated={(updatedRooms) => {
+          setRooms(updatedRooms);
+          if (!updatedRooms.some((r) => r.roomId === roomId) && updatedRooms.length > 0) {
+            setRoomId(updatedRooms[0].roomId);
+          }
+          fetchOperatorSnapshot();
+        }}
       />
     </main>
   );

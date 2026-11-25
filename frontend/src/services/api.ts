@@ -273,6 +273,67 @@ export async function getOperatorRoomsApi() {
   return json.data;
 }
 
+export interface CreateRoomParams {
+  roomCode: string;
+  roomName: string;
+  maxTrays?: number;
+  tempMin: number;
+  tempMax: number;
+  humidityMin: number;
+  humidityMax: number;
+  co2Max: number;
+  description?: string;
+  cameraStreamUrl?: string;
+  initialTraysCount?: number;
+}
+
+export interface UpdateRoomParams {
+  roomName?: string;
+  maxTrays?: number;
+  tempMin?: number;
+  tempMax?: number;
+  humidityMin?: number;
+  humidityMax?: number;
+  co2Max?: number;
+  description?: string;
+  cameraStreamUrl?: string;
+}
+
+export async function createOperatorRoomApi(params: CreateRoomParams) {
+  const res = await fetch(`${API_BASE}/operator/rooms`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(params),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || json.error?.message || "Lỗi tạo buồng nuôi");
+  broadcastTabSync("operator");
+  return json;
+}
+
+export async function updateOperatorRoomApi(roomId: number, params: UpdateRoomParams) {
+  const res = await fetch(`${API_BASE}/operator/rooms/${roomId}`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(params),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || json.error?.message || "Lỗi cập nhật buồng nuôi");
+  broadcastTabSync("operator");
+  return json;
+}
+
+export async function deleteOperatorRoomApi(roomId: number) {
+  const res = await fetch(`${API_BASE}/operator/rooms/${roomId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || json.error?.message || "Lỗi xóa buồng nuôi");
+  broadcastTabSync("operator");
+  return json;
+}
+
 export async function getOperatorTraysApi(roomId?: number) {
   const url = roomId ? `${API_BASE}/operator/trays?roomId=${roomId}` : `${API_BASE}/operator/trays`;
   const res = await fetch(url, {
@@ -498,16 +559,35 @@ export async function getSampleIotHexApi(temp?: number, hum?: number, co2?: numb
 // ============================================================================
 // Quản lý người dùng & phân quyền RBAC (Chức năng A3 - Dành cho Admin)
 // ============================================================================
+// Quản lý người dùng & phân quyền RBAC (Dành cho Admin)
+// ============================================================================
 export interface ManagedUser {
   userId: number;
   fullName: string;
   email: string;
   phoneNumber: string;
+  address?: string;
   roleId: number;
   roleName: string;
   isActive: boolean;
   createdAt: string;
   updatedAt?: string;
+}
+
+export interface CreateManagedUserParams {
+  fullName: string;
+  email: string;
+  phoneNumber?: string;
+  roleId: number;
+  password?: string;
+  address?: string;
+}
+
+export interface UpdateManagedUserParams {
+  fullName: string;
+  email?: string;
+  phoneNumber?: string;
+  address?: string;
 }
 
 export async function getManagedUsersApi(): Promise<ManagedUser[]> {
@@ -517,6 +597,28 @@ export async function getManagedUsersApi(): Promise<ManagedUser[]> {
   const json = await res.json();
   if (!res.ok) throw new Error(json.error?.message || "Không thể tải danh sách người dùng");
   return json.data || [];
+}
+
+export async function createManagedUserApi(params: CreateManagedUserParams) {
+  const res = await fetch(`${API_BASE}/operator/users`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(params),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || json.error?.message || "Lỗi tạo tài khoản người dùng");
+  return json;
+}
+
+export async function updateManagedUserApi(userId: number, params: UpdateManagedUserParams) {
+  const res = await fetch(`${API_BASE}/operator/users/${userId}`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(params),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || json.error?.message || "Lỗi cập nhật người dùng");
+  return json;
 }
 
 export async function updateUserStatusApi(userId: number, isActive: boolean) {
