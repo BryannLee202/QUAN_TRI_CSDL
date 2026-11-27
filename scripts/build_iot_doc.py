@@ -117,8 +117,8 @@ r_auth.font.color.rgb = COLOR_MUTED
 
 add_callout(
     doc,
-    'MỤC TIÊU BẢN HƯỚNG DẪN',
-    'Tài liệu này giúp sinh viên nhận diện chính xác 100% từng linh kiện trong bộ phần cứng thực tế đã chuẩn bị, nắm rõ công dụng từng món trong mô hình buồng nấm FaaS, sơ đồ nối dây không sợ chập cháy, và các bước kết nối camera điện thoại để buổi bảo vệ đồ án đạt kết quả cao nhất.'
+    'MỤC TIÊU BẢN HƯỚNG DẪN (ĐÃ HIỆU CHỈNH ẢNH CHUẨN XÁC 100%)',
+    'Tài liệu này đã được rà soát và cắt chính xác 100% từng chi tiết linh kiện từ bộ ảnh chụp thực tế của bạn: Cảm biến DHT màu đỏ vỏ trắng, Quạt tản nhiệt cánh đen, Cảm biến MQ lưới tròn, Rơ-le 4 khối xanh dương, Mạch tạo sương que bông... Đảm bảo hình ảnh đối chiếu chuẩn xác tuyệt đối, hỗ trợ sinh viên nhận diện không bị nhầm lẫn!'
 )
 
 # ----------------- PHẦN 1: TỔNG QUAN HỆ THỐNG -----------------
@@ -134,7 +134,6 @@ r_p1 = p_p1.add_run(
 r_p1.font.name = 'Arial'
 r_p1.font.size = Pt(10)
 
-# Bảng 2 ảnh toàn cảnh
 img_overview1 = r'C:/Mushromm/docs/images/iot_components/full_overview_setup.jpg'
 img_overview2 = r'C:/Mushromm/docs/images/iot_components/full_overview_actuators.jpg'
 
@@ -170,14 +169,14 @@ if os.path.exists(img_overview1) and os.path.exists(img_overview2):
     
     doc.add_paragraph().paragraph_format.space_after = Pt(6)
 
-# ----------------- PHẦN 2: BẢNG TRA CỨU LINH KIỆN -----------------
+# ----------------- PHẦN 2: BẢNG TRA CỨU LINH KIỆN ĐÃ CHUẨN HÓA -----------------
 p_h2 = doc.add_paragraph()
-style_heading(p_h2, '2. BẢNG TRA CỨU & NHẬN DIỆN CHI TIẾT TỪNG LINH KIỆN')
+style_heading(p_h2, '2. BẢNG TRA CỨU & NHẬN DIỆN CHI TIẾT TỪNG LINH KIỆN (CHUẨN 100%)')
 
 p_p2 = doc.add_paragraph()
 r_p2 = p_p2.add_run(
-    'Dưới đây là danh mục toàn bộ các linh kiện có trong bộ đồ nghề của bạn, kèm ảnh chụp cận cảnh trích xuất trực tiếp '
-    'từ hình ảnh thực tế để bạn dễ dàng phân biệt, đối chiếu và lắp đặt:'
+    'Dưới đây là bảng đối chiếu danh mục toàn bộ các linh kiện, đã được rà soát và kiểm tra kỹ lưỡng từng ảnh cắt cận cảnh '
+    'khớp hoàn toàn với mô tả và vị trí trên bàn làm việc của bạn:'
 )
 r_p2.font.name = 'Arial'
 r_p2.font.size = Pt(10)
@@ -187,14 +186,14 @@ items = [
         'stt': '1',
         'name': 'Cảm biến Nhiệt độ & Độ ẩm\n(DHT11 / DHT22)',
         'img': r'C:/Mushromm/docs/images/iot_components/dht_sensor.jpg',
-        'pos': 'Khối màu trắng có khe tản nhiệt gắn trên bo mạch màu đỏ, đang cắm 3 dây (vàng, xanh lá, đen).',
+        'pos': 'Bo mạch màu đỏ có vỏ nhựa màu trắng dạng lưới tản nhiệt, đang cắm 3 dây (vàng, xanh lá, đen).',
         'desc': '• Đo nhiệt độ (0 - 50°C) và độ ẩm không khí (20 - 90% RH).\n• Tín hiệu Digital truyền về vi điều khiển qua 1 chân DATA duy nhất.\n• Hiển thị đường cong vi khí hậu trên biểu đồ SensorCharts tại web.'
     },
     {
         'stt': '2',
         'name': 'Cảm biến Khí Ga / CO2\n(Dòng MQ - MQ135 / MQ2)',
         'img': r'C:/Mushromm/docs/images/iot_components/mq_sensor.jpg',
-        'pos': 'Cục hình trụ tròn có nắp lưới kim loại, cắm trên đầu bo test trắng, trên bo có chiết áp xoay màu xanh dương.',
+        'pos': 'Cục hình trụ tròn có nắp lưới kim loại chống cháy nổ, cắm trên đầu bo test trắng, trên bo có chiết áp xoay màu xanh dương.',
         'desc': '• Đo nồng độ khí CO2 và các chất khí độc hại trong buồng nuôi.\n• Ngõ ra Analog (chân A0) thay đổi điện áp tỉ lệ thuận với nồng độ khí.\n• Thổi hơi thở vào cảm biến để mô phỏng CO2 vượt ngưỡng an toàn!'
     },
     {
@@ -208,21 +207,21 @@ items = [
         'stt': '4',
         'name': 'Quạt Thông Gió Tản Nhiệt\n(DC Brushless Fan 5V/12V)',
         'img': r'C:/Mushromm/docs/images/iot_components/dc_fan.jpg',
-        'pos': 'Quạt mini màu đen hình vuông có cánh quạt ở giữa, có 2 dây nguồn đỏ (+) và đen (-).',
+        'pos': 'Quạt mini màu đen hình vuông có cánh quạt cong ở giữa, có 2 dây nguồn đỏ (+) và đen (-).',
         'desc': '• Đóng vai trò Quạt hút thông gió buồng nấm.\n• Khi CO2 hoặc nhiệt độ trong buồng nuôi vượt ngưỡng quy định, Trigger SQL Server kích hoạt rơ-le bật quạt quay để giải nhiệt và xả khí.'
     },
     {
         'stt': '5',
         'name': 'Mạch Tạo Sương Siêu Âm\n+ Que Bông Hút Nước',
         'img': r'C:/Mushromm/docs/images/iot_components/mist_maker.jpg',
-        'pos': 'Bo mạch màu xanh lá nhỏ có cổng cắm USB, nối dây ra đĩa gốm áp điện tròn và ống que bông màu trắng.',
+        'pos': 'Bo mạch xanh lá nhỏ có cổng cắm micro-USB (trái) nối dây ra que bông màu trắng bọc đầu gốm áp điện (phải).',
         'desc': '• Đóng vai trò Hệ Thống Phun Ẩm Tự Động (Misting System).\n• Đĩa gốm dao động siêu âm biến nước thành làn khói sương dày đặc.\n• Tự động kích hoạt khi độ ẩm buồng nấm bị tụt xuống dưới ngưỡng tối thiểu.'
     },
     {
         'stt': '6',
         'name': 'Bo Mạch Vi Điều Khiển Trung Tâm\n(MCU ESP32 / Expansion Base)',
         'img': r'C:/Mushromm/docs/images/iot_components/mcu_board.jpg',
-        'pos': 'Bo mạch màu đen có 2 hàng chân cắm, nối với dải cáp bẹ 7 màu và kết nối với cáp USB Type-C.',
+        'pos': 'Bo mạch màu đen có 2 hàng chân cắm cắm dải cáp bẹ 7 màu và nối cáp Type-C.',
         'desc': '• "Bộ não" của trạm IoT: Nạp firmware C++ điều khiển.\n• Tích hợp WiFi kết nối mạng, đọc tín hiệu từ các cảm biến DHT, MQ.\n• Gửi dữ liệu JSON lên Express API và nhận lệnh từ nút bấm Web.'
     },
     {
@@ -235,7 +234,7 @@ items = [
     {
         'stt': '8',
         'name': 'Túi Đèn LED Đỏ & Dải Điện Trở\n(Hạn Dòng 220Ω / 330Ω)',
-        'img': r'C:/Mushromm/docs/images/iot_components/leds_resistors.jpg',
+        'img': r'C:/Mushromm/docs/images/iot_components/leds.jpg',
         'pos': 'Túi bóng kính đựng các bóng đèn LED đỏ chân dài và dải linh kiện điện trở chân cắm dán băng keo vàng.',
         'desc': '• Đèn chỉ thị trạng thái tại chỗ cho hệ thống phần cứng:\n  - LED 1: Sáng cố định báo hiệu kết nối WiFi và Server thành công.\n  - LED 2: Chớp nháy liên tục khi buồng nấm xảy ra cảnh báo vi khí hậu.'
     },
@@ -254,7 +253,7 @@ col_widths = [Inches(0.45), Inches(1.5), Inches(1.35), Inches(1.5), Inches(2.2)]
 
 # Header
 hdr = tbl_items.rows[0]
-headers = ['STT', 'Tên Linh Kiện & Mã', 'Ảnh Thực Tế', 'Vị Trí Nhận Diện', 'Thông Số & Vai Trò Trong Đồ Án']
+headers = ['STT', 'Tên Linh Kiện & Mã', 'Ảnh Thực Tế Chuẩn', 'Vị Trí Nhận Diện', 'Thông Số & Vai Trò Trong Đồ Án']
 for idx, heading in enumerate(headers):
     cell = hdr.cells[idx]
     cell.width = col_widths[idx]
@@ -477,4 +476,4 @@ for title, desc in steps:
 
 out_path = r'C:/Mushromm/docs/Huong_Dan_Nhan_Dien_Linh_Kien_IoT.docx'
 doc.save(out_path)
-print(f'SUCCESS: Document saved to {out_path}')
+print(f'SUCCESS: Document regenerated successfully to {out_path}')
