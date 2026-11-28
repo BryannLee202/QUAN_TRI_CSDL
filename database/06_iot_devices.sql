@@ -42,8 +42,45 @@ BEGIN
 END
 GO
 
+-- Lấy lệnh gần nhất của từng thiết bị trong buồng (dùng mỗi giây khi ESP32 hỏi lệnh)
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_DeviceActionLogs_Room_Type_Action'
+               AND object_id = OBJECT_ID('DeviceActionLogs'))
+    CREATE NONCLUSTERED INDEX IX_DeviceActionLogs_Room_Type_Action
+        ON DeviceActionLogs (RoomID, DeviceType, ActionID DESC)
+        INCLUDE (ActionState, TriggeredBy, ExecutedAt);
+GO
+
 -- ----------------------------------------------------------------------------
--- 2. VIEW TRẠNG THÁI THIẾT BỊ (online nếu liên lạc trong 60 giây gần nhất)
+-- 2. HÀM PHỤ TRỢ
+-- ----------------------------------------------------------------------------
+-- ActionState -> BẬT/TẮT: 'ON', 'AUTO_ON_75%', 'SPEED_70' là BẬT; 'OFF', 'AUTO_OFF', 'SPEED_0' là TẮT
+CREATE OR ALTER FUNCTION dbo.fn_IsDeviceStateOn (@ActionState VARCHAR(20))
+RETURNS BIT
+AS
+BEGIN
+    IF @ActionState IS NULL RETURN 0;
+    DECLARE @s VARCHAR(20) = UPPER(@ActionState);
+    IF @s LIKE '%OFF%' OR @s = 'SPEED_0' RETURN 0;
+    IF @s LIKE '%ON%' OR @s LIKE 'SPEED[_]%' RETURN 1;
+    RETURN 0;
+END
+GO
+
+-- TriggeredBy -> lệnh tự động hay lệnh tay
+CREATE OR ALTER FUNCTION dbo.fn_IsAutoTrigger (@TriggeredBy NVARCHAR(100))
+RETURNS BIT
+AS
+BEGIN
+    IF @TriggeredBy IS NULL RETURN 0;
+    IF @TriggeredBy IN (N'T_SQL_TRIGGER_AUTO', N'SCHEDULED_CRON', N'IOT_AUTO_RULE')
+       OR @TriggeredBy LIKE N'%AUTO%'
+        RETURN 1;
+    RETURN 0;
+END
+GO
+
+-- ----------------------------------------------------------------------------
+-- 3. VIEW TRẠNG THÁI THIẾT BỊ (online nếu liên lạc trong 60 giây gần nhất)
 -- ----------------------------------------------------------------------------
 CREATE OR ALTER VIEW dbo.vw_IoTDeviceStatus
 AS
@@ -56,5 +93,75 @@ FROM IoTDevices d
 JOIN Rooms r ON r.RoomID = d.RoomID;
 GO
 
-PRINT N'>>> HOÀN TẤT 06_iot_devices.sql: IoTDevices, vw_IoTDeviceStatus <<<';
+-- ----------------------------------------------------------------------------
+-- 4. DANH SÁCH LỆNH RELAY CỦA BUỒNG
+--    kind (tên dùng trong firmware) <-> DeviceType (tên trong DeviceActionLogs):
+--    mist   <- MISTING_SYSTEM / MIST_MAKER (nút phun sương trên camera dùng MIST_MAKER)
+--    fan    <- EXHAUST_FAN
+--    light  <- GROW_LIGHT  (LED nhỏ mô phỏng đèn chiếu sáng)
+--    heater <- HEATER      (LED nhỏ mô phỏng sưởi)
+-- ----------------------------------------------------------------------------
+CREATE OR ALTER PROCEDURE dbo.sp_GetRoomDeviceCommands
+    @RoomID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    ;WITH Kinds AS (
+        SELECT Kind, DeviceType, IsPrimary
+        FROM (VALUES ('mist',   'MISTING_SYSTEM', 1),
+                     ('mist',   'MIST_MAKER',     0),
+                     ('fan',    'EXHAUST_FAN',    1),
+                     ('light',  'GROW_LIGHT',     1),
+                     ('heater', 'HEATER',         1)) k (Kind, DeviceType, IsPrimary)
+    ),
+    Latest AS (
+        SELECT k.Kind, d.ActionState, d.TriggeredBy, d.ExecutedAt,
+               ROW_NUMBER() OVER (PARTITION BY k.Kind ORDER BY d.ActionID DESC) AS rn
+        FROM Kinds k
+        JOIN DeviceActionLogs d ON d.RoomID = @RoomID AND d.DeviceType = k.DeviceType
+    )
+    SELECT k.Kind,
+           k.DeviceType,
+           CAST(dbo.fn_IsDeviceStateOn(l.ActionState) AS BIT) AS State,
+           CASE WHEN l.TriggeredBy IS NULL OR dbo.fn_IsAutoTrigger(l.TriggeredBy) = 1
+                THEN 'auto' ELSE 'manual' END AS Mode,
+           ISNULL(l.ActionState, 'OFF') AS ActionState,
+           l.TriggeredBy,
+           l.ExecutedAt
+    FROM Kinds k
+    LEFT JOIN Latest l ON l.Kind = k.Kind AND l.rn = 1
+    WHERE k.IsPrimary = 1
+    ORDER BY CASE k.Kind WHEN 'mist' THEN 1 WHEN 'fan' THEN 2 WHEN 'light' THEN 3 ELSE 4 END;
+END
+GO
+
+-- ----------------------------------------------------------------------------
+-- 5. ESP32 HỎI LỆNH: xác thực key, cập nhật LastSeenAt, trả lệnh
+-- ----------------------------------------------------------------------------
+CREATE OR ALTER PROCEDURE dbo.sp_GetDeviceCommands
+    @ApiKeyHash CHAR(64),
+    @IpAddress VARCHAR(45) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @DeviceID INT, @RoomID INT;
+
+    SELECT @DeviceID = DeviceID, @RoomID = RoomID
+    FROM IoTDevices
+    WHERE ApiKeyHash = @ApiKeyHash AND IsActive = 1;
+
+    IF @DeviceID IS NULL
+        THROW 50401, N'DEVICE_UNAUTHORIZED: API key của thiết bị không hợp lệ hoặc thiết bị đã bị khóa.', 1;
+
+    UPDATE IoTDevices
+    SET LastSeenAt = SYSDATETIME(), IpAddress = ISNULL(@IpAddress, IpAddress)
+    WHERE DeviceID = @DeviceID;
+
+    SELECT @DeviceID AS DeviceID, @RoomID AS RoomID;
+    EXEC dbo.sp_GetRoomDeviceCommands @RoomID = @RoomID;
+END
+GO
+
+PRINT N'>>> HOÀN TẤT 06_iot_devices.sql: IoTDevices, vw_IoTDeviceStatus, sp_GetRoomDeviceCommands, sp_GetDeviceCommands <<<';
 GO
