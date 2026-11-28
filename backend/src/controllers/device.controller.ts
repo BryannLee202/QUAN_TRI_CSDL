@@ -27,6 +27,8 @@ interface CommandRow {
 export const hashDeviceKey = (key: string): string =>
   crypto.createHash("sha256").update(key, "utf8").digest("hex").toUpperCase();
 
+const generateDeviceKey = (): string => `mc_${crypto.randomBytes(24).toString("hex")}`;
+
 const clientIp = (req: Request): string | null => {
   const ip = req.socket.remoteAddress || null;
   return ip ? ip.replace(/^::ffff:/, "").slice(0, 45) : null;
@@ -140,5 +142,115 @@ export const getDeviceCommands = async (req: Request, res: Response): Promise<vo
     });
   } catch (error: any) {
     sendDeviceError(res, error, "DEVICE_COMMANDS_ERROR");
+  }
+};
+
+// 3. GET /api/iot/devices?roomId= - Danh sách thiết bị kèm trạng thái online (Admin, Operator)
+export const listIoTDevices = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const roomId = toNumberOrNull(req.query.roomId);
+    const request = getPool().request();
+    request.input("RoomID", sql.Int, roomId);
+    const result = await request.query(`
+      SELECT DeviceID, RoomID, RoomCode, RoomName, DeviceName, FirmwareVersion, IpAddress,
+             IsActive, IsOnline, LastSeenAt, SecondsSinceSeen, CreatedAt
+      FROM dbo.vw_IoTDeviceStatus
+      WHERE @RoomID IS NULL OR RoomID = @RoomID
+      ORDER BY RoomID, DeviceID
+    `);
+    res.status(200).json({
+      success: true,
+      data: result.recordset.map((d: any) => ({
+        deviceId: d.DeviceID,
+        roomId: d.RoomID,
+        roomCode: d.RoomCode,
+        roomName: d.RoomName,
+        deviceName: d.DeviceName,
+        firmwareVersion: d.FirmwareVersion,
+        ipAddress: d.IpAddress,
+        isActive: Boolean(d.IsActive),
+        isOnline: Boolean(d.IsOnline),
+        lastSeenAt: d.LastSeenAt,
+        secondsSinceSeen: d.SecondsSinceSeen,
+        createdAt: d.CreatedAt,
+      })),
+    });
+  } catch (error: any) {
+    sendDeviceError(res, error, "LIST_DEVICES_ERROR");
+  }
+};
+
+// 4. GET /api/iot/rooms/:roomId/device-states - Trạng thái relay hiện tại của buồng (cho web)
+export const getRoomDeviceStates = async (req: Request, res: Response): Promise<void> => {
+  const roomId = Number(req.params.roomId);
+  if (!Number.isInteger(roomId) || roomId <= 0) {
+    res.status(400).json({ success: false, error: { code: "INVALID_ROOM", message: "roomId không hợp lệ" } });
+    return;
+  }
+  try {
+    const request = getPool().request();
+    request.input("RoomID", sql.Int, roomId);
+    const result = await request.execute("sp_GetRoomDeviceCommands");
+    res.status(200).json({ success: true, data: toCommands(result.recordset as CommandRow[]) });
+  } catch (error: any) {
+    sendDeviceError(res, error, "ROOM_DEVICE_STATES_ERROR");
+  }
+};
+
+// 5. POST /api/iot/devices - Đăng ký ESP32 mới, trả API key MỘT LẦN DUY NHẤT (Admin)
+export const registerIoTDevice = async (req: Request, res: Response): Promise<void> => {
+  const roomId = toNumberOrNull(req.body?.roomId);
+  const deviceName = String(req.body?.deviceName || "").trim();
+  if (!roomId || !deviceName || deviceName.length > 100) {
+    res.status(400).json({
+      success: false,
+      error: { code: "INVALID_PARAMS", message: "Cần roomId và deviceName (tối đa 100 ký tự)." },
+    });
+    return;
+  }
+  try {
+    const apiKey = generateDeviceKey();
+    const request = getPool().request();
+    request.input("RoomID", sql.Int, roomId);
+    request.input("DeviceName", sql.NVarChar(100), deviceName);
+    request.input("ApiKeyHash", sql.Char(64), hashDeviceKey(apiKey));
+    const result = await request.execute("sp_RegisterIoTDevice");
+    const d: any = result.recordset[0];
+    res.status(201).json({
+      success: true,
+      data: { deviceId: d?.DeviceID, roomId: d?.RoomID, deviceName: d?.DeviceName, apiKey },
+      message: "Lưu API key ngay: hệ thống chỉ lưu bản băm nên không xem lại được.",
+    });
+  } catch (error: any) {
+    sendDeviceError(res, error, "REGISTER_DEVICE_ERROR");
+  }
+};
+
+// 6. POST /api/iot/devices/:deviceId/rotate-key - Cấp API key mới, key cũ hết hiệu lực (Admin)
+export const rotateIoTDeviceKey = async (req: Request, res: Response): Promise<void> => {
+  const deviceId = Number(req.params.deviceId);
+  if (!Number.isInteger(deviceId) || deviceId <= 0) {
+    res.status(400).json({ success: false, error: { code: "INVALID_DEVICE", message: "deviceId không hợp lệ" } });
+    return;
+  }
+  try {
+    const apiKey = generateDeviceKey();
+    const request = getPool().request();
+    request.input("DeviceID", sql.Int, deviceId);
+    request.input("ApiKeyHash", sql.Char(64), hashDeviceKey(apiKey));
+    const result = await request.query(
+      "UPDATE IoTDevices SET ApiKeyHash = @ApiKeyHash WHERE DeviceID = @DeviceID; SELECT @@ROWCOUNT AS Affected;"
+    );
+    if (!result.recordset[0]?.Affected) {
+      res.status(404).json({ success: false, error: { code: "DEVICE_NOT_FOUND", message: "Không tìm thấy thiết bị" } });
+      return;
+    }
+    res.status(200).json({
+      success: true,
+      data: { deviceId, apiKey },
+      message: "Đã cấp key mới. Nạp lại firmware với key này; key cũ không còn dùng được.",
+    });
+  } catch (error: any) {
+    sendDeviceError(res, error, "ROTATE_DEVICE_KEY_ERROR");
   }
 };
