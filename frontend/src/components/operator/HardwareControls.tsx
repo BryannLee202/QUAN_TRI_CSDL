@@ -33,6 +33,28 @@ export const DEVICES = [
       </svg>
     ),
   },
+  {
+    type: "GROW_LIGHT",
+    label: "Đèn chiếu sáng (LED)",
+    hint: "LED mô phỏng đèn quang phổ, chỉ bật/tắt bằng tay",
+    icon: (
+      <svg className="w-4 h-4 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 18h6"/>
+        <path d="M10 22h4"/>
+        <path d="M12 2a7 7 0 0 0-4 12.7V16h8v-1.3A7 7 0 0 0 12 2Z"/>
+      </svg>
+    ),
+  },
+  {
+    type: "HEATER",
+    label: "Sưởi ấm (LED)",
+    hint: "LED mô phỏng sưởi, tự bật khi nhiệt độ dưới ngưỡng tối thiểu",
+    icon: (
+      <svg className="w-4 h-4 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 4v10.5a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/>
+      </svg>
+    ),
+  },
 ] as const;
 
 interface Props {
