@@ -179,6 +179,8 @@ sqlcmd -S .\SQLEXPRESS01 -d master -E -C -I -i database/01_schema.sql
 sqlcmd -S .\SQLEXPRESS01 -d SmartMushroomDB -E -C -I -i database/02_tsql_logic.sql
 sqlcmd -S .\SQLEXPRESS01 -d SmartMushroomDB -E -C -I -i database/03_seed_data.sql
 sqlcmd -S .\SQLEXPRESS01 -d SmartMushroomDB -E -C -I -i database/04_indexing_and_performance.sql
+sqlcmd -S .\SQLEXPRESS01 -d SmartMushroomDB -E -C -I -i database/05_audit_logs.sql
+sqlcmd -S .\SQLEXPRESS01 -d SmartMushroomDB -E -C -I -i database/06_iot_devices.sql   # thiết bị ESP32 thật, xem firmware/esp32/README.md
 ```
 
 ### 3. Khởi chạy 1-Click bằng Batch Script (Windows)
