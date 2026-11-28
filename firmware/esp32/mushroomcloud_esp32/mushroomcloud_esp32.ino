@@ -3,7 +3,9 @@
 //
 // Cảm biến:
 //   - DHT22 (nhiệt độ + độ ẩm)           : DATA -> GPIO 33, VCC -> 3V3
-//   - MQ-135 (CO2 ước lượng)          : AO -> cầu chia áp 2 điện trở bằng nhau -> GPIO 32 (ADC1), nguồn 5V
+//   - CO2, chọn 1 trong 2 bằng CO2_SENSOR:
+//       CO2_MQ135  : AO -> cầu chia áp 2 điện trở bằng nhau -> GPIO 32 (ADC1), nguồn 5V. Chỉ ƯỚC LƯỢNG
+//       CO2_MHZ19B : TX cảm biến -> GPIO 16 (RX2), RX cảm biến -> GPIO 17 (TX2), nguồn 5V. Đo NDIR ra ppm thật
 // Relay (module 4 kênh): phun sương GPIO 14, quạt GPIO 27, đèn LED GPIO 26, sưởi (LED) GPIO 25
 // Thư viện (Library Manager): "DHT sensor library" (Adafruit), "Adafruit Unified Sensor", "ArduinoJson" (v7)
 //
@@ -27,9 +29,16 @@ const char* WIFI_PASS  = "MAT_KHAU_WIFI";
 const char* SERVER     = "http://192.168.1.10:5000";     // IP LAN của máy chạy backend (ipconfig), KHÔNG dùng localhost
 const char* DEVICE_KEY = "MC-ESP32-RM03-DEMO";           // key demo gắn buồng RM03 (database/06_iot_devices.sql)
 
+// ---------- CẢM BIẾN CO2 ----------
+#define CO2_MQ135  1
+#define CO2_MHZ19B 2
+#define CO2_SENSOR CO2_MQ135           // đổi thành CO2_MHZ19B nếu dùng MH-Z19B
+
 // ---------- CHÂN KẾT NỐI ----------
 #define DHT_PIN 33                     // D33
 #define MQ_PIN 32                      // D32 (ADC1). Không dùng chân ADC2 (0, 2, 4, 12-15, 25-27) vì bị Wi-Fi chiếm
+#define MHZ_RX_PIN 16                  // nối TX của MH-Z19B
+#define MHZ_TX_PIN 17                  // nối RX của MH-Z19B
 const int RELAY_MIST = 14, RELAY_FAN = 27, RELAY_LIGHT = 26, RELAY_HEATER = 25;
 const bool RELAY_ACTIVE_LOW = false;   // module đang dùng bật khi chân ở mức HIGH; đổi true nếu thiết bị chạy ngược
 const bool LED_DIRECT = false;         // true nếu LED đèn/sưởi cắm THẲNG vào GPIO 26/25 (không qua relay)
@@ -46,7 +55,11 @@ const unsigned long SEND_EVERY_MS   = 2000;    // gửi dữ liệu mỗi 2 giâ
 const unsigned long POLL_EVERY_MS   = 1000;    // hỏi lệnh mỗi 1 giây
 const unsigned long WIFI_TIMEOUT_MS = 15000;   // chờ Wi-Fi tối đa 15 giây mỗi lần thử
 const unsigned long FAILSAFE_MS     = 120000;  // mất server 2 phút -> tắt hết relay
+#if CO2_SENSOR == CO2_MHZ19B
+const unsigned long CO2_WARMUP_MS   = 90000;   // MH-Z19B cần làm nóng, trong lúc này số đo chưa đúng
+#else
 const unsigned long CO2_WARMUP_MS   = 30000;   // MQ-135: dùng thời gian này để lấy mức nền
+#endif
 const int HTTP_RETRIES = 3;
 
 DHT dht(DHT_PIN, DHT22);
@@ -91,6 +104,39 @@ void applyCommands(const String& json) {
 // ---------- CẢM BIẾN CO2 ----------
 bool co2WarmingUp() { return millis() - bootAt < CO2_WARMUP_MS; }
 
+#if CO2_SENSOR == CO2_MHZ19B
+// Gửi lệnh đọc 0x86, nhận 9 byte, kiểm tra checksum. Trả ppm hoặc -1 nếu lỗi
+byte mhzChecksum(const byte* b) {
+  byte sum = 0;
+  for (int i = 1; i < 8; i++) sum += b[i];
+  return 0xFF - sum + 1;
+}
+
+void mhzSend(byte cmd, byte arg) {
+  byte frame[9] = {0xFF, 0x01, cmd, arg, 0, 0, 0, 0, 0};
+  frame[8] = mhzChecksum(frame);
+  while (Serial2.available()) Serial2.read();
+  Serial2.write(frame, 9);
+}
+
+int readCO2() {
+  mhzSend(0x86, 0x00);
+  byte b[9];
+  if (Serial2.readBytes(b, 9) != 9 || b[0] != 0xFF || b[1] != 0x86 || b[8] != mhzChecksum(b)) {
+    Serial.println("MH-Z19B khong tra loi (kiem tra TX->16, RX->17, nguon 5V)");
+    return -1;
+  }
+  if (co2WarmingUp()) return -1;
+  return b[2] * 256 + b[3];
+}
+
+void co2Setup() {
+  Serial2.begin(9600, SERIAL_8N1, MHZ_RX_PIN, MHZ_TX_PIN);
+  Serial2.setTimeout(500);
+  delay(100);
+  mhzSend(0x79, 0x00);   // TẮT tự hiệu chuẩn ABC: buồng nấm kín không về 400 ppm mỗi ngày nên ABC làm số đo trôi
+}
+#else
 // Lấy trung bình 10 lần đọc analog, trả ppm ước lượng hoặc -1 nếu lỗi / đang lấy mức nền
 int readCO2() {
   long sum = 0;
@@ -120,6 +166,7 @@ void co2Setup() {
   analogReadResolution(12);                     // ADC 0..4095
   analogSetPinAttenuation(MQ_PIN, ADC_11db);    // đo được tới ~3.1V
 }
+#endif
 
 // ---------- WI-FI ----------
 // Thử kết nối trong WIFI_TIMEOUT_MS, không chặn mãi; loop() sẽ thử lại lần sau
