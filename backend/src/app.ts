@@ -14,6 +14,7 @@ import analyticsRoutes from "./routes/analytics.routes.js";
 import healthRoutes from "./routes/health.routes.js";
 import operatorRoutes from "./routes/operator.routes.js";
 import iotRoutes from "./routes/iotParser.routes.js";
+import deviceRoutes from "./routes/device.routes.js";
 import aiRoutes from "./routes/ai.routes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { csrfProtection } from "./middleware/csrf.middleware.js";
@@ -59,6 +60,19 @@ const generalApiLimiter = rateLimit({
   },
 });
 
+// Thiết bị IoT thật (ESP32) gửi số đo mỗi 2 giây và hỏi lệnh mỗi giây (~90 request/phút/thiết bị)
+const deviceLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: isTestOrInternal,
+  message: {
+    success: false,
+    error: { code: "RATE_LIMIT_EXCEEDED", message: "Thiết bị gửi quá nhiều yêu cầu, hãy giảm tần suất." },
+  },
+});
+
 const authLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 phút
   max: 10, // Tối đa 10 lần thử đăng nhập/phút
@@ -98,6 +112,7 @@ app.use("/api", generalApiLimiter, rentalRoutes);
 app.use("/api", generalApiLimiter, paymentRoutes);
 app.use("/api", generalApiLimiter, analyticsRoutes);
 app.use("/api", generalApiLimiter, operatorRoutes);
+app.use("/api/iot", deviceLimiter, deviceRoutes); // ESP32: /readings, /commands, /devices
 app.use("/api/iot", generalApiLimiter, iotRoutes);
 app.use("/api/ai", generalApiLimiter, aiRoutes);
 

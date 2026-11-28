@@ -1,6 +1,7 @@
 "use client";
 
 import Switch from "./Switch";
+import IoTDeviceStatusBadge from "./IoTDeviceStatusBadge";
 import type { DeviceState } from "./types";
 
 export const DEVICES = [
@@ -30,6 +31,28 @@ export const DEVICES = [
         <path d="m19.07 10.93-4.24-4.24"/>
         <path d="M22 22H2"/>
         <path d="m16 16-4-4-4 4"/>
+      </svg>
+    ),
+  },
+  {
+    type: "GROW_LIGHT",
+    label: "Đèn chiếu sáng (LED)",
+    hint: "LED mô phỏng đèn quang phổ, chỉ bật/tắt bằng tay",
+    icon: (
+      <svg className="w-4 h-4 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 18h6"/>
+        <path d="M10 22h4"/>
+        <path d="M12 2a7 7 0 0 0-4 12.7V16h8v-1.3A7 7 0 0 0 12 2Z"/>
+      </svg>
+    ),
+  },
+  {
+    type: "HEATER",
+    label: "Sưởi ấm (LED)",
+    hint: "LED mô phỏng sưởi, tự bật khi nhiệt độ dưới ngưỡng tối thiểu",
+    icon: (
+      <svg className="w-4 h-4 text-[#C28E58]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 4v10.5a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/>
       </svg>
     ),
   },
@@ -65,6 +88,7 @@ export default function HardwareControls({ roomId, devices, onToggle }: Props) {
             <p className="text-[11px] text-[#735843] dark:text-[#BFA895]">Can thiệp cưỡng bức rơ-le phần cứng IoT</p>
           </div>
         </div>
+        <IoTDeviceStatusBadge roomId={roomId} />
       </header>
 
       <ul className="space-y-4">

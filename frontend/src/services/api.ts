@@ -724,3 +724,54 @@ export async function requestCustomerHarvestApi(payload: {
   return json;
 }
 
+
+// ============================================================================
+// THIẾT BỊ IOT THẬT (ESP32)
+// ============================================================================
+export interface RoomDeviceStateItem {
+  kind: "mist" | "fan" | "light" | "heater";
+  deviceType: string;
+  state: boolean;
+  mode: "auto" | "manual";
+  actionState: string;
+  triggeredBy: string | null;
+  executedAt: string | null;
+}
+
+export interface IoTDeviceItem {
+  deviceId: number;
+  roomId: number;
+  roomCode: string;
+  roomName: string;
+  deviceName: string;
+  firmwareVersion: string | null;
+  ipAddress: string | null;
+  isActive: boolean;
+  isOnline: boolean;
+  lastSeenAt: string | null;
+  secondsSinceSeen: number | null;
+  createdAt: string;
+}
+
+/** Trạng thái relay hiện tại của buồng (lấy từ lệnh gần nhất trong DeviceActionLogs) */
+export async function getRoomDeviceStatesApi(roomId: number): Promise<RoomDeviceStateItem[]> {
+  const res = await fetch(`${API_BASE}/iot/rooms/${roomId}/device-states`, {
+    headers: getAuthHeaders(),
+    credentials: "include",
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Không lấy được trạng thái thiết bị");
+  return json.data || [];
+}
+
+/** Danh sách ESP32 kèm trạng thái online (Admin / Operator) */
+export async function getIoTDevicesApi(roomId?: number): Promise<IoTDeviceItem[]> {
+  const query = roomId ? `?roomId=${roomId}` : "";
+  const res = await fetch(`${API_BASE}/iot/devices${query}`, {
+    headers: getAuthHeaders(),
+    credentials: "include",
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Không lấy được danh sách thiết bị IoT");
+  return json.data || [];
+}

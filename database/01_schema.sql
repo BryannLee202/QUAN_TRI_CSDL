@@ -17,6 +17,7 @@ USE SmartMushroomDB;
 GO
 
 -- XÓA BẢNG CŨ THEO THỨ TỰ RÀNG BUỘC (NẾU CẦN TÁI TẠO)
+IF OBJECT_ID('IoTDevices', 'U') IS NOT NULL DROP TABLE IoTDevices; -- tạo ở 06_iot_devices.sql, có FK tới Rooms
 IF OBJECT_ID('AuditLogs', 'U') IS NOT NULL DROP TABLE AuditLogs;
 IF OBJECT_ID('PaymentTransactions', 'U') IS NOT NULL DROP TABLE PaymentTransactions;
 IF OBJECT_ID('DeviceActionLogs', 'U') IS NOT NULL DROP TABLE DeviceActionLogs;
