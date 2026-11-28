@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  getDeviceCommands,
   postDeviceReading,
 } from "../controllers/device.controller.js";
 
@@ -11,5 +12,6 @@ import {
 const router = Router();
 
 router.post("/readings", postDeviceReading);
+router.get("/commands", getDeviceCommands);
 
 export default router;

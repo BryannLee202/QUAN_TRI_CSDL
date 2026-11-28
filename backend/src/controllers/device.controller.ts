@@ -8,6 +8,7 @@ import { getPool } from "../config/db.js";
  *
  * Hợp đồng API giữa firmware ESP32 (firmware/esp32) và backend:
  *   POST /api/iot/readings  { temperature, humidity, co2 }  header x-device-key  -> 201 { commands }
+ *   GET  /api/iot/commands                                  header x-device-key  -> 200 { commands }
  *   commands = [{ kind: "mist" | "fan" | "light" | "heater", state: boolean, mode: "auto" | "manual" }]
  *
  * API key chỉ lưu dạng SHA-256 trong bảng IoTDevices (xem database/06_iot_devices.sql).
@@ -115,5 +116,29 @@ export const postDeviceReading = async (req: Request, res: Response): Promise<vo
     });
   } catch (error: any) {
     sendDeviceError(res, error, "DEVICE_INGEST_ERROR");
+  }
+};
+
+// 2. GET /api/iot/commands - ESP32 hỏi lệnh relay (mỗi giây)
+export const getDeviceCommands = async (req: Request, res: Response): Promise<void> => {
+  const key = readDeviceKey(req);
+  if (!key) {
+    res.status(401).json({ success: false, error: { code: "DEVICE_UNAUTHORIZED", message: "Thiếu header x-device-key" } });
+    return;
+  }
+  try {
+    const request = getPool().request();
+    request.input("ApiKeyHash", sql.Char(64), hashDeviceKey(key));
+    request.input("IpAddress", sql.VarChar(45), clientIp(req));
+    const result = await request.execute("sp_GetDeviceCommands");
+    const info = findRecordset<{ DeviceID: number; RoomID: number }>(result.recordsets, "DeviceID")[0];
+    res.status(200).json({
+      success: true,
+      deviceId: info?.DeviceID,
+      roomId: info?.RoomID,
+      commands: toCommands(findRecordset<CommandRow>(result.recordsets, "Kind")),
+    });
+  } catch (error: any) {
+    sendDeviceError(res, error, "DEVICE_COMMANDS_ERROR");
   }
 };
