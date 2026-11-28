@@ -163,5 +163,107 @@ BEGIN
 END
 GO
 
-PRINT N'>>> HOÀN TẤT 06_iot_devices.sql: IoTDevices, vw_IoTDeviceStatus, sp_GetRoomDeviceCommands, sp_GetDeviceCommands <<<';
+-- ----------------------------------------------------------------------------
+-- 6. ESP32 GỬI SỐ ĐO
+--    - Xác thực key, kiểm tra số đo, INSERT SensorData (trigger sinh cảnh báo + bật quạt theo CO2)
+--    - Luật tự động có trễ (hysteresis) cho phun sương và sưởi:
+--        phun sương: BẬT khi độ ẩm < HumidityMin, TẮT khi độ ẩm >= HumidityMin + 3
+--        sưởi      : BẬT khi nhiệt độ < TempMin,   TẮT khi nhiệt độ >= TempMin + 1
+--    - Lệnh tay của kỹ thuật viên được ưu tiên 10 phút, sau đó luật tự động chạy lại
+--    - Đèn chiếu sáng chỉ điều khiển tay
+-- ----------------------------------------------------------------------------
+CREATE OR ALTER PROCEDURE dbo.sp_IngestDeviceReading
+    @ApiKeyHash CHAR(64),
+    @Temperature DECIMAL(5,2),
+    @Humidity DECIMAL(5,2),
+    @CO2Level DECIMAL(7,2),
+    @FirmwareVersion VARCHAR(30) = NULL,
+    @IpAddress VARCHAR(45) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    DECLARE @DeviceID INT, @RoomID INT;
+    SELECT @DeviceID = DeviceID, @RoomID = RoomID
+    FROM IoTDevices
+    WHERE ApiKeyHash = @ApiKeyHash AND IsActive = 1;
+
+    IF @DeviceID IS NULL
+        THROW 50401, N'DEVICE_UNAUTHORIZED: API key của thiết bị không hợp lệ hoặc thiết bị đã bị khóa.', 1;
+
+    IF @Temperature IS NULL OR @Humidity IS NULL OR @CO2Level IS NULL
+        THROW 50400, N'INVALID_READING: Cần đủ temperature, humidity và co2.', 1;
+    IF @Temperature NOT BETWEEN -10 AND 60 OR @Humidity NOT BETWEEN 0 AND 100
+       OR @CO2Level NOT BETWEEN 0 AND 10000
+        THROW 50400, N'INVALID_READING: Số đo ngoài phạm vi (nhiệt độ -10..60°C, độ ẩm 0..100%, CO2 0..10000 ppm).', 1;
+
+    DECLARE @HumidityMin DECIMAL(5,2), @TempMin DECIMAL(5,2);
+    SELECT @HumidityMin = HumidityMin, @TempMin = TempMin FROM Rooms WHERE RoomID = @RoomID;
+
+    DECLARE @Now DATETIME2(3) = SYSDATETIME();
+    DECLARE @DataID BIGINT;
+
+    BEGIN TRANSACTION;
+
+    INSERT INTO SensorData (RoomID, Temperature, Humidity, CO2Level, RecordedAt)
+    VALUES (@RoomID, @Temperature, @Humidity, @CO2Level, @Now);
+    SET @DataID = SCOPE_IDENTITY();
+
+    UPDATE IoTDevices
+    SET LastSeenAt = @Now,
+        IpAddress = ISNULL(@IpAddress, IpAddress),
+        FirmwareVersion = ISNULL(@FirmwareVersion, FirmwareVersion)
+    WHERE DeviceID = @DeviceID;
+
+    -- Luật tự động: mỗi thiết bị một dòng, áp dụng cùng một khuôn
+    DECLARE @Rules TABLE (DeviceType VARCHAR(50), AltType VARCHAR(50), NeedOn BIT, CanOff BIT, Reason NVARCHAR(200));
+    INSERT INTO @Rules VALUES
+        ('MISTING_SYSTEM', 'MIST_MAKER',
+         CASE WHEN @Humidity < @HumidityMin THEN 1 ELSE 0 END,
+         CASE WHEN @Humidity >= @HumidityMin + 3 THEN 1 ELSE 0 END,
+         CONCAT(N'Độ ẩm ', @Humidity, N'% so với ngưỡng tối thiểu ', @HumidityMin, N'%')),
+        ('HEATER', 'HEATER',
+         CASE WHEN @Temperature < @TempMin THEN 1 ELSE 0 END,
+         CASE WHEN @Temperature >= @TempMin + 1 THEN 1 ELSE 0 END,
+         CONCAT(N'Nhiệt độ ', @Temperature, N'°C so với ngưỡng tối thiểu ', @TempMin, N'°C'));
+
+    ;WITH LastAction AS (
+        SELECT ru.DeviceType, ru.NeedOn, ru.CanOff, ru.Reason,
+               la.ActionState, la.TriggeredBy, la.ExecutedAt
+        FROM @Rules ru
+        OUTER APPLY (
+            SELECT TOP (1) d.ActionState, d.TriggeredBy, d.ExecutedAt
+            FROM DeviceActionLogs d
+            WHERE d.RoomID = @RoomID AND d.DeviceType IN (ru.DeviceType, ru.AltType)
+            ORDER BY d.ActionID DESC
+        ) la
+    ),
+    Decision AS (
+        SELECT DeviceType, Reason,
+               dbo.fn_IsDeviceStateOn(ActionState) AS IsOn,
+               CASE WHEN TriggeredBy IS NULL OR dbo.fn_IsAutoTrigger(TriggeredBy) = 1
+                         OR ExecutedAt < DATEADD(MINUTE, -10, @Now)
+                    THEN 1 ELSE 0 END AS AutoAllowed,
+               NeedOn, CanOff
+        FROM LastAction
+    )
+    INSERT INTO DeviceActionLogs (RoomID, DeviceType, ActionState, TriggeredBy, Details, ExecutedAt)
+    SELECT @RoomID, DeviceType,
+           CASE WHEN NeedOn = 1 THEN 'ON' ELSE 'OFF' END,
+           N'IOT_AUTO_RULE',
+           CONCAT(CASE WHEN NeedOn = 1 THEN N'Tự động bật: ' ELSE N'Tự động tắt: ' END, Reason),
+           @Now
+    FROM Decision
+    WHERE AutoAllowed = 1
+      AND ((NeedOn = 1 AND IsOn = 0) OR (CanOff = 1 AND IsOn = 1));
+
+    COMMIT TRANSACTION;
+
+    SELECT @DeviceID AS DeviceID, @RoomID AS RoomID, @DataID AS DataID;
+    EXEC dbo.sp_GetRoomDeviceCommands @RoomID = @RoomID;
+END
+GO
+
+PRINT N'>>> HOÀN TẤT 06_iot_devices.sql: IoTDevices, vw_IoTDeviceStatus, sp_IngestDeviceReading, sp_GetDeviceCommands <<<';
 GO
