@@ -25,6 +25,7 @@ import {
   getOperatorAlertsApi,
   getOperatorRoomsApi,
   getOperatorTraysApi,
+  getRoomDeviceStatesApi,
   resolveOperatorAlertApi,
   toggleOperatorDeviceApi,
   updateOperatorTrayStatusApi,
@@ -185,6 +186,33 @@ export default function OperatorPage() {
     }
   }, [rooms]);
 
+  // 1b. Nạp trạng thái relay thật của buồng (lệnh gần nhất trong DeviceActionLogs) khi đổi buồng,
+  //     để công tắc khớp với thiết bị ESP32 thay vì dữ liệu mock
+  useEffect(() => {
+    let cancelled = false;
+    getRoomDeviceStatesApi(roomId)
+      .then((items) => {
+        if (cancelled) return;
+        setDevices((prev) => {
+          const next = { ...prev };
+          for (const it of items) {
+            next[`${roomId}:${it.deviceType}`] = {
+              on: it.state,
+              actionState: it.actionState,
+              triggeredBy: it.triggeredBy || undefined,
+            };
+          }
+          return next;
+        });
+      })
+      .catch(() => {
+        /* backend chưa chạy 06_iot_devices.sql: giữ trạng thái hiện có */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [roomId]);
+
   // 2. Lắng nghe sự kiện Socket.io thời gian thực
   useOperatorSocket({
     onAlert: (a) =>
@@ -192,7 +220,8 @@ export default function OperatorPage() {
     onDevice: (d) =>
       setDevices((prev) => ({
         ...prev,
-        [`${d.roomId}:${d.deviceType}`]: {
+        // Nút phun sương ở camera gửi MIST_MAKER, công tắc dùng MISTING_SYSTEM: gộp về một
+        [`${d.roomId}:${d.deviceType === "MIST_MAKER" ? "MISTING_SYSTEM" : d.deviceType}`]: {
           on: isDeviceOn(d.actionState),
           actionState: d.actionState,
           triggeredBy: d.triggeredBy,

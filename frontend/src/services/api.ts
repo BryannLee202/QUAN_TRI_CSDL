@@ -724,3 +724,27 @@ export async function requestCustomerHarvestApi(payload: {
   return json;
 }
 
+
+// ============================================================================
+// THIẾT BỊ IOT THẬT (ESP32)
+// ============================================================================
+export interface RoomDeviceStateItem {
+  kind: "mist" | "fan" | "light" | "heater";
+  deviceType: string;
+  state: boolean;
+  mode: "auto" | "manual";
+  actionState: string;
+  triggeredBy: string | null;
+  executedAt: string | null;
+}
+
+/** Trạng thái relay hiện tại của buồng (lấy từ lệnh gần nhất trong DeviceActionLogs) */
+export async function getRoomDeviceStatesApi(roomId: number): Promise<RoomDeviceStateItem[]> {
+  const res = await fetch(`${API_BASE}/iot/rooms/${roomId}/device-states`, {
+    headers: getAuthHeaders(),
+    credentials: "include",
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message || "Không lấy được trạng thái thiết bị");
+  return json.data || [];
+}
