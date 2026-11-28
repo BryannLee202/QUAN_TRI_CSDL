@@ -265,5 +265,40 @@ BEGIN
 END
 GO
 
+-- ----------------------------------------------------------------------------
+-- 7. ĐĂNG KÝ THIẾT BỊ MỚI (Admin) - API key sinh ở backend, chỉ truyền hash vào
+-- ----------------------------------------------------------------------------
+CREATE OR ALTER PROCEDURE dbo.sp_RegisterIoTDevice
+    @RoomID INT,
+    @DeviceName NVARCHAR(100),
+    @ApiKeyHash CHAR(64)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF NOT EXISTS (SELECT 1 FROM Rooms WHERE RoomID = @RoomID)
+        THROW 50404, N'ROOM_NOT_FOUND: Buồng nuôi không tồn tại.', 1;
+
+    INSERT INTO IoTDevices (RoomID, DeviceName, ApiKeyHash)
+    VALUES (@RoomID, @DeviceName, @ApiKeyHash);
+
+    SELECT * FROM dbo.vw_IoTDeviceStatus WHERE DeviceID = SCOPE_IDENTITY();
+END
+GO
+
+-- ----------------------------------------------------------------------------
+-- 8. THIẾT BỊ DEMO: ESP32 gắn buồng RM03 (ngưỡng CO2 800 ppm, thổi hơi là vượt)
+--    API key demo: MC-ESP32-RM03-DEMO  (chỉ dùng môi trường dev/demo,
+--    tạo key riêng bằng POST /api/iot/devices khi triển khai thật)
+-- ----------------------------------------------------------------------------
+IF NOT EXISTS (SELECT 1 FROM IoTDevices)
+BEGIN
+    INSERT INTO IoTDevices (RoomID, DeviceName, ApiKeyHash)
+    SELECT RoomID, N'ESP32 buồng RM03 (demo)',
+           CONVERT(CHAR(64), HASHBYTES('SHA2_256', 'MC-ESP32-RM03-DEMO'), 2)
+    FROM Rooms WHERE RoomCode = 'RM03';
+    PRINT N'>>> ĐÃ TẠO THIẾT BỊ DEMO ESP32 CHO RM03 (API key: MC-ESP32-RM03-DEMO) <<<';
+END
+GO
+
 PRINT N'>>> HOÀN TẤT 06_iot_devices.sql: IoTDevices, vw_IoTDeviceStatus, sp_IngestDeviceReading, sp_GetDeviceCommands <<<';
 GO
