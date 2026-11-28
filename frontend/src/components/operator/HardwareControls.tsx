@@ -1,6 +1,7 @@
 "use client";
 
 import Switch from "./Switch";
+import IoTDeviceStatusBadge from "./IoTDeviceStatusBadge";
 import type { DeviceState } from "./types";
 
 export const DEVICES = [
@@ -87,6 +88,7 @@ export default function HardwareControls({ roomId, devices, onToggle }: Props) {
             <p className="text-[11px] text-[#735843] dark:text-[#BFA895]">Can thiệp cưỡng bức rơ-le phần cứng IoT</p>
           </div>
         </div>
+        <IoTDeviceStatusBadge roomId={roomId} />
       </header>
 
       <ul className="space-y-4">
